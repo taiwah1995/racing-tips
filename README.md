@@ -7,7 +7,7 @@ Mobile-first static site that replaces Notion tip pages with a file-based archiv
 Live (GitHub Pages):
 
 ```
-https://taiwah1995.github.io/racing-tips/?v=20260920r
+https://taiwah1995.github.io/racing-tips/?v=20260920s
 ```
 
 ### Local server
@@ -46,13 +46,13 @@ Example: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, a
 ## Features
 
 - **Home**: list of tip archives (date + venue 沙田/快活谷 + race count + 馬膽 with colored place pills). Header subtitle is meeting count plus all-time banker WP P&L from every settled meeting in `data/wp-bets.json` (`{N} 賽馬日 ☆ 累計盈利 $… ☆ (回報 ±…%)`, white `.subtitle-profit`)
-- **馬膽WP投注簿**: heading `馬膽WP投注簿 *馬膽投注 獨贏$100 位置$300` with no title underline and no blank gap under the title (`padding-bottom: 0` / ledger `margin-top: 0` and `padding: 0 10px 10px`); monthly W / P ledger from `data/wp-bets.json` using fullwidth `｜` only (e.g. `W｜投注 $400｜贏 $1165｜回報 +191.3%`), with TOTAL as two lines (`TOTAL｜投注 $1600｜贏 $2635｜` then `☆ 本月盈利 $1035 ☆ (回報 +64.7%)`)
+- **馬膽WP投注簿**: heading `馬膽WP投注簿 *馬膽投注 獨贏$100 位置$300` with one horizontal line under the title (outer panel only; no nested inner box). Monthly W / P ledger from `data/wp-bets.json` using fullwidth `｜` only (e.g. `W｜投注 $400｜贏 $1165｜回報 +191.3%`), with TOTAL as two lines (`TOTAL｜投注 $1600｜贏 $2635｜` then `☆ 本月盈利 $1035 ☆ (回報 +64.7%)`)
 - **Day detail**:
   - 「🏆 全日重心馬匹數據表」— 場次｜首選｜次選｜三選｜冷腳
   - 「🏆 全日重心馬推介」— 每日 3 隻
 - **Filters**: venue tabs + 賽事月份
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920r`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920s`) versions data fetches and asset URLs
 
 ## Add a new race day
 
