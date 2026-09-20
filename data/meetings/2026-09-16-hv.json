@@ -1,0 +1,268 @@
+{
+  "id": "2026-09-16-hv",
+  "date": "2026-09-16",
+  "venue": "快活谷",
+  "venueCode": "HV",
+  "raceCount": 8,
+  "label": null,
+  "tipsTable": [
+    {
+      "race": 1,
+      "first": {
+        "no": 2,
+        "name": "夜色輝煌",
+        "style": "前",
+        "score": 79
+      },
+      "second": {
+        "no": 5,
+        "name": "燈火闌珊",
+        "style": "中",
+        "score": 75
+      },
+      "third": {
+        "no": 8,
+        "name": "繁華都市",
+        "style": "後",
+        "score": 71
+      },
+      "dark": {
+        "no": 11,
+        "name": "暗中觀察",
+        "style": "中",
+        "score": 64
+      },
+      "class": "五班",
+      "distance": 1000
+    },
+    {
+      "race": 2,
+      "first": {
+        "no": 4,
+        "name": "山谷清風",
+        "style": "中",
+        "score": 81
+      },
+      "second": {
+        "no": 1,
+        "name": "快活時光",
+        "style": "前",
+        "score": 77
+      },
+      "third": {
+        "no": 7,
+        "name": "綠茵場上",
+        "style": "中",
+        "score": 73
+      },
+      "dark": {
+        "no": 10,
+        "name": "意外驚喜",
+        "style": "後",
+        "score": 66
+      },
+      "class": "四班",
+      "distance": 1200
+    },
+    {
+      "race": 3,
+      "first": {
+        "no": 6,
+        "name": "衝刺達人",
+        "style": "前",
+        "score": 86
+      },
+      "second": {
+        "no": 3,
+        "name": "速度之王",
+        "style": "前",
+        "score": 78
+      },
+      "third": {
+        "no": 9,
+        "name": "急先鋒",
+        "style": "中",
+        "score": 74
+      },
+      "dark": {
+        "no": 12,
+        "name": "後來居上",
+        "style": "後",
+        "score": 68
+      },
+      "class": "五班",
+      "distance": 1650
+    },
+    {
+      "race": 4,
+      "first": {
+        "no": 1,
+        "name": "精準出擊",
+        "style": "中",
+        "score": 83
+      },
+      "second": {
+        "no": 5,
+        "name": "穩操勝券",
+        "style": "前",
+        "score": 79
+      },
+      "third": {
+        "no": 8,
+        "name": "機會之馬",
+        "style": "後",
+        "score": 75
+      },
+      "dark": {
+        "no": 13,
+        "name": "冷門候補",
+        "style": "中",
+        "score": 67
+      },
+      "class": "三班",
+      "distance": 1200
+    },
+    {
+      "race": 5,
+      "first": {
+        "no": 7,
+        "name": "夜戰英雄",
+        "style": "前",
+        "score": 89
+      },
+      "second": {
+        "no": 2,
+        "name": "燈光之下",
+        "style": "中",
+        "score": 80
+      },
+      "third": {
+        "no": 4,
+        "name": "星光熠熠",
+        "style": "中",
+        "score": 76
+      },
+      "dark": {
+        "no": 9,
+        "name": "暗夜精靈",
+        "style": "後",
+        "score": 70
+      },
+      "class": "四班",
+      "distance": 1650
+    },
+    {
+      "race": 6,
+      "first": {
+        "no": 3,
+        "name": "彎道高手",
+        "style": "中",
+        "score": 84
+      },
+      "second": {
+        "no": 6,
+        "name": "內欄優勢",
+        "style": "前",
+        "score": 80
+      },
+      "third": {
+        "no": 10,
+        "name": "外檔突圍",
+        "style": "後",
+        "score": 75
+      },
+      "dark": {
+        "no": 14,
+        "name": "黑馬潛力",
+        "style": "中",
+        "score": 69
+      },
+      "class": "四班",
+      "distance": 1000
+    },
+    {
+      "race": 7,
+      "first": {
+        "no": 5,
+        "name": "最終決戰",
+        "style": "前",
+        "score": 87
+      },
+      "second": {
+        "no": 1,
+        "name": "王者風範",
+        "style": "前",
+        "score": 82
+      },
+      "third": {
+        "no": 8,
+        "name": "挑戰巔峰",
+        "style": "中",
+        "score": 77
+      },
+      "dark": {
+        "no": 11,
+        "name": "逆轉勝",
+        "style": "後",
+        "score": 71
+      },
+      "class": "三班",
+      "distance": 1800
+    },
+    {
+      "race": 8,
+      "first": {
+        "no": 2,
+        "name": "收官之作",
+        "style": "中",
+        "score": 85
+      },
+      "second": {
+        "no": 4,
+        "name": "完美落幕",
+        "style": "前",
+        "score": 81
+      },
+      "third": {
+        "no": 7,
+        "name": "餘韻悠長",
+        "style": "後",
+        "score": 76
+      },
+      "dark": {
+        "no": 12,
+        "name": "最後驚喜",
+        "style": "中",
+        "score": 68
+      },
+      "class": "二班",
+      "distance": 1200
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1650,
+      "no": 7,
+      "name": "夜戰英雄",
+      "note": "夜賽經驗豐富，全日心水"
+    },
+    {
+      "race": 3,
+      "class": "五班",
+      "distance": 1650,
+      "no": 6,
+      "name": "衝刺達人",
+      "note": "短途專才，快活谷適配"
+    },
+    {
+      "race": 7,
+      "class": "三班",
+      "distance": 1800,
+      "no": 5,
+      "name": "最終決戰",
+      "note": "班次下降有利"
+    }
+  ]
+}
