@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920l';
+  const APP_DATA_VERSION = '20260920m';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -194,12 +194,16 @@
     });
     const tStake = wStake + pStake;
     const tWin = wWin + pWin;
+    const profit = tWin - tStake;
+    const profitAbs = Math.abs(Math.round(profit));
+    const profitStr = (profit >= 0 ? '$' : '-$') + profitAbs;
     el.innerHTML =
       '<div class="banker-wp-summary">' +
       '<div class="banker-wp-title">當月累計投注:</div>' +
       '<div class="banker-wp-line">' + formatLedgerLine('W', wStake, wWin) + '</div>' +
       '<div class="banker-wp-line">' + formatLedgerLine('P', pStake, pWin) + '</div>' +
-      '<div class="banker-wp-line banker-wp-total">' + formatLedgerLine('TOTAL', tStake, tWin) + '</div>' +
+      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(tStake) + ' | 贏 ' + formatMoney(tWin) + ' ｜</div>' +
+      '<div class="banker-wp-line banker-wp-profit">☆ 本月盈利 ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
       '</div>';
   }
 

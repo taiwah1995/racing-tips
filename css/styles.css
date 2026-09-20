@@ -528,11 +528,17 @@ body {
 .banker-wp-book {
   margin-top: 18px;
 }
+.banker-wp-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 8px;
+}
 .banker-wp-note {
   font-size: 0.72rem;
+  font-weight: 500;
   color: var(--text-muted);
-  margin-top: 4px;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 .banker-wp-ledger {
   margin-top: 10px;
@@ -561,6 +567,11 @@ body {
   margin-top: 2px;
   color: var(--gold);
   font-weight: 600;
+}
+.banker-wp-profit {
+  color: var(--gold);
+  font-weight: 700;
+  white-space: normal;
 }
 .banker-wp-empty {
   font-size: 0.78rem;

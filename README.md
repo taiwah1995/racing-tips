@@ -7,7 +7,7 @@ Mobile-first static site that replaces Notion tip pages with a file-based archiv
 Live (GitHub Pages):
 
 ```
-https://taiwah1995.github.io/racing-tips/?v=20260920l
+https://taiwah1995.github.io/racing-tips/?v=20260920m
 ```
 
 ### Local server
@@ -46,13 +46,13 @@ Example: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, a
 ## Features
 
 - **Home**: list of tip archives (date + venue 沙田/快活谷 + race count + 馬膽 with colored place pills)
-- **馬膽WP投注簿**: monthly W / P / TOTAL ledger from `data/wp-bets.json`（當月累計投注）
+- **馬膽WP投注簿**: heading note `*馬膽投注 獨贏$100 位置$300`; monthly W / P ledger from `data/wp-bets.json`, with TOTAL as two lines (`TOTAL｜投注 $… | 贏 $… ｜` then `☆ 本月盈利 $… ☆ (回報 ±…%)`)
 - **Day detail**:
   - 「🏆 全日重心馬匹數據表」— 場次｜首選｜次選｜三選｜冷腳
   - 「🏆 全日重心馬推介」— 每日 3 隻
 - **Filters**: venue tabs + 賽事月份
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920l`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920m`) versions data fetches and asset URLs
 
 ## Add a new race day
 
