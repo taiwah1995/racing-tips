@@ -7,7 +7,14 @@
       "venueCode": "HV",
       "raceCount": 8,
       "label": null,
-      "file": "meetings/2026-09-16-hv.json"
+      "file": "meetings/2026-09-16-hv.json",
+      "banker": {
+        "race": 4,
+        "no": 3,
+        "name": "烈焰光芒",
+        "odds": 4.5
+      },
+      "bankerPlace": "冠"
     },
     {
       "id": "2026-09-12-st",
@@ -16,7 +23,14 @@
       "venueCode": "ST",
       "raceCount": 10,
       "label": null,
-      "file": "meetings/2026-09-12-st.json"
+      "file": "meetings/2026-09-12-st.json",
+      "banker": {
+        "race": 4,
+        "no": 12,
+        "name": "快樂高球",
+        "odds": 3.3
+      },
+      "bankerPlace": null
     },
     {
       "id": "2026-09-09-hv",
@@ -25,7 +39,14 @@
       "venueCode": "HV",
       "raceCount": 8,
       "label": null,
-      "file": "meetings/2026-09-09-hv.json"
+      "file": "meetings/2026-09-09-hv.json",
+      "banker": {
+        "race": 6,
+        "no": 6,
+        "name": "福進",
+        "odds": 5.9
+      },
+      "bankerPlace": "冠"
     },
     {
       "id": "2026-09-06-st",
@@ -34,7 +55,14 @@
       "venueCode": "ST",
       "raceCount": 10,
       "label": "開鑼日",
-      "file": "meetings/2026-09-06-st.json"
+      "file": "meetings/2026-09-06-st.json",
+      "banker": {
+        "race": 9,
+        "no": 5,
+        "name": "櫻花酒杯",
+        "odds": 3.1
+      },
+      "bankerPlace": "冠"
     }
   ]
 }

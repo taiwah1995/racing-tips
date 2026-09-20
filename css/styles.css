@@ -154,15 +154,8 @@ body {
 .tab:active { opacity: 0.85; }
 
 .month-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+  display: block;
   position: relative;
-}
-.month-label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: var(--text-muted);
 }
 #month-filter {
   width: 100%;
@@ -246,15 +239,30 @@ body {
 
 .meeting-card .row2 {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
   font-size: 0.85rem;
   color: var(--text-muted);
 }
+.meeting-card .row2-meta {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.meeting-card .banker-part {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  opacity: 0.92;
+}
 .meeting-card .chevron {
   margin-left: auto;
+  flex-shrink: 0;
   color: var(--gold-dim);
   font-size: 1.1rem;
+  line-height: 1.35;
 }
 
 .empty {

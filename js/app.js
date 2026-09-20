@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920g';
+  const APP_DATA_VERSION = '20260920h';
   let indexData = null;
   let venueFilter = 'all';
   let monthFilter = getCurrentMonthKey();
@@ -141,6 +141,18 @@
     return res.json();
   }
 
+
+  /** Home card second line: race count + optional 馬膽 (from index banker fields). */
+  function formatBankerLine(m) {
+    const count = `${m.raceCount}場賽事`;
+    const b = m.banker;
+    if (!b || !b.name) return escapeHtml(count);
+    const odds = b.odds != null && b.odds !== '' ? String(b.odds) : '';
+    const place = m.bankerPlace ? ` ${escapeHtml(m.bankerPlace)}` : '';
+    const oddsPart = odds ? ` ${escapeHtml(odds)}` : '';
+    return `${escapeHtml(count)} <span class="banker-part">| 馬膽 : ${escapeHtml(b.name)}${oddsPart}${place}</span>`;
+  }
+
   /* ---------- render home ---------- */
   function renderHome() {
     viewHome.hidden = false;
@@ -183,13 +195,14 @@
         ? `<span class="badge badge-demo">${escapeHtml(m.label)}</span>`
         : '';
 
+      const bankerLine = formatBankerLine(m);
       btn.innerHTML = `
         <div class="row1">
           <span class="date">${formatShortDate(m.date)}</span>
           <span style="display:flex;gap:6px;align-items:center">${demoBadge}${venueBadge}</span>
         </div>
         <div class="row2">
-          <span>${m.raceCount} 場賽事</span>
+          <span class="row2-meta">${bankerLine}</span>
           <span class="chevron">›</span>
         </div>`;
       btn.addEventListener('click', () => {
