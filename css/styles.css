@@ -285,19 +285,19 @@ body {
   background: var(--bg-elev);
   color: var(--text-muted);
   font-weight: 600;
-  padding: 6px 2px;
+  padding: 5px 1px;
   text-align: center;
   border-bottom: 1px solid var(--border);
   font-size: clamp(0.58rem, 2.6vw, 0.68rem);
 }
-.tips-table th:first-child { width: 18%; }
+.tips-table th:first-child { width: 16%; }
 .tips-table th:nth-child(2),
 .tips-table th:nth-child(3),
 .tips-table th:nth-child(4),
-.tips-table th:nth-child(5) { width: 20.5%; }
+.tips-table th:nth-child(5) { width: 21%; }
 
 .tips-table td {
-  padding: 6px 2px;
+  padding: 5px 1px;
   text-align: center;
   border-bottom: 1px solid var(--border);
   vertical-align: middle;
@@ -334,33 +334,77 @@ body {
   display: block;
   text-align: center;
   max-width: 100%;
+  font-size: clamp(0.62rem, 2.85vw, 0.76rem); /* ~1–2px bump vs table base */
+  line-height: 1.3;
 }
 .cell-horse .hn {
   font-weight: 600;
   color: var(--text);
-  font-size: clamp(0.55rem, 2.5vw, 0.68rem);
-  line-height: 1.25;
+  font-size: inherit;
+  line-height: 1.3;
   overflow-wrap: anywhere;
   word-break: break-word;
 }
+/* Compact: (跑法) 賠率 inline after horse name */
 .cell-horse .hs {
-  display: block;
-  font-size: clamp(0.48rem, 2.1vw, 0.55rem);
+  display: inline;
+  font-size: 0.92em;
   color: var(--text-muted);
   font-weight: 500;
-  line-height: 1.15;
-  margin-top: 1px;
+  white-space: nowrap;
 }
 .cell-horse .ho {
-  display: block;
-  font-size: clamp(0.45rem, 2vw, 0.52rem);
+  display: inline;
+  font-size: 0.92em;
   color: var(--gold-dim);
   font-weight: 600;
-  line-height: 1.1;
-  margin-top: 1px;
+  margin-left: 0.15em;
+  white-space: nowrap;
 }
 .cell-horse.col-first .hn { color: var(--accent); }
 .cell-horse.col-dark .hn { color: #ffa657; }
+
+/* Post-race place badges: 冠／亞／季／殿 */
+.place-badge {
+  display: inline-block;
+  margin-left: 2px;
+  padding: 0 4px;
+  border-radius: 999px;
+  font-size: 0.62em;
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.place-badge.place-w {
+  background: #f0c14b;
+  color: #0d1117;
+}
+.place-badge.place-2 {
+  background: rgba(192, 192, 192, 0.95);
+  color: #1a1a1a;
+}
+.place-badge.place-3 {
+  background: rgba(205, 127, 50, 0.95);
+  color: #1a1208;
+}
+.place-badge.place-4 {
+  background: rgba(88, 166, 255, 0.35);
+  color: #79b8ff;
+  border: 1px solid rgba(88, 166, 255, 0.5);
+}
+
+.tips-result-note {
+  margin-top: 0;
+  padding-top: 8px;
+}
+
+.pc-odds-inline {
+  font-size: 0.85em;
+  color: var(--gold-dim);
+  font-weight: 600;
+}
 
 .hl-match {
   background: rgba(240, 193, 75, 0.25) !important;

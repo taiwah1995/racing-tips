@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920b';
+  const APP_DATA_VERSION = '20260920c';
   let indexData = null;
   let currentMeeting = null;
   let venueFilter = 'all';
@@ -37,22 +37,45 @@
     return `${y}-${m}-${d}`;
   }
 
-  function horseCell(h, colClass) {
+  /** Map tip horse number → place badge label (冠/亞/季/殿) when result present. */
+  function placeBadge(h, result) {
+    if (!h || !result) return '';
+    const no = Number(h.no);
+    const map = [
+      [result.w, '冠', 'place-w'],
+      [result['2'], '亞', 'place-2'],
+      [result['3'], '季', 'place-3'],
+      [result['4'], '殿', 'place-4'],
+    ];
+    for (const [finNo, label, cls] of map) {
+      if (finNo != null && Number(finNo) === no) {
+        return `<span class="place-badge ${cls}" title="${label}">${label}</span>`;
+      }
+    }
+    return '';
+  }
+
+  /**
+   * Tip cell: 馬號 馬名 (跑法) 賠率 — odds immediately after closing paren.
+   * Optional place badge when row has result.
+   */
+  function horseCell(h, colClass, result) {
     if (!h) return '<span class="cell-horse">—</span>';
     const name = escapeHtml(h.name);
     const stylePart = h.style ? ` (${h.style})` : '';
     const oddsPart = h.odds != null && h.odds !== '' ? ` ${h.odds}` : '';
     const label = `${h.no} ${h.name}${stylePart}${oddsPart}`;
     const match = horseQuery && name.includes(horseQuery);
-    const styleLine = h.style
-      ? `<span class="hs">(${escapeHtml(h.style)})</span>`
-      : '';
-    const oddsLine =
-      h.odds != null && h.odds !== ''
-        ? `<span class="ho">${escapeHtml(String(h.odds))}</span>`
-        : '';
+    const styleOdds =
+      (h.style
+        ? ` <span class="hs">(${escapeHtml(h.style)})</span>`
+        : '') +
+      (h.odds != null && h.odds !== ''
+        ? ` <span class="ho">${escapeHtml(String(h.odds))}</span>`
+        : '');
+    const badge = placeBadge(h, result);
     return `<span class="cell-horse ${colClass || ''}${match ? ' hl-match' : ''}" title="${escapeAttr(label)}">
-      <span class="hn">${h.no} ${name}</span>${styleLine}${oddsLine}
+      <span class="hn">${h.no} ${name}</span>${styleOdds}${badge}
     </span>`;
   }
 
@@ -79,12 +102,8 @@
 
   function horseMatchesMeeting(m, q) {
     if (!q) return true;
-    const tipStr = JSON.stringify(m._tipsCache || '');
-    // For home list we only have index; deep match happens after load.
-    // Soft match: always show when searching, filter rows in detail.
-    // Better: check if we have cached meeting data.
     if (m._allNames) return m._allNames.some((n) => n.includes(q));
-    return true; // show all on home until we enrich
+    return true;
   }
 
   /* ---------- data ---------- */
@@ -201,16 +220,36 @@
     // Tips table
     const tbody = $('#tips-tbody');
     tbody.innerHTML = '';
+    let hasAnyResult = false;
     (meeting.tipsTable || []).forEach((row) => {
+      const result = row.result || null;
+      if (result) hasAnyResult = true;
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td class="race-col">${raceCell(row)}</td>
-        <td>${horseCell(row.first, 'col-first')}</td>
-        <td>${horseCell(row.second, '')}</td>
-        <td>${horseCell(row.third, '')}</td>
-        <td>${horseCell(row.dark, 'col-dark')}</td>`;
+        <td>${horseCell(row.first, 'col-first', result)}</td>
+        <td>${horseCell(row.second, '', result)}</td>
+        <td>${horseCell(row.third, '', result)}</td>
+        <td>${horseCell(row.dark, 'col-dark', result)}</td>`;
       tbody.appendChild(tr);
     });
+
+    // Post-race hit note
+    let noteEl = $('#tips-result-note');
+    if (!noteEl) {
+      noteEl = document.createElement('p');
+      noteEl.id = 'tips-result-note';
+      noteEl.className = 'panel-hint tips-result-note';
+      const scroll = tbody.closest('.table-scroll') || tbody.parentElement;
+      scroll.insertAdjacentElement('afterend', noteEl);
+    }
+    if (hasAnyResult) {
+      noteEl.hidden = false;
+      noteEl.textContent = '已完場 · 命中標示：冠／亞／季／殿';
+    } else {
+      noteEl.hidden = true;
+      noteEl.textContent = '';
+    }
 
     // 全日重心馬推介 — exactly 3 horses for the day
     const picks = (meeting.dailyPicks || []).slice(0, 3);
@@ -222,14 +261,18 @@
       card.className = 'pick-card' + (i === 0 ? ' pick-top' : '');
       const clsDist = `${dp.class || ''}${dp.distance != null ? dp.distance : ''}`;
       const match = horseQuery && (dp.name || '').includes(horseQuery);
+      const stylePart = dp.style ? ` (${escapeHtml(dp.style)})` : '';
+      const oddsPart =
+        dp.odds != null && dp.odds !== ''
+          ? ` <span class="pc-odds-inline">${escapeHtml(String(dp.odds))}</span>`
+          : '';
       card.innerHTML = `
         <div class="pc-head">
           <span class="pc-race">第${dp.race}場</span>
           <span class="pc-class">${escapeHtml(clsDist)}</span>
           ${i === 0 ? '<span class="top-badge">⭐ 心水</span>' : ''}
         </div>
-        <div class="pc-horse${match ? ' hl-match' : ''}">${dp.no || ''} ${escapeHtml(dp.name || '')}${dp.style ? ' (' + escapeHtml(dp.style) + ')' : ''}</div>
-        ${dp.odds != null && dp.odds !== '' ? `<div class="pc-odds">${escapeHtml(String(dp.odds))}</div>` : ''}
+        <div class="pc-horse${match ? ' hl-match' : ''}">${dp.no || ''} ${escapeHtml(dp.name || '')}${stylePart}${oddsPart}</div>
         ${dp.note ? `<div class="pc-note">${escapeHtml(dp.note)}</div>` : ''}`;
       container.appendChild(card);
     });
