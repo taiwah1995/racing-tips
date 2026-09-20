@@ -7,10 +7,10 @@ Mobile-first static demo that replaces Notion tip pages with a file-based archiv
 Live (GitHub Pages):
 
 ```
-https://taiwah1995.github.io/racing-tips/?v=20260920i
+https://taiwah1995.github.io/racing-tips/?v=20260920k
 ```
 
-### Local server
+Home panel「馬膽WP投注簿」loads `data/wp-bets.json` and shows monthly W / P / TOTAL lines.
 
 ```bash
 cd /workspace/racing-tips-demo
@@ -52,7 +52,7 @@ Demo: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, and 
   - 「🏆 全日重心馬推介」— 每日 3 隻
 - **Filters**: venue tabs + horse-name search
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920c`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920k`) versions data fetches and asset URLs
 
 ## Add a new race day
 
