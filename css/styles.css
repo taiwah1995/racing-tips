@@ -583,3 +583,11 @@ body {
   color: var(--text-muted);
   margin-top: 6px;
 }
+
+.banker-wp-foot {
+  margin: 6px 2px 0;
+  padding: 0 2px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
