@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920m';
+  const APP_DATA_VERSION = '20260920n';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -160,7 +160,7 @@
   }
 
   function formatLedgerLine(label, stake, win) {
-    return label + '｜投注 ' + formatMoney(stake) + ' | 贏 ' + formatMoney(win) + ' ｜回報 ' + formatRoi(win, stake);
+    return label + '｜投注 ' + formatMoney(stake) + '｜贏 ' + formatMoney(win) + '｜回報 ' + formatRoi(win, stake);
   }
 
   /**
@@ -202,7 +202,7 @@
       '<div class="banker-wp-title">當月累計投注:</div>' +
       '<div class="banker-wp-line">' + formatLedgerLine('W', wStake, wWin) + '</div>' +
       '<div class="banker-wp-line">' + formatLedgerLine('P', pStake, pWin) + '</div>' +
-      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(tStake) + ' | 贏 ' + formatMoney(tWin) + ' ｜</div>' +
+      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(tStake) + '｜贏 ' + formatMoney(tWin) + '｜</div>' +
       '<div class="banker-wp-line banker-wp-profit">☆ 本月盈利 ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
       '</div>';
   }
