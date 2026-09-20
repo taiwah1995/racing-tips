@@ -7,7 +7,7 @@ Mobile-first static site that replaces Notion tip pages with a file-based archiv
 Live (GitHub Pages):
 
 ```
-https://taiwah1995.github.io/racing-tips/?v=20260920aa
+https://taiwah1995.github.io/racing-tips/?v=20260920ab
 ```
 
 ### Local server
@@ -46,13 +46,13 @@ Example: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, a
 ## Features
 
 - **Home**: list of tip archives (date + venue 沙田/快活谷 + race count + 馬膽 with place icons 🏆／🥈／🥉／4️⃣). Header subtitle is meeting count plus all-time banker WP P&L from every settled meeting in `data/wp-bets.json` (`{N} 賽馬日 💰 累計盈利 $… 💰 (回報 ±…%)`, white `.subtitle-profit`)
-- **馬膽WP投注簿**: on home, order is venue tabs → month selector → WP book (plus footnote `* 以最終賠率派彩金額計算`) → daily meeting cards. Heading `馬膽WP投注簿 *馬膽投注 獨贏$100 位置$300` with one horizontal line under the title (outer panel only; no nested inner box). Monthly W / P ledger from `data/wp-bets.json` using fullwidth `｜` only (e.g. `W｜投注 $400｜贏 $1165｜回報 +191.3%`), with TOTAL as two lines (`TOTAL｜投注 $1600｜贏 $2635｜` then `💰 本月盈利 $1035 💰 (回報 +64.7%)`). The profit line uses the same `font-size` as the panel title (`clamp(0.8rem, 3.6vw, 0.95rem)`); `$1035` / `+64.7%` are white (`.banker-wp-profit-val`), the rest of the line stays gold. Outside the bordered card, a muted `.banker-wp-foot` note: `* 以最終賠率派彩金額計算`
+- **馬膽WP投注簿**: on home, order is venue tabs → month selector → WP book (plus footnote `* 以最終賠率派彩金額計算`) → daily meeting cards. Heading `馬膽WP投注簿 *馬膽投注 獨贏$100 位置$300` with one horizontal line under the title (outer panel only; no nested inner box). Monthly W / P ledger from `data/wp-bets.json` using fullwidth `｜` only, **filtered by the venue tab** (`全部` = all venues that month; `沙田` = `venueCode` ST; `快活谷` = `venueCode` HV). Header all-time `累計盈利` stays all venues. Example Sep 2026: 全部 `W｜投注 $400｜贏 $1165｜回報 +191.3%`; 沙田 / 快活谷 each 2 meetings `W｜投注 $200` / `P｜投注 $600`. TOTAL is two lines (`TOTAL｜投注 $1600｜贏 $2635｜` then `💰 本月盈利 $1035 💰 (回報 +64.7%)` on 全部). The profit line uses the same `font-size` as the panel title (`clamp(0.8rem, 3.6vw, 0.95rem)`); `$1035` / `+64.7%` are white (`.banker-wp-profit-val`), the rest of the line stays gold. Outside the bordered card, a muted `.banker-wp-foot` note: `* 以最終賠率派彩金額計算`
 - **Day detail**:
   - 「🏆 各場馬匹心水貼士」— 場次｜首選｜次選｜三選｜冷腳
   - 「🏆 全日重心馬推介」— 每日 3 隻；`馬號 馬名` then result icon (if any) then `(最終賠率 W：X.x ｜P：X.x)` from `dailyPicks.oddsWin` / `oddsPlace` (on.cc 臨場). No `(跑法)` after the name. Example: `5 櫻花酒杯 🏆 (最終賠率 W：3.1 ｜P：1.5)`
 - **Filters**: venue tabs + 賽事月份
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920aa`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920ab`) versions data fetches and asset URLs
 
 ## Add a new race day
 

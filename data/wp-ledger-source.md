@@ -33,11 +33,29 @@ Place pays top-3 only (冠/亞/季); 殿 does not pay Place unless HKJC chart sh
 - 獨贏 5 → **31.00** → winReturn = 31.00 × 10 = **310**
 - 位置 5 → **15.00** → placeReturn = 15.00 × 30 = **450**
 
-## September 2026 monthly totals (4 settled banker meetings)
+## September 2026 monthly totals
+
+UI filters these by venue tab (`全部` / `沙田` ST / `快活谷` HV). Header all-time 累計盈利 stays all venues.
+
+### 全部 (4 settled banker meetings)
 | Pool | 投注 | 贏 | 回報% |
 |------|------|-----|-------|
 | W | $400 | $1165 | +191.3% |
 | P | $1200 | $1470 | +22.5% |
 | TOTAL | $1600 | $2635 | +64.7% |
+
+### 沙田 ST (2 meetings: 09-12 miss, 09-06 hit)
+| Pool | 投注 | 贏 | 回報% |
+|------|------|-----|-------|
+| W | $200 | $310 | +55.0% |
+| P | $600 | $450 | −25.0% |
+| TOTAL | $800 | $760 | −5.0% |
+
+### 快活谷 HV (2 meetings: 09-16, 09-09)
+| Pool | 投注 | 贏 | 回報% |
+|------|------|-----|-------|
+| W | $200 | $855 | +327.5% |
+| P | $600 | $1020 | +70.0% |
+| TOTAL | $800 | $1875 | +134.4% |
 
 Data file: `data/wp-bets.json`

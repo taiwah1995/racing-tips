@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920aa';
+  const APP_DATA_VERSION = '20260920ab';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -171,10 +171,15 @@
   /**
    * Settled banker meetings for selected month from wp-bets.json.
    * Only entries present in the ledger (finished / bankerPlace resolved incl. null miss).
+   * When venue is ST/HV, keep that venue only; 'all' (or omitted) keeps every venue.
    */
-  function settledWpMeetingsForMonth(monthKey) {
+  function settledWpMeetingsForMonth(monthKey, venue) {
     if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
-    return wpBets.meetings.filter((m) => m.date && m.date.startsWith(monthKey));
+    return wpBets.meetings.filter((m) => {
+      if (!m.date || !m.date.startsWith(monthKey)) return false;
+      if (venue && venue !== 'all' && m.venueCode !== venue) return false;
+      return true;
+    });
   }
 
 
@@ -223,7 +228,7 @@
     if (!el) return;
     const stakeW = (wpBets && wpBets.stakeWin) || 100;
     const stakeP = (wpBets && wpBets.stakePlace) || 300;
-    const rows = settledWpMeetingsForMonth(monthFilter);
+    const rows = settledWpMeetingsForMonth(monthFilter, venueFilter);
     if (!rows.length) {
       el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
       return;
