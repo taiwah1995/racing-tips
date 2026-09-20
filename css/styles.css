@@ -528,6 +528,10 @@ body {
 .banker-wp-book {
   margin-top: 18px;
 }
+.banker-wp-book .panel-title,
+.banker-wp-heading {
+  border-bottom: none;
+}
 .banker-wp-heading {
   display: flex;
   flex-wrap: wrap;
