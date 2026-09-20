@@ -1,0 +1,332 @@
+{
+  "id": "2026-09-12-st",
+  "date": "2026-09-12",
+  "venue": "沙田",
+  "venueCode": "ST",
+  "raceCount": 10,
+  "label": null,
+  "tipsTable": [
+    {
+      "race": 1,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 14,
+        "name": "星之願",
+        "style": "前",
+        "odds": 8.4
+      },
+      "second": {
+        "no": 10,
+        "name": "籐王駒",
+        "style": "前",
+        "odds": 3.6
+      },
+      "third": {
+        "no": 1,
+        "name": "暴風一族",
+        "style": "前",
+        "odds": 11
+      },
+      "dark": {
+        "no": 9,
+        "name": "文武全能",
+        "style": "後",
+        "odds": 16
+      }
+    },
+    {
+      "race": 2,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 2,
+        "name": "路路勁",
+        "style": "中",
+        "odds": 4.3
+      },
+      "second": {
+        "no": 8,
+        "name": "紅海旺",
+        "style": "後",
+        "odds": 3.6
+      },
+      "third": {
+        "no": 5,
+        "name": "盈俊天下",
+        "style": "前",
+        "odds": 5.6
+      },
+      "dark": {
+        "no": 13,
+        "name": "杭至尊",
+        "style": "中",
+        "odds": 16
+      }
+    },
+    {
+      "race": 3,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 14,
+        "name": "海洋帝君",
+        "style": "後",
+        "odds": 7.2
+      },
+      "second": {
+        "no": 6,
+        "name": "銀騰",
+        "style": "後",
+        "odds": 5.1
+      },
+      "third": {
+        "no": 13,
+        "name": "快樂老撾",
+        "style": "後",
+        "odds": 9.6
+      },
+      "dark": {
+        "no": 8,
+        "name": "劍無情",
+        "style": "後",
+        "odds": 7.4
+      }
+    },
+    {
+      "race": 4,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 12,
+        "name": "快樂高球",
+        "style": "前",
+        "odds": 3.3
+      },
+      "second": {
+        "no": 3,
+        "name": "砂漿麒星",
+        "style": "後",
+        "odds": 10
+      },
+      "third": {
+        "no": 5,
+        "name": "鋼鐵安防",
+        "style": "放",
+        "odds": 18
+      },
+      "dark": {
+        "no": 8,
+        "name": "錶之梵星",
+        "style": "後",
+        "odds": 13
+      }
+    },
+    {
+      "race": 5,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 10,
+        "name": "烈進駒",
+        "style": "後",
+        "odds": 3.9
+      },
+      "second": {
+        "no": 9,
+        "name": "龍文正道",
+        "style": "前",
+        "odds": 5.7
+      },
+      "third": {
+        "no": 11,
+        "name": "天天更好",
+        "style": "中",
+        "odds": 6.1
+      },
+      "dark": {
+        "no": 5,
+        "name": "鋁神",
+        "style": "中",
+        "odds": 27
+      }
+    },
+    {
+      "race": 6,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 5,
+        "name": "好運年",
+        "style": "前",
+        "odds": 11
+      },
+      "second": {
+        "no": 1,
+        "name": "捷威",
+        "style": "中",
+        "odds": 3.0
+      },
+      "third": {
+        "no": 9,
+        "name": "華麗再贏",
+        "style": "中",
+        "odds": 7.5
+      },
+      "dark": {
+        "no": 2,
+        "name": "爆出美麗",
+        "style": "後",
+        "odds": 10
+      }
+    },
+    {
+      "race": 7,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 13,
+        "name": "天比高",
+        "style": "前",
+        "odds": 7.1
+      },
+      "second": {
+        "no": 5,
+        "name": "步風影",
+        "style": "前",
+        "odds": 3.8
+      },
+      "third": {
+        "no": 3,
+        "name": "部族高手",
+        "style": "放",
+        "odds": 9.3
+      },
+      "dark": {
+        "no": 7,
+        "name": "量子猴王",
+        "style": "後",
+        "odds": 9.1
+      }
+    },
+    {
+      "race": 8,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 13,
+        "name": "幸運糖",
+        "style": "前",
+        "odds": 8.3
+      },
+      "second": {
+        "no": 1,
+        "name": "實力股",
+        "style": "放",
+        "odds": 1.8
+      },
+      "third": {
+        "no": 4,
+        "name": "團結勇士",
+        "style": "放",
+        "odds": 15
+      },
+      "dark": {
+        "no": 12,
+        "name": "無敵好瑪",
+        "style": "中",
+        "odds": 27
+      }
+    },
+    {
+      "race": 9,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 13,
+        "name": "正極",
+        "style": "後",
+        "odds": 22
+      },
+      "second": {
+        "no": 1,
+        "name": "超寫意",
+        "style": "後",
+        "odds": 8.7
+      },
+      "third": {
+        "no": 8,
+        "name": "傑出雷霆",
+        "style": "後",
+        "odds": 7.3
+      },
+      "dark": {
+        "no": 10,
+        "name": "膨才",
+        "style": "後",
+        "odds": 41
+      }
+    },
+    {
+      "race": 10,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 12,
+        "name": "嵐臣",
+        "style": "前",
+        "odds": 1.9
+      },
+      "second": {
+        "no": 4,
+        "name": "細水長流",
+        "style": "中",
+        "odds": 12
+      },
+      "third": {
+        "no": 10,
+        "name": "金勝名駒",
+        "style": "後",
+        "odds": 11
+      },
+      "dark": {
+        "no": 5,
+        "name": "潮州精神",
+        "style": "後",
+        "odds": 15
+      }
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 4,
+      "class": "",
+      "distance": null,
+      "no": 12,
+      "name": "快樂高球",
+      "style": "前",
+      "odds": 3.3,
+      "note": ""
+    },
+    {
+      "race": 10,
+      "class": "",
+      "distance": null,
+      "no": 12,
+      "name": "嵐臣",
+      "style": "前",
+      "odds": 1.9,
+      "note": ""
+    },
+    {
+      "race": 1,
+      "class": "",
+      "distance": null,
+      "no": 14,
+      "name": "星之願",
+      "style": "前",
+      "odds": 8.4,
+      "note": ""
+    }
+  ]
+}

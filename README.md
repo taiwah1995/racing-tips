@@ -13,7 +13,6 @@ https://taiwah1995.github.io/racing-tips/
 ### Local server
 
 ```bash
-cd /workspace/racing-tips-demo
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
@@ -36,13 +35,16 @@ Then open `http://127.0.0.1:8765/` in a browser (phone width ~390–430px looks 
 
 No build step — plain HTML + CSS + JS.
 
-## Sample meetings
+## Meetings
+
+Newest first:
 
 | File | Date | Venue |
 |------|------|-------|
-| `data/meetings/2026-09-20-st.json` | 2026-09-20 | 沙田 (DEMO) |
 | `data/meetings/2026-09-16-hv.json` | 2026-09-16 | 快活谷 · 8場 |
-| `data/meetings/2026-09-13-st.json` | 2026-09-13 | 沙田 |
+| `data/meetings/2026-09-12-st.json` | 2026-09-12 | 沙田 · 10場 |
+| `data/meetings/2026-09-09-hv.json` | 2026-09-09 | 快活谷 · 8場 |
+| `data/meetings/2026-09-06-st.json` | 2026-09-06 | 沙田 · 開鑼日 · 10場 |
 
 ## Tech
 

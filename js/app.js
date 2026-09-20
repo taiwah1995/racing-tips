@@ -39,13 +39,19 @@
   function horseCell(h, colClass) {
     if (!h) return '<span class="cell-horse">—</span>';
     const name = escapeHtml(h.name);
-    const label = `${h.no} ${name}${h.style ? ' (' + h.style + ')' : ''}`;
+    const stylePart = h.style ? ` (${h.style})` : '';
+    const oddsPart = h.odds != null && h.odds !== '' ? ` ${h.odds}` : '';
+    const label = `${h.no} ${h.name}${stylePart}${oddsPart}`;
     const match = horseQuery && name.includes(horseQuery);
     const styleLine = h.style
       ? `<span class="hs">(${escapeHtml(h.style)})</span>`
       : '';
+    const oddsLine =
+      h.odds != null && h.odds !== ''
+        ? `<span class="ho">${escapeHtml(String(h.odds))}</span>`
+        : '';
     return `<span class="cell-horse ${colClass || ''}${match ? ' hl-match' : ''}" title="${escapeAttr(label)}">
-      <span class="hn">${h.no} ${name}</span>${styleLine}
+      <span class="hn">${h.no} ${name}</span>${styleLine}${oddsLine}
     </span>`;
   }
 
@@ -217,7 +223,8 @@
           <span class="pc-class">${escapeHtml(clsDist)}</span>
           ${i === 0 ? '<span class="top-badge">⭐ 心水</span>' : ''}
         </div>
-        <div class="pc-horse${match ? ' hl-match' : ''}">${dp.no || ''} ${escapeHtml(dp.name || '')}</div>
+        <div class="pc-horse${match ? ' hl-match' : ''}">${dp.no || ''} ${escapeHtml(dp.name || '')}${dp.style ? ' (' + escapeHtml(dp.style) + ')' : ''}</div>
+        ${dp.odds != null && dp.odds !== '' ? `<div class="pc-odds">${escapeHtml(String(dp.odds))}</div>` : ''}
         ${dp.note ? `<div class="pc-note">${escapeHtml(dp.note)}</div>` : ''}`;
       container.appendChild(card);
     });

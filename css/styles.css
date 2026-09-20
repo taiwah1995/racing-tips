@@ -351,6 +351,14 @@ body {
   line-height: 1.15;
   margin-top: 1px;
 }
+.cell-horse .ho {
+  display: block;
+  font-size: clamp(0.45rem, 2vw, 0.52rem);
+  color: var(--gold-dim);
+  font-weight: 600;
+  line-height: 1.1;
+  margin-top: 1px;
+}
 .cell-horse.col-first .hn { color: var(--accent); }
 .cell-horse.col-dark .hn { color: #ffa657; }
 
@@ -405,7 +413,13 @@ body {
   background: var(--gold);
   color: #0d1117;
 }
-.pick-card .pc-horse {
+.pick-card .pc-odds {
+  font-size: 0.75rem;
+  color: var(--gold-dim);
+  font-weight: 600;
+  margin-top: 2px;
+}
+.pc-horse {
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--accent);

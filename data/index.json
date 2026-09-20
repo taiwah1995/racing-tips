@@ -1,15 +1,6 @@
 {
   "meetings": [
     {
-      "id": "2026-09-20-st",
-      "date": "2026-09-20",
-      "venue": "沙田",
-      "venueCode": "ST",
-      "raceCount": 10,
-      "label": "DEMO",
-      "file": "meetings/2026-09-20-st.json"
-    },
-    {
       "id": "2026-09-16-hv",
       "date": "2026-09-16",
       "venue": "快活谷",
@@ -19,13 +10,31 @@
       "file": "meetings/2026-09-16-hv.json"
     },
     {
-      "id": "2026-09-13-st",
-      "date": "2026-09-13",
+      "id": "2026-09-12-st",
+      "date": "2026-09-12",
       "venue": "沙田",
       "venueCode": "ST",
       "raceCount": 10,
       "label": null,
-      "file": "meetings/2026-09-13-st.json"
+      "file": "meetings/2026-09-12-st.json"
+    },
+    {
+      "id": "2026-09-09-hv",
+      "date": "2026-09-09",
+      "venue": "快活谷",
+      "venueCode": "HV",
+      "raceCount": 8,
+      "label": null,
+      "file": "meetings/2026-09-09-hv.json"
+    },
+    {
+      "id": "2026-09-06-st",
+      "date": "2026-09-06",
+      "venue": "沙田",
+      "venueCode": "ST",
+      "raceCount": 10,
+      "label": "開鑼日",
+      "file": "meetings/2026-09-06-st.json"
     }
   ]
 }

@@ -8,261 +8,267 @@
   "tipsTable": [
     {
       "race": 1,
+      "class": "",
+      "distance": null,
       "first": {
-        "no": 2,
-        "name": "夜色輝煌",
+        "no": 7,
+        "name": "銀亮濠俠",
         "style": "前",
-        "score": 79
+        "odds": 6.6
       },
       "second": {
-        "no": 5,
-        "name": "燈火闌珊",
+        "no": 11,
+        "name": "辣得金",
         "style": "中",
-        "score": 75
+        "odds": 7.0
       },
       "third": {
         "no": 8,
-        "name": "繁華都市",
+        "name": "陸小鳳",
         "style": "後",
-        "score": 71
+        "odds": 6.3
       },
       "dark": {
-        "no": 11,
-        "name": "暗中觀察",
-        "style": "中",
-        "score": 64
-      },
-      "class": "五班",
-      "distance": 1000
+        "no": 12,
+        "name": "洛河",
+        "style": "後",
+        "odds": 12
+      }
     },
     {
       "race": 2,
+      "class": "",
+      "distance": null,
       "first": {
-        "no": 4,
-        "name": "山谷清風",
+        "no": 8,
+        "name": "花好月盈",
         "style": "中",
-        "score": 81
+        "odds": 4.8
       },
       "second": {
-        "no": 1,
-        "name": "快活時光",
-        "style": "前",
-        "score": 77
+        "no": 11,
+        "name": "天下寵兒",
+        "style": "中",
+        "odds": 2.8
       },
       "third": {
-        "no": 7,
-        "name": "綠茵場上",
-        "style": "中",
-        "score": 73
+        "no": 3,
+        "name": "朗日自強",
+        "style": "後",
+        "odds": 8.0
       },
       "dark": {
-        "no": 10,
-        "name": "意外驚喜",
-        "style": "後",
-        "score": 66
-      },
-      "class": "四班",
-      "distance": 1200
+        "no": 1,
+        "name": "本領多好",
+        "style": "放",
+        "odds": 52
+      }
     },
     {
       "race": 3,
+      "class": "",
+      "distance": null,
       "first": {
         "no": 6,
-        "name": "衝刺達人",
-        "style": "前",
-        "score": 86
+        "name": "捷足奔馳",
+        "style": "放",
+        "odds": 4.1
       },
       "second": {
-        "no": 3,
-        "name": "速度之王",
-        "style": "前",
-        "score": 78
+        "no": 1,
+        "name": "優才",
+        "style": "中/後",
+        "odds": 4.4
       },
       "third": {
         "no": 9,
-        "name": "急先鋒",
-        "style": "中",
-        "score": 74
+        "name": "獎星",
+        "style": "前",
+        "odds": 13
       },
       "dark": {
-        "no": 12,
-        "name": "後來居上",
+        "no": 5,
+        "name": "浪漫老撾",
         "style": "後",
-        "score": 68
-      },
-      "class": "五班",
-      "distance": 1650
+        "odds": 7.2
+      }
     },
     {
       "race": 4,
+      "class": "",
+      "distance": null,
       "first": {
-        "no": 1,
-        "name": "精準出擊",
-        "style": "中",
-        "score": 83
+        "no": 3,
+        "name": "烈焰光芒",
+        "style": "前",
+        "odds": 4.5
       },
       "second": {
-        "no": 5,
-        "name": "穩操勝券",
-        "style": "前",
-        "score": 79
+        "no": 2,
+        "name": "棒棒糖",
+        "style": "後",
+        "odds": 8.8
       },
       "third": {
-        "no": 8,
-        "name": "機會之馬",
+        "no": 5,
+        "name": "星威心得",
         "style": "後",
-        "score": 75
+        "odds": 15
       },
       "dark": {
-        "no": 13,
-        "name": "冷門候補",
-        "style": "中",
-        "score": 67
-      },
-      "class": "三班",
-      "distance": 1200
+        "no": 1,
+        "name": "沙井之友",
+        "style": "後",
+        "odds": 5.7
+      }
     },
     {
       "race": 5,
+      "class": "",
+      "distance": null,
       "first": {
-        "no": 7,
-        "name": "夜戰英雄",
-        "style": "前",
-        "score": 89
-      },
-      "second": {
-        "no": 2,
-        "name": "燈光之下",
-        "style": "中",
-        "score": 80
-      },
-      "third": {
-        "no": 4,
-        "name": "星光熠熠",
-        "style": "中",
-        "score": 76
-      },
-      "dark": {
-        "no": 9,
-        "name": "暗夜精靈",
-        "style": "後",
-        "score": 70
-      },
-      "class": "四班",
-      "distance": 1650
-    },
-    {
-      "race": 6,
-      "first": {
-        "no": 3,
-        "name": "彎道高手",
-        "style": "中",
-        "score": 84
-      },
-      "second": {
         "no": 6,
-        "name": "內欄優勢",
-        "style": "前",
-        "score": 80
+        "name": "競駿非凡",
+        "style": "後",
+        "odds": 5.4
+      },
+      "second": {
+        "no": 11,
+        "name": "領袖勁力",
+        "style": "後",
+        "odds": 8.4
       },
       "third": {
         "no": 10,
-        "name": "外檔突圍",
-        "style": "後",
-        "score": 75
+        "name": "團結戰靈",
+        "style": "放",
+        "odds": 9.5
       },
       "dark": {
-        "no": 14,
-        "name": "黑馬潛力",
-        "style": "中",
-        "score": 69
+        "no": 8,
+        "name": "老鼠斑",
+        "style": "前",
+        "odds": 4.8
+      }
+    },
+    {
+      "race": 6,
+      "class": "",
+      "distance": null,
+      "first": {
+        "no": 3,
+        "name": "浪漫鬥士",
+        "style": "前",
+        "odds": 8.2
       },
-      "class": "四班",
-      "distance": 1000
+      "second": {
+        "no": 8,
+        "name": "勁好運",
+        "style": "前",
+        "odds": 9.4
+      },
+      "third": {
+        "no": 10,
+        "name": "北斗福星",
+        "style": "放",
+        "odds": 10
+      },
+      "dark": {
+        "no": 6,
+        "name": "傲視同群",
+        "style": "後",
+        "odds": 17
+      }
     },
     {
       "race": 7,
+      "class": "",
+      "distance": null,
       "first": {
-        "no": 5,
-        "name": "最終決戰",
+        "no": 4,
+        "name": "舞林寶典",
         "style": "前",
-        "score": 87
+        "odds": 2.9
       },
       "second": {
-        "no": 1,
-        "name": "王者風範",
-        "style": "前",
-        "score": 82
+        "no": 5,
+        "name": "品德寶寶",
+        "style": "中",
+        "odds": 8.9
       },
       "third": {
-        "no": 8,
-        "name": "挑戰巔峰",
-        "style": "中",
-        "score": 77
+        "no": 10,
+        "name": "勝萬金",
+        "style": "放",
+        "odds": 6.5
       },
       "dark": {
-        "no": 11,
-        "name": "逆轉勝",
+        "no": 2,
+        "name": "燭光晚餐",
         "style": "後",
-        "score": 71
-      },
-      "class": "三班",
-      "distance": 1800
+        "odds": 16
+      }
     },
     {
       "race": 8,
+      "class": "",
+      "distance": null,
       "first": {
-        "no": 2,
-        "name": "收官之作",
-        "style": "中",
-        "score": 85
+        "no": 8,
+        "name": "勁沙塵",
+        "style": "後",
+        "odds": 6.0
       },
       "second": {
-        "no": 4,
-        "name": "完美落幕",
-        "style": "前",
-        "score": 81
+        "no": 11,
+        "name": "穿甲金鷹",
+        "style": "後",
+        "odds": 9.7
       },
       "third": {
-        "no": 7,
-        "name": "餘韻悠長",
+        "no": 1,
+        "name": "勁速威龍",
         "style": "後",
-        "score": 76
+        "odds": 11
       },
       "dark": {
-        "no": 12,
-        "name": "最後驚喜",
-        "style": "中",
-        "score": 68
-      },
-      "class": "二班",
-      "distance": 1200
+        "no": 7,
+        "name": "銀亮奔騰",
+        "style": "前",
+        "odds": 6.8
+      }
     }
   ],
   "dailyPicks": [
     {
-      "race": 5,
-      "class": "四班",
-      "distance": 1650,
-      "no": 7,
-      "name": "夜戰英雄",
-      "note": "夜賽經驗豐富，全日心水"
+      "race": 4,
+      "class": "",
+      "distance": null,
+      "no": 3,
+      "name": "烈焰光芒",
+      "style": "前",
+      "odds": 4.5,
+      "note": ""
     },
     {
-      "race": 3,
-      "class": "五班",
-      "distance": 1650,
-      "no": 6,
-      "name": "衝刺達人",
-      "note": "短途專才，快活谷適配"
+      "race": 6,
+      "class": "",
+      "distance": null,
+      "no": 3,
+      "name": "浪漫鬥士",
+      "style": "前",
+      "odds": 8.2,
+      "note": ""
     },
     {
-      "race": 7,
-      "class": "三班",
-      "distance": 1800,
-      "no": 5,
-      "name": "最終決戰",
-      "note": "班次下降有利"
+      "race": 8,
+      "class": "",
+      "distance": null,
+      "no": 8,
+      "name": "勁沙塵",
+      "style": "後",
+      "odds": 6.0,
+      "note": ""
     }
   ]
 }
