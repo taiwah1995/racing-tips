@@ -1,0 +1,326 @@
+{
+  "id": "2026-09-20-st",
+  "date": "2026-09-20",
+  "venue": "沙田",
+  "venueCode": "ST",
+  "raceCount": 10,
+  "label": "DEMO",
+  "tipsTable": [
+    {
+      "race": 1,
+      "first": {
+        "no": 3,
+        "name": "飛騰勇士",
+        "style": "前",
+        "score": 82
+      },
+      "second": {
+        "no": 7,
+        "name": "勝利之星",
+        "style": "中",
+        "score": 78
+      },
+      "third": {
+        "no": 1,
+        "name": "金輝再現",
+        "style": "後",
+        "score": 74
+      },
+      "dark": {
+        "no": 11,
+        "name": "暗黑騎士",
+        "style": "中",
+        "score": 68
+      },
+      "class": "五班",
+      "distance": 1200
+    },
+    {
+      "race": 2,
+      "first": {
+        "no": 5,
+        "name": "閃電快馬",
+        "style": "前",
+        "score": 85
+      },
+      "second": {
+        "no": 2,
+        "name": "風馳電掣",
+        "style": "前",
+        "score": 80
+      },
+      "third": {
+        "no": 8,
+        "name": "穩步高升",
+        "style": "中",
+        "score": 76
+      },
+      "dark": {
+        "no": 12,
+        "name": "黑馬奇兵",
+        "style": "後",
+        "score": 70
+      },
+      "class": "四班",
+      "distance": 1400
+    },
+    {
+      "race": 3,
+      "first": {
+        "no": 1,
+        "name": "王者之風",
+        "style": "前",
+        "score": 90
+      },
+      "second": {
+        "no": 4,
+        "name": "傲視群雄",
+        "style": "中",
+        "score": 84
+      },
+      "third": {
+        "no": 6,
+        "name": "千里馬",
+        "style": "中",
+        "score": 79
+      },
+      "dark": {
+        "no": 9,
+        "name": "冷門殺手",
+        "style": "後",
+        "score": 72
+      },
+      "class": "三班",
+      "distance": 1600
+    },
+    {
+      "race": 4,
+      "first": {
+        "no": 8,
+        "name": "海闊天空",
+        "style": "中",
+        "score": 81
+      },
+      "second": {
+        "no": 3,
+        "name": "乘風破浪",
+        "style": "前",
+        "score": 77
+      },
+      "third": {
+        "no": 10,
+        "name": "勇往直前",
+        "style": "後",
+        "score": 73
+      },
+      "dark": {
+        "no": 14,
+        "name": "意外之喜",
+        "style": "中",
+        "score": 65
+      },
+      "class": "四班",
+      "distance": 1200
+    },
+    {
+      "race": 5,
+      "first": {
+        "no": 2,
+        "name": "龍騰虎躍",
+        "style": "前",
+        "score": 88
+      },
+      "second": {
+        "no": 6,
+        "name": "鳳舞九天",
+        "style": "中",
+        "score": 83
+      },
+      "third": {
+        "no": 9,
+        "name": "麒麟獻瑞",
+        "style": "中",
+        "score": 78
+      },
+      "dark": {
+        "no": 13,
+        "name": "隱藏實力",
+        "style": "後",
+        "score": 71
+      },
+      "class": "五班",
+      "distance": 1400
+    },
+    {
+      "race": 6,
+      "first": {
+        "no": 4,
+        "name": "超級巨星",
+        "style": "前",
+        "score": 92
+      },
+      "second": {
+        "no": 1,
+        "name": "絕對王牌",
+        "style": "前",
+        "score": 81
+      },
+      "third": {
+        "no": 7,
+        "name": "明日之星",
+        "style": "中",
+        "score": 75
+      },
+      "dark": {
+        "no": 10,
+        "name": "潛力無限",
+        "style": "後",
+        "score": 69
+      },
+      "class": "二班",
+      "distance": 1800
+    },
+    {
+      "race": 7,
+      "first": {
+        "no": 6,
+        "name": "鐵血戰士",
+        "style": "中",
+        "score": 84
+      },
+      "second": {
+        "no": 3,
+        "name": "堅不可摧",
+        "style": "前",
+        "score": 80
+      },
+      "third": {
+        "no": 11,
+        "name": "持久戰力",
+        "style": "後",
+        "score": 76
+      },
+      "dark": {
+        "no": 5,
+        "name": "冷門黑馬",
+        "style": "中",
+        "score": 67
+      },
+      "class": "三班",
+      "distance": 1400
+    },
+    {
+      "race": 8,
+      "first": {
+        "no": 9,
+        "name": "冠軍寶座",
+        "style": "前",
+        "score": 87
+      },
+      "second": {
+        "no": 2,
+        "name": "挑戰者",
+        "style": "中",
+        "score": 82
+      },
+      "third": {
+        "no": 5,
+        "name": "後起之秀",
+        "style": "後",
+        "score": 77
+      },
+      "dark": {
+        "no": 12,
+        "name": "神秘來客",
+        "style": "中",
+        "score": 70
+      },
+      "class": "四班",
+      "distance": 1600
+    },
+    {
+      "race": 9,
+      "first": {
+        "no": 1,
+        "name": "至尊無上",
+        "style": "前",
+        "score": 91
+      },
+      "second": {
+        "no": 4,
+        "name": "皇者歸來",
+        "style": "中",
+        "score": 86
+      },
+      "third": {
+        "no": 8,
+        "name": "王道再現",
+        "style": "中",
+        "score": 80
+      },
+      "dark": {
+        "no": 7,
+        "name": "逆襲奇蹟",
+        "style": "後",
+        "score": 73
+      },
+      "class": "一班",
+      "distance": 2000
+    },
+    {
+      "race": 10,
+      "first": {
+        "no": 3,
+        "name": "完美收官",
+        "style": "中",
+        "score": 83
+      },
+      "second": {
+        "no": 6,
+        "name": "壓軸好戲",
+        "style": "前",
+        "score": 79
+      },
+      "third": {
+        "no": 10,
+        "name": "終極一戰",
+        "style": "後",
+        "score": 74
+      },
+      "dark": {
+        "no": 14,
+        "name": "驚喜結局",
+        "style": "中",
+        "score": 66
+      },
+      "class": "三班",
+      "distance": 1200
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 6,
+      "class": "二班",
+      "distance": 1800,
+      "no": 4,
+      "name": "超級巨星",
+      "note": "評分大幅領先，全日最大優勢"
+    },
+    {
+      "race": 3,
+      "class": "三班",
+      "distance": 1600,
+      "no": 1,
+      "name": "王者之風",
+      "note": "班次適合，狀態出色"
+    },
+    {
+      "race": 9,
+      "class": "一班",
+      "distance": 2000,
+      "no": 1,
+      "name": "至尊無上",
+      "note": "頂級班次表現穩定"
+    }
+  ]
+}
