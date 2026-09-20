@@ -6,6 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
+  const APP_DATA_VERSION = '20260920b';
   let indexData = null;
   let currentMeeting = null;
   let venueFilter = 'all';
@@ -87,15 +88,19 @@
   }
 
   /* ---------- data ---------- */
+  function dataUrl(path) {
+    return `${DATA_BASE}/${path}?v=${APP_DATA_VERSION}`;
+  }
+
   async function loadIndex() {
-    const res = await fetch(`${DATA_BASE}/index.json`);
+    const res = await fetch(dataUrl('index.json'));
     if (!res.ok) throw new Error('無法載入 index.json');
     indexData = await res.json();
     // Preload horse names for search filter on home
     await Promise.all(
       indexData.meetings.map(async (m) => {
         try {
-          const r = await fetch(`${DATA_BASE}/${m.file}`);
+          const r = await fetch(dataUrl(m.file));
           const full = await r.json();
           const names = [];
           (full.tipsTable || []).forEach((row) => {
@@ -117,7 +122,7 @@
   async function loadMeeting(id) {
     const meta = indexData.meetings.find((m) => m.id === id);
     if (!meta) throw new Error('找不到賽日：' + id);
-    const res = await fetch(`${DATA_BASE}/${meta.file}`);
+    const res = await fetch(dataUrl(meta.file));
     if (!res.ok) throw new Error('無法載入賽日資料');
     return res.json();
   }
