@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920z';
+  const APP_DATA_VERSION = '20260920aa';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -249,7 +249,7 @@
       '<div class="banker-wp-line">' + formatLedgerLine('W', wStake, wWin) + '</div>' +
       '<div class="banker-wp-line">' + formatLedgerLine('P', pStake, pWin) + '</div>' +
       '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(tStake) + '｜贏 ' + formatMoney(tWin) + '｜</div>' +
-      '<div class="banker-wp-line banker-wp-profit">💰 本月盈利 ' + profitStr + ' 💰 (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
+      '<div class="banker-wp-line banker-wp-profit">💰 本月盈利 <span class="banker-wp-profit-val">' + profitStr + '</span> 💰 (回報 <span class="banker-wp-profit-val">' + formatRoi(tWin, tStake) + '</span>)</div>' +
       '</div>';
   }
 
