@@ -107,9 +107,10 @@ body {
   color: var(--text-muted);
   margin-top: 2px;
 }
-.subtitle.subtitle-profit {
-  color: var(--gold);
+.subtitle-profit {
+  color: #fff;
   font-weight: 700;
+  font-size: 0.78rem;
 }
 .subtitle:empty,
 .subtitle[hidden] { display: none !important; }

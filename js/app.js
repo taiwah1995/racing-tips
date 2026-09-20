@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920p';
+  const APP_DATA_VERSION = '20260920q';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -201,17 +201,17 @@
     return '☆ ' + label + ' ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')';
   }
 
-  /** Header subtitle: all-time banker WP P&L from every settled meeting in wp-bets.json. */
+  /** Header subtitle: N race days + all-time banker WP P&L (white .subtitle-profit). */
   function renderAllTimeProfitSubtitle() {
     pageSub.classList.add('subtitle-profit');
     pageSub.hidden = false;
     const rows = settledWpMeetings();
     if (!rows.length) {
-      pageSub.textContent = '☆ 累計盈利 $0 ☆ (回報 +/-0.0%)';
+      pageSub.textContent = '0 賽馬日 ☆ 累計盈利 $0 ☆ (回報 +0.0%)';
       return;
     }
     const t = wpPoolTotals(rows);
-    pageSub.textContent = formatProfitStarLine('累計盈利', t.profit, t.tWin, t.tStake);
+    pageSub.textContent = rows.length + ' 賽馬日 ' + formatProfitStarLine('累計盈利', t.profit, t.tWin, t.tStake);
   }
 
   function renderWpLedger() {
