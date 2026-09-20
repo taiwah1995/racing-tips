@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920t';
+  const APP_DATA_VERSION = '20260920u';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -200,7 +200,7 @@
       ? settledWpMeetings()
       : (wpBets && Array.isArray(wpBets.meetings) ? wpBets.meetings.slice() : []);
     if (!rows.length) {
-      pageSub.textContent = '0 賽馬日 ☆ 累計盈利 $0 ☆ (回報 +0.0%)';
+      pageSub.textContent = '0 賽馬日 💰 累計盈利 $0 💰 (回報 +0.0%)';
       return;
     }
     let tStake, tWin, profit;
@@ -214,7 +214,7 @@
     const profitAbs = Math.abs(Math.round(profit));
     const profitStr = (profit >= 0 ? '$' : '-$') + profitAbs;
     pageSub.textContent =
-      rows.length + ' 賽馬日 ☆ 累計盈利 ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')';
+      rows.length + ' 賽馬日 💰 累計盈利 ' + profitStr + ' 💰 (回報 ' + formatRoi(tWin, tStake) + ')';
   }
 
 
@@ -249,7 +249,7 @@
       '<div class="banker-wp-line">' + formatLedgerLine('W', wStake, wWin) + '</div>' +
       '<div class="banker-wp-line">' + formatLedgerLine('P', pStake, pWin) + '</div>' +
       '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(tStake) + '｜贏 ' + formatMoney(tWin) + '｜</div>' +
-      '<div class="banker-wp-line banker-wp-profit">☆ 本月盈利 ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
+      '<div class="banker-wp-line banker-wp-profit">💰 本月盈利 ' + profitStr + ' 💰 (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
       '</div>';
   }
 
