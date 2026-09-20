@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920s';
+  const APP_DATA_VERSION = '20260920t';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -37,7 +37,11 @@
     return `${y}-${m}-${d}`;
   }
 
-  /** Map tip horse number → place badge label (冠/亞/季/殿) when result present. */
+  /** Map tip horse number → place icon (🏆🥈🥉4️⃣) when result present. */
+  const PLACE_ICON = { '冠': '🏆', '亞': '🥈', '季': '🥉', '殿': '4️⃣' };
+  function placeIconFromLabel(label) {
+    return PLACE_ICON[label] || '';
+  }
   function placeBadge(h, result) {
     if (!h || !result) return '';
     const no = Number(h.no);
@@ -49,7 +53,8 @@
     ];
     for (const [finNo, label, cls] of map) {
       if (finNo != null && Number(finNo) === no) {
-        return `<span class="place-badge ${cls}" title="${label}">${label}</span>`;
+        const icon = placeIconFromLabel(label);
+        return `<span class="place-badge ${cls}" title="${label}" aria-label="${label}">${icon}</span>`;
       }
     }
     return '';
@@ -264,7 +269,8 @@
     let place = '';
     if (m.bankerPlace) {
       const cls = bankerPlaceClass(m.bankerPlace);
-      place = ` <span class="place-badge ${cls}" title="${escapeAttr(m.bankerPlace)}">${escapeHtml(m.bankerPlace)}</span>`;
+      const icon = placeIconFromLabel(m.bankerPlace) || escapeHtml(m.bankerPlace);
+      place = ` <span class="place-badge ${cls}" title="${escapeAttr(m.bankerPlace)}" aria-label="${escapeAttr(m.bankerPlace)}">${icon}</span>`;
     }
     return `${escapeHtml(count)} <span class="banker-part">| 馬膽 : ${escapeHtml(b.name)}${oddsPart}${place}</span>`;
   }
@@ -369,7 +375,7 @@
     }
     if (hasAnyResult) {
       noteEl.hidden = false;
-      noteEl.textContent = '已完場 · 命中標示：冠／亞／季／殿';
+      noteEl.textContent = '已完場 · 命中標示：🏆／🥈／🥉／4️⃣';
     } else {
       noteEl.hidden = true;
       noteEl.textContent = '';
