@@ -6,11 +6,10 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920f';
+  const APP_DATA_VERSION = '20260920g';
   let indexData = null;
-  let currentMeeting = null;
   let venueFilter = 'all';
-  let horseQuery = '';
+  let monthFilter = getCurrentMonthKey();
 
   const $ = (sel) => document.querySelector(sel);
   const $$ = (sel) => [...document.querySelectorAll(sel)];
@@ -22,7 +21,7 @@
   const pageSub = $('#page-sub');
   const meetingList = $('#meeting-list');
   const homeEmpty = $('#home-empty');
-  const searchInput = $('#search-horse');
+  const monthFilterSelect = $('#month-filter');
 
   /* ---------- helpers ---------- */
   function formatDate(iso) {
@@ -64,7 +63,6 @@
     const stylePart = h.style ? ` (${h.style})` : '';
     const oddsPart = h.odds != null && h.odds !== '' ? String(h.odds) : '';
     const label = `${h.no} ${h.name}${stylePart}${oddsPart ? ' ' + oddsPart : ''}`;
-    const match = horseQuery && name.includes(horseQuery);
     const styleHtml = h.style
       ? ` <span class="hs">(${escapeHtml(h.style)})</span>`
       : '';
@@ -72,7 +70,7 @@
       ? `<span class="ho">${escapeHtml(oddsPart)}</span>`
       : '<span class="ho ho-empty"></span>';
     const badge = placeBadge(h, result);
-    return `<span class="cell-horse ${colClass || ''}${match ? ' hl-match' : ''}" title="${escapeAttr(label)}">
+    return `<span class="cell-horse ${colClass || ''}" title="${escapeAttr(label)}">
       <span class="hline1"><span class="hn">${h.no} ${name}</span>${styleHtml}</span>
       <span class="hline2">${oddsHtml}${badge}</span>
     </span>`;
@@ -99,10 +97,28 @@
     return escapeHtml(s).replace(/'/g, '&#39;');
   }
 
-  function horseMatchesMeeting(m, q) {
-    if (!q) return true;
-    if (m._allNames) return m._allNames.some((n) => n.includes(q));
-    return true;
+
+  function getCurrentMonthKey() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  }
+
+  function formatMonthLabel(month) {
+    const [year, monthNumber] = month.split('-');
+    return `${year}年${Number(monthNumber)}月`;
+  }
+
+  function buildMonthOptions() {
+    const months = new Set(indexData.meetings.map((m) => m.date.slice(0, 7)));
+    months.add(monthFilter);
+    monthFilterSelect.innerHTML = '';
+    [...months].sort((a, b) => b.localeCompare(a)).forEach((month) => {
+      const option = document.createElement('option');
+      option.value = month;
+      option.textContent = formatMonthLabel(month);
+      monthFilterSelect.appendChild(option);
+    });
+    monthFilterSelect.value = monthFilter;
   }
 
   /* ---------- data ---------- */
@@ -114,27 +130,7 @@
     const res = await fetch(dataUrl('index.json'));
     if (!res.ok) throw new Error('無法載入 index.json');
     indexData = await res.json();
-    // Preload horse names for search filter on home
-    await Promise.all(
-      indexData.meetings.map(async (m) => {
-        try {
-          const r = await fetch(dataUrl(m.file));
-          const full = await r.json();
-          const names = [];
-          (full.tipsTable || []).forEach((row) => {
-            ['first', 'second', 'third', 'dark'].forEach((k) => {
-              if (row[k] && row[k].name) names.push(row[k].name);
-            });
-          });
-          (full.dailyPicks || []).forEach((dp) => {
-            if (dp.name) names.push(dp.name);
-          });
-          m._allNames = names;
-        } catch (_) {
-          m._allNames = [];
-        }
-      })
-    );
+    buildMonthOptions();
   }
 
   async function loadMeeting(id) {
@@ -154,19 +150,20 @@
     pageSub.hidden = false;
     pageSub.textContent = '貼士存檔 · DEMO';
 
-    let list = indexData.meetings.slice();
+    const monthMeetings = indexData.meetings.filter((m) =>
+      m.date.startsWith(monthFilter)
+    );
+    let list = monthMeetings.slice();
     if (venueFilter !== 'all') {
       list = list.filter((m) => m.venueCode === venueFilter);
-    }
-    if (horseQuery) {
-      list = list.filter((m) =>
-        (m._allNames || []).some((n) => n.includes(horseQuery))
-      );
     }
 
     meetingList.innerHTML = '';
     if (!list.length) {
       homeEmpty.hidden = false;
+      homeEmpty.textContent = monthMeetings.length
+        ? '找不到符合條件的賽日'
+        : '今個月暫未有賽日貼士';
       return;
     }
     homeEmpty.hidden = true;
@@ -205,7 +202,6 @@
 
   /* ---------- render detail ---------- */
   function renderDetail(meeting) {
-    currentMeeting = meeting;
     viewHome.hidden = true;
     viewDetail.hidden = false;
     btnBack.hidden = false;
@@ -259,7 +255,6 @@
       const card = document.createElement('div');
       card.className = 'pick-card' + (i === 0 ? ' pick-top' : '');
       const clsDist = `${dp.class || ''}${dp.distance != null ? dp.distance : ''}`;
-      const match = horseQuery && (dp.name || '').includes(horseQuery);
       const stylePart = dp.style ? ` (${escapeHtml(dp.style)})` : '';
       const oddsPart =
         dp.odds != null && dp.odds !== ''
@@ -273,7 +268,7 @@
           <span class="pc-class">${escapeHtml(clsDist)}</span>
           ${i === 0 ? '<span class="top-badge">⭐ 心水</span>' : ''}
         </div>
-        <div class="pc-horse${match ? ' hl-match' : ''}">${dp.no || ''} ${escapeHtml(dp.name || '')}${stylePart}${oddsPart}${pickBadge}</div>
+        <div class="pc-horse">${dp.no || ''} ${escapeHtml(dp.name || '')}${stylePart}${oddsPart}${pickBadge}</div>
         ${dp.note ? `<div class="pc-note">${escapeHtml(dp.note)}</div>` : ''}`;
       container.appendChild(card);
     });
@@ -314,17 +309,9 @@
       });
     });
 
-    let searchTimer;
-    searchInput.addEventListener('input', () => {
-      clearTimeout(searchTimer);
-      searchTimer = setTimeout(() => {
-        horseQuery = searchInput.value.trim();
-        if (!viewHome.hidden) {
-          renderHome();
-        } else if (currentMeeting) {
-          renderDetail(currentMeeting); // re-highlight
-        }
-      }, 150);
+    monthFilterSelect.addEventListener('change', () => {
+      monthFilter = monthFilterSelect.value;
+      if (!viewHome.hidden) renderHome();
     });
 
     window.addEventListener('hashchange', route);

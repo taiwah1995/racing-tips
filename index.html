@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0d1117" />
   <meta http-equiv="Cache-Control" content="no-cache" />
   <title>賽馬貼士 · DEMO</title>
-  <link rel="stylesheet" href="css/styles.css?v=20260920f" />
+  <link rel="stylesheet" href="css/styles.css?v=20260920g" />
 </head>
 <body>
   <div id="app">
@@ -29,13 +29,13 @@
             <button class="tab" data-venue="ST" type="button">沙田</button>
             <button class="tab" data-venue="HV" type="button">快活谷</button>
           </div>
-          <label class="search-wrap">
-            <span class="sr-only">搜尋馬名</span>
-            <input id="search-horse" type="search" placeholder="搜尋馬名…" autocomplete="off" />
+          <label class="month-wrap">
+            <span class="month-label">賽事月份</span>
+            <select id="month-filter" aria-label="賽事月份"></select>
           </label>
         </div>
         <ul id="meeting-list" class="meeting-list" aria-live="polite"></ul>
-        <p id="home-empty" class="empty" hidden>找不到符合條件的賽日</p>
+        <p id="home-empty" class="empty" hidden>今個月暫未有賽日貼士</p>
       </section>
 
       <!-- DETAIL VIEW -->
@@ -71,6 +71,6 @@
       DEMO · 僅供參考 · 非投注建議
     </footer>
   </div>
-  <script src="js/app.js?v=20260920f"></script>
+  <script src="js/app.js?v=20260920g"></script>
 </body>
 </html>

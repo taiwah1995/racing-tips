@@ -7,7 +7,7 @@ Mobile-first static demo that replaces Notion tip pages with a file-based archiv
 Live (GitHub Pages):
 
 ```
-https://taiwah1995.github.io/racing-tips/?v=20260920f
+https://taiwah1995.github.io/racing-tips/?v=20260920g
 ```
 
 ### Local server
@@ -53,9 +53,9 @@ All four meetings include official HKJC Local Results top-4. Source notes: `data
 - **Day detail**:
   - 「🏆 全日重心馬匹數據表」— 場次｜首選｜次選｜三選｜冷腳
   - 「🏆 全日重心馬推介」— 每日 3 隻（with place badges when hit）
-- **Filters**: venue tabs + horse-name search
+- **Filters**: venue tabs (全部／沙田／快活谷) + month selector「賽事月份」(defaults to the current month only)
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920f`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920g`) versions data fetches and asset URLs
 
 ## Add a new race day
 

@@ -153,19 +153,35 @@ body {
 }
 .tab:active { opacity: 0.85; }
 
-.search-wrap input {
+.month-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+.month-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+#month-filter {
   width: 100%;
   min-height: var(--tap);
-  padding: 0 14px;
+  padding: 0 40px 0 14px;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--bg-elev);
   color: var(--text);
+  font: inherit;
   font-size: 1rem;
   outline: none;
+  cursor: pointer;
 }
-.search-wrap input::placeholder { color: var(--text-muted); }
-.search-wrap input:focus { border-color: var(--gold-dim); }
+#month-filter:focus { border-color: var(--gold-dim); }
+#month-filter option {
+  background: var(--bg-elev);
+  color: var(--text);
+}
 
 /* ===== Meeting list ===== */
 .meeting-list {
@@ -413,12 +429,6 @@ body {
   font-size: 0.85em;
   color: var(--gold-dim);
   font-weight: 600;
-}
-
-.hl-match {
-  background: rgba(240, 193, 75, 0.25) !important;
-  border-radius: 3px;
-  box-shadow: 0 0 0 1px var(--gold-dim);
 }
 
 .panel-hint {
