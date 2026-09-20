@@ -35,7 +35,7 @@ Place pays top-3 only (冠/亞/季); 殿 does not pay Place unless HKJC chart sh
 
 ## September 2026 monthly totals
 
-UI filters these by venue tab (`全部` / `沙田` ST / `快活谷` HV). Header all-time 累計盈利 stays all venues.
+UI filters both the WP book monthly totals and the header all-time `N 賽馬日 💰 累計盈利` by venue tab (`全部` / `沙田` ST / `快活谷` HV).
 
 ### 全部 (4 settled banker meetings)
 | Pool | 投注 | 贏 | 回報% |

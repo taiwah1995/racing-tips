@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920ab';
+  const APP_DATA_VERSION = '20260920ac';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -171,13 +171,12 @@
   /**
    * Settled banker meetings for selected month from wp-bets.json.
    * Only entries present in the ledger (finished / bankerPlace resolved incl. null miss).
-   * When venue is ST/HV, keep that venue only; 'all' (or omitted) keeps every venue.
    */
-  function settledWpMeetingsForMonth(monthKey, venue) {
+  function settledWpMeetingsForMonth(monthKey, venueCode) {
     if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
     return wpBets.meetings.filter((m) => {
       if (!m.date || !m.date.startsWith(monthKey)) return false;
-      if (venue && venue !== 'all' && m.venueCode !== venue) return false;
+      if (venueCode && venueCode !== 'all' && m.venueCode !== venueCode) return false;
       return true;
     });
   }
@@ -196,14 +195,22 @@
     return { tStake: wStake + pStake, tWin: wWin + pWin };
   }
 
-  /** Header subtitle: N race days + all-time banker WP P&L (white text). */
+  /** All settled banker meetings, optionally filtered by venue tab (ST/HV). */
+  function settledWpMeetings(venueCode) {
+    if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
+    const code = venueCode != null ? venueCode : venueFilter;
+    return wpBets.meetings.filter((m) => {
+      if (!code || code === 'all') return true;
+      return m.venueCode === code;
+    });
+  }
+
+  /** Header subtitle: N race days + banker WP P&L (white text); respects venue tab. */
   function renderAllTimeProfitSubtitle() {
     if (!pageSub) return;
     pageSub.classList.add('subtitle-profit');
     pageSub.hidden = false;
-    const rows = (typeof settledWpMeetings === 'function')
-      ? settledWpMeetings()
-      : (wpBets && Array.isArray(wpBets.meetings) ? wpBets.meetings.slice() : []);
+    const rows = settledWpMeetings(venueFilter);
     if (!rows.length) {
       pageSub.textContent = '0 賽馬日 💰 累計盈利 $0 💰 (回報 +0.0%)';
       return;
