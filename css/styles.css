@@ -257,10 +257,6 @@ body {
   color: var(--text-muted);
   opacity: 0.92;
 }
-.meeting-card .place-badge {
-  font-size: 0.78em;
-  vertical-align: 0.12em;
-}
 .meeting-card .chevron {
   margin-left: auto;
   flex-shrink: 0;
@@ -525,4 +521,16 @@ body {
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
   }
+}
+
+
+/* Home: 馬膽WP投注簿 */
+.banker-wp-book {
+  margin-top: 18px;
+}
+.banker-wp-note {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.4;
 }

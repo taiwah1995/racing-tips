@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920i';
+  const APP_DATA_VERSION = '20260920j';
   let indexData = null;
   let venueFilter = 'all';
   let monthFilter = getCurrentMonthKey();
@@ -36,34 +36,19 @@
     return `${y}-${m}-${d}`;
   }
 
-  const PLACE_BADGE_CLASS = {
-    '冠': 'place-w',
-    '亞': 'place-2',
-    '季': 'place-3',
-    '殿': 'place-4',
-  };
-
-  /** Colored 冠/亞/季/殿 pill (gold/silver/bronze/blue) — home + detail. */
-  function placeBadgeEl(label) {
-    const cls = PLACE_BADGE_CLASS[label];
-    if (!cls) return '';
-    const safe = escapeHtml(label);
-    return `<span class="place-badge ${cls}" title="${safe}">${safe}</span>`;
-  }
-
   /** Map tip horse number → place badge label (冠/亞/季/殿) when result present. */
   function placeBadge(h, result) {
     if (!h || !result) return '';
     const no = Number(h.no);
     const map = [
-      [result.w, '冠'],
-      [result['2'], '亞'],
-      [result['3'], '季'],
-      [result['4'], '殿'],
+      [result.w, '冠', 'place-w'],
+      [result['2'], '亞', 'place-2'],
+      [result['3'], '季', 'place-3'],
+      [result['4'], '殿', 'place-4'],
     ];
-    for (const [finNo, label] of map) {
+    for (const [finNo, label, cls] of map) {
       if (finNo != null && Number(finNo) === no) {
-        return placeBadgeEl(label);
+        return `<span class="place-badge ${cls}" title="${label}">${label}</span>`;
       }
     }
     return '';
@@ -157,14 +142,24 @@
   }
 
 
+  /** Map 冠/亞/季/殿 → place-badge CSS class for home card colors. */
+  function bankerPlaceClass(label) {
+    const map = { '冠': 'place-w', '亞': 'place-2', '季': 'place-3', '殿': 'place-4' };
+    return map[label] || '';
+  }
+
   /** Home card second line: race count + optional 馬膽 (from index banker fields). */
   function formatBankerLine(m) {
     const count = `${m.raceCount}場賽事`;
     const b = m.banker;
     if (!b || !b.name) return escapeHtml(count);
     const odds = b.odds != null && b.odds !== '' ? String(b.odds) : '';
-    const place = placeBadgeEl(m.bankerPlace);
     const oddsPart = odds ? ` ${escapeHtml(odds)}` : '';
+    let place = '';
+    if (m.bankerPlace) {
+      const cls = bankerPlaceClass(m.bankerPlace);
+      place = ` <span class="place-badge ${cls}" title="${escapeAttr(m.bankerPlace)}">${escapeHtml(m.bankerPlace)}</span>`;
+    }
     return `${escapeHtml(count)} <span class="banker-part">| 馬膽 : ${escapeHtml(b.name)}${oddsPart}${place}</span>`;
   }
 
