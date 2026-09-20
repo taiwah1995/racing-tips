@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920h';
+  const APP_DATA_VERSION = '20260920i';
   let indexData = null;
   let venueFilter = 'all';
   let monthFilter = getCurrentMonthKey();
@@ -36,19 +36,34 @@
     return `${y}-${m}-${d}`;
   }
 
+  const PLACE_BADGE_CLASS = {
+    '冠': 'place-w',
+    '亞': 'place-2',
+    '季': 'place-3',
+    '殿': 'place-4',
+  };
+
+  /** Colored 冠/亞/季/殿 pill (gold/silver/bronze/blue) — home + detail. */
+  function placeBadgeEl(label) {
+    const cls = PLACE_BADGE_CLASS[label];
+    if (!cls) return '';
+    const safe = escapeHtml(label);
+    return `<span class="place-badge ${cls}" title="${safe}">${safe}</span>`;
+  }
+
   /** Map tip horse number → place badge label (冠/亞/季/殿) when result present. */
   function placeBadge(h, result) {
     if (!h || !result) return '';
     const no = Number(h.no);
     const map = [
-      [result.w, '冠', 'place-w'],
-      [result['2'], '亞', 'place-2'],
-      [result['3'], '季', 'place-3'],
-      [result['4'], '殿', 'place-4'],
+      [result.w, '冠'],
+      [result['2'], '亞'],
+      [result['3'], '季'],
+      [result['4'], '殿'],
     ];
-    for (const [finNo, label, cls] of map) {
+    for (const [finNo, label] of map) {
       if (finNo != null && Number(finNo) === no) {
-        return `<span class="place-badge ${cls}" title="${label}">${label}</span>`;
+        return placeBadgeEl(label);
       }
     }
     return '';
@@ -148,7 +163,7 @@
     const b = m.banker;
     if (!b || !b.name) return escapeHtml(count);
     const odds = b.odds != null && b.odds !== '' ? String(b.odds) : '';
-    const place = m.bankerPlace ? ` ${escapeHtml(m.bankerPlace)}` : '';
+    const place = placeBadgeEl(m.bankerPlace);
     const oddsPart = odds ? ` ${escapeHtml(odds)}` : '';
     return `${escapeHtml(count)} <span class="banker-part">| 馬膽 : ${escapeHtml(b.name)}${oddsPart}${place}</span>`;
   }
