@@ -4,6 +4,14 @@ Mobile-first static demo that replaces Notion tip pages with a file-based archiv
 
 ## Open the demo
 
+Live (GitHub Pages):
+
+```
+https://taiwah1995.github.io/racing-tips/?v=20260920e
+```
+
+### Local server
+
 ```bash
 cd /workspace/racing-tips-demo
 python3 -m http.server 8765 --bind 127.0.0.1
@@ -13,13 +21,21 @@ Then open `http://127.0.0.1:8765/` (phone width ~390–430px looks best).
 
 ## Tip cell format
 
-Four tip columns（首選／次選／三選／冷腳）render each horse as:
+Four tip columns（首選／次選／三選／冷腳）render each horse on **two lines**:
 
 ```
-馬號 馬名 (跑法) 賠率
+Line 1: 馬號 馬名 (跑法) [badge]
+Line 2: 賠率
 ```
 
-Example: `7 銀亮濠俠 (前) 6.6` — odds (`h.odds`) sit immediately after the closing parenthesis on the same compact line.
+Example:
+
+```
+7 銀亮濠俠 (前) 冠
+6.6
+```
+
+Odds (`h.odds`) always sit on the second line. The optional place badge（冠／亞／季／殿）stays on line 1 after the running style.
 
 ## Post-race results schema
 
@@ -41,10 +57,10 @@ Demo: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, and 
 - **Home**: list of tip archives (date + venue 沙田/快活谷 + race count)
 - **Day detail**:
   - 「🏆 全日重心馬匹數據表」— 場次｜首選｜次選｜三選｜冷腳
-  - 「🏆 全日重心馬推介」
+  - 「🏆 全日重心馬推介」— 每日 3 隻
 - **Filters**: venue tabs + horse-name search
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920d`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920e`) versions data fetches and asset URLs
 
 ## Add a new race day
 

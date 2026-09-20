@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920d';
+  const APP_DATA_VERSION = '20260920e';
   let indexData = null;
   let currentMeeting = null;
   let venueFilter = 'all';
@@ -56,26 +56,25 @@
   }
 
   /**
-   * Tip cell: 馬號 馬名 (跑法) 賠率 — odds immediately after closing paren.
-   * Optional place badge when row has result.
+   * Tip cell: line1 馬號 馬名 (跑法) [badge]; line2 always odds.
    */
   function horseCell(h, colClass, result) {
     if (!h) return '<span class="cell-horse">—</span>';
     const name = escapeHtml(h.name);
     const stylePart = h.style ? ` (${h.style})` : '';
-    const oddsPart = h.odds != null && h.odds !== '' ? ` ${h.odds}` : '';
-    const label = `${h.no} ${h.name}${stylePart}${oddsPart}`;
+    const oddsPart = h.odds != null && h.odds !== '' ? String(h.odds) : '';
+    const label = `${h.no} ${h.name}${stylePart}${oddsPart ? ' ' + oddsPart : ''}`;
     const match = horseQuery && name.includes(horseQuery);
-    const styleOdds =
-      (h.style
-        ? ` <span class="hs">(${escapeHtml(h.style)})</span>`
-        : '') +
-      (h.odds != null && h.odds !== ''
-        ? ` <span class="ho">${escapeHtml(String(h.odds))}</span>`
-        : '');
+    const styleHtml = h.style
+      ? ` <span class="hs">(${escapeHtml(h.style)})</span>`
+      : '';
+    const oddsHtml = oddsPart
+      ? `<span class="ho">${escapeHtml(oddsPart)}</span>`
+      : '<span class="ho ho-empty"></span>';
     const badge = placeBadge(h, result);
     return `<span class="cell-horse ${colClass || ''}${match ? ' hl-match' : ''}" title="${escapeAttr(label)}">
-      <span class="hn">${h.no} ${name}</span>${styleOdds}${badge}
+      <span class="hline1"><span class="hn">${h.no} ${name}</span>${styleHtml}${badge}</span>
+      <span class="hline2">${oddsHtml}</span>
     </span>`;
   }
 
