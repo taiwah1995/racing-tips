@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920o';
+  const APP_DATA_VERSION = '20260920p';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -163,25 +163,23 @@
     return label + '｜投注 ' + formatMoney(stake) + '｜贏 ' + formatMoney(win) + '｜回報 ' + formatRoi(win, stake);
   }
 
+  function settledWpMeetings() {
+    if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
+    return wpBets.meetings;
+  }
+
   /**
    * Settled banker meetings for selected month from wp-bets.json.
    * Only entries present in the ledger (finished / bankerPlace resolved incl. null miss).
    */
   function settledWpMeetingsForMonth(monthKey) {
-    if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
-    return wpBets.meetings.filter((m) => m.date && m.date.startsWith(monthKey));
+    return settledWpMeetings().filter((m) => m.date && m.date.startsWith(monthKey));
   }
 
-  function renderWpLedger() {
-    const el = document.getElementById('banker-wp-ledger');
-    if (!el) return;
+  /** Stake W$100 / P$300 (or wp-bets.json overrides) for the given settled rows. */
+  function wpPoolTotals(rows) {
     const stakeW = (wpBets && wpBets.stakeWin) || 100;
     const stakeP = (wpBets && wpBets.stakePlace) || 300;
-    const rows = settledWpMeetingsForMonth(monthFilter);
-    if (!rows.length) {
-      el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
-      return;
-    }
     let wStake = 0;
     let pStake = 0;
     let wWin = 0;
@@ -194,16 +192,44 @@
     });
     const tStake = wStake + pStake;
     const tWin = wWin + pWin;
-    const profit = tWin - tStake;
+    return { wStake, pStake, wWin, pWin, tStake, tWin, profit: tWin - tStake };
+  }
+
+  function formatProfitStarLine(label, profit, tWin, tStake) {
     const profitAbs = Math.abs(Math.round(profit));
     const profitStr = (profit >= 0 ? '$' : '-$') + profitAbs;
+    return '☆ ' + label + ' ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')';
+  }
+
+  /** Header subtitle: all-time banker WP P&L from every settled meeting in wp-bets.json. */
+  function renderAllTimeProfitSubtitle() {
+    pageSub.classList.add('subtitle-profit');
+    pageSub.hidden = false;
+    const rows = settledWpMeetings();
+    if (!rows.length) {
+      pageSub.textContent = '☆ 累計盈利 $0 ☆ (回報 +/-0.0%)';
+      return;
+    }
+    const t = wpPoolTotals(rows);
+    pageSub.textContent = formatProfitStarLine('累計盈利', t.profit, t.tWin, t.tStake);
+  }
+
+  function renderWpLedger() {
+    const el = document.getElementById('banker-wp-ledger');
+    if (!el) return;
+    const rows = settledWpMeetingsForMonth(monthFilter);
+    if (!rows.length) {
+      el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
+      return;
+    }
+    const t = wpPoolTotals(rows);
     el.innerHTML =
       '<div class="banker-wp-summary">' +
       '<div class="banker-wp-title">當月累計投注:</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('W', wStake, wWin) + '</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('P', pStake, pWin) + '</div>' +
-      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(tStake) + '｜贏 ' + formatMoney(tWin) + '｜</div>' +
-      '<div class="banker-wp-line banker-wp-profit">☆ 本月盈利 ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('W', t.wStake, t.wWin) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('P', t.pStake, t.pWin) + '</div>' +
+      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(t.tStake) + '｜贏 ' + formatMoney(t.tWin) + '｜</div>' +
+      '<div class="banker-wp-line banker-wp-profit">' + formatProfitStarLine('本月盈利', t.profit, t.tWin, t.tStake) + '</div>' +
       '</div>';
   }
 
@@ -234,8 +260,7 @@
     viewDetail.hidden = true;
     btnBack.hidden = true;
     pageTitle.textContent = '🏇 TW賽馬貼士';
-    pageSub.hidden = false;
-    pageSub.textContent = '貼士存檔';
+    renderAllTimeProfitSubtitle();
 
     renderWpLedger();
 
