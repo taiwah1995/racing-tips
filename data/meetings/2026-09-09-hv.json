@@ -295,8 +295,10 @@
       "no": 6,
       "name": "福進",
       "style": "前",
-      "odds": 5.9,
-      "note": ""
+      "odds": 5.4,
+      "note": "",
+      "oddsWin": 5.4,
+      "oddsPlace": 1.8
     },
     {
       "race": 7,
@@ -305,8 +307,10 @@
       "no": 1,
       "name": "官金騏",
       "style": "前",
-      "odds": 3.5,
-      "note": ""
+      "odds": 2.0,
+      "note": "",
+      "oddsWin": 2.0,
+      "oddsPlace": 1.0
     },
     {
       "race": 8,
@@ -315,8 +319,10 @@
       "no": 2,
       "name": "人和家興",
       "style": "前",
-      "odds": 5.9,
-      "note": ""
+      "odds": 22.0,
+      "note": "",
+      "oddsWin": 22.0,
+      "oddsPlace": 4.9
     }
   ]
 }

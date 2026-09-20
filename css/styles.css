@@ -591,3 +591,14 @@ body {
   color: var(--text-muted);
   line-height: 1.35;
 }
+
+.pc-final-odds {
+  font-size: 0.78em;
+  color: var(--gold-dim);
+  font-weight: 600;
+  white-space: normal;
+}
+.pc-horse {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}

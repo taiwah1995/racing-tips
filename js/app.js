@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920x';
+  const APP_DATA_VERSION = '20260920y';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -390,20 +390,25 @@
       const card = document.createElement('div');
       card.className = 'pick-card' + (i === 0 ? ' pick-top' : '');
       const clsDist = `${dp.class || ''}${dp.distance != null ? dp.distance : ''}`;
-      const stylePart = dp.style ? ` (${escapeHtml(dp.style)})` : '';
-      const oddsPart =
-        dp.odds != null && dp.odds !== ''
-          ? ` <span class="pc-odds-inline">${escapeHtml(String(dp.odds))}</span>`
-          : '';
       const raceRow = (meeting.tipsTable || []).find((r) => Number(r.race) === Number(dp.race));
       const pickBadge = placeBadge(dp, raceRow && raceRow.result ? raceRow.result : null);
+      const wOdds = dp.oddsWin != null ? dp.oddsWin : dp.odds;
+      const pOdds = dp.oddsPlace;
+      let finalOddsHtml = '';
+      if (wOdds != null && wOdds !== '' && pOdds != null && pOdds !== '') {
+        finalOddsHtml =
+          ` <span class="pc-final-odds">(最終賠率 W：${escapeHtml(String(wOdds))} ｜P：${escapeHtml(String(pOdds))})</span>`;
+      } else if (wOdds != null && wOdds !== '') {
+        finalOddsHtml =
+          ` <span class="pc-final-odds">(最終賠率 W：${escapeHtml(String(wOdds))})</span>`;
+      }
       card.innerHTML = `
         <div class="pc-head">
           <span class="pc-race">第${dp.race}場</span>
           <span class="pc-class">${escapeHtml(clsDist)}</span>
           ${i === 0 ? '<span class="top-badge">⭐ 心水</span>' : ''}
         </div>
-        <div class="pc-horse">${dp.no || ''} ${escapeHtml(dp.name || '')}${stylePart}${oddsPart}${pickBadge}</div>
+        <div class="pc-horse">${dp.no || ''} ${escapeHtml(dp.name || '')}${pickBadge}${finalOddsHtml}</div>
         ${dp.note ? `<div class="pc-note">${escapeHtml(dp.note)}</div>` : ''}`;
       container.appendChild(card);
     });

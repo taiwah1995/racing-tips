@@ -366,7 +366,9 @@
       "name": "櫻花酒杯",
       "style": "前",
       "odds": 3.1,
-      "note": ""
+      "note": "",
+      "oddsWin": 3.1,
+      "oddsPlace": 1.5
     },
     {
       "race": 6,
@@ -375,8 +377,10 @@
       "no": 2,
       "name": "哈羅威",
       "style": "前",
-      "odds": 3.8,
-      "note": ""
+      "odds": 3.0,
+      "note": "",
+      "oddsWin": 3.0,
+      "oddsPlace": 1.3
     },
     {
       "race": 5,
@@ -385,8 +389,10 @@
       "no": 5,
       "name": "明德輝煌",
       "style": "後",
-      "odds": 7.3,
-      "note": ""
+      "odds": 6.3,
+      "note": "",
+      "oddsWin": 6.3,
+      "oddsPlace": 2.1
     }
   ]
 }

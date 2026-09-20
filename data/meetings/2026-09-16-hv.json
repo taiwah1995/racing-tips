@@ -295,8 +295,10 @@
       "no": 3,
       "name": "烈焰光芒",
       "style": "前",
-      "odds": 4.5,
-      "note": ""
+      "odds": 3.1,
+      "note": "",
+      "oddsWin": 3.1,
+      "oddsPlace": 1.6
     },
     {
       "race": 6,
@@ -305,8 +307,10 @@
       "no": 3,
       "name": "浪漫鬥士",
       "style": "前",
-      "odds": 8.2,
-      "note": ""
+      "odds": 12.0,
+      "note": "",
+      "oddsWin": 12.0,
+      "oddsPlace": 3.4
     },
     {
       "race": 8,
@@ -315,8 +319,10 @@
       "no": 8,
       "name": "勁沙塵",
       "style": "後",
-      "odds": 6.0,
-      "note": ""
+      "odds": 4.9,
+      "note": "",
+      "oddsWin": 4.9,
+      "oddsPlace": 1.7
     }
   ]
 }
