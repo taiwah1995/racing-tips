@@ -353,6 +353,7 @@ body {
   display: block;
   margin-top: 1px;
   line-height: 1.2;
+  white-space: nowrap;
 }
 .cell-horse .hs {
   display: inline;
@@ -362,7 +363,7 @@ body {
   white-space: nowrap;
 }
 .cell-horse .ho {
-  display: block;
+  display: inline;
   font-size: 0.92em;
   color: var(--gold-dim);
   font-weight: 600;
@@ -375,14 +376,14 @@ body {
 /* Post-race place badges: 冠／亞／季／殿 */
 .place-badge {
   display: inline-block;
-  margin-left: 2px;
+  margin-left: 3px;
   padding: 0 4px;
   border-radius: 999px;
-  font-size: 0.62em;
+  font-size: 0.72em; /* ~1px larger than prior 0.62em */
   font-weight: 800;
   line-height: 1.35;
   letter-spacing: 0.02em;
-  vertical-align: top;
+  vertical-align: baseline;
   white-space: nowrap;
 }
 .place-badge.place-w {

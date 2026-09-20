@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920e';
+  const APP_DATA_VERSION = '20260920f';
   let indexData = null;
   let currentMeeting = null;
   let venueFilter = 'all';
@@ -56,7 +56,7 @@
   }
 
   /**
-   * Tip cell: line1 馬號 馬名 (跑法) [badge]; line2 always odds.
+   * Tip cell: line1 馬號 馬名 (跑法); line2 odds + place badge (same line).
    */
   function horseCell(h, colClass, result) {
     if (!h) return '<span class="cell-horse">—</span>';
@@ -73,8 +73,8 @@
       : '<span class="ho ho-empty"></span>';
     const badge = placeBadge(h, result);
     return `<span class="cell-horse ${colClass || ''}${match ? ' hl-match' : ''}" title="${escapeAttr(label)}">
-      <span class="hline1"><span class="hn">${h.no} ${name}</span>${styleHtml}${badge}</span>
-      <span class="hline2">${oddsHtml}</span>
+      <span class="hline1"><span class="hn">${h.no} ${name}</span>${styleHtml}</span>
+      <span class="hline2">${oddsHtml}${badge}</span>
     </span>`;
   }
 
@@ -265,13 +265,15 @@
         dp.odds != null && dp.odds !== ''
           ? ` <span class="pc-odds-inline">${escapeHtml(String(dp.odds))}</span>`
           : '';
+      const raceRow = (meeting.tipsTable || []).find((r) => Number(r.race) === Number(dp.race));
+      const pickBadge = placeBadge(dp, raceRow && raceRow.result ? raceRow.result : null);
       card.innerHTML = `
         <div class="pc-head">
           <span class="pc-race">第${dp.race}場</span>
           <span class="pc-class">${escapeHtml(clsDist)}</span>
           ${i === 0 ? '<span class="top-badge">⭐ 心水</span>' : ''}
         </div>
-        <div class="pc-horse${match ? ' hl-match' : ''}">${dp.no || ''} ${escapeHtml(dp.name || '')}${stylePart}${oddsPart}</div>
+        <div class="pc-horse${match ? ' hl-match' : ''}">${dp.no || ''} ${escapeHtml(dp.name || '')}${stylePart}${oddsPart}${pickBadge}</div>
         ${dp.note ? `<div class="pc-note">${escapeHtml(dp.note)}</div>` : ''}`;
       container.appendChild(card);
     });
