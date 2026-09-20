@@ -131,7 +131,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .venue-tabs {
@@ -522,9 +522,10 @@ body {
 }
 
 
-/* Home: 馬膽WP投注簿 */
+/* Home: 馬膽WP投注簿 — sits between month selector and meeting cards */
 .banker-wp-book {
-  margin-top: 18px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 .banker-wp-book .panel-title,
 .banker-wp-heading {
@@ -585,7 +586,7 @@ body {
 }
 
 .banker-wp-foot {
-  margin: 6px 2px 0;
+  margin: 6px 2px 14px;
   padding: 0 2px;
   font-size: 0.72rem;
   color: var(--text-muted);
