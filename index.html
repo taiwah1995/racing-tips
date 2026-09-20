@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#0d1117" />
   <meta http-equiv="Cache-Control" content="no-cache" />
-  <title>賽馬貼士 · DEMO</title>
-  <link rel="stylesheet" href="css/styles.css?v=20260920i" />
+  <title>TW賽馬貼士</title>
+  <link rel="stylesheet" href="css/styles.css?v=20260920l" />
 </head>
 <body>
   <div id="app">
@@ -14,8 +14,8 @@
       <div class="header-inner">
         <button id="btn-back" class="btn-back" type="button" aria-label="返回" hidden>←</button>
         <div class="header-titles">
-          <h1 id="page-title">🏇 賽馬貼士</h1>
-          <p id="page-sub" class="subtitle">貼士存檔 · DEMO</p>
+          <h1 id="page-title">🏇 TW賽馬貼士</h1>
+          <p id="page-sub" class="subtitle">貼士存檔</p>
         </div>
       </div>
     </header>
@@ -36,6 +36,12 @@
         </div>
         <ul id="meeting-list" class="meeting-list" aria-live="polite"></ul>
         <p id="home-empty" class="empty" hidden>今個月暫未有賽日貼士</p>
+
+        <div class="panel banker-wp-book" id="banker-wp-book">
+          <h2 class="panel-title">馬膽WP投注簿</h2>
+          <p class="panel-hint banker-wp-note">馬膽投注 獨贏$100 位置$300</p>
+          <div id="banker-wp-ledger" class="banker-wp-ledger" aria-live="polite"></div>
+        </div>
       </section>
 
       <!-- DETAIL VIEW -->
@@ -68,9 +74,9 @@
     </main>
 
     <footer class="site-footer">
-      DEMO · 僅供參考 · 非投注建議
+      僅供參考 · 非投注建議
     </footer>
   </div>
-  <script src="js/app.js?v=20260920i"></script>
+  <script src="js/app.js?v=20260920l"></script>
 </body>
 </html>

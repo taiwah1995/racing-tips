@@ -1,19 +1,18 @@
-# 賽馬貼士 DEMO（Hong Kong Racing Tips Archive）
+# TW賽馬貼士（Hong Kong Racing Tips Archive）
 
-Mobile-first static demo that replaces Notion tip pages with a file-based archive.
+Mobile-first static site that replaces Notion tip pages with a file-based archive.
 
-## Open the demo
+## Open
 
 Live (GitHub Pages):
 
 ```
-https://taiwah1995.github.io/racing-tips/?v=20260920i
+https://taiwah1995.github.io/racing-tips/?v=20260920l
 ```
 
 ### Local server
 
 ```bash
-cd /workspace/racing-tips-demo
 python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
@@ -42,17 +41,18 @@ Optional per-race top-4 on each `tipsTable` row:
 - No `result` → no badges
 - If any race has results, a note appears under the table: `已完場 · 命中標示：冠／亞／季／殿`
 
-Demo: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, and 7.
+Example: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, and 7.
 
 ## Features
 
-- **Home**: list of tip archives (date + venue 沙田/快活谷 + race count)
+- **Home**: list of tip archives (date + venue 沙田/快活谷 + race count + 馬膽 with colored place pills)
+- **馬膽WP投注簿**: monthly W / P / TOTAL ledger from `data/wp-bets.json`（當月累計投注）
 - **Day detail**:
   - 「🏆 全日重心馬匹數據表」— 場次｜首選｜次選｜三選｜冷腳
   - 「🏆 全日重心馬推介」— 每日 3 隻
-- **Filters**: venue tabs + horse-name search
+- **Filters**: venue tabs + 賽事月份
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920c`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920l`) versions data fetches and asset URLs
 
 ## Add a new race day
 
@@ -66,7 +66,7 @@ No build step — plain HTML + CSS + JS.
 
 | File | Date | Venue |
 |------|------|-------|
-| `data/meetings/2026-09-16-hv.json` | 2026-09-16 | 快活谷 · 8場（含完場 demo） |
+| `data/meetings/2026-09-16-hv.json` | 2026-09-16 | 快活谷 · 8場（含完場結果） |
 | `data/meetings/2026-09-12-st.json` | 2026-09-12 | 沙田 |
 | `data/meetings/2026-09-09-hv.json` | 2026-09-09 | 快活谷 |
 | `data/meetings/2026-09-06-st.json` | 2026-09-06 | 沙田 |

@@ -1,13 +1,14 @@
 /**
- * 賽馬貼士 DEMO — hash-routed SPA
+ * TW賽馬貼士 — hash-routed SPA
  * Routes: #/  |  #/meeting/:id
  */
 (function () {
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920i';
+  const APP_DATA_VERSION = '20260920l';
   let indexData = null;
+  let wpBets = null;
   let venueFilter = 'all';
   let monthFilter = getCurrentMonthKey();
 
@@ -141,6 +142,66 @@
     return res.json();
   }
 
+  async function loadWpBets() {
+    const res = await fetch(dataUrl('wp-bets.json'));
+    if (!res.ok) throw new Error('無法載入 wp-bets.json');
+    wpBets = await res.json();
+  }
+
+  function formatMoney(n) {
+    return '$' + Math.round(Number(n) || 0);
+  }
+
+  function formatRoi(winAmt, stakeAmt) {
+    if (!stakeAmt) return '+/-0.0%';
+    const pct = ((winAmt - stakeAmt) / stakeAmt) * 100;
+    const sign = pct >= 0 ? '+' : '';
+    return sign + pct.toFixed(1) + '%';
+  }
+
+  function formatLedgerLine(label, stake, win) {
+    return label + '｜投注 ' + formatMoney(stake) + ' | 贏 ' + formatMoney(win) + ' ｜回報 ' + formatRoi(win, stake);
+  }
+
+  /**
+   * Settled banker meetings for selected month from wp-bets.json.
+   * Only entries present in the ledger (finished / bankerPlace resolved incl. null miss).
+   */
+  function settledWpMeetingsForMonth(monthKey) {
+    if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
+    return wpBets.meetings.filter((m) => m.date && m.date.startsWith(monthKey));
+  }
+
+  function renderWpLedger() {
+    const el = document.getElementById('banker-wp-ledger');
+    if (!el) return;
+    const stakeW = (wpBets && wpBets.stakeWin) || 100;
+    const stakeP = (wpBets && wpBets.stakePlace) || 300;
+    const rows = settledWpMeetingsForMonth(monthFilter);
+    if (!rows.length) {
+      el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
+      return;
+    }
+    let wStake = 0;
+    let pStake = 0;
+    let wWin = 0;
+    let pWin = 0;
+    rows.forEach((m) => {
+      wStake += stakeW;
+      pStake += stakeP;
+      wWin += Number(m.winReturn) || 0;
+      pWin += Number(m.placeReturn) || 0;
+    });
+    const tStake = wStake + pStake;
+    const tWin = wWin + pWin;
+    el.innerHTML =
+      '<div class="banker-wp-summary">' +
+      '<div class="banker-wp-title">當月累計投注:</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('W', wStake, wWin) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('P', pStake, pWin) + '</div>' +
+      '<div class="banker-wp-line banker-wp-total">' + formatLedgerLine('TOTAL', tStake, tWin) + '</div>' +
+      '</div>';
+  }
 
   /** Map 冠/亞/季/殿 → place-badge CSS class for home card colors. */
   function bankerPlaceClass(label) {
@@ -168,9 +229,11 @@
     viewHome.hidden = false;
     viewDetail.hidden = true;
     btnBack.hidden = true;
-    pageTitle.textContent = '🏇 賽馬貼士';
+    pageTitle.textContent = '🏇 TW賽馬貼士';
     pageSub.hidden = false;
-    pageSub.textContent = '貼士存檔 · DEMO';
+    pageSub.textContent = '貼士存檔';
+
+    renderWpLedger();
 
     const monthMeetings = indexData.meetings.filter((m) =>
       m.date.startsWith(monthFilter)
@@ -345,6 +408,7 @@
     bindEvents();
     try {
       await loadIndex();
+      await loadWpBets();
       await route();
     } catch (err) {
       meetingList.innerHTML = '';
