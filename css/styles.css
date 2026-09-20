@@ -300,7 +300,7 @@ body {
   padding: 5px 1px;
   text-align: center;
   border-bottom: 1px solid var(--border);
-  vertical-align: middle;
+  vertical-align: top;
   line-height: 1.25;
   overflow-wrap: anywhere;
   word-break: break-word;

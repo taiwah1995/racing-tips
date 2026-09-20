@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920c';
+  const APP_DATA_VERSION = '20260920d';
   let indexData = null;
   let currentMeeting = null;
   let venueFilter = 'all';

@@ -41,10 +41,10 @@ Demo: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, and 
 - **Home**: list of tip archives (date + venue 沙田/快活谷 + race count)
 - **Day detail**:
   - 「🏆 全日重心馬匹數據表」— 場次｜首選｜次選｜三選｜冷腳
-  - 「🏆 全日重心馬推介」— 每日 3 隻
+  - 「🏆 全日重心馬推介」
 - **Filters**: venue tabs + horse-name search
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920c`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920d`) versions data fetches and asset URLs
 
 ## Add a new race day
 
