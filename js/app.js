@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920q';
+  const APP_DATA_VERSION = '20260920r';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -163,23 +163,66 @@
     return label + '｜投注 ' + formatMoney(stake) + '｜贏 ' + formatMoney(win) + '｜回報 ' + formatRoi(win, stake);
   }
 
-  function settledWpMeetings() {
-    if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
-    return wpBets.meetings;
-  }
-
   /**
    * Settled banker meetings for selected month from wp-bets.json.
    * Only entries present in the ledger (finished / bankerPlace resolved incl. null miss).
    */
   function settledWpMeetingsForMonth(monthKey) {
-    return settledWpMeetings().filter((m) => m.date && m.date.startsWith(monthKey));
+    if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
+    return wpBets.meetings.filter((m) => m.date && m.date.startsWith(monthKey));
   }
 
-  /** Stake W$100 / P$300 (or wp-bets.json overrides) for the given settled rows. */
-  function wpPoolTotals(rows) {
+
+  function sumWpReturns(rows) {
     const stakeW = (wpBets && wpBets.stakeWin) || 100;
     const stakeP = (wpBets && wpBets.stakePlace) || 300;
+    let wStake = 0, pStake = 0, wWin = 0, pWin = 0;
+    rows.forEach((m) => {
+      wStake += stakeW;
+      pStake += stakeP;
+      wWin += Number(m.winReturn) || 0;
+      pWin += Number(m.placeReturn) || 0;
+    });
+    return { tStake: wStake + pStake, tWin: wWin + pWin };
+  }
+
+  /** Header subtitle: N race days + all-time banker WP P&L (white text). */
+  function renderAllTimeProfitSubtitle() {
+    if (!pageSub) return;
+    pageSub.classList.add('subtitle-profit');
+    pageSub.hidden = false;
+    const rows = (typeof settledWpMeetings === 'function')
+      ? settledWpMeetings()
+      : (wpBets && Array.isArray(wpBets.meetings) ? wpBets.meetings.slice() : []);
+    if (!rows.length) {
+      pageSub.textContent = '0 賽馬日 ☆ 累計盈利 $0 ☆ (回報 +0.0%)';
+      return;
+    }
+    let tStake, tWin, profit;
+    if (typeof wpPoolTotals === 'function') {
+      const t = wpPoolTotals(rows);
+      tStake = t.tStake; tWin = t.tWin; profit = t.profit;
+    } else {
+      const r = sumWpReturns(rows);
+      tStake = r.tStake; tWin = r.tWin; profit = tWin - tStake;
+    }
+    const profitAbs = Math.abs(Math.round(profit));
+    const profitStr = (profit >= 0 ? '$' : '-$') + profitAbs;
+    pageSub.textContent =
+      rows.length + ' 賽馬日 ☆ 累計盈利 ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')';
+  }
+
+
+  function renderWpLedger() {
+    const el = document.getElementById('banker-wp-ledger');
+    if (!el) return;
+    const stakeW = (wpBets && wpBets.stakeWin) || 100;
+    const stakeP = (wpBets && wpBets.stakePlace) || 300;
+    const rows = settledWpMeetingsForMonth(monthFilter);
+    if (!rows.length) {
+      el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
+      return;
+    }
     let wStake = 0;
     let pStake = 0;
     let wWin = 0;
@@ -192,44 +235,16 @@
     });
     const tStake = wStake + pStake;
     const tWin = wWin + pWin;
-    return { wStake, pStake, wWin, pWin, tStake, tWin, profit: tWin - tStake };
-  }
-
-  function formatProfitStarLine(label, profit, tWin, tStake) {
+    const profit = tWin - tStake;
     const profitAbs = Math.abs(Math.round(profit));
     const profitStr = (profit >= 0 ? '$' : '-$') + profitAbs;
-    return '☆ ' + label + ' ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')';
-  }
-
-  /** Header subtitle: N race days + all-time banker WP P&L (white .subtitle-profit). */
-  function renderAllTimeProfitSubtitle() {
-    pageSub.classList.add('subtitle-profit');
-    pageSub.hidden = false;
-    const rows = settledWpMeetings();
-    if (!rows.length) {
-      pageSub.textContent = '0 賽馬日 ☆ 累計盈利 $0 ☆ (回報 +0.0%)';
-      return;
-    }
-    const t = wpPoolTotals(rows);
-    pageSub.textContent = rows.length + ' 賽馬日 ' + formatProfitStarLine('累計盈利', t.profit, t.tWin, t.tStake);
-  }
-
-  function renderWpLedger() {
-    const el = document.getElementById('banker-wp-ledger');
-    if (!el) return;
-    const rows = settledWpMeetingsForMonth(monthFilter);
-    if (!rows.length) {
-      el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
-      return;
-    }
-    const t = wpPoolTotals(rows);
     el.innerHTML =
       '<div class="banker-wp-summary">' +
       '<div class="banker-wp-title">當月累計投注:</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('W', t.wStake, t.wWin) + '</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('P', t.pStake, t.pWin) + '</div>' +
-      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(t.tStake) + '｜贏 ' + formatMoney(t.tWin) + '｜</div>' +
-      '<div class="banker-wp-line banker-wp-profit">' + formatProfitStarLine('本月盈利', t.profit, t.tWin, t.tStake) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('W', wStake, wWin) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('P', pStake, pWin) + '</div>' +
+      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(tStake) + '｜贏 ' + formatMoney(tWin) + '｜</div>' +
+      '<div class="banker-wp-line banker-wp-profit">☆ 本月盈利 ' + profitStr + ' ☆ (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
       '</div>';
   }
 
@@ -261,7 +276,6 @@
     btnBack.hidden = true;
     pageTitle.textContent = '🏇 TW賽馬貼士';
     renderAllTimeProfitSubtitle();
-
     renderWpLedger();
 
     const monthMeetings = indexData.meetings.filter((m) =>

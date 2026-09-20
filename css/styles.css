@@ -536,6 +536,8 @@ body {
 .banker-wp-book .panel-title,
 .banker-wp-heading {
   border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 .banker-wp-heading {
   display: flex;
@@ -550,7 +552,8 @@ body {
   line-height: 1.35;
 }
 .banker-wp-ledger {
-  margin-top: 10px;
+  margin-top: 0;
+  padding: 0 10px 10px;
 }
 .banker-wp-summary {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
