@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260920ac';
+  const APP_DATA_VERSION = '20260921test0923';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -352,9 +352,18 @@
     viewHome.hidden = true;
     viewDetail.hidden = false;
     btnBack.hidden = false;
-    pageTitle.textContent = `${formatShortDate(meeting.date)} ${meeting.venue} ${meeting.raceCount}場賽事`;
-    pageSub.textContent = '';
-    pageSub.hidden = true;
+    const titleBase = `${formatShortDate(meeting.date)} ${meeting.venue} ${meeting.raceCount}場賽事`;
+    pageTitle.textContent = meeting.label ? `${titleBase}【${meeting.label}】` : titleBase;
+    if (meeting.label) {
+      pageSub.classList.remove('subtitle-profit');
+      pageSub.hidden = false;
+      pageSub.textContent = meeting.testNote
+        ? String(meeting.testNote)
+        : `⚠ ${meeting.label} · 僅供參考 · 非投注建議`;
+    } else {
+      pageSub.textContent = '';
+      pageSub.hidden = true;
+    }
 
     const meta = $('#detail-meta');
     if (meta) meta.innerHTML = '';
@@ -388,6 +397,11 @@
     if (hasAnyResult) {
       noteEl.hidden = false;
       noteEl.textContent = '已完場 · 命中標示：🏆／🥈／🥉／4️⃣';
+    } else if (meeting.label) {
+      noteEl.hidden = false;
+      noteEl.textContent = meeting.testNote
+        ? String(meeting.testNote)
+        : `【${meeting.label}】僅供參考 · 非投注建議`;
     } else {
       noteEl.hidden = true;
       noteEl.textContent = '';

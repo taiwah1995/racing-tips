@@ -1,0 +1,310 @@
+{
+  "id": "2026-09-23-hv",
+  "date": "2026-09-23",
+  "venue": "快活谷",
+  "venueCode": "HV",
+  "raceCount": 9,
+  "label": "測試",
+  "testNote": "測試頁 · 僅R1為真實Poe 4甲；R5/R8待分析官交回後更新；其餘場次(2,3,4,6,7,9)暫用R1重複內容只改場次號。賠率待定。僅供參考 · 非投注建議。",
+  "tipsTable": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1650,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    },
+    {
+      "race": 2,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    },
+    {
+      "race": 3,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    },
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    },
+    {
+      "race": 6,
+      "class": "四班",
+      "distance": 1000,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    },
+    {
+      "race": 7,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    },
+    {
+      "race": 8,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    },
+    {
+      "race": 9,
+      "class": "三班",
+      "distance": 1800,
+      "first": {
+        "no": 6,
+        "name": "開心三多",
+        "style": "後",
+        "odds": null
+      },
+      "second": {
+        "no": 3,
+        "name": "神駒馬靈",
+        "style": "前",
+        "odds": null
+      },
+      "third": {
+        "no": 8,
+        "name": "電訊驕陽",
+        "style": "後",
+        "odds": null
+      },
+      "dark": {
+        "no": 11,
+        "name": "東方魅影",
+        "style": "中前",
+        "odds": null
+      }
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1650,
+      "no": 6,
+      "name": "開心三多",
+      "style": "後",
+      "odds": null,
+      "note": "【測試】R1真實首選 · 隔夜賠率待定",
+      "oddsWin": null,
+      "oddsPlace": null
+    },
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1650,
+      "no": 6,
+      "name": "開心三多",
+      "style": "後",
+      "odds": null,
+      "note": "【測試】暫用R1重複 · 待R5 Poe更新",
+      "oddsWin": null,
+      "oddsPlace": null
+    },
+    {
+      "race": 8,
+      "class": "三班",
+      "distance": 1200,
+      "no": 6,
+      "name": "開心三多",
+      "style": "後",
+      "odds": null,
+      "note": "【測試】暫用R1重複 · 待R8 Poe更新",
+      "oddsWin": null,
+      "oddsPlace": null
+    }
+  ]
+}
