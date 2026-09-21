@@ -5,7 +5,7 @@
   "venueCode": "HV",
   "raceCount": 9,
   "label": "測試",
-  "testNote": "測試頁 · R1+R5為真實Poe 4甲；R8待分析官；其餘場次(2,3,4,6,7,9)=R1重複只改場次號。賠率待定。僅供參考 · 非投注建議。",
+  "testNote": "測試頁 · 1–9場均為用戶手動 Poe 最近9個chat擷取。董氏評分缺故全日重心暫用R1/R5/R8首選。賠率待定。僅供參考 · 非投注建議。",
   "tipsTable": [
     {
       "race": 1,
@@ -41,27 +41,27 @@
       "class": "四班",
       "distance": 1200,
       "first": {
-        "no": 6,
-        "name": "開心三多",
-        "style": "後",
+        "no": 4,
+        "name": "馬馳登",
+        "style": "中",
         "odds": null
       },
       "second": {
-        "no": 3,
-        "name": "神駒馬靈",
+        "no": 9,
+        "name": "開心五月",
         "style": "前",
         "odds": null
       },
       "third": {
-        "no": 8,
-        "name": "電訊驕陽",
+        "no": 3,
+        "name": "路路勁",
         "style": "後",
         "odds": null
       },
       "dark": {
-        "no": 11,
-        "name": "東方魅影",
-        "style": "中前",
+        "no": 7,
+        "name": "銀刺勇士",
+        "style": "放",
         "odds": null
       }
     },
@@ -70,27 +70,27 @@
       "class": "四班",
       "distance": 1650,
       "first": {
-        "no": 6,
-        "name": "開心三多",
+        "no": 5,
+        "name": "凝妙星",
         "style": "後",
         "odds": null
       },
       "second": {
-        "no": 3,
-        "name": "神駒馬靈",
-        "style": "前",
-        "odds": null
-      },
-      "third": {
-        "no": 8,
-        "name": "電訊驕陽",
+        "no": 6,
+        "name": "領航天子",
         "style": "後",
         "odds": null
       },
+      "third": {
+        "no": 2,
+        "name": "贏玥",
+        "style": "前",
+        "odds": null
+      },
       "dark": {
-        "no": 11,
-        "name": "東方魅影",
-        "style": "中前",
+        "no": 10,
+        "name": "家傳之寶",
+        "style": "後",
         "odds": null
       }
     },
@@ -100,26 +100,26 @@
       "distance": 1200,
       "first": {
         "no": 6,
-        "name": "開心三多",
-        "style": "後",
-        "odds": null
-      },
-      "second": {
-        "no": 3,
-        "name": "神駒馬靈",
+        "name": "快樂神駒",
         "style": "前",
         "odds": null
       },
+      "second": {
+        "no": 4,
+        "name": "星辰千帥",
+        "style": "中",
+        "odds": null
+      },
       "third": {
-        "no": 8,
-        "name": "電訊驕陽",
-        "style": "後",
+        "no": 11,
+        "name": "焦點",
+        "style": "中後",
         "odds": null
       },
       "dark": {
-        "no": 11,
-        "name": "東方魅影",
-        "style": "中前",
+        "no": 7,
+        "name": "震撼人心",
+        "style": "後",
         "odds": null
       }
     },
@@ -130,18 +130,18 @@
       "first": {
         "no": 5,
         "name": "創科群英",
-        "style": "前",
+        "style": "後",
         "odds": null
       },
       "second": {
         "no": 9,
         "name": "爆竹",
-        "style": "中",
+        "style": "後",
         "odds": null
       },
       "third": {
-        "no": 6,
-        "name": "越駿聯歡",
+        "no": 1,
+        "name": "本領非凡",
         "style": "中",
         "odds": null
       },
@@ -157,27 +157,27 @@
       "class": "四班",
       "distance": 1000,
       "first": {
-        "no": 6,
-        "name": "開心三多",
-        "style": "後",
-        "odds": null
-      },
-      "second": {
-        "no": 3,
-        "name": "神駒馬靈",
+        "no": 1,
+        "name": "福進",
         "style": "前",
         "odds": null
       },
+      "second": {
+        "no": 4,
+        "name": "巴閉王",
+        "style": "放",
+        "odds": null
+      },
       "third": {
-        "no": 8,
-        "name": "電訊驕陽",
-        "style": "後",
+        "no": 9,
+        "name": "天火同人",
+        "style": "中",
         "odds": null
       },
       "dark": {
-        "no": 11,
-        "name": "東方魅影",
-        "style": "中前",
+        "no": 6,
+        "name": "升升雙息",
+        "style": "後",
         "odds": null
       }
     },
@@ -186,27 +186,27 @@
       "class": "三班",
       "distance": 1200,
       "first": {
-        "no": 6,
-        "name": "開心三多",
+        "no": 8,
+        "name": "首飾悟空",
         "style": "後",
         "odds": null
       },
       "second": {
-        "no": 3,
-        "name": "神駒馬靈",
-        "style": "前",
+        "no": 6,
+        "name": "電源之駒",
+        "style": "後",
         "odds": null
       },
       "third": {
-        "no": 8,
-        "name": "電訊驕陽",
+        "no": 1,
+        "name": "東來欣賞",
         "style": "後",
         "odds": null
       },
       "dark": {
         "no": 11,
-        "name": "東方魅影",
-        "style": "中前",
+        "name": "盈妍威楓",
+        "style": "中",
         "odds": null
       }
     },
@@ -215,27 +215,27 @@
       "class": "三班",
       "distance": 1200,
       "first": {
-        "no": 6,
-        "name": "開心三多",
-        "style": "後",
+        "no": 8,
+        "name": "繼往開來",
+        "style": "前",
         "odds": null
       },
       "second": {
         "no": 3,
-        "name": "神駒馬靈",
+        "name": "富心星",
         "style": "前",
         "odds": null
       },
       "third": {
-        "no": 8,
-        "name": "電訊驕陽",
-        "style": "後",
+        "no": 4,
+        "name": "久久為昇",
+        "style": "中",
         "odds": null
       },
       "dark": {
-        "no": 11,
-        "name": "東方魅影",
-        "style": "中前",
+        "no": 12,
+        "name": "亞機拉",
+        "style": "後",
         "odds": null
       }
     },
@@ -244,27 +244,27 @@
       "class": "三班",
       "distance": 1800,
       "first": {
-        "no": 6,
-        "name": "開心三多",
-        "style": "後",
-        "odds": null
-      },
-      "second": {
         "no": 3,
-        "name": "神駒馬靈",
+        "name": "凌登",
         "style": "前",
         "odds": null
       },
+      "second": {
+        "no": 6,
+        "name": "將義",
+        "style": "後",
+        "odds": null
+      },
       "third": {
-        "no": 8,
-        "name": "電訊驕陽",
+        "no": 10,
+        "name": "風將",
         "style": "後",
         "odds": null
       },
       "dark": {
-        "no": 11,
-        "name": "東方魅影",
-        "style": "中前",
+        "no": 9,
+        "name": "中國心",
+        "style": "後",
         "odds": null
       }
     }
@@ -278,7 +278,7 @@
       "name": "開心三多",
       "style": "後",
       "odds": null,
-      "note": "【測試】R1真實首選 · 隔夜賠率待定",
+      "note": "【測試】無董氏評分暫未能計 gap · 暫用該場首選",
       "oddsWin": null,
       "oddsPlace": null
     },
@@ -288,9 +288,9 @@
       "distance": 1650,
       "no": 5,
       "name": "創科群英",
-      "style": "前",
+      "style": "後",
       "odds": null,
-      "note": "【測試】R5真實首選 · 隔夜賠率待定",
+      "note": "【測試】無董氏評分暫未能計 gap · 暫用該場首選",
       "oddsWin": null,
       "oddsPlace": null
     },
@@ -298,11 +298,11 @@
       "race": 8,
       "class": "三班",
       "distance": 1200,
-      "no": 6,
-      "name": "開心三多",
-      "style": "後",
+      "no": 8,
+      "name": "繼往開來",
+      "style": "前",
       "odds": null,
-      "note": "【測試】暫用R1重複 · 待R8 Poe更新",
+      "note": "【測試】無董氏評分暫未能計 gap · 暫用該場首選",
       "oddsWin": null,
       "oddsPlace": null
     }
