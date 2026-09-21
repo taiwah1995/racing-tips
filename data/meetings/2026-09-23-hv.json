@@ -5,7 +5,7 @@
   "venueCode": "HV",
   "raceCount": 9,
   "label": "測試",
-  "testNote": "測試頁 · 1–9場均為用戶手動 Poe 最近9個chat擷取。董氏評分缺故全日重心暫用R1/R5/R8首選。賠率待定。僅供參考 · 非投注建議。",
+  "testNote": "測試頁 · tipsTable 1–9 場為用戶手動 Poe 擷取。董氏評分：R1/R3/R4/R5/R8 已擷；R2/R6/R7/R9 Poe URL 404；R3/R4 gap 無效故未入選。全日重心按 gap：R5(6)／R8(6)／R1(5)；隔夜賠率 null 跳過 <2.5 降級。僅供參考 · 非投注建議。",
   "tipsTable": [
     {
       "race": 1,
@@ -271,18 +271,6 @@
   ],
   "dailyPicks": [
     {
-      "race": 1,
-      "class": "五班",
-      "distance": 1650,
-      "no": 6,
-      "name": "開心三多",
-      "style": "後",
-      "odds": null,
-      "note": "【測試】無董氏評分暫未能計 gap · 暫用該場首選",
-      "oddsWin": null,
-      "oddsPlace": null
-    },
-    {
       "race": 5,
       "class": "四班",
       "distance": 1650,
@@ -290,7 +278,7 @@
       "name": "創科群英",
       "style": "後",
       "odds": null,
-      "note": "【測試】無董氏評分暫未能計 gap · 暫用該場首選",
+      "note": "【測試】gap=6（首選董氏 94） · 全日第一心水",
       "oddsWin": null,
       "oddsPlace": null
     },
@@ -302,7 +290,19 @@
       "name": "繼往開來",
       "style": "前",
       "odds": null,
-      "note": "【測試】無董氏評分暫未能計 gap · 暫用該場首選",
+      "note": "【測試】gap=6（首選董氏 92）",
+      "oddsWin": null,
+      "oddsPlace": null
+    },
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1650,
+      "no": 6,
+      "name": "開心三多",
+      "style": "後",
+      "odds": null,
+      "note": "【測試】gap=5（首選董氏 85）",
       "oddsWin": null,
       "oddsPlace": null
     }
