@@ -13,25 +13,25 @@
       "first": {
         "no": 6,
         "name": "開心三多",
-        "style": "後",
+        "style": "前",
         "odds": null
       },
       "second": {
         "no": 3,
         "name": "神駒馬靈",
-        "style": "前",
+        "style": "中",
         "odds": null
       },
       "third": {
         "no": 8,
         "name": "電訊驕陽",
-        "style": "後",
+        "style": "放",
         "odds": null
       },
       "dark": {
-        "no": 11,
-        "name": "東方魅影",
-        "style": "中前",
+        "no": 4,
+        "name": "紅磚戰士",
+        "style": "放",
         "odds": null
       }
     },
@@ -40,27 +40,27 @@
       "class": "四班",
       "distance": 1200,
       "first": {
-        "no": 4,
-        "name": "馬馳登",
-        "style": "中",
-        "odds": null
-      },
-      "second": {
         "no": 9,
         "name": "開心五月",
         "style": "前",
         "odds": null
       },
+      "second": {
+        "no": 4,
+        "name": "馬馳登",
+        "style": "後",
+        "odds": null
+      },
       "third": {
-        "no": 3,
-        "name": "路路勁",
+        "no": 10,
+        "name": "比特星",
         "style": "後",
         "odds": null
       },
       "dark": {
         "no": 7,
         "name": "銀刺勇士",
-        "style": "放",
+        "style": "中",
         "odds": null
       }
     },
@@ -69,26 +69,26 @@
       "class": "四班",
       "distance": 1650,
       "first": {
-        "no": 5,
-        "name": "凝妙星",
-        "style": "後",
+        "no": 2,
+        "name": "贏玥",
+        "style": "中後",
         "odds": null
       },
       "second": {
-        "no": 6,
-        "name": "領航天子",
+        "no": 10,
+        "name": "加州活力",
         "style": "後",
         "odds": null
       },
       "third": {
-        "no": 2,
-        "name": "贏玥",
+        "no": 5,
+        "name": "凝妙星",
         "style": "前",
         "odds": null
       },
       "dark": {
-        "no": 10,
-        "name": "加州活力",
+        "no": 1,
+        "name": "星願無限",
         "style": "後",
         "odds": null
       }
@@ -100,25 +100,25 @@
       "first": {
         "no": 6,
         "name": "快樂神駒",
-        "style": "前",
+        "style": "後",
         "odds": null
       },
       "second": {
-        "no": 4,
-        "name": "星辰千帥",
+        "no": 3,
+        "name": "應龍飛影",
         "style": "中",
         "odds": null
       },
       "third": {
         "no": 11,
         "name": "焦點",
-        "style": "中後",
+        "style": "後",
         "odds": null
       },
       "dark": {
-        "no": 7,
-        "name": "震撼人心",
-        "style": "後",
+        "no": 4,
+        "name": "星辰千帥",
+        "style": "前",
         "odds": null
       }
     },
@@ -133,20 +133,20 @@
         "odds": null
       },
       "second": {
-        "no": 9,
-        "name": "爆竹",
-        "style": "後",
+        "no": 1,
+        "name": "本領非凡",
+        "style": "前",
         "odds": null
       },
       "third": {
-        "no": 1,
-        "name": "本領非凡",
+        "no": 7,
+        "name": "滿洛城",
         "style": "中",
         "odds": null
       },
       "dark": {
-        "no": 11,
-        "name": "健康小馬",
+        "no": 12,
+        "name": "同心",
         "style": "後",
         "odds": null
       }
@@ -156,15 +156,15 @@
       "class": "四班",
       "distance": 1000,
       "first": {
-        "no": 1,
-        "name": "福進",
+        "no": 4,
+        "name": "巴閉王",
         "style": "前",
         "odds": null
       },
       "second": {
-        "no": 4,
-        "name": "巴閉王",
-        "style": "放",
+        "no": 1,
+        "name": "福進",
+        "style": "前",
         "odds": null
       },
       "third": {
@@ -187,18 +187,18 @@
       "first": {
         "no": 8,
         "name": "首飾悟空",
-        "style": "後",
+        "style": "前",
         "odds": null
       },
       "second": {
-        "no": 6,
-        "name": "電源之駒",
-        "style": "後",
+        "no": 2,
+        "name": "乘數表",
+        "style": "中",
         "odds": null
       },
       "third": {
-        "no": 1,
-        "name": "東來欣賞",
+        "no": 12,
+        "name": "丞匡掠影",
         "style": "後",
         "odds": null
       },
@@ -220,20 +220,20 @@
         "odds": null
       },
       "second": {
-        "no": 2,
+        "no": 11,
+        "name": "驕陽雄心",
+        "style": "後",
+        "odds": null
+      },
+      "third": {
+        "no": 3,
         "name": "富心星",
         "style": "前",
         "odds": null
       },
-      "third": {
-        "no": 4,
-        "name": "久久為昇",
-        "style": "中",
-        "odds": null
-      },
       "dark": {
-        "no": 12,
-        "name": "亞機拉",
+        "no": 2,
+        "name": "團結勇士",
         "style": "後",
         "odds": null
       }
@@ -243,65 +243,65 @@
       "class": "三班",
       "distance": 1800,
       "first": {
-        "no": 3,
-        "name": "凌登",
+        "no": 1,
+        "name": "嘉應傳承",
         "style": "前",
         "odds": null
       },
       "second": {
-        "no": 6,
-        "name": "將義",
-        "style": "後",
+        "no": 3,
+        "name": "凌登",
+        "style": "中",
         "odds": null
       },
       "third": {
-        "no": 10,
-        "name": "風將",
+        "no": 9,
+        "name": "中國心",
         "style": "後",
         "odds": null
       },
       "dark": {
-        "no": 9,
-        "name": "中國心",
-        "style": "後",
+        "no": 6,
+        "name": "將義",
+        "style": "中",
         "odds": null
       }
     }
   ],
   "dailyPicks": [
     {
+      "race": 4,
+      "class": "四班",
+      "distance": 1200,
+      "no": 6,
+      "name": "快樂神駒",
+      "style": "後",
+      "odds": null,
+      "note": "gap=14（董氏 90） · 全日第一心水",
+      "oddsWin": null,
+      "oddsPlace": null
+    },
+    {
       "race": 3,
       "class": "四班",
       "distance": 1650,
-      "no": 5,
-      "name": "凝妙星",
-      "style": "後",
+      "no": 2,
+      "name": "贏玥",
+      "style": "中後",
       "odds": null,
-      "note": "gap=7（歷史貼士 95） · 全日第一重心",
+      "note": "gap=7（董氏 93）",
       "oddsWin": null,
       "oddsPlace": null
     },
     {
-      "race": 9,
-      "class": "三班",
-      "distance": 1800,
-      "no": 3,
-      "name": "凌登",
+      "race": 6,
+      "class": "四班",
+      "distance": 1000,
+      "no": 4,
+      "name": "巴閉王",
       "style": "前",
       "odds": null,
-      "note": "gap=7（歷史貼士 92）",
-      "oddsWin": null,
-      "oddsPlace": null
-    },
-    {
-      "race": 5,
-      "class": "四班",
-      "distance": 1650,
-      "no": 5,
-      "name": "創科群英",
-      "style": "後",
-      "odds": null,
-      "note": "gap=6（歷史貼士 94）",
+      "note": "gap=6（董氏 84）",
       "oddsWin": null,
       "oddsPlace": null
     }
