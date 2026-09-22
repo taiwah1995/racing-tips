@@ -4,8 +4,7 @@
   "venue": "快活谷",
   "venueCode": "HV",
   "raceCount": 9,
-  "label": "測試",
-  "testNote": "測試稿 · R1–R9 貼士表已填（Poe History 對照）。全日重心 gap：R3(7)／R9(7)／R5(6)；賠率暫 null 待晚間 <2.5 過濾。含賽卡注碼 · 勿作實注。",
+  "label": null,
   "tipsTable": [
     {
       "race": 1,
@@ -278,7 +277,7 @@
       "name": "凝妙星",
       "style": "後",
       "odds": null,
-      "note": "【測試】gap=7（歷史貼士 95） · 全日第一重心",
+      "note": "gap=7（歷史貼士 95） · 全日第一重心",
       "oddsWin": null,
       "oddsPlace": null
     },
@@ -290,7 +289,7 @@
       "name": "凌登",
       "style": "前",
       "odds": null,
-      "note": "【測試】gap=7（歷史貼士 92）",
+      "note": "gap=7（歷史貼士 92）",
       "oddsWin": null,
       "oddsPlace": null
     },
@@ -302,7 +301,7 @@
       "name": "創科群英",
       "style": "後",
       "odds": null,
-      "note": "【測試】gap=6（歷史貼士 94）",
+      "note": "gap=6（歷史貼士 94）",
       "oddsWin": null,
       "oddsPlace": null
     }
