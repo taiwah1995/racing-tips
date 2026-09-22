@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260922hv0923oddsfill';
+  const APP_DATA_VERSION = '20260922hv0923dailyui';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -74,7 +74,7 @@
       : '';
     const oddsHtml = oddsPart
       ? `<span class="ho">${escapeHtml(oddsPart)}</span>`
-      : '<span class="ho ho-empty">—</span>';
+      : '<span class="ho ho-empty"></span>';
     const badge = placeBadge(h, result);
     return `<span class="cell-horse ${colClass || ''}" title="${escapeAttr(label)}">
       <span class="hline1"><span class="hn">${h.no} ${name}</span>${styleHtml}</span>
@@ -412,30 +412,39 @@
     const container = $('#daily-picks');
     container.innerHTML = '';
 
+    const hintEl = document.querySelector('.daily-picks-hint');
+    if (hintEl) {
+      const hintText = meeting.dailyPicksHint || '(賠率低於2.5只作次選推介)';
+      hintEl.textContent = hintText;
+    }
+
     picks.forEach((dp, i) => {
       const card = document.createElement('div');
       card.className = 'pick-card' + (i === 0 ? ' pick-top' : '');
       const clsDist = `${dp.class || ''}${dp.distance != null ? dp.distance : ''}`;
       const raceRow = (meeting.tipsTable || []).find((r) => Number(r.race) === Number(dp.race));
-      const pickBadge = placeBadge(dp, raceRow && raceRow.result ? raceRow.result : null);
-      const wOdds = dp.oddsWin != null ? dp.oddsWin : dp.odds;
-      const pOdds = dp.oddsPlace;
+      const hasResult = !!(raceRow && raceRow.result);
+      const pickBadge = placeBadge(dp, hasResult ? raceRow.result : null);
+      // 「最終賠率」只賽後顯示；唔用隔夜 odds 充當最終
       let finalOddsHtml = '';
-      if (wOdds != null && wOdds !== '' && pOdds != null && pOdds !== '') {
-        finalOddsHtml =
-          ` <span class="pc-final-odds">(最終賠率 W：${escapeHtml(String(wOdds))} ｜P：${escapeHtml(String(pOdds))})</span>`;
-      } else if (wOdds != null && wOdds !== '') {
-        finalOddsHtml =
-          ` <span class="pc-final-odds">(最終賠率 W：${escapeHtml(String(wOdds))})</span>`;
+      if (hasResult) {
+        const wOdds = dp.oddsWin != null ? dp.oddsWin : dp.odds;
+        const pOdds = dp.oddsPlace;
+        if (wOdds != null && wOdds !== '' && pOdds != null && pOdds !== '') {
+          finalOddsHtml =
+            ` <span class="pc-final-odds">(最終賠率 W：${escapeHtml(String(wOdds))} ｜P：${escapeHtml(String(pOdds))})</span>`;
+        } else if (wOdds != null && wOdds !== '') {
+          finalOddsHtml =
+            ` <span class="pc-final-odds">(最終賠率 W：${escapeHtml(String(wOdds))})</span>`;
+        }
       }
       card.innerHTML = `
         <div class="pc-head">
           <span class="pc-race">第${dp.race}場</span>
           <span class="pc-class">${escapeHtml(clsDist)}</span>
-          ${i === 0 ? '<span class="top-badge">⭐ 心水</span>' : ''}
+          ${i === 0 ? '<span class="top-badge">⭐ 全日心水</span>' : ''}
         </div>
-        <div class="pc-horse">${dp.no || ''} ${escapeHtml(dp.name || '')}${pickBadge}${finalOddsHtml}</div>
-        ${dp.odds != null && dp.odds !== '' ? `<div class="pc-odds">${escapeHtml(String(dp.odds))}</div>` : ''}`;
+        <div class="pc-horse">${dp.no || ''} ${escapeHtml(dp.name || '')}${pickBadge}${finalOddsHtml}</div>`;
       container.appendChild(card);
     });
 
