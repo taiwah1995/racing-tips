@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260921hv0923banker';
+  const APP_DATA_VERSION = '20260922hv0923live';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
