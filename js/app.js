@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260922hv0923formal';
+  const APP_DATA_VERSION = '20260922hv0923oddsfill';
   let indexData = null;
   let wpBets = null;
   let venueFilter = 'all';
@@ -74,7 +74,7 @@
       : '';
     const oddsHtml = oddsPart
       ? `<span class="ho">${escapeHtml(oddsPart)}</span>`
-      : '<span class="ho ho-empty"></span>';
+      : '<span class="ho ho-empty">—</span>';
     const badge = placeBadge(h, result);
     return `<span class="cell-horse ${colClass || ''}" title="${escapeAttr(label)}">
       <span class="hline1"><span class="hn">${h.no} ${name}</span>${styleHtml}</span>
@@ -435,7 +435,7 @@
           ${i === 0 ? '<span class="top-badge">⭐ 心水</span>' : ''}
         </div>
         <div class="pc-horse">${dp.no || ''} ${escapeHtml(dp.name || '')}${pickBadge}${finalOddsHtml}</div>
-        ${dp.note ? `<div class="pc-note">${escapeHtml(dp.note)}</div>` : ''}`;
+        ${dp.odds != null && dp.odds !== '' ? `<div class="pc-odds">${escapeHtml(String(dp.odds))}</div>` : ''}`;
       container.appendChild(card);
     });
 

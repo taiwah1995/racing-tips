@@ -14,25 +14,25 @@
         "no": 6,
         "name": "開心三多",
         "style": "前",
-        "odds": null
+        "odds": 10
       },
       "second": {
         "no": 3,
         "name": "神駒馬靈",
         "style": "中",
-        "odds": null
+        "odds": 4.8
       },
       "third": {
         "no": 8,
         "name": "電訊驕陽",
         "style": "放",
-        "odds": null
+        "odds": 5.3
       },
       "dark": {
         "no": 4,
         "name": "紅磚戰士",
         "style": "放",
-        "odds": null
+        "odds": 11
       }
     },
     {
@@ -43,25 +43,25 @@
         "no": 9,
         "name": "開心五月",
         "style": "前",
-        "odds": null
+        "odds": 4.1
       },
       "second": {
         "no": 4,
         "name": "馬馳登",
         "style": "後",
-        "odds": null
+        "odds": 4.9
       },
       "third": {
         "no": 10,
         "name": "比特星",
         "style": "後",
-        "odds": null
+        "odds": 6.1
       },
       "dark": {
         "no": 7,
         "name": "銀刺勇士",
         "style": "中",
-        "odds": null
+        "odds": 7.9
       }
     },
     {
@@ -72,25 +72,25 @@
         "no": 2,
         "name": "贏玥",
         "style": "中後",
-        "odds": null
+        "odds": 5.1
       },
       "second": {
         "no": 10,
         "name": "加州活力",
         "style": "後",
-        "odds": null
+        "odds": 15
       },
       "third": {
         "no": 5,
         "name": "凝妙星",
         "style": "前",
-        "odds": null
+        "odds": 3.3
       },
       "dark": {
         "no": 1,
         "name": "星願無限",
         "style": "後",
-        "odds": null
+        "odds": 23
       }
     },
     {
@@ -101,25 +101,25 @@
         "no": 6,
         "name": "快樂神駒",
         "style": "後",
-        "odds": null
+        "odds": 2.1
       },
       "second": {
         "no": 3,
         "name": "應龍飛影",
         "style": "中",
-        "odds": null
+        "odds": 6.1
       },
       "third": {
         "no": 11,
         "name": "焦點",
         "style": "後",
-        "odds": null
+        "odds": 21
       },
       "dark": {
         "no": 4,
         "name": "星辰千帥",
         "style": "前",
-        "odds": null
+        "odds": 13
       }
     },
     {
@@ -130,25 +130,25 @@
         "no": 5,
         "name": "創科群英",
         "style": "後",
-        "odds": null
+        "odds": 6.2
       },
       "second": {
         "no": 1,
         "name": "本領非凡",
         "style": "前",
-        "odds": null
+        "odds": 12
       },
       "third": {
         "no": 7,
         "name": "滿洛城",
         "style": "中",
-        "odds": null
+        "odds": 11
       },
       "dark": {
         "no": 12,
         "name": "同心",
         "style": "後",
-        "odds": null
+        "odds": 6
       }
     },
     {
@@ -159,25 +159,25 @@
         "no": 4,
         "name": "巴閉王",
         "style": "前",
-        "odds": null
+        "odds": 2.7
       },
       "second": {
         "no": 1,
         "name": "福進",
         "style": "前",
-        "odds": null
+        "odds": 4.6
       },
       "third": {
         "no": 9,
         "name": "天火同人",
         "style": "中",
-        "odds": null
+        "odds": 9.7
       },
       "dark": {
         "no": 6,
         "name": "升升雙息",
         "style": "後",
-        "odds": null
+        "odds": 18
       }
     },
     {
@@ -188,25 +188,25 @@
         "no": 8,
         "name": "首飾悟空",
         "style": "前",
-        "odds": null
+        "odds": 4.9
       },
       "second": {
         "no": 2,
         "name": "乘數表",
         "style": "中",
-        "odds": null
+        "odds": 14
       },
       "third": {
         "no": 12,
         "name": "丞匡掠影",
         "style": "後",
-        "odds": null
+        "odds": 4.3
       },
       "dark": {
         "no": 11,
         "name": "盈妍威楓",
         "style": "中",
-        "odds": null
+        "odds": 14
       }
     },
     {
@@ -217,25 +217,25 @@
         "no": 8,
         "name": "繼往開來",
         "style": "前",
-        "odds": null
+        "odds": 3
       },
       "second": {
         "no": 11,
         "name": "驕陽雄心",
         "style": "後",
-        "odds": null
+        "odds": 9.6
       },
       "third": {
         "no": 3,
         "name": "富心星",
         "style": "前",
-        "odds": null
+        "odds": 12
       },
       "dark": {
         "no": 2,
         "name": "團結勇士",
         "style": "後",
-        "odds": null
+        "odds": 12
       }
     },
     {
@@ -246,41 +246,29 @@
         "no": 1,
         "name": "嘉應傳承",
         "style": "前",
-        "odds": null
+        "odds": 3.9
       },
       "second": {
         "no": 3,
         "name": "凌登",
         "style": "中",
-        "odds": null
+        "odds": 16
       },
       "third": {
         "no": 9,
         "name": "中國心",
         "style": "後",
-        "odds": null
+        "odds": 7.8
       },
       "dark": {
         "no": 6,
         "name": "將義",
         "style": "中",
-        "odds": null
+        "odds": 16
       }
     }
   ],
   "dailyPicks": [
-    {
-      "race": 4,
-      "class": "四班",
-      "distance": 1200,
-      "no": 6,
-      "name": "快樂神駒",
-      "style": "後",
-      "odds": null,
-      "note": "gap=14（董氏 90） · 全日第一心水",
-      "oddsWin": null,
-      "oddsPlace": null
-    },
     {
       "race": 3,
       "class": "四班",
@@ -288,8 +276,18 @@
       "no": 2,
       "name": "贏玥",
       "style": "中後",
-      "odds": null,
-      "note": "gap=7（董氏 93）",
+      "odds": 5.1,
+      "oddsWin": null,
+      "oddsPlace": null
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1200,
+      "no": 6,
+      "name": "快樂神駒",
+      "style": "後",
+      "odds": 2.1,
       "oddsWin": null,
       "oddsPlace": null
     },
@@ -300,10 +298,10 @@
       "no": 4,
       "name": "巴閉王",
       "style": "前",
-      "odds": null,
-      "note": "gap=6（董氏 84）",
+      "odds": 2.7,
       "oddsWin": null,
       "oddsPlace": null
     }
-  ]
+  ],
+  "dailyPicksHint": "(賠率低於2.5不作推介)"
 }
