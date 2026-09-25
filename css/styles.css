@@ -221,6 +221,13 @@ body {
   font-size: 1.05rem;
   font-weight: 700;
 }
+.meeting-card .row1-main {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
 .meeting-card .badge {
   font-size: 0.7rem;
   font-weight: 700;
@@ -570,9 +577,6 @@ body {
   overflow-x: auto;
   white-space: nowrap;
 }
-.banker-wp-block + .banker-wp-block {
-  margin-top: 10px;
-}
 .banker-wp-title {
   color: var(--text-muted);
   margin-bottom: 4px;
@@ -595,6 +599,10 @@ body {
 .banker-wp-profit-val {
   color: #fff;
 }
+.pl-pos { color: #39ff14; }
+.pl-neg { color: #ff3b30; }
+.banker-wp-profit-val.pl-pos { color: #39ff14; }
+.banker-wp-profit-val.pl-neg { color: #ff3b30; }
 .banker-wp-empty {
   font-size: 0.78rem;
   color: var(--text-muted);
