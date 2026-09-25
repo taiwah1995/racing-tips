@@ -45,20 +45,21 @@ Example: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, a
 
 ## Features
 
-- **Home**: list of tip archives (date + venue 沙田/快活谷 + race count + 馬膽 with place icons 🏆／🥈／🥉／4️⃣). Header subtitle is meeting count plus all-time banker WP P&L from `data/wp-bets.json` (`{N} 賽馬日 💰 累計盈利 $… 💰 (回報 ±…%)`, white `.subtitle-profit`), **filtered by the venue tab** (`全部` = all venues; `沙田` = ST; `快活谷` = HV). Sep 2026: 全部 `4 賽馬日` `$1035` `+64.7%`; 沙田 `2 賽馬日` `-$40` `-5.0%`; 快活谷 `2 賽馬日` `$1075` `+134.4%`
-- **馬膽WP投注簿**: on home, order is venue tabs → month selector → WP book (plus footnote `* 以最終賠率派彩金額計算`) → daily meeting cards. Heading `馬膽WP投注簿 *馬膽投注 獨贏$100 位置$300` with one horizontal line under the title (outer panel only; no nested inner box). Monthly W / P ledger from `data/wp-bets.json` using fullwidth `｜` only, **also filtered by the venue tab** (`全部` = all venues that month; `沙田` = `venueCode` ST; `快活谷` = `venueCode` HV). Example Sep 2026: 全部 `W｜投注 $400｜贏 $1165｜回報 +191.3%`; 沙田 / 快活谷 each 2 meetings `W｜投注 $200` / `P｜投注 $600`. TOTAL is two lines (`TOTAL｜投注 $1600｜贏 $2635｜` then `💰 本月盈利 $1035 💰 (回報 +64.7%)` on 全部). The profit line uses the same `font-size` as the panel title (`clamp(0.8rem, 3.6vw, 0.95rem)`); `$1035` / `+64.7%` are white (`.banker-wp-profit-val`), the rest of the line stays gold. Outside the bordered card, a muted `.banker-wp-foot` note: `* 以最終賠率派彩金額計算`
+- **Home**: list of tip archives (date + venue 沙田/快活谷 + race count + 馬膽 with place icons 🏆／🥈／🥉／4️⃣). Header subtitle is meeting count plus all-time banker WP P&L (`{N} 賽馬日 💰 累計盈利 $… 💰 (回報 ±…%)`, white `.subtitle-profit`), **filtered by the venue tab** (`全部` = all venues; `沙田` = ST; `快活谷` = HV). N and the profit are computed on load from each meeting JSON: banker is `dailyPicks[0]`, a meeting counts once that race has a `result`, Win pays on 冠 and Place pays 冠／亞／季, payout = final `oddsWin` / `oddsPlace` × stake (獨贏 $100 · 位置 $300). Sep 2026: 全部 `5 賽馬日` `$1160` `+58.0%`; 沙田 `2 賽馬日` `-$40` `-5.0%`; 快活谷 `3 賽馬日` `$1200` `+100.0%`
+- **馬膽WP投注簿**: on home, order is venue tabs → month selector → WP book (plus footnote `* 以最終賠率派彩金額計算`) → daily meeting cards. Heading `馬膽WP投注簿 *馬膽投注 獨贏$100 位置$300` with one horizontal line under the title (outer panel only; no nested inner box). The book is computed on load (same banker result + final odds rules as the header), **filtered by the venue tab** (`全部` = all venues that month; `沙田` = `venueCode` ST; `快活谷` = `venueCode` HV). Each settled meeting shows W / P payout and 盈虧, then `當月累計投注` and `本年累計投注`, using fullwidth `｜` only. Example Sep 2026 全部: five meetings, `W｜投注 $500｜贏 $1165｜回報 +133.0%`, `P｜投注 $1500｜贏 $1995｜回報 +33.0%`, TOTAL `投注 $2000｜贏 $3160` then `💰 本月盈利 $1160 💰 (回報 +58.0%)` (本年 matches 本月 while only September is on file). 沙田 stays 2 meetings `W｜投注 $200｜贏 $310` / `P｜投注 $600｜贏 $450` / `-$40` `-5.0%`. The month/year profit line uses the same `font-size` as the panel title (`clamp(0.8rem, 3.6vw, 0.95rem)`); the profit amount and ROI are white (`.banker-wp-profit-val`), the rest of the line stays gold. Outside the bordered card, a muted `.banker-wp-foot` note: `* 以最終賠率派彩金額計算`
 - **Day detail**:
   - 「🏆 各場馬匹心水貼士」— 場次｜首選｜次選｜三選｜冷腳
   - 「🏆 全日重心馬推介」— 每日 3 隻；`馬號 馬名` then result icon (if any) then `(最終賠率 W：X.x ｜P：X.x)` from `dailyPicks.oddsWin` / `oddsPlace` (on.cc 臨場). No `(跑法)` after the name. Example: `5 櫻花酒杯 🏆 (最終賠率 W：3.1 ｜P：1.5)`
 - **Filters**: venue tabs + 賽事月份
 - **Hash routes**: `#/` home · `#/meeting/<id>` day detail
-- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260920ac`) versions data fetches and asset URLs
+- **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260925autostats`) versions data fetches and asset URLs
 
 ## Add a new race day
 
 1. Drop a JSON file under `data/meetings/` (copy an existing one as a template).
 2. Add an entry to `data/index.json` pointing at that file.
-3. Bump `APP_DATA_VERSION` (and `?v=` on CSS/JS in `index.html`) so phones refresh.
+3. After the meeting, add each race `result` and the banker's final `oddsWin` / `oddsPlace` on `dailyPicks[0]`. The header count, cumulative P&L, and the WP book (including the venue tabs) update from that — no separate ledger file.
+4. Bump `APP_DATA_VERSION` (and `?v=` on CSS/JS in `index.html`) so phones refresh.
 
 No build step — plain HTML + CSS + JS.
 
@@ -66,6 +67,7 @@ No build step — plain HTML + CSS + JS.
 
 | File | Date | Venue |
 |------|------|-------|
+| `data/meetings/2026-09-23-hv.json` | 2026-09-23 | 快活谷 · 9場（含完場結果） |
 | `data/meetings/2026-09-16-hv.json` | 2026-09-16 | 快活谷 · 8場（含完場結果） |
 | `data/meetings/2026-09-12-st.json` | 2026-09-12 | 沙田 |
 | `data/meetings/2026-09-09-hv.json` | 2026-09-09 | 快活谷 |

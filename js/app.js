@@ -6,9 +6,15 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260925hvresults';
+  const APP_DATA_VERSION = '20260925autostats';
+  /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
+  const STAKE_WIN = 100;
+  const STAKE_PLACE = 300;
   let indexData = null;
-  let wpBets = null;
+  /** id → meeting JSON */
+  let meetingsById = new Map();
+  /** Settled banker bets, index order (newest first). */
+  let settledRows = [];
   let venueFilter = 'all';
   let monthFilter = getCurrentMonthKey();
 
@@ -140,17 +146,24 @@
   }
 
   async function loadMeeting(id) {
+    if (meetingsById.has(id)) return meetingsById.get(id);
     const meta = indexData.meetings.find((m) => m.id === id);
     if (!meta) throw new Error('找不到賽日：' + id);
     const res = await fetch(dataUrl(meta.file));
     if (!res.ok) throw new Error('無法載入賽日資料');
-    return res.json();
+    const meeting = await res.json();
+    meetingsById.set(id, meeting);
+    return meeting;
   }
 
-  async function loadWpBets() {
-    const res = await fetch(dataUrl('wp-bets.json'));
-    if (!res.ok) throw new Error('無法載入 wp-bets.json');
-    wpBets = await res.json();
+  async function loadAllMeetings() {
+    const loaded = await Promise.all(indexData.meetings.map(async (meta) => {
+      const meeting = await loadMeeting(meta.id);
+      return { meta, meeting };
+    }));
+    settledRows = loaded
+      .map(({ meta, meeting }) => settleBankerBet(meta, meeting))
+      .filter(Boolean);
   }
 
   function formatMoney(n) {
@@ -168,101 +181,146 @@
     return label + '｜投注 ' + formatMoney(stake) + '｜贏 ' + formatMoney(win) + '｜回報 ' + formatRoi(win, stake);
   }
 
+  function formatSignedMoney(profit) {
+    const profitAbs = Math.abs(Math.round(profit));
+    return (profit >= 0 ? '$' : '-$') + profitAbs;
+  }
+
+  function toOdds(value) {
+    if (value == null || value === '') return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function hasFinishResult(result) {
+    if (!result || typeof result !== 'object') return false;
+    return ['w', '2', '3', '4'].some((key) => result[key] != null && result[key] !== '');
+  }
+
+  function placeLabelForNo(no, result) {
+    const n = Number(no);
+    const map = [
+      [result.w, '冠'],
+      [result['2'], '亞'],
+      [result['3'], '季'],
+      [result['4'], '殿'],
+    ];
+    for (const [fin, label] of map) {
+      if (fin != null && fin !== '' && Number(fin) === n) return label;
+    }
+    return null;
+  }
+
   /**
-   * Settled banker meetings for selected month from wp-bets.json.
-   * Only entries present in the ledger (finished / bankerPlace resolved incl. null miss).
+   * Banker = dailyPicks[0]. Settled once that race has a result.
+   * Win pays on 冠; Place pays 冠/亞/季 (殿 does not).
+   * Payout = final decimal odds × stake; a miss pays 0.
+   * A hit with no final odds is left unsettled so a missing number is not shown as a loss.
    */
-  function settledWpMeetingsForMonth(monthKey, venueCode) {
-    if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
-    return wpBets.meetings.filter((m) => {
-      if (!m.date || !m.date.startsWith(monthKey)) return false;
-      if (venueCode && venueCode !== 'all' && m.venueCode !== venueCode) return false;
+  function settleBankerBet(meta, meeting) {
+    const banker = (meeting.dailyPicks || [])[0];
+    if (!banker) return null;
+    const race = (meeting.tipsTable || []).find((row) => Number(row.race) === Number(banker.race));
+    if (!race || !hasFinishResult(race.result)) return null;
+    const no = Number(banker.no);
+    const winHit = Number(race.result.w) === no;
+    const placeHit = [race.result.w, race.result['2'], race.result['3']]
+      .some((fin) => fin != null && fin !== '' && Number(fin) === no);
+    const oddsWin = toOdds(banker.oddsWin);
+    const oddsPlace = toOdds(banker.oddsPlace);
+    if (winHit && oddsWin == null) return null;
+    if (placeHit && oddsPlace == null) return null;
+    return {
+      id: meeting.id || meta.id,
+      date: meeting.date || meta.date,
+      venue: meeting.venue || meta.venue,
+      venueCode: meeting.venueCode || meta.venueCode,
+      bankerName: banker.name || '',
+      winReturn: winHit ? Math.round(oddsWin * STAKE_WIN) : 0,
+      placeReturn: placeHit ? Math.round(oddsPlace * STAKE_PLACE) : 0,
+    };
+  }
+
+  /** Settled banker meetings. prefix filters date (month `YYYY-MM` or year `YYYY`). */
+  function settledMeetings(venueCode, datePrefix) {
+    return settledRows.filter((row) => {
+      if (venueCode && venueCode !== 'all' && row.venueCode !== venueCode) return false;
+      if (datePrefix && !String(row.date).startsWith(datePrefix)) return false;
       return true;
     });
   }
 
-
-  function sumWpReturns(rows) {
-    const stakeW = (wpBets && wpBets.stakeWin) || 100;
-    const stakeP = (wpBets && wpBets.stakePlace) || 300;
-    let wStake = 0, pStake = 0, wWin = 0, pWin = 0;
-    rows.forEach((m) => {
-      wStake += stakeW;
-      pStake += stakeP;
-      wWin += Number(m.winReturn) || 0;
-      pWin += Number(m.placeReturn) || 0;
-    });
-    return { tStake: wStake + pStake, tWin: wWin + pWin };
-  }
-
-  /** All settled banker meetings, optionally filtered by venue tab (ST/HV). */
-  function settledWpMeetings(venueCode) {
-    if (!wpBets || !Array.isArray(wpBets.meetings)) return [];
-    const code = venueCode != null ? venueCode : venueFilter;
-    return wpBets.meetings.filter((m) => {
-      if (!code || code === 'all') return true;
-      return m.venueCode === code;
-    });
-  }
-
-  /** Header subtitle: N race days + banker WP P&L (white text); respects venue tab. */
-  function renderAllTimeProfitSubtitle() {
-    if (!pageSub) return;
-    pageSub.classList.add('subtitle-profit');
-    pageSub.hidden = false;
-    const rows = settledWpMeetings(venueFilter);
-    if (!rows.length) {
-      pageSub.textContent = '0 賽馬日 💰 累計盈利 $0 💰 (回報 +0.0%)';
-      return;
-    }
-    let tStake, tWin, profit;
-    if (typeof wpPoolTotals === 'function') {
-      const t = wpPoolTotals(rows);
-      tStake = t.tStake; tWin = t.tWin; profit = t.profit;
-    } else {
-      const r = sumWpReturns(rows);
-      tStake = r.tStake; tWin = r.tWin; profit = tWin - tStake;
-    }
-    const profitAbs = Math.abs(Math.round(profit));
-    const profitStr = (profit >= 0 ? '$' : '-$') + profitAbs;
-    pageSub.textContent =
-      rows.length + ' 賽馬日 💰 累計盈利 ' + profitStr + ' 💰 (回報 ' + formatRoi(tWin, tStake) + ')';
-  }
-
-
-  function renderWpLedger() {
-    const el = document.getElementById('banker-wp-ledger');
-    if (!el) return;
-    const stakeW = (wpBets && wpBets.stakeWin) || 100;
-    const stakeP = (wpBets && wpBets.stakePlace) || 300;
-    const rows = settledWpMeetingsForMonth(monthFilter, venueFilter);
-    if (!rows.length) {
-      el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
-      return;
-    }
+  function poolTotals(rows) {
     let wStake = 0;
     let pStake = 0;
     let wWin = 0;
     let pWin = 0;
-    rows.forEach((m) => {
-      wStake += stakeW;
-      pStake += stakeP;
-      wWin += Number(m.winReturn) || 0;
-      pWin += Number(m.placeReturn) || 0;
+    rows.forEach((row) => {
+      wStake += STAKE_WIN;
+      pStake += STAKE_PLACE;
+      wWin += row.winReturn;
+      pWin += row.placeReturn;
     });
     const tStake = wStake + pStake;
     const tWin = wWin + pWin;
-    const profit = tWin - tStake;
-    const profitAbs = Math.abs(Math.round(profit));
-    const profitStr = (profit >= 0 ? '$' : '-$') + profitAbs;
-    el.innerHTML =
-      '<div class="banker-wp-summary">' +
-      '<div class="banker-wp-title">當月累計投注:</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('W', wStake, wWin) + '</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('P', pStake, pWin) + '</div>' +
-      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(tStake) + '｜贏 ' + formatMoney(tWin) + '｜</div>' +
-      '<div class="banker-wp-line banker-wp-profit">💰 本月盈利 <span class="banker-wp-profit-val">' + profitStr + '</span> 💰 (回報 <span class="banker-wp-profit-val">' + formatRoi(tWin, tStake) + '</span>)</div>' +
-      '</div>';
+    return { wStake, pStake, wWin, pWin, tStake, tWin, profit: tWin - tStake };
+  }
+
+  /** Header subtitle: N race days with results + banker WP P&L; respects venue tab. */
+  function renderAllTimeProfitSubtitle() {
+    if (!pageSub) return;
+    pageSub.classList.add('subtitle-profit');
+    pageSub.hidden = false;
+    const rows = settledMeetings(venueFilter);
+    if (!rows.length) {
+      pageSub.textContent = '0 賽馬日 💰 累計盈利 $0 💰 (回報 +0.0%)';
+      return;
+    }
+    const t = poolTotals(rows);
+    pageSub.textContent =
+      rows.length + ' 賽馬日 💰 累計盈利 ' + formatSignedMoney(t.profit) + ' 💰 (回報 ' + formatRoi(t.tWin, t.tStake) + ')';
+  }
+
+  function renderMeetingLedgerBlock(row) {
+    const tWin = row.winReturn + row.placeReturn;
+    const tStake = STAKE_WIN + STAKE_PLACE;
+    const title = row.date + ' ' + row.venue + '｜' + row.bankerName;
+    return (
+      '<div class="banker-wp-block">' +
+      '<div class="banker-wp-title">' + escapeHtml(title) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('W', STAKE_WIN, row.winReturn) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('P', STAKE_PLACE, row.placeReturn) + '</div>' +
+      '<div class="banker-wp-line banker-wp-total">💰 盈虧 ' + formatSignedMoney(tWin - tStake) + ' 💰 (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
+      '</div>'
+    );
+  }
+
+  function renderPoolSummary(title, profitLabel, rows) {
+    const t = poolTotals(rows);
+    return (
+      '<div class="banker-wp-block">' +
+      '<div class="banker-wp-title">' + escapeHtml(title) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('W', t.wStake, t.wWin) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('P', t.pStake, t.pWin) + '</div>' +
+      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(t.tStake) + '｜贏 ' + formatMoney(t.tWin) + '｜</div>' +
+      '<div class="banker-wp-line banker-wp-profit">💰 ' + profitLabel + ' <span class="banker-wp-profit-val">' + formatSignedMoney(t.profit) + '</span> 💰 (回報 <span class="banker-wp-profit-val">' + formatRoi(t.tWin, t.tStake) + '</span>)</div>' +
+      '</div>'
+    );
+  }
+
+  function renderWpLedger() {
+    const el = document.getElementById('banker-wp-ledger');
+    if (!el) return;
+    const monthRows = settledMeetings(venueFilter, monthFilter);
+    const yearRows = settledMeetings(venueFilter, monthFilter.slice(0, 4));
+    if (!monthRows.length && !yearRows.length) {
+      el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
+      return;
+    }
+    const parts = monthRows.map(renderMeetingLedgerBlock);
+    if (monthRows.length) parts.push(renderPoolSummary('當月累計投注:', '本月盈利', monthRows));
+    if (yearRows.length) parts.push(renderPoolSummary('本年累計投注:', '本年盈利', yearRows));
+    el.innerHTML = '<div class="banker-wp-summary">' + parts.join('') + '</div>';
   }
 
   /** Map 冠/亞/季/殿 → place-badge CSS class for home card colors. */
@@ -278,11 +336,18 @@
     if (!b || !b.name) return escapeHtml(count);
     const odds = b.odds != null && b.odds !== '' ? String(b.odds) : '';
     const oddsPart = odds ? ` ${escapeHtml(odds)}` : '';
+    let placeLabel = m.bankerPlace || '';
+    const meeting = meetingsById.get(m.id);
+    const banker = meeting && (meeting.dailyPicks || [])[0];
+    const race = banker && (meeting.tipsTable || []).find((row) => Number(row.race) === Number(banker.race));
+    if (race && hasFinishResult(race.result)) {
+      placeLabel = placeLabelForNo(banker.no, race.result) || '';
+    }
     let place = '';
-    if (m.bankerPlace) {
-      const cls = bankerPlaceClass(m.bankerPlace);
-      const icon = placeIconFromLabel(m.bankerPlace) || escapeHtml(m.bankerPlace);
-      place = ` <span class="place-badge ${cls}" title="${escapeAttr(m.bankerPlace)}" aria-label="${escapeAttr(m.bankerPlace)}">${icon}</span>`;
+    if (placeLabel) {
+      const cls = bankerPlaceClass(placeLabel);
+      const icon = placeIconFromLabel(placeLabel) || escapeHtml(placeLabel);
+      place = ` <span class="place-badge ${cls}" title="${escapeAttr(placeLabel)}" aria-label="${escapeAttr(placeLabel)}">${icon}</span>`;
     }
     return `${escapeHtml(count)} <span class="banker-part">| 馬膽 : ${escapeHtml(b.name)}${oddsPart}${place}</span>`;
   }
@@ -497,7 +562,7 @@
     bindEvents();
     try {
       await loadIndex();
-      await loadWpBets();
+      await loadAllMeetings();
       await route();
     } catch (err) {
       meetingList.innerHTML = '';

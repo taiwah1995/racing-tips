@@ -58,4 +58,10 @@ UI filters both the WP book monthly totals and the header all-time `N 賽馬日 
 | P | $600 | $1020 | +70.0% |
 | TOTAL | $800 | $1875 | +134.4% |
 
-Data file: `data/wp-bets.json`
+Historical dividends above were first stored in `data/wp-bets.json` (removed). The site now computes the same returns on load from each meeting's banker (`dailyPicks[0]`):
+
+- Win pays only on 冠; Place pays 冠／亞／季
+- return = final decimal odds × stake (獨贏 $100, 位置 $300); a miss returns 0
+- decimal odds = HKJC dividend per $10 ÷ 10
+
+`2026-09-16` 烈焰光芒 `oddsWin` is **3.15** (獨贏 31.50 ÷ 10), not the one-decimal 3.1, so the win return stays **$315**. Place 1.6 × $300 = **$480** was already exact. The other three settled meetings already matched (`5.4`/`1.8`, `3.1`/`1.5`, and the 09-12 miss).
