@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260925autostats';
+  const APP_DATA_VERSION = '20260925uiv2';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -171,14 +171,37 @@
   }
 
   function formatRoi(winAmt, stakeAmt) {
-    if (!stakeAmt) return '+/-0.0%';
+    if (!stakeAmt) return '+/-0%';
     const pct = ((winAmt - stakeAmt) / stakeAmt) * 100;
     const sign = pct >= 0 ? '+' : '';
-    return sign + pct.toFixed(1) + '%';
+    const rounded = Math.round(pct * 10) / 10;
+    const body = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+    return sign + body + '%';
+  }
+
+  /** Positive neon green, negative red. Zero keeps the surrounding colour. */
+  function plClass(amount) {
+    if (amount > 0) return 'pl-pos';
+    if (amount < 0) return 'pl-neg';
+    return '';
+  }
+
+  function toneSpan(text, amount, extraClass) {
+    const cls = [extraClass, plClass(amount)].filter(Boolean).join(' ');
+    return cls ? '<span class="' + cls + '">' + text + '</span>' : text;
+  }
+
+  function signedMoneyHtml(amount, extraClass) {
+    return toneSpan(formatSignedMoney(amount), amount, extraClass);
+  }
+
+  function roiHtml(winAmt, stakeAmt, extraClass) {
+    const pct = stakeAmt ? ((winAmt - stakeAmt) / stakeAmt) * 100 : 0;
+    return toneSpan(formatRoi(winAmt, stakeAmt), pct, extraClass);
   }
 
   function formatLedgerLine(label, stake, win) {
-    return label + '｜投注 ' + formatMoney(stake) + '｜贏 ' + formatMoney(win) + '｜回報 ' + formatRoi(win, stake);
+    return label + '｜投注 ' + formatMoney(stake) + '｜贏 ' + formatMoney(win) + '｜回報 ' + roiHtml(win, stake);
   }
 
   function formatSignedMoney(profit) {
@@ -273,54 +296,41 @@
     pageSub.hidden = false;
     const rows = settledMeetings(venueFilter);
     if (!rows.length) {
-      pageSub.textContent = '0 賽馬日 💰 累計盈利 $0 💰 (回報 +0.0%)';
+      pageSub.innerHTML = '0 賽馬日 💰 累計盈利 $0 💰 (回報 +0%)';
       return;
     }
     const t = poolTotals(rows);
-    pageSub.textContent =
-      rows.length + ' 賽馬日 💰 累計盈利 ' + formatSignedMoney(t.profit) + ' 💰 (回報 ' + formatRoi(t.tWin, t.tStake) + ')';
-  }
-
-  function renderMeetingLedgerBlock(row) {
-    const tWin = row.winReturn + row.placeReturn;
-    const tStake = STAKE_WIN + STAKE_PLACE;
-    const title = row.date + ' ' + row.venue + '｜' + row.bankerName;
-    return (
-      '<div class="banker-wp-block">' +
-      '<div class="banker-wp-title">' + escapeHtml(title) + '</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('W', STAKE_WIN, row.winReturn) + '</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('P', STAKE_PLACE, row.placeReturn) + '</div>' +
-      '<div class="banker-wp-line banker-wp-total">💰 盈虧 ' + formatSignedMoney(tWin - tStake) + ' 💰 (回報 ' + formatRoi(tWin, tStake) + ')</div>' +
-      '</div>'
-    );
-  }
-
-  function renderPoolSummary(title, profitLabel, rows) {
-    const t = poolTotals(rows);
-    return (
-      '<div class="banker-wp-block">' +
-      '<div class="banker-wp-title">' + escapeHtml(title) + '</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('W', t.wStake, t.wWin) + '</div>' +
-      '<div class="banker-wp-line">' + formatLedgerLine('P', t.pStake, t.pWin) + '</div>' +
-      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(t.tStake) + '｜贏 ' + formatMoney(t.tWin) + '｜</div>' +
-      '<div class="banker-wp-line banker-wp-profit">💰 ' + profitLabel + ' <span class="banker-wp-profit-val">' + formatSignedMoney(t.profit) + '</span> 💰 (回報 <span class="banker-wp-profit-val">' + formatRoi(t.tWin, t.tStake) + '</span>)</div>' +
-      '</div>'
-    );
+    pageSub.innerHTML =
+      rows.length + ' 賽馬日 💰 累計盈利 ' + signedMoneyHtml(t.profit) + ' 💰 (回報 ' + roiHtml(t.tWin, t.tStake) + ')';
   }
 
   function renderWpLedger() {
     const el = document.getElementById('banker-wp-ledger');
     if (!el) return;
-    const monthRows = settledMeetings(venueFilter, monthFilter);
-    const yearRows = settledMeetings(venueFilter, monthFilter.slice(0, 4));
-    if (!monthRows.length && !yearRows.length) {
+    const rows = settledMeetings(venueFilter, monthFilter);
+    if (!rows.length) {
       el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
       return;
     }
-    const parts = monthRows.map(renderMeetingLedgerBlock);
-    if (monthRows.length) parts.push(renderPoolSummary('當月累計投注:', '本月盈利', monthRows));
-    if (yearRows.length) parts.push(renderPoolSummary('本年累計投注:', '本年盈利', yearRows));
-    el.innerHTML = '<div class="banker-wp-summary">' + parts.join('') + '</div>';
+    const t = poolTotals(rows);
+    el.innerHTML =
+      '<div class="banker-wp-summary">' +
+      '<div class="banker-wp-title">當月累計投注:</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('W', t.wStake, t.wWin) + '</div>' +
+      '<div class="banker-wp-line">' + formatLedgerLine('P', t.pStake, t.pWin) + '</div>' +
+      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 ' + formatMoney(t.tStake) + '｜贏 ' + formatMoney(t.tWin) + '｜</div>' +
+      '<div class="banker-wp-line banker-wp-profit">💰 本月盈利 ' + signedMoneyHtml(t.profit, 'banker-wp-profit-val') + ' 💰 (回報 ' + roiHtml(t.tWin, t.tStake, 'banker-wp-profit-val') + ')</div>' +
+      '</div>';
+  }
+
+  /** Settled banker P/L for a home card. Empty when the banker race has no result. */
+  function cardPlHtml(meta) {
+    const row = settledRows.find((r) => r.id === meta.id);
+    if (!row) return '';
+    const tWin = row.winReturn + row.placeReturn;
+    const tStake = STAKE_WIN + STAKE_PLACE;
+    const profit = tWin - tStake;
+    return '<span class="card-pl">💰 盈虧 ' + signedMoneyHtml(profit) + ' (' + roiHtml(tWin, tStake) + ')</span>';
   }
 
   /** Map 冠/亞/季/殿 → place-badge CSS class for home card colors. */
@@ -397,7 +407,10 @@
       const bankerLine = formatBankerLine(m);
       btn.innerHTML = `
         <div class="row1">
-          <span class="date">${formatShortDate(m.date)}</span>
+          <span class="row1-main">
+            <span class="date">${formatShortDate(m.date)}</span>
+            ${cardPlHtml(m)}
+          </span>
           <span style="display:flex;gap:6px;align-items:center">${demoBadge}${venueBadge}</span>
         </div>
         <div class="row2">
