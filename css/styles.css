@@ -570,6 +570,9 @@ body {
   overflow-x: auto;
   white-space: nowrap;
 }
+.banker-wp-block + .banker-wp-block {
+  margin-top: 10px;
+}
 .banker-wp-title {
   color: var(--text-muted);
   margin-bottom: 4px;
