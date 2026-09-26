@@ -515,6 +515,9 @@ body {
   color: var(--text);
   line-height: 1.5;
 }
+#attack-hot .attack-count {
+  color: #fff;
+}
 #attack-hot .attack-horse {
   color: #ff3b30;
 }

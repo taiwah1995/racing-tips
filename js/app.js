@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260926st0927attack3';
+  const APP_DATA_VERSION = '20260926st0927attack4';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -609,9 +609,10 @@
       ? String(hot.disclaimer)
       : '僅供參考 · 非投注建議';
     const heading =
-      '🚫 是日攻擊熱門馬｜高危馬 ' + groups.high.length + ' 隻｜中危馬 ' + groups.mid.length + ' 隻';
+      '🚫 是日攻擊熱門馬｜<span class="attack-count">高危馬 ' + groups.high.length +
+      ' 隻</span>｜<span class="attack-count">中危馬 ' + groups.mid.length + ' 隻</span>';
     el.innerHTML =
-      '<h2 class="panel-title">' + escapeHtml(heading) + '</h2>' +
+      '<h2 class="panel-title">' + heading + '</h2>' +
       summary +
       groups.high.map((item) => attackHorseRow(item, '高危')).join('') +
       groups.mid.map((item) => attackHorseRow(item, '中危')).join('') +
