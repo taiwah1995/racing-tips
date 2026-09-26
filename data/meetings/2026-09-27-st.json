@@ -1,0 +1,359 @@
+{
+  "id": "2026-09-27-st",
+  "date": "2026-09-27",
+  "venue": "沙田",
+  "venueCode": "ST",
+  "raceCount": 11,
+  "label": null,
+  "tipsTable": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1200,
+      "first": {
+        "no": 6,
+        "name": "銳一",
+        "style": "後",
+        "odds": 2.9
+      },
+      "second": {
+        "no": 1,
+        "name": "機械騎士",
+        "style": "前",
+        "odds": 5.6
+      },
+      "third": {
+        "no": 3,
+        "name": "日日獎",
+        "style": "前",
+        "odds": 8.6
+      },
+      "dark": {
+        "no": 4,
+        "name": "旭能精英",
+        "style": "中",
+        "odds": 25
+      }
+    },
+    {
+      "race": 2,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 12,
+        "name": "金多囍",
+        "style": "後",
+        "odds": 6.2
+      },
+      "second": {
+        "no": 4,
+        "name": "小魔怪",
+        "style": "中",
+        "odds": 6.9
+      },
+      "third": {
+        "no": 11,
+        "name": "源好運",
+        "style": "後",
+        "odds": 8
+      },
+      "dark": {
+        "no": 10,
+        "name": "隋我同來",
+        "style": "中",
+        "odds": 6.6
+      }
+    },
+    {
+      "race": 3,
+      "class": "五班",
+      "distance": 1400,
+      "first": {
+        "no": 11,
+        "name": "快樂老撾",
+        "style": "後",
+        "odds": 4.7
+      },
+      "second": {
+        "no": 1,
+        "name": "一路精彩",
+        "style": "前",
+        "odds": 5.4
+      },
+      "third": {
+        "no": 9,
+        "name": "果然僥倖",
+        "style": "後",
+        "odds": 13
+      },
+      "dark": {
+        "no": 2,
+        "name": "東方寶寶",
+        "style": "中",
+        "odds": 9.5
+      }
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1000,
+      "first": {
+        "no": 14,
+        "name": "燊輝之星",
+        "style": "後",
+        "odds": 13
+      },
+      "second": {
+        "no": 9,
+        "name": "雷神太保",
+        "style": "中後",
+        "odds": 13
+      },
+      "third": {
+        "no": 1,
+        "name": "極速神影",
+        "style": "前",
+        "odds": 4.4
+      },
+      "dark": {
+        "no": 13,
+        "name": "共創歡欣",
+        "style": "後",
+        "odds": 13
+      }
+    },
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 6,
+        "name": "砂漿麒星",
+        "style": "前",
+        "odds": 2.1
+      },
+      "second": {
+        "no": 4,
+        "name": "贏得自然",
+        "style": "後",
+        "odds": 25
+      },
+      "third": {
+        "no": 5,
+        "name": "穿甲戰鷹",
+        "style": "放",
+        "odds": 6.4
+      },
+      "dark": {
+        "no": 7,
+        "name": "和光同塵",
+        "style": "後",
+        "odds": 18
+      }
+    },
+    {
+      "race": 6,
+      "class": "四班",
+      "distance": 1400,
+      "first": {
+        "no": 13,
+        "name": "戀愛狂",
+        "style": "後",
+        "odds": 7.4
+      },
+      "second": {
+        "no": 1,
+        "name": "準輝煌",
+        "style": "前",
+        "odds": 7.2
+      },
+      "third": {
+        "no": 12,
+        "name": "熱氣球",
+        "style": "前",
+        "odds": 11
+      },
+      "dark": {
+        "no": 2,
+        "name": "都靈冠星",
+        "style": "前",
+        "odds": 19
+      }
+    },
+    {
+      "race": 7,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 8,
+        "name": "致力之城",
+        "style": "前",
+        "odds": 1.5
+      },
+      "second": {
+        "no": 5,
+        "name": "何方來聲",
+        "style": "前/放",
+        "odds": 8.2
+      },
+      "third": {
+        "no": 12,
+        "name": "伶俐驫駒",
+        "style": "後",
+        "odds": 23
+      },
+      "dark": {
+        "no": 9,
+        "name": "包裝天王",
+        "style": "前",
+        "odds": 14
+      }
+    },
+    {
+      "race": 8,
+      "class": "三級賽",
+      "distance": 1400,
+      "first": {
+        "no": 6,
+        "name": "小鳥天堂",
+        "style": "後",
+        "odds": 2
+      },
+      "second": {
+        "no": 1,
+        "name": "錶之銀河",
+        "style": "後",
+        "odds": 6.5
+      },
+      "third": {
+        "no": 8,
+        "name": "幸運有您",
+        "style": "後",
+        "odds": 16
+      },
+      "dark": {
+        "no": 3,
+        "name": "白鷺金剛",
+        "style": "中",
+        "odds": 7.4
+      }
+    },
+    {
+      "race": 9,
+      "class": "三班",
+      "distance": 1600,
+      "first": {
+        "no": 8,
+        "name": "包裝戰仕",
+        "style": "中",
+        "odds": 2.3
+      },
+      "second": {
+        "no": 1,
+        "name": "活力拍檔",
+        "style": "後",
+        "odds": 4.8
+      },
+      "third": {
+        "no": 13,
+        "name": "逍遙騎士",
+        "style": "前",
+        "odds": 16
+      },
+      "dark": {
+        "no": 14,
+        "name": "量子力奇",
+        "style": "後",
+        "odds": 33
+      }
+    },
+    {
+      "race": 10,
+      "class": "二班",
+      "distance": 1200,
+      "first": {
+        "no": 3,
+        "name": "扶搖勢勁",
+        "style": "前",
+        "odds": 3.2
+      },
+      "second": {
+        "no": 8,
+        "name": "極上紗瓏",
+        "style": "放",
+        "odds": 5.8
+      },
+      "third": {
+        "no": 9,
+        "name": "興馳千里",
+        "style": "後",
+        "odds": 9.2
+      },
+      "dark": {
+        "no": 12,
+        "name": "好評如潮",
+        "style": "後",
+        "odds": 24
+      }
+    },
+    {
+      "race": 11,
+      "class": "三班",
+      "distance": 1400,
+      "first": {
+        "no": 6,
+        "name": "綫路英雄",
+        "style": "後",
+        "odds": 3.5
+      },
+      "second": {
+        "no": 3,
+        "name": "友瑩仁",
+        "style": "中",
+        "odds": 5.5
+      },
+      "third": {
+        "no": 2,
+        "name": "超勁赤兔",
+        "style": "前",
+        "odds": 10
+      },
+      "dark": {
+        "no": 4,
+        "name": "同樣美麗",
+        "style": "前",
+        "odds": 11
+      }
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1200,
+      "no": 6,
+      "name": "銳一",
+      "style": "後",
+      "odds": 2.9
+    },
+    {
+      "race": 7,
+      "class": "三班",
+      "distance": 1200,
+      "no": 8,
+      "name": "致力之城",
+      "style": "前",
+      "odds": 1.5
+    },
+    {
+      "race": 8,
+      "class": "三級賽",
+      "distance": 1400,
+      "no": 6,
+      "name": "小鳥天堂",
+      "style": "後",
+      "odds": 2
+    }
+  ],
+  "dailyPicksHint": "(賠率低於2.5只作次選推介)"
+}
