@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260926st0927';
+  const APP_DATA_VERSION = '20260926st0927attack';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -526,7 +526,62 @@
       container.appendChild(card);
     });
 
+    renderAttackHot(meeting);
+
     window.scrollTo(0, 0);
+  }
+
+  function attackWatchRow(item) {
+    if (item == null || item === '') return '';
+    if (typeof item !== 'object') {
+      return '<div class="pick-card"><div class="pc-race">' + escapeHtml(item) + '</div></div>';
+    }
+    const odds = item.odds != null && item.odds !== '' ? String(item.odds) : '';
+    const line =
+      '第' + escapeHtml(item.race) + '場 ' + escapeHtml(item.no) + ' ' + escapeHtml(item.name || '') +
+      '｜隔夜 ' + escapeHtml(odds) + '｜中 ' + escapeHtml(item.hits) + ' 項';
+    const signals = Array.isArray(item.signals)
+      ? item.signals.filter((s) => s != null && s !== '')
+      : [];
+    const sig = signals.length
+      ? '<div class="pc-note">' + signals.map((s) => escapeHtml(s)).join('、') + '</div>'
+      : '';
+    return '<div class="pick-card"><div class="pc-race">' + line + '</div>' + sig + '</div>';
+  }
+
+  /** Bottom of the day page. Absent when the meeting has no attackHot. */
+  function renderAttackHot(meeting) {
+    const existing = document.getElementById('attack-hot');
+    const hot = meeting && meeting.attackHot;
+    if (!hot || typeof hot !== 'object') {
+      if (existing) existing.remove();
+      return;
+    }
+    const el = existing || document.createElement('section');
+    el.id = 'attack-hot';
+    el.className = 'panel';
+    if (!existing) viewDetail.appendChild(el);
+    const high = Array.isArray(hot.high) ? hot.high : [];
+    const watch = Array.isArray(hot.watch) ? hot.watch : [];
+    const highHtml = high.length
+      ? '<p class="panel-hint">高攻擊</p>' + high.map(attackWatchRow).join('')
+      : '';
+    const summary = hot.summary
+      ? '<p class="panel-hint">' + escapeHtml(hot.summary) + '</p>'
+      : '';
+    const note = hot.note
+      ? '<p class="panel-hint">' + escapeHtml(hot.note) + '</p>'
+      : '';
+    const disclaimer = hot.disclaimer != null && String(hot.disclaimer) !== ''
+      ? String(hot.disclaimer)
+      : '僅供參考 · 非投注建議';
+    el.innerHTML =
+      '<h2 class="panel-title">' + escapeHtml(hot.title || '') + '</h2>' +
+      summary +
+      highHtml +
+      watch.map(attackWatchRow).join('') +
+      note +
+      '<p class="panel-hint">' + escapeHtml(disclaimer) + '</p>';
   }
 
   /* ---------- routing ---------- */

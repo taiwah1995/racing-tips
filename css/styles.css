@@ -515,6 +515,18 @@ body {
   color: var(--text);
   line-height: 1.5;
 }
+#attack-hot .panel-hint {
+  margin-top: 0;
+  padding-top: 8px;
+}
+#attack-hot .panel-hint:last-child {
+  padding-bottom: 10px;
+}
+#attack-hot .pc-note {
+  margin-top: 4px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
 
 /* ===== Footer ===== */
 .site-footer {
