@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260926st0927attack2';
+  const APP_DATA_VERSION = '20260926st0927attack3';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -531,14 +531,29 @@
     window.scrollTo(0, 0);
   }
 
-  function attackWatchRow(item) {
-    if (item == null || item === '') return '';
-    if (typeof item !== 'object') {
-      return '<div class="pick-card"><div class="pc-race">' + escapeHtml(item) + '</div></div>';
-    }
-    const odds = item.odds != null && item.odds !== '' ? String(item.odds) : '';
+  /** hits >= 6 高危, 4–5 中危. Anything else is not shown. */
+  function attackTier(hits) {
+    const n = Number(hits);
+    if (!Number.isFinite(n)) return '';
+    if (n >= 6) return '高危';
+    if (n >= 4 && n < 6) return '中危';
+    return '';
+  }
+
+  function formatAttackOdds(odds) {
+    if (odds == null || odds === '') return '';
+    const n = Number(odds);
+    if (!Number.isFinite(n)) return String(odds);
+    const rounded = Math.round(n * 10) / 10;
+    return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+  }
+
+  function attackHorseRow(item, tier) {
+    const odds = formatAttackOdds(item.odds);
     const line =
-      '第' + escapeHtml(item.race) + '場 <span class="attack-horse">' + escapeHtml(item.no) + ' ' + escapeHtml(item.name || '') + '</span>｜隔夜 ' + escapeHtml(odds) + '｜中 ' + escapeHtml(item.hits) + ' 項';
+      '第' + escapeHtml(item.race) + '場 (' + tier + ') <span class="attack-horse">' +
+      escapeHtml(item.no) + ' ' + escapeHtml(item.name || '') + '</span>｜隔夜 ' +
+      escapeHtml(odds) + '｜中 ' + escapeHtml(item.hits) + ' 項';
     const signals = Array.isArray(item.signals)
       ? item.signals.filter((s) => s != null && s !== '')
       : [];
@@ -546,6 +561,29 @@
       ? '<div class="pc-note">' + signals.map((s) => escapeHtml(s)).join('、') + '</div>'
       : '';
     return '<div class="pick-card"><div class="pc-race">' + line + '</div>' + sig + '</div>';
+  }
+
+  /**
+   * high then watch, data order. Same race+number is kept once.
+   * Shown order is 高危 first, then 中危.
+   */
+  function attackHorseGroups(hot) {
+    const lists = []
+      .concat(Array.isArray(hot.high) ? hot.high : [])
+      .concat(Array.isArray(hot.watch) ? hot.watch : []);
+    const seen = new Set();
+    const high = [];
+    const mid = [];
+    lists.forEach((item) => {
+      if (!item || typeof item !== 'object') return;
+      const key = String(item.race) + '|' + String(item.no);
+      if (seen.has(key)) return;
+      seen.add(key);
+      const tier = attackTier(item.hits);
+      if (tier === '高危') high.push(item);
+      else if (tier === '中危') mid.push(item);
+    });
+    return { high, mid };
   }
 
   /** Bottom of the day page. Absent when the meeting has no attackHot. */
@@ -560,14 +598,7 @@
     el.id = 'attack-hot';
     el.className = 'panel';
     if (!existing) viewDetail.appendChild(el);
-    const high = Array.isArray(hot.high) ? hot.high : [];
-    const watch = Array.isArray(hot.watch) ? hot.watch : [];
-    const highHtml = high.length
-      ? '<p class="panel-hint">高危</p>' + high.map(attackWatchRow).join('')
-      : '';
-    const watchHtml = watch.length
-      ? '<p class="panel-hint">中危</p>' + watch.map(attackWatchRow).join('')
-      : '';
+    const groups = attackHorseGroups(hot);
     const summary = hot.summary
       ? '<p class="panel-hint">' + escapeHtml(hot.summary) + '</p>'
       : '';
@@ -577,12 +608,13 @@
     const disclaimer = hot.disclaimer != null && String(hot.disclaimer) !== ''
       ? String(hot.disclaimer)
       : '僅供參考 · 非投注建議';
-    const heading = (hot.title || '') + ' | 高危馬 ' + high.length + ' 隻 | 中危馬 ' + watch.length + ' 隻';
+    const heading =
+      '🚫 是日攻擊熱門馬｜高危馬 ' + groups.high.length + ' 隻｜中危馬 ' + groups.mid.length + ' 隻';
     el.innerHTML =
       '<h2 class="panel-title">' + escapeHtml(heading) + '</h2>' +
       summary +
-      highHtml +
-      watchHtml +
+      groups.high.map((item) => attackHorseRow(item, '高危')).join('') +
+      groups.mid.map((item) => attackHorseRow(item, '中危')).join('') +
       note +
       '<p class="panel-hint">' + escapeHtml(disclaimer) + '</p>';
   }
