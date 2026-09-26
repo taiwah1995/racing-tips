@@ -515,6 +515,12 @@ body {
   color: var(--text);
   line-height: 1.5;
 }
+#attack-hot .panel-title {
+  color: #fff;
+}
+#attack-hot .attack-horse {
+  color: #ff3b30;
+}
 #attack-hot .panel-hint {
   margin-top: 0;
   padding-top: 8px;

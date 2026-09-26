@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260926st0927attack';
+  const APP_DATA_VERSION = '20260926st0927attack2';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -538,8 +538,7 @@
     }
     const odds = item.odds != null && item.odds !== '' ? String(item.odds) : '';
     const line =
-      '第' + escapeHtml(item.race) + '場 ' + escapeHtml(item.no) + ' ' + escapeHtml(item.name || '') +
-      '｜隔夜 ' + escapeHtml(odds) + '｜中 ' + escapeHtml(item.hits) + ' 項';
+      '第' + escapeHtml(item.race) + '場 <span class="attack-horse">' + escapeHtml(item.no) + ' ' + escapeHtml(item.name || '') + '</span>｜隔夜 ' + escapeHtml(odds) + '｜中 ' + escapeHtml(item.hits) + ' 項';
     const signals = Array.isArray(item.signals)
       ? item.signals.filter((s) => s != null && s !== '')
       : [];
@@ -564,7 +563,10 @@
     const high = Array.isArray(hot.high) ? hot.high : [];
     const watch = Array.isArray(hot.watch) ? hot.watch : [];
     const highHtml = high.length
-      ? '<p class="panel-hint">高攻擊</p>' + high.map(attackWatchRow).join('')
+      ? '<p class="panel-hint">高危</p>' + high.map(attackWatchRow).join('')
+      : '';
+    const watchHtml = watch.length
+      ? '<p class="panel-hint">中危</p>' + watch.map(attackWatchRow).join('')
       : '';
     const summary = hot.summary
       ? '<p class="panel-hint">' + escapeHtml(hot.summary) + '</p>'
@@ -575,11 +577,12 @@
     const disclaimer = hot.disclaimer != null && String(hot.disclaimer) !== ''
       ? String(hot.disclaimer)
       : '僅供參考 · 非投注建議';
+    const heading = (hot.title || '') + ' | 高危馬 ' + high.length + ' 隻 | 中危馬 ' + watch.length + ' 隻';
     el.innerHTML =
-      '<h2 class="panel-title">' + escapeHtml(hot.title || '') + '</h2>' +
+      '<h2 class="panel-title">' + escapeHtml(heading) + '</h2>' +
       summary +
       highHtml +
-      watch.map(attackWatchRow).join('') +
+      watchHtml +
       note +
       '<p class="panel-hint">' + escapeHtml(disclaimer) + '</p>';
   }
