@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0d1117" />
   <meta http-equiv="Cache-Control" content="no-cache" />
   <title>TW賽馬貼士</title>
-  <link rel="stylesheet" href="css/styles.css?v=20260930st1001hv0" />
+  <link rel="stylesheet" href="css/styles.css?v=20260930st1001profit" />
 </head>
 <body>
   <div id="app">
@@ -29,10 +29,13 @@
             <button class="tab" data-venue="ST" type="button">沙田</button>
             <button class="tab" data-venue="HV" type="button">快活谷</button>
           </div>
-          <label class="month-wrap">
-            <span class="sr-only">賽事月份</span>
-            <select id="month-filter" aria-label="賽事月份"></select>
-          </label>
+          <div class="month-line">
+            <label class="month-wrap">
+              <span class="sr-only">賽事月份</span>
+              <select id="month-filter" aria-label="賽事月份"></select>
+            </label>
+            <span id="month-profit" class="month-profit"></span>
+          </div>
         </div>
 
         <div class="panel banker-wp-book" id="banker-wp-book">
@@ -78,6 +81,6 @@
       僅供參考 · 非投注建議
     </footer>
   </div>
-  <script src="js/app.js?v=20260930st1001hv0"></script>
+  <script src="js/app.js?v=20260930st1001profit"></script>
 </body>
 </html>
