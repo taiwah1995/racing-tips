@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260930st1001profit';
+  const APP_DATA_VERSION = '20260930st1001monthonly';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -390,22 +390,6 @@
     return `${escapeHtml(count)} <span class="banker-part">| 馬膽 : ${escapeHtml(b.name)}${oddsPart}${place}</span>`;
   }
 
-  /** 💰當月盈利 beside the month control. Same profit and ROI as the ledger. */
-  function renderMonthProfit() {
-    const el = document.getElementById('month-profit');
-    if (!el) return;
-    const rows = settledMeetings(venueFilter, monthFilter);
-    if (!rows.length) {
-      el.textContent = '💰當月盈利$0 (+0%)';
-      return;
-    }
-    const t = poolTotals(rows);
-    const pct = t.tStake ? ((t.tWin - t.tStake) / t.tStake) * 100 : 0;
-    const pctText = t.tStake ? formatRoi(t.tWin, t.tStake) : '+0%';
-    el.innerHTML = '💰當月盈利' + toneSpan(formatSignedMoney(t.profit), t.profit) +
-      ' ' + toneSpan('(' + pctText + ')', pct);
-  }
-
   /* ---------- render home ---------- */
   function renderHome() {
     viewHome.hidden = false;
@@ -414,7 +398,6 @@
     pageTitle.textContent = '🏇 TW賽馬貼士';
     renderAllTimeProfitSubtitle();
     renderWpLedger();
-    renderMonthProfit();
 
     const monthMeetings = indexData.meetings.filter((m) =>
       m.date.startsWith(monthFilter)

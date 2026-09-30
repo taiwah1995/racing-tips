@@ -158,22 +158,12 @@ body {
 }
 .tab:active { opacity: 0.85; }
 
-.month-line {
-  display: flex;
-  align-items: center;
-  gap: 0.25em;
-}
 .month-wrap {
   display: block;
   position: relative;
-  flex: 0 0 auto;
-}
-.month-profit {
-  white-space: nowrap;
-  font-size: 1rem;
 }
 #month-filter {
-  width: auto;
+  width: 100%;
   min-height: var(--tap);
   padding: 0 40px 0 14px;
   border: 1px solid var(--border);
