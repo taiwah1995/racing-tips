@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260930st1001yellow';
+  const APP_DATA_VERSION = '20260930st1001month';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -138,10 +138,26 @@
     return `${DATA_BASE}/${path}?v=${APP_DATA_VERSION}`;
   }
 
+  function defaultMonthKey() {
+    const now = new Date();
+    const today = now.getFullYear() + '-' +
+      String(now.getMonth() + 1).padStart(2, '0') + '-' +
+      String(now.getDate()).padStart(2, '0');
+    const dates = (indexData.meetings || [])
+      .map((m) => m.date)
+      .filter(Boolean)
+      .slice()
+      .sort();
+    const upcoming = dates.find((date) => date >= today);
+    const chosen = upcoming || dates[dates.length - 1];
+    return chosen ? chosen.slice(0, 7) : getCurrentMonthKey();
+  }
+
   async function loadIndex() {
     const res = await fetch(dataUrl('index.json'));
     if (!res.ok) throw new Error('無法載入 index.json');
     indexData = await res.json();
+    monthFilter = defaultMonthKey();
     buildMonthOptions();
   }
 
@@ -304,12 +320,34 @@
       rows.length + ' 賽馬日 💰 累計盈利 ' + signedMoneyHtml(t.profit) + ' 💰 (回報 ' + roiHtml(t.tWin, t.tStake) + ')';
   }
 
+  function monthHasMeetings(monthKey, venueCode) {
+    return (indexData.meetings || []).some((m) => {
+      if (!m.date || !m.date.startsWith(monthKey)) return false;
+      if (venueCode && venueCode !== 'all' && m.venueCode !== venueCode) return false;
+      return true;
+    });
+  }
+
+  function renderZeroLedger() {
+    return (
+      '<div class="banker-wp-summary">' +
+      '<div class="banker-wp-title">當月累計投注:</div>' +
+      '<div class="banker-wp-line">W｜投注 $0｜贏 $0｜回報 +0%</div>' +
+      '<div class="banker-wp-line">P｜投注 $0｜贏 $0｜回報 +0%</div>' +
+      '<div class="banker-wp-line banker-wp-total">TOTAL｜投注 $0｜贏 $0｜</div>' +
+      '<div class="banker-wp-line banker-wp-profit">💰 本月盈利 <span class="banker-wp-profit-val">$0</span> 💰 (回報 <span class="banker-wp-profit-val">+0%</span>)</div>' +
+      '</div>'
+    );
+  }
+
   function renderWpLedger() {
     const el = document.getElementById('banker-wp-ledger');
     if (!el) return;
     const rows = settledMeetings(venueFilter, monthFilter);
     if (!rows.length) {
-      el.innerHTML = '<p class="banker-wp-empty">暫未有結算</p>';
+      el.innerHTML = monthHasMeetings(monthFilter, venueFilter)
+        ? renderZeroLedger()
+        : '<p class="banker-wp-empty">暫未有結算</p>';
       return;
     }
     const t = poolTotals(rows);
