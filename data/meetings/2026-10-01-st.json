@@ -1,0 +1,505 @@
+{
+  "id": "2026-10-01-st",
+  "date": "2026-10-01",
+  "venue": "沙田",
+  "venueCode": "ST",
+  "raceCount": 11,
+  "label": null,
+  "tipsTable": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1200,
+      "first": {
+        "no": 5,
+        "name": "同有運",
+        "style": "前",
+        "odds": 3.6
+      },
+      "second": {
+        "no": 10,
+        "name": "爆熱",
+        "style": "放",
+        "odds": 6.3
+      },
+      "third": {
+        "no": 6,
+        "name": "魅力知福",
+        "style": "後",
+        "odds": 10
+      },
+      "dark": {
+        "no": 12,
+        "name": "怡昌奇兵",
+        "style": "中",
+        "odds": 11
+      }
+    },
+    {
+      "race": 2,
+      "class": "五班",
+      "distance": 1600,
+      "first": {
+        "no": 6,
+        "name": "志醒大將",
+        "style": "後",
+        "odds": 4.8
+      },
+      "second": {
+        "no": 1,
+        "name": "君達得",
+        "style": "後",
+        "odds": 3.2
+      },
+      "third": {
+        "no": 9,
+        "name": "開心三多",
+        "style": "中",
+        "odds": 7.8
+      },
+      "dark": {
+        "no": 11,
+        "name": "駟跑得",
+        "style": "後",
+        "odds": 20
+      }
+    },
+    {
+      "race": 3,
+      "class": "三級賽",
+      "distance": 1000,
+      "first": {
+        "no": 4,
+        "name": "顏色之皇",
+        "style": "前",
+        "odds": 2.8
+      },
+      "second": {
+        "no": 1,
+        "name": "精算暴雪",
+        "style": "中",
+        "odds": 6.6
+      },
+      "third": {
+        "no": 2,
+        "name": "翠紅",
+        "style": "後",
+        "odds": 4.5
+      },
+      "dark": {
+        "no": 7,
+        "name": "魔術控制",
+        "style": "後",
+        "odds": 4.8
+      }
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1400,
+      "first": {
+        "no": 7,
+        "name": "實力加",
+        "style": "後",
+        "odds": 3.1
+      },
+      "second": {
+        "no": 10,
+        "name": "遨遊波士",
+        "style": "放",
+        "odds": 4.8
+      },
+      "third": {
+        "no": 3,
+        "name": "超拍檔",
+        "style": "後",
+        "odds": 17
+      },
+      "dark": {
+        "no": 14,
+        "name": "久久為軍",
+        "style": "後",
+        "odds": 6.8
+      }
+    },
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1000,
+      "first": {
+        "no": 3,
+        "name": "嘉應耀昇",
+        "style": "前",
+        "odds": 4.9
+      },
+      "second": {
+        "no": 1,
+        "name": "星球勇士",
+        "style": "放",
+        "odds": 2.3
+      },
+      "third": {
+        "no": 12,
+        "name": "天寶威威",
+        "style": "中",
+        "odds": 10
+      },
+      "dark": {
+        "no": 4,
+        "name": "輕功猛男",
+        "style": "放",
+        "odds": 16
+      }
+    },
+    {
+      "race": 6,
+      "class": "四班",
+      "distance": 1800,
+      "first": {
+        "no": 3,
+        "name": "佰勝金龍",
+        "style": "後",
+        "odds": 1.8
+      },
+      "second": {
+        "no": 13,
+        "name": "禾道威",
+        "style": "後",
+        "odds": 11
+      },
+      "third": {
+        "no": 6,
+        "name": "夢照發",
+        "style": "後",
+        "odds": 16
+      },
+      "dark": {
+        "no": 7,
+        "name": "好運年",
+        "style": "中",
+        "odds": 10
+      }
+    },
+    {
+      "race": 7,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 11,
+        "name": "同喜",
+        "style": "後",
+        "odds": 19
+      },
+      "second": {
+        "no": 6,
+        "name": "烈進駒",
+        "style": "中後",
+        "odds": 3.3
+      },
+      "third": {
+        "no": 10,
+        "name": "嘉應光彩",
+        "style": "前",
+        "odds": 3.8
+      },
+      "dark": {
+        "no": 2,
+        "name": "光年程祥",
+        "style": "前中",
+        "odds": 8.8
+      }
+    },
+    {
+      "race": 8,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 4,
+        "name": "明德輝煌",
+        "style": "前",
+        "odds": 4.8
+      },
+      "second": {
+        "no": 13,
+        "name": "花果猴王",
+        "style": "中",
+        "odds": 10
+      },
+      "third": {
+        "no": 8,
+        "name": "天天更好",
+        "style": "前",
+        "odds": 12
+      },
+      "dark": {
+        "no": 6,
+        "name": "擅搏",
+        "style": "中",
+        "odds": 7.5
+      }
+    },
+    {
+      "race": 9,
+      "class": "二班",
+      "distance": 1400,
+      "first": {
+        "no": 2,
+        "name": "喜慶寶",
+        "style": "前",
+        "odds": 2.9
+      },
+      "second": {
+        "no": 12,
+        "name": "威利金箭",
+        "style": "中",
+        "odds": 9.3
+      },
+      "third": {
+        "no": 10,
+        "name": "至尊瑰寶",
+        "style": "後",
+        "odds": 16
+      },
+      "dark": {
+        "no": 5,
+        "name": "樂勝天下",
+        "style": "後",
+        "odds": 26
+      }
+    },
+    {
+      "race": 10,
+      "class": "三班",
+      "distance": 1400,
+      "first": {
+        "no": 14,
+        "name": "八仟好運",
+        "style": "前",
+        "odds": 4.3
+      },
+      "second": {
+        "no": 7,
+        "name": "巴閉精",
+        "style": "前",
+        "odds": 6.7
+      },
+      "third": {
+        "no": 1,
+        "name": "超寫意",
+        "style": "中",
+        "odds": 11
+      },
+      "dark": {
+        "no": 8,
+        "name": "金錢遊戲",
+        "style": "後",
+        "odds": 9.8
+      }
+    },
+    {
+      "race": 11,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 1,
+        "name": "偵探傳奇",
+        "style": "後",
+        "odds": 3.6
+      },
+      "second": {
+        "no": 3,
+        "name": "㩒住贏",
+        "style": "後",
+        "odds": 13
+      },
+      "third": {
+        "no": 4,
+        "name": "金金小子",
+        "style": "前",
+        "odds": 10
+      },
+      "dark": {
+        "no": 8,
+        "name": "辣得準",
+        "style": "前",
+        "odds": 13
+      }
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 9,
+      "class": "二班",
+      "distance": 1400,
+      "no": 2,
+      "name": "喜慶寶",
+      "style": "前",
+      "odds": 2.9
+    },
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1200,
+      "no": 5,
+      "name": "同有運",
+      "style": "前",
+      "odds": 3.6
+    },
+    {
+      "race": 11,
+      "class": "三班",
+      "distance": 1200,
+      "no": 1,
+      "name": "偵探傳奇",
+      "style": "後",
+      "odds": 3.6
+    }
+  ],
+  "dailyPicksHint": "(賠率低於2.5只作次選推介)",
+  "attackHot": {
+    "title": "🚫 是日攻擊熱門馬｜高危馬 1 隻｜中危馬 9 隻",
+    "summary": "高危攻擊馬建議放棄投注 | 中危攻擊馬建議減注50%",
+    "high": [
+      {
+        "race": 10,
+        "no": 3,
+        "name": "友瑩亮",
+        "odds": 5.9,
+        "hits": 6,
+        "signals": [
+          "轉騎",
+          "上仗爆冷入位今變熱",
+          "騎師無參與晨操",
+          "初騎",
+          "學徒袁幸堯策熱",
+          "入位後評分加分偏少"
+        ]
+      }
+    ],
+    "watch": [
+      {
+        "race": 2,
+        "no": 8,
+        "name": "萬事勝利",
+        "odds": 5.7,
+        "hits": 5,
+        "signals": [
+          "轉騎",
+          "轉程",
+          "增程",
+          "晨操無騎師",
+          "初騎"
+        ]
+      },
+      {
+        "race": 3,
+        "no": 4,
+        "name": "顏色之皇",
+        "odds": 2.8,
+        "hits": 4,
+        "signals": [
+          "轉騎",
+          "對手轉強",
+          "體重+15",
+          "評分新高"
+        ]
+      },
+      {
+        "race": 3,
+        "no": 2,
+        "name": "翠紅",
+        "odds": 4.5,
+        "hits": 5,
+        "signals": [
+          "轉程",
+          "谷轉田",
+          "對手轉強",
+          "評分新高",
+          "檔位轉差"
+        ]
+      },
+      {
+        "race": 3,
+        "no": 7,
+        "name": "魔術控制",
+        "odds": 4.8,
+        "hits": 4,
+        "signals": [
+          "轉程",
+          "轉佩備",
+          "上仗獨贏355爆冷入位",
+          "入位後評分無加"
+        ]
+      },
+      {
+        "race": 8,
+        "no": 11,
+        "name": "閃電奇駿",
+        "odds": 5.6,
+        "hits": 5,
+        "signals": [
+          "轉騎",
+          "轉佩備",
+          "谷轉田",
+          "體重+15",
+          "初騎"
+        ]
+      },
+      {
+        "race": 8,
+        "no": 5,
+        "name": "八玲瓏",
+        "odds": 5.9,
+        "hits": 5,
+        "signals": [
+          "轉騎",
+          "爆冷入位變熱",
+          "晨操無騎師",
+          "初騎",
+          "評分新高"
+        ]
+      },
+      {
+        "race": 9,
+        "no": 2,
+        "name": "喜慶寶",
+        "odds": 2.9,
+        "hits": 4,
+        "signals": [
+          "轉程",
+          "增程",
+          "體重+18",
+          "評分新高"
+        ]
+      },
+      {
+        "race": 10,
+        "no": 14,
+        "name": "八仟好運",
+        "odds": 4.3,
+        "hits": 4,
+        "signals": [
+          "對手轉強",
+          "晨操無騎師",
+          "評分新高",
+          "入位後加分偏少"
+        ]
+      },
+      {
+        "race": 11,
+        "no": 6,
+        "name": "超和平",
+        "odds": 5.8,
+        "hits": 4,
+        "signals": [
+          "對手轉強",
+          "體重-17",
+          "評分新高",
+          "上仗獨贏1.7今隔夜5.8"
+        ]
+      }
+    ],
+    "note": "高危＝中 6 項或以上；中危＝中 4 至 5 項。第15、20、22、23項未核實，未計入命中。",
+    "disclaimer": "僅供參考 · 非投注建議"
+  }
+}
