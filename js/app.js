@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260930st1001month';
+  const APP_DATA_VERSION = '20260930st1001hv0';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -320,14 +320,6 @@
       rows.length + ' 賽馬日 💰 累計盈利 ' + signedMoneyHtml(t.profit) + ' 💰 (回報 ' + roiHtml(t.tWin, t.tStake) + ')';
   }
 
-  function monthHasMeetings(monthKey, venueCode) {
-    return (indexData.meetings || []).some((m) => {
-      if (!m.date || !m.date.startsWith(monthKey)) return false;
-      if (venueCode && venueCode !== 'all' && m.venueCode !== venueCode) return false;
-      return true;
-    });
-  }
-
   function renderZeroLedger() {
     return (
       '<div class="banker-wp-summary">' +
@@ -345,9 +337,7 @@
     if (!el) return;
     const rows = settledMeetings(venueFilter, monthFilter);
     if (!rows.length) {
-      el.innerHTML = monthHasMeetings(monthFilter, venueFilter)
-        ? renderZeroLedger()
-        : '<p class="banker-wp-empty">暫未有結算</p>';
+      el.innerHTML = renderZeroLedger();
       return;
     }
     const t = poolTotals(rows);
