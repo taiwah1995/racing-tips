@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260930st1001monthonly';
+  const APP_DATA_VERSION = '20260930st1001attackalign';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -576,11 +576,13 @@
     return Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
   }
 
-  function attackHorseRow(item, tier) {
+  function attackHorseRow(item, tier, showRace) {
     const odds = formatAttackOdds(item.odds);
     const nameClass = tier === '中危' ? 'attack-horse-mid' : 'attack-horse';
+    const raceLabel = '第' + escapeHtml(item.race) + '場 ';
+    const raceClass = showRace ? 'attack-race' : 'attack-race attack-race-cont';
     const line =
-      '第' + escapeHtml(item.race) + '場 (' + tier + ') <span class="attack-horse">' +
+      '(' + tier + ') <span class="attack-horse">' +
       escapeHtml(item.no) + '</span> <span class="' + nameClass + '">' + escapeHtml(item.name || '') + '</span>｜隔夜 ' +
       escapeHtml(odds) + '｜中 ' + escapeHtml(item.hits) + ' 項';
     const signals = Array.isArray(item.signals)
@@ -589,7 +591,22 @@
     const sig = signals.length
       ? '<div class="pc-note">' + signals.map((s) => escapeHtml(s)).join('、') + '</div>'
       : '';
-    return '<div class="pick-card"><div class="pc-race">' + line + '</div>' + sig + '</div>';
+    return '<div class="pick-card attack-horse-row">' +
+      '<span class="' + raceClass + '"' + (showRace ? '' : ' aria-hidden="true"') + '>' + raceLabel + '</span>' +
+      '<div class="attack-horse-body"><div class="pc-race">' + line + '</div>' + sig + '</div>' +
+      '</div>';
+  }
+
+  /** 高危 then 中危. A repeated race label is kept only on the first horse of a consecutive run. */
+  function attackRowsHtml(groups) {
+    const rows = [];
+    groups.high.forEach((item) => rows.push({ item, tier: '高危' }));
+    groups.mid.forEach((item) => rows.push({ item, tier: '中危' }));
+    return rows.map((row, index) => {
+      const prev = index > 0 ? rows[index - 1].item : null;
+      const showRace = !prev || String(prev.race) !== String(row.item.race);
+      return attackHorseRow(row.item, row.tier, showRace);
+    }).join('');
   }
 
   /**
@@ -643,8 +660,7 @@
     el.innerHTML =
       '<h2 class="panel-title">' + heading + '</h2>' +
       summary +
-      groups.high.map((item) => attackHorseRow(item, '高危')).join('') +
-      groups.mid.map((item) => attackHorseRow(item, '中危')).join('') +
+      attackRowsHtml(groups) +
       note +
       '<p class="panel-hint">' + escapeHtml(disclaimer) + '</p>';
   }
