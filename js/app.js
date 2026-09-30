@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20260930st1001';
+  const APP_DATA_VERSION = '20260930st1001yellow';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -550,9 +550,10 @@
 
   function attackHorseRow(item, tier) {
     const odds = formatAttackOdds(item.odds);
+    const nameClass = tier === '中危' ? 'attack-horse-mid' : 'attack-horse';
     const line =
       '第' + escapeHtml(item.race) + '場 (' + tier + ') <span class="attack-horse">' +
-      escapeHtml(item.no) + ' ' + escapeHtml(item.name || '') + '</span>｜隔夜 ' +
+      escapeHtml(item.no) + '</span> <span class="' + nameClass + '">' + escapeHtml(item.name || '') + '</span>｜隔夜 ' +
       escapeHtml(odds) + '｜中 ' + escapeHtml(item.hits) + ' 項';
     const signals = Array.isArray(item.signals)
       ? item.signals.filter((s) => s != null && s !== '')

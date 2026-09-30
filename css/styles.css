@@ -521,6 +521,9 @@ body {
 #attack-hot .attack-horse {
   color: #ff3b30;
 }
+#attack-hot .attack-horse-mid {
+  color: #ffe14a;
+}
 #attack-hot .panel-hint {
   margin-top: 0;
   padding-top: 8px;
