@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261002attack5';
+  const APP_DATA_VERSION = '20261002pattern';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -478,10 +478,13 @@
     const tbody = $('#tips-tbody');
     tbody.innerHTML = '';
     let hasAnyResult = false;
-    (meeting.tipsTable || []).forEach((row) => {
+    (meeting.tipsTable || []).forEach((row, index) => {
       const result = row.result || null;
       if (result) hasAnyResult = true;
+      const alt = index % 2 === 1 ? ' tips-alt' : '';
+      const noteHtml = patternNoteHtml(row.patternNote);
       const tr = document.createElement('tr');
+      tr.className = 'tips-race' + alt + (noteHtml ? ' has-note' : '');
       tr.innerHTML = `
         <td class="race-col">${raceCell(row)}</td>
         <td>${horseCell(row.first, 'col-first', result)}</td>
@@ -489,6 +492,12 @@
         <td>${horseCell(row.third, '', result)}</td>
         <td>${horseCell(row.dark, 'col-dark', result)}</td>`;
       tbody.appendChild(tr);
+      if (noteHtml) {
+        const noteTr = document.createElement('tr');
+        noteTr.className = 'pattern-note' + alt;
+        noteTr.innerHTML = '<td></td><td class="pattern-note-cell" colspan="4">' + noteHtml + '</td>';
+        tbody.appendChild(noteTr);
+      }
     });
 
     // Post-race hit note
@@ -557,6 +566,23 @@
     renderAttackHot(meeting);
 
     window.scrollTo(0, 0);
+  }
+
+  /** One line under the four tip cells: 留意 items, then 避 items. */
+  function patternNoteHtml(note) {
+    if (!note || typeof note !== 'object') return '';
+    const items = [];
+    const watch = Array.isArray(note.watch) ? note.watch : [];
+    const avoid = Array.isArray(note.avoid) ? note.avoid : [];
+    watch.forEach((text) => {
+      if (text == null || text === '') return;
+      items.push('<span class="pl-pos">留意</span> ' + escapeHtml(text));
+    });
+    avoid.forEach((text) => {
+      if (text == null || text === '') return;
+      items.push('<span class="pl-neg">避</span> ' + escapeHtml(text));
+    });
+    return items.join('；');
   }
 
   /** hits >= 6 高危, 4–5 中危. Anything else is not shown. */
