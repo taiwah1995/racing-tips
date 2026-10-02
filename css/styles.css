@@ -620,6 +620,7 @@ body {
   font-weight: 600;
 }
 .wind-pick .wind-pick-name { text-align: left; }
+.wind-pick td.wind-pick-kind { color: var(--gold); }
 .wind-pick tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
 .wind-pick tr.wind-pick-split td { border-top: 2px solid var(--border); }
 .wind-table thead tr:first-child th.wind-group,
