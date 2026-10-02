@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261002windcolor';
+  const APP_DATA_VERSION = '20261002windpick';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -829,6 +829,66 @@
     return rows;
   }
 
+  function formatWindRate(rate) {
+    const rounded = Math.round(rate * 10) / 10;
+    return (Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1)) + '%';
+  }
+
+  function formatWindCount(n) {
+    return Number.isInteger(n) ? String(n) : String(n);
+  }
+
+  /** 大風 and 有風 only, when (Win + Place) / (Win + Place + Lose) is above 60%. */
+  function windPickRows(table) {
+    const kinds = [
+      { name: '大風', start: 5 },
+      { name: '有風', start: 9 },
+    ];
+    const picks = [];
+    (table.rows || []).forEach((row) => {
+      const name = cellText(gvizCell(row, 1)).trim();
+      if (!name || isLabelRow(name)) return;
+      kinds.forEach((kind) => {
+        const cells = [0, 1, 2].map((i) => gvizCell(row, kind.start + i));
+        const blank = cells.every((cell) => !cell || cell.v == null || cell.v === '');
+        if (blank) return;
+        const nums = cells.map((cell) => {
+          if (!cell || cell.v == null || cell.v === '') return 0;
+          const n = Number(cell.v);
+          return Number.isFinite(n) ? n : 0;
+        });
+        const total = nums[0] + nums[1] + nums[2];
+        if (!(total > 0)) return;
+        const rate = ((nums[0] + nums[1]) / total) * 100;
+        if (!(rate > 60)) return;
+        picks.push({ name: name, kind: kind.name, total: total, rate: rate });
+      });
+    });
+    picks.sort((a, b) => {
+      if (a.rate !== b.rate) return b.rate - a.rate;
+      if (a.total !== b.total) return b.total - a.total;
+      return a.name.localeCompare(b.name, 'zh-HK');
+    });
+    return picks;
+  }
+
+  function windPickHtml(picks) {
+    const body = picks.map((pick) => {
+      return '<tr>' +
+        '<td class="wind-pick-name">' + escapeHtml(pick.name) + '</td>' +
+        '<td>' + escapeHtml(pick.kind) + '</td>' +
+        '<td>' + escapeHtml(formatWindCount(pick.total)) + '</td>' +
+        '<td>' + rateCellHtml(formatWindRate(pick.rate)) + '</td>' +
+        '</tr>';
+    }).join('');
+    return '<section class="panel" id="wind-picks">' +
+      '<h2 class="panel-title">推介</h2>' +
+      '<div class="wind-scroll">' +
+      '<table class="wind-pick">' +
+      '<thead><tr><th>馬房</th><th>風類</th><th>隻數</th><th>三甲%</th></tr></thead>' +
+      '<tbody>' + body + '</tbody></table></div></section>';
+  }
+
   function windTableHtml(title, nameHeader, rows) {
     const groupHeads = WIND_GROUPS.map((name) => '<th class="wind-group" colspan="4">' + name + '</th>').join('');
     const subHeads = WIND_GROUPS.map(() => '<th>Win</th><th>Place</th><th>Lose</th><th>三甲%</th>').join('');
@@ -891,6 +951,7 @@
       if (host) {
         host.innerHTML =
           windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers)) +
+          windPickHtml(windPickRows(trainers)) +
           windTableHtml('賽日累計收風統計', '賽日', meetingRows(days));
       }
       if (status) status.hidden = true;
