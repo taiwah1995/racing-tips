@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261002st1001only';
+  const APP_DATA_VERSION = '20261002wind';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -23,6 +23,7 @@
 
   const viewHome = $('#view-home');
   const viewDetail = $('#view-detail');
+  const viewWind = $('#view-wind');
   const btnBack = $('#btn-back');
   const pageTitle = $('#page-title');
   const pageSub = $('#page-sub');
@@ -394,6 +395,7 @@
   function renderHome() {
     viewHome.hidden = false;
     viewDetail.hidden = true;
+    viewWind.hidden = true;
     btnBack.hidden = true;
     pageTitle.textContent = '🏇 TW賽馬貼士';
     renderAllTimeProfitSubtitle();
@@ -457,6 +459,7 @@
   function renderDetail(meeting) {
     viewHome.hidden = true;
     viewDetail.hidden = false;
+    viewWind.hidden = true;
     btnBack.hidden = false;
     const titleBase = `${formatShortDate(meeting.date)} ${meeting.venue} ${meeting.raceCount}場賽事`;
     pageTitle.textContent = meeting.label ? `${titleBase}【${meeting.label}】` : titleBase;
@@ -691,9 +694,220 @@
       '<p class="panel-hint">' + escapeHtml(disclaimer) + '</p>';
   }
 
+  /* ---------- 收風 dashboard (live Google Sheet, nothing stored) ---------- */
+  const WIND_SHEET_ID = '10vr-9Huqp6UyBJMDtRUKmjhMi_0TP0wjlYEv9ZI55co';
+  const WIND_GROUPS = ['大風', '有風', '位置風', '食糊位', '其他'];
+  let windLoad = 0;
+
+  function windSheetUrl(sheetName) {
+    const q = new URLSearchParams({
+      tqx: 'out:json',
+      sheet: sheetName,
+      t: String(Date.now()),
+    });
+    return 'https://docs.google.com/spreadsheets/d/' + WIND_SHEET_ID + '/gviz/tq?' + q.toString();
+  }
+
+  function parseGviz(text) {
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start < 0 || end < start) throw new Error('收風資料格式錯誤');
+    return JSON.parse(text.slice(start, end + 1));
+  }
+
+  function gvizCell(row, index) {
+    const cells = row && row.c;
+    if (!cells || index >= cells.length) return null;
+    return cells[index] || null;
+  }
+
+  function cellText(cell) {
+    if (!cell) return '';
+    if (cell.f != null && cell.f !== '') return String(cell.f);
+    if (cell.v == null || cell.v === '') return '';
+    if (typeof cell.v === 'number') {
+      return Number.isInteger(cell.v) ? String(cell.v) : String(cell.v);
+    }
+    return String(cell.v);
+  }
+
+  function cellNumber(cell) {
+    if (!cell || cell.v == null || cell.v === '') return null;
+    const n = Number(cell.v);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  /** Sheet stores 命中% as text like 71.4% or 0%. Blank is not a rate. */
+  function parseHitRate(cell) {
+    const raw = cell && cell.v != null && cell.v !== '' ? cell.v : (cell && cell.f);
+    if (raw == null || String(raw).trim() === '') return null;
+    const n = Number(String(raw).trim().replace('%', ''));
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function dateSortKey(cell) {
+    if (!cell) return null;
+    const v = cell.v;
+    const fromSerial = typeof v === 'string' && v.match(/^Date\((\d+),(\d+),(\d+)\)$/);
+    if (fromSerial) return (+fromSerial[1]) * 10000 + (+fromSerial[2] + 1) * 100 + (+fromSerial[3]);
+    const label = cell.f || (typeof v === 'string' ? v : '');
+    const fromLabel = String(label).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (fromLabel) return (+fromLabel[3]) * 10000 + (+fromLabel[2]) * 100 + (+fromLabel[1]);
+    return null;
+  }
+
+  function isLabelRow(text) {
+    const t = String(text || '').replace(/\s+/g, '');
+    return t === '馬房' || t === '賽日' || t === '練馬師';
+  }
+
+  function rateCellHtml(text) {
+    const shown = text == null || text === '' ? '' : escapeHtml(String(text));
+    const n = Number(String(text == null ? '' : text).trim().replace('%', ''));
+    if (shown && Number.isFinite(n) && n > 0) return '<span class="pl-pos">' + shown + '</span>';
+    return shown;
+  }
+
+  function windGroupCells(row) {
+    const out = [];
+    for (let i = 0; i < 20; i++) out.push(cellText(gvizCell(row, 5 + i)));
+    return out;
+  }
+
+  function trainerRows(table) {
+    const rows = [];
+    (table.rows || []).forEach((row) => {
+      const name = cellText(gvizCell(row, 1)).trim();
+      if (!name || isLabelRow(name)) return;
+      const runners = cellNumber(gvizCell(row, 2));
+      const rate = parseHitRate(gvizCell(row, 4));
+      rows.push({
+        label: name,
+        count: cellText(gvizCell(row, 2)),
+        hit: cellText(gvizCell(row, 3)),
+        rateText: cellText(gvizCell(row, 4)),
+        rate: rate,
+        runners: runners,
+        bottom: runners == null || runners === 0 || rate == null,
+        groups: windGroupCells(row),
+      });
+    });
+    rows.sort((a, b) => {
+      if (a.bottom !== b.bottom) return a.bottom ? 1 : -1;
+      if (!a.bottom && a.rate !== b.rate) return b.rate - a.rate;
+      const ar = a.runners == null ? -1 : a.runners;
+      const br = b.runners == null ? -1 : b.runners;
+      if (ar !== br) return br - ar;
+      return a.label.localeCompare(b.label, 'zh-HK');
+    });
+    return rows;
+  }
+
+  function meetingRows(table) {
+    const rows = [];
+    (table.rows || []).forEach((row) => {
+      const dateCell = gvizCell(row, 1);
+      const label = cellText(dateCell).trim();
+      const key = dateSortKey(dateCell);
+      if (!label || !key || isLabelRow(label)) return;
+      const runners = cellNumber(gvizCell(row, 2));
+      rows.push({
+        label: label,
+        sortKey: key,
+        count: cellText(gvizCell(row, 2)),
+        hit: cellText(gvizCell(row, 3)),
+        rateText: cellText(gvizCell(row, 4)),
+        runners: runners,
+        groups: windGroupCells(row),
+      });
+    });
+    rows.sort((a, b) => b.sortKey - a.sortKey);
+    return rows;
+  }
+
+  function windTableHtml(title, nameHeader, rows) {
+    const groupHeads = WIND_GROUPS.map((name) => '<th class="wind-group" colspan="4">' + name + '</th>').join('');
+    const subHeads = WIND_GROUPS.map(() => '<th>Win</th><th>Place</th><th>Lose</th><th>三甲%</th>').join('');
+    const body = rows.map((row) => {
+      const groups = row.groups.map((value) => '<td>' + escapeHtml(value) + '</td>').join('');
+      return '<tr>' +
+        '<td class="wind-name">' + escapeHtml(row.label) + '</td>' +
+        '<td>' + escapeHtml(row.count) + '</td>' +
+        '<td>' + escapeHtml(row.hit) + '</td>' +
+        '<td>' + rateCellHtml(row.rateText) + '</td>' +
+        groups +
+        '</tr>';
+    }).join('');
+    return '<section class="panel">' +
+      '<h2 class="panel-title">' + escapeHtml(title) + '</h2>' +
+      '<div class="wind-scroll">' +
+      '<table class="wind-table">' +
+      '<thead><tr>' +
+      '<th class="wind-name" rowspan="2">' + escapeHtml(nameHeader) + '</th>' +
+      '<th rowspan="2">隻數</th><th rowspan="2">命中</th><th rowspan="2">命中%</th>' +
+      groupHeads +
+      '</tr><tr>' + subHeads + '</tr></thead>' +
+      '<tbody>' + body + '</tbody></table></div></section>';
+  }
+
+  async function loadWindSheet(sheetName) {
+    const res = await fetch(windSheetUrl(sheetName));
+    if (!res.ok) throw new Error('無法載入收風統計');
+    const data = parseGviz(await res.text());
+    if (!data.table) throw new Error('無法載入收風統計');
+    return data.table;
+  }
+
+  async function renderWind() {
+    const token = ++windLoad;
+    viewHome.hidden = true;
+    viewDetail.hidden = true;
+    viewWind.hidden = false;
+    btnBack.hidden = false;
+    pageTitle.textContent = '收風統計';
+    pageSub.classList.remove('subtitle-profit');
+    pageSub.hidden = false;
+    pageSub.textContent = '賽馬臨場收風統計表';
+    const status = $('#wind-status');
+    const host = $('#wind-tables');
+    if (status) {
+      status.hidden = false;
+      status.textContent = '載入中…';
+    }
+    if (host) host.innerHTML = '';
+    try {
+      const [trainers, days] = await Promise.all([
+        loadWindSheet('馬房累計收風統計'),
+        loadWindSheet('賽日累計收風統計'),
+      ]);
+      if (token !== windLoad || viewWind.hidden) return;
+      if (host) {
+        host.innerHTML =
+          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers)) +
+          windTableHtml('賽日累計收風統計', '賽日', meetingRows(days));
+      }
+      if (status) status.hidden = true;
+    } catch (err) {
+      console.error(err);
+      if (token !== windLoad) return;
+      if (status) {
+        status.hidden = false;
+        status.textContent = '載入失敗：' + (err.message || err);
+      }
+    }
+  }
+
   /* ---------- routing ---------- */
   async function route() {
     const hash = location.hash || '#/';
+    if (hash === '#/wind') {
+      try {
+        await renderWind();
+      } catch (err) {
+        console.error(err);
+      }
+      return;
+    }
     const m = hash.match(/^#\/meeting\/([^/]+)/);
     try {
       if (m) {

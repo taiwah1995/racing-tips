@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0d1117" />
   <meta http-equiv="Cache-Control" content="no-cache" />
   <title>TW賽馬貼士</title>
-  <link rel="stylesheet" href="css/styles.css?v=20261002st1001only" />
+  <link rel="stylesheet" href="css/styles.css?v=20261002wind" />
 </head>
 <body>
   <div id="app">
@@ -23,6 +23,7 @@
     <main id="main">
       <!-- HOME VIEW -->
       <section id="view-home" class="view">
+        <a class="wind-entry" href="#/wind">收風統計</a>
         <div class="filters">
           <div class="venue-tabs" role="tablist">
             <button class="tab active" data-venue="all" type="button">全部</button>
@@ -72,12 +73,18 @@
           <div id="daily-picks" class="daily-picks"></div>
         </div>
       </section>
+
+      <!-- WIND DASHBOARD -->
+      <section id="view-wind" class="view" hidden>
+        <p id="wind-status" class="empty" hidden></p>
+        <div id="wind-tables"></div>
+      </section>
     </main>
 
     <footer class="site-footer">
       僅供參考 · 非投注建議
     </footer>
   </div>
-  <script src="js/app.js?v=20261002st1001only"></script>
+  <script src="js/app.js?v=20261002wind"></script>
 </body>
 </html>
