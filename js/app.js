@@ -884,9 +884,17 @@
   }
 
   function windPickHtml(picks) {
+    const splitGroups = picks.some((pick) => pick.kind === '大風') &&
+      picks.some((pick) => pick.kind === '有風');
+    let splitMarked = false;
     const body = picks.map((pick) => {
       const hitText = formatWindCount(pick.hits) + '/' + formatWindCount(pick.total);
-      return '<tr>' +
+      let rowClass = '';
+      if (splitGroups && pick.kind === '有風' && !splitMarked) {
+        rowClass = ' class="wind-pick-split"';
+        splitMarked = true;
+      }
+      return '<tr' + rowClass + '>' +
         '<td class="wind-pick-name">' + escapeHtml(pick.name) + '</td>' +
         '<td>' + escapeHtml(pick.kind) + '</td>' +
         '<td>' + escapeHtml(formatWindCount(pick.total)) + '</td>' +

@@ -621,6 +621,7 @@ body {
 }
 .wind-pick .wind-pick-name { text-align: left; }
 .wind-pick tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
+.wind-pick tr.wind-pick-split td { border-top: 2px solid var(--border); }
 .wind-table thead tr:first-child th.wind-group,
 .wind-table thead tr:nth-child(2) th:nth-child(4n + 1),
 .wind-table tbody td:nth-child(4n + 5) {
