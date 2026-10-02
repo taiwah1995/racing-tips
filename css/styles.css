@@ -599,7 +599,28 @@ body {
   font-weight: 600;
 }
 .wind-table th.wind-group { color: var(--gold); }
-.wind-table .wind-rate-mid { color: #ffe14a; }
+.wind-table .wind-rate-mid,
+.wind-pick .wind-rate-mid { color: #ffe14a; }
+.wind-pick {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: clamp(0.58rem, 2.7vw, 0.7rem);
+  white-space: nowrap;
+}
+.wind-pick th,
+.wind-pick td {
+  padding: 5px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.25;
+}
+.wind-pick th {
+  background: var(--bg-elev);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.wind-pick .wind-pick-name { text-align: left; }
+.wind-pick tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
 .wind-table thead tr:first-child th.wind-group,
 .wind-table thead tr:nth-child(2) th:nth-child(4n + 1),
 .wind-table tbody td:nth-child(4n + 5) {
