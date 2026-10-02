@@ -560,6 +560,59 @@ body {
   visibility: hidden;
 }
 
+/* ===== 收風 dashboard ===== */
+.wind-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  margin-bottom: 10px;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  background: var(--bg-elev);
+  color: var(--gold);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.wind-entry:active { background: var(--bg-hover); }
+.wind-scroll {
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+.wind-table {
+  border-collapse: collapse;
+  font-size: clamp(0.58rem, 2.7vw, 0.7rem);
+  white-space: nowrap;
+}
+.wind-table th,
+.wind-table td {
+  padding: 5px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.25;
+}
+.wind-table th {
+  background: var(--bg-elev);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.wind-table th.wind-group { color: var(--gold); }
+.wind-table .wind-name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  background: var(--bg-card);
+}
+.wind-table thead .wind-name {
+  z-index: 2;
+  background: var(--bg-elev);
+}
+.wind-table tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
+.wind-table tbody tr:nth-child(even) td.wind-name { background: #1e2633; }
+
 /* ===== Footer ===== */
 .site-footer {
   text-align: center;
