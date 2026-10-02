@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261002windpick';
+  const APP_DATA_VERSION = '20261003windcombo';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -859,12 +859,23 @@
         });
         const total = nums[0] + nums[1] + nums[2];
         if (!(total > 0)) return;
-        const rate = ((nums[0] + nums[1]) / total) * 100;
+        const hits = nums[0] + nums[1];
+        const rate = (hits / total) * 100;
         if (!(rate > 60)) return;
-        picks.push({ name: name, kind: kind.name, total: total, rate: rate });
+        picks.push({
+          name: name,
+          kind: kind.name,
+          win: nums[0],
+          place: nums[1],
+          lose: nums[2],
+          total: total,
+          hits: hits,
+          rate: rate,
+        });
       });
     });
     picks.sort((a, b) => {
+      if (a.kind !== b.kind) return a.kind === '大風' ? -1 : 1;
       if (a.rate !== b.rate) return b.rate - a.rate;
       if (a.total !== b.total) return b.total - a.total;
       return a.name.localeCompare(b.name, 'zh-HK');
@@ -874,18 +885,23 @@
 
   function windPickHtml(picks) {
     const body = picks.map((pick) => {
+      const hitText = formatWindCount(pick.hits) + '/' + formatWindCount(pick.total);
       return '<tr>' +
         '<td class="wind-pick-name">' + escapeHtml(pick.name) + '</td>' +
         '<td>' + escapeHtml(pick.kind) + '</td>' +
         '<td>' + escapeHtml(formatWindCount(pick.total)) + '</td>' +
+        '<td>' + escapeHtml(hitText) + '</td>' +
+        '<td>' + escapeHtml(formatWindCount(pick.win)) + '</td>' +
+        '<td>' + escapeHtml(formatWindCount(pick.place)) + '</td>' +
+        '<td>' + escapeHtml(formatWindCount(pick.lose)) + '</td>' +
         '<td>' + rateCellHtml(formatWindRate(pick.rate)) + '</td>' +
         '</tr>';
     }).join('');
     return '<section class="panel" id="wind-picks">' +
-      '<h2 class="panel-title">推介</h2>' +
+      '<h2 class="panel-title">風向組合推介</h2>' +
       '<div class="wind-scroll">' +
       '<table class="wind-pick">' +
-      '<thead><tr><th>馬房</th><th>風類</th><th>隻數</th><th>三甲%</th></tr></thead>' +
+      '<thead><tr><th>馬房</th><th>風類</th><th>隻數</th><th>命中</th><th>Win</th><th>Place</th><th>Lose</th><th>三甲%</th></tr></thead>' +
       '<tbody>' + body + '</tbody></table></div></section>';
   }
 
