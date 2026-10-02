@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261003windcombo';
+  const APP_DATA_VERSION = '20261003windtop';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -877,6 +877,8 @@
     picks.sort((a, b) => {
       if (a.kind !== b.kind) return a.kind === '大風' ? -1 : 1;
       if (a.rate !== b.rate) return b.rate - a.rate;
+      if (a.win !== b.win) return b.win - a.win;
+      if (a.place !== b.place) return b.place - a.place;
       if (a.total !== b.total) return b.total - a.total;
       return a.name.localeCompare(b.name, 'zh-HK');
     });
@@ -974,8 +976,8 @@
       if (token !== windLoad || viewWind.hidden) return;
       if (host) {
         host.innerHTML =
-          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers)) +
           windPickHtml(windPickRows(trainers)) +
+          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers)) +
           windTableHtml('賽日累計收風統計', '賽日', meetingRows(days));
       }
       if (status) status.hidden = true;
