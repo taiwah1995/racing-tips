@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261003windtop';
+  const APP_DATA_VERSION = '20261003windkind';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -898,7 +898,7 @@
       }
       return '<tr' + rowClass + '>' +
         '<td class="wind-pick-name">' + escapeHtml(pick.name) + '</td>' +
-        '<td>' + escapeHtml(pick.kind) + '</td>' +
+        '<td class="wind-pick-kind">' + escapeHtml(pick.kind) + '</td>' +
         '<td>' + escapeHtml(formatWindCount(pick.total)) + '</td>' +
         '<td>' + escapeHtml(hitText) + '</td>' +
         '<td>' + escapeHtml(formatWindCount(pick.win)) + '</td>' +
