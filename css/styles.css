@@ -599,6 +599,7 @@ body {
   font-weight: 600;
 }
 .wind-table th.wind-group { color: var(--gold); }
+.wind-table .wind-rate-mid { color: #ffe14a; }
 .wind-table thead tr:first-child th.wind-group,
 .wind-table thead tr:nth-child(2) th:nth-child(4n + 1),
 .wind-table tbody td:nth-child(4n + 5) {

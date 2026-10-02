@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261002windhit';
+  const APP_DATA_VERSION = '20261002windcolor';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -761,11 +761,15 @@
     return t === '馬房' || t === '賽日' || t === '練馬師';
   }
 
+  /** 命中% and 三甲% only. Blank stays empty; it is not 0%. */
   function rateCellHtml(text) {
-    const shown = text == null || text === '' ? '' : escapeHtml(String(text));
-    const n = Number(String(text == null ? '' : text).trim().replace('%', ''));
-    if (shown && Number.isFinite(n) && n > 0) return '<span class="pl-pos">' + shown + '</span>';
-    return shown;
+    if (text == null || String(text).trim() === '') return '';
+    const n = Number(String(text).trim().replace('%', ''));
+    const shown = escapeHtml(String(text));
+    if (!Number.isFinite(n)) return shown;
+    if (n >= 65) return '<span class="pl-pos">' + shown + '</span>';
+    if (n >= 45) return '<span class="wind-rate-mid">' + shown + '</span>';
+    return '<span class="pl-neg">' + shown + '</span>';
   }
 
   function windGroupCells(row) {
@@ -829,7 +833,10 @@
     const groupHeads = WIND_GROUPS.map((name) => '<th class="wind-group" colspan="4">' + name + '</th>').join('');
     const subHeads = WIND_GROUPS.map(() => '<th>Win</th><th>Place</th><th>Lose</th><th>三甲%</th>').join('');
     const body = rows.map((row) => {
-      const groups = row.groups.map((value) => '<td>' + escapeHtml(value) + '</td>').join('');
+      const groups = row.groups.map((value, index) => {
+        const html = index % 4 === 3 ? rateCellHtml(value) : escapeHtml(value);
+        return '<td>' + html + '</td>';
+      }).join('');
       return '<tr>' +
         '<td class="wind-name">' + escapeHtml(row.label) + '</td>' +
         '<td>' + escapeHtml(row.count) + '</td>' +
