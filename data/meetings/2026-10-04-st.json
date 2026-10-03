@@ -14,25 +14,25 @@
         "no": 1,
         "name": "東方寶寶",
         "style": null,
-        "odds": null
+        "odds": 9.7
       },
       "second": {
         "no": 14,
         "name": "一鹿歡騰",
         "style": null,
-        "odds": null
+        "odds": 3.3
       },
       "third": {
         "no": 12,
         "name": "東方魅影",
         "style": null,
-        "odds": null
+        "odds": 4.7
       },
       "dark": {
         "no": 2,
         "name": "光輝歲月",
         "style": null,
-        "odds": null
+        "odds": 9.2
       }
     },
     {
@@ -49,19 +49,19 @@
         "no": 14,
         "name": "有你有我",
         "style": null,
-        "odds": null
+        "odds": 8.7
       },
       "third": {
         "no": 2,
         "name": "狼來了",
         "style": null,
-        "odds": null
+        "odds": 8.6
       },
       "dark": {
         "no": 12,
         "name": "電子騰飛",
         "style": null,
-        "odds": null
+        "odds": 29
       }
     },
     {
@@ -78,19 +78,19 @@
         "no": 7,
         "name": "滿心星",
         "style": null,
-        "odds": null
+        "odds": 6.1
       },
       "third": {
         "no": 8,
         "name": "將睿",
         "style": null,
-        "odds": null
+        "odds": 4.5
       },
       "dark": {
         "no": 6,
         "name": "時時精準",
         "style": null,
-        "odds": null
+        "odds": 11
       }
     },
     {
@@ -101,25 +101,25 @@
         "no": 8,
         "name": "文武全能",
         "style": null,
-        "odds": null
+        "odds": 3
       },
       "second": {
         "no": 13,
         "name": "巴閉佬",
         "style": null,
-        "odds": null
+        "odds": 7.5
       },
       "third": {
         "no": 6,
         "name": "增旺",
         "style": null,
-        "odds": null
+        "odds": 7.2
       },
       "dark": {
         "no": 12,
         "name": "添喜運",
         "style": null,
-        "odds": null
+        "odds": 27
       }
     },
     {
@@ -130,25 +130,25 @@
         "no": 7,
         "name": "超加加",
         "style": null,
-        "odds": null
+        "odds": 5.5
       },
       "second": {
         "no": 6,
         "name": "午夜快車",
         "style": null,
-        "odds": null
+        "odds": 4.8
       },
       "third": {
         "no": 8,
         "name": "風起雲湧",
         "style": null,
-        "odds": null
+        "odds": 13
       },
       "dark": {
         "no": 4,
         "name": "隨緣得勝",
         "style": null,
-        "odds": null
+        "odds": 13
       }
     },
     {
@@ -165,19 +165,19 @@
         "no": 6,
         "name": "紅衣醒目",
         "style": null,
-        "odds": null
+        "odds": 5
       },
       "third": {
         "no": 8,
         "name": "喜駿昇星",
         "style": null,
-        "odds": null
+        "odds": 13
       },
       "dark": {
         "no": 9,
         "name": "盛勢威楓",
         "style": null,
-        "odds": null
+        "odds": 10
       }
     },
     {
@@ -188,25 +188,25 @@
         "no": 14,
         "name": "飛躍成就",
         "style": null,
-        "odds": null
+        "odds": 7.6
       },
       "second": {
         "no": 3,
         "name": "愛馬心",
         "style": null,
-        "odds": null
+        "odds": 4.5
       },
       "third": {
         "no": 8,
         "name": "金運齊來",
         "style": null,
-        "odds": null
+        "odds": 5.2
       },
       "dark": {
         "no": 12,
         "name": "北極之錶",
         "style": null,
-        "odds": null
+        "odds": 12
       }
     },
     {
@@ -223,19 +223,19 @@
         "no": 3,
         "name": "千禧龍",
         "style": null,
-        "odds": null
+        "odds": 9.8
       },
       "third": {
         "no": 6,
         "name": "勁大威猛",
         "style": null,
-        "odds": null
+        "odds": 10
       },
       "dark": {
         "no": 4,
         "name": "川河耀駒",
         "style": null,
-        "odds": null
+        "odds": 15
       }
     },
     {
@@ -246,25 +246,25 @@
         "no": 11,
         "name": "都靈福星",
         "style": null,
-        "odds": null
+        "odds": 5.5
       },
       "second": {
         "no": 8,
         "name": "花開",
         "style": null,
-        "odds": null
+        "odds": 6
       },
       "third": {
         "no": 12,
         "name": "量子力奇",
         "style": null,
-        "odds": null
+        "odds": 5.6
       },
       "dark": {
         "no": 1,
         "name": "皇龍飛將",
         "style": null,
-        "odds": null
+        "odds": 14
       }
     },
     {
@@ -275,25 +275,25 @@
         "no": 13,
         "name": "幸運糖",
         "style": null,
-        "odds": null
+        "odds": 9.1
       },
       "second": {
         "no": 9,
         "name": "從化之星",
         "style": null,
-        "odds": null
+        "odds": 7.2
       },
       "third": {
         "no": 3,
         "name": "精彩福星",
         "style": null,
-        "odds": null
+        "odds": 13
       },
       "dark": {
         "no": 14,
         "name": "拉合爾",
         "style": null,
-        "odds": null
+        "odds": 13
       }
     },
     {
@@ -310,19 +310,19 @@
         "no": 1,
         "name": "喜蓮勁感",
         "style": null,
-        "odds": null
+        "odds": 14
       },
       "third": {
         "no": 10,
         "name": "包裝明將",
         "style": null,
-        "odds": null
+        "odds": 10
       },
       "dark": {
         "no": 3,
         "name": "鑽石星空",
         "style": null,
-        "odds": null
+        "odds": 23
       }
     }
   ],
@@ -355,5 +355,27 @@
       "odds": 2.2
     }
   ],
-  "dailyPicksHint": "(賠率低於2.5只作次選推介)"
+  "dailyPicksHint": "(賠率低於2.5只作次選推介)",
+  "attackHot": {
+    "title": "🚫 是日攻擊熱門馬｜高危馬 0 隻｜中危馬 1 隻",
+    "summary": "高危攻擊馬建議放棄投注 | 中危攻擊馬建議減注50%",
+    "high": [],
+    "watch": [
+      {
+        "race": 1,
+        "no": 14,
+        "name": "一鹿歡騰",
+        "odds": 3.3,
+        "hits": 5,
+        "signals": [
+          "轉騎",
+          "增程",
+          "體重",
+          "初騎",
+          "冷人"
+        ]
+      }
+    ],
+    "disclaimer": "僅供參考 · 非投注建議"
+  }
 }
