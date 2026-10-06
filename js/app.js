@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261006flying7';
+  const APP_DATA_VERSION = '20261006flying8';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1185,22 +1185,25 @@
     const advice = flyingAdviceText(grade);
     const winOdds = flyingOddsText(horse.t);
     const meta = [horse.trainer, horse.group].filter(Boolean).map(escapeHtml).join(' · ');
+    const adviceHtml = advice
+      ? '<span class="' + gradeClass + '">' + escapeHtml(advice) + '</span>'
+      : '';
+    const metaHtml = meta
+      ? '<span class="fly-meta">' + (advice ? '｜' : '') + meta + '</span>'
+      : '';
     const place = flyingPlaceHtml(horse.finish);
     const winPay = flyingMoney(horse.winPay);
     const placePay = flyingMoney(horse.placePay);
     const payBits = [];
     if (winPay) payBits.push('W ' + escapeHtml(winPay));
     if (placePay) payBits.push('P ' + escapeHtml(placePay));
-    const resultBits = [];
-    if (place) resultBits.push('<span class="fly-finish">' + place + '</span>');
-    if (payBits.length) resultBits.push('<span class="fly-pay">' + payBits.join(' ') + '</span>');
     return '<article class="fly-horse">' +
       '<div class="fly-horse-top"><span class="fly-horse-name">#' + escapeHtml(horse.no) +
-      ' ' + escapeHtml(horse.name) + '｜W：' + escapeHtml(winOdds || '—') + '</span>' + mark + '</div>' +
-      (advice ? '<p class="fly-advice ' + gradeClass + '">' + escapeHtml(advice) + '</p>' : '') +
-      (meta ? '<p class="fly-meta">' + meta + '</p>' : '') +
+      ' ' + escapeHtml(horse.name) + '｜W：' + escapeHtml(winOdds || '—') +
+      (place ? '｜' + place : '') + '</span>' + mark + '</div>' +
+      (adviceHtml || metaHtml ? '<p class="fly-advice">' + adviceHtml + metaHtml + '</p>' : '') +
       (horse.comment ? '<p class="fly-note">' + escapeHtml(horse.comment) + '</p>' : '') +
-      (resultBits.length ? '<p class="fly-result">' + resultBits.join(' ') + '</p>' : '') +
+      (payBits.length ? '<p class="fly-result"><span class="fly-pay">' + payBits.join(' ') + '</span></p>' : '') +
       '</article>';
   }
 
