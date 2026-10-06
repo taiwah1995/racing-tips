@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261006flying5';
+  const APP_DATA_VERSION = '20261006flying6';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1149,8 +1149,27 @@
     return { A: 'fly-grade-a', B: 'fly-grade-b', C: 'fly-grade-c', D: 'fly-grade-d' }[grade] || '';
   }
 
+  /** Sheet 等級 wins. A blank grade is derived from 評分. */
+  function flyingResolvedGrade(horse) {
+    const sheet = String(horse.grade || '').trim().toUpperCase();
+    if (sheet) return sheet;
+    const score = Number(String(horse.score || '').trim());
+    if (!Number.isFinite(score)) return '';
+    if (score >= 70) return 'A';
+    if (score >= 55) return 'B';
+    if (score >= 40) return 'C';
+    return 'D';
+  }
+
+  function flyingAdviceText(grade) {
+    if (grade === 'A') return '主攻；可 1W3P 或加重位置';
+    if (grade === 'B') return '正選／細注';
+    if (grade === 'C') return '觀察或極細注';
+    return '';
+  }
+
   function flyingHorseHtml(horse) {
-    const grade = String(horse.grade || '').trim().toUpperCase();
+    const grade = flyingResolvedGrade(horse);
     const gradeClass = flyingGradeClass(grade);
     const badge = grade
       ? '<span class="fly-grade ' + gradeClass + '">' + escapeHtml(grade) + '</span>'
@@ -1162,10 +1181,9 @@
     const mark = (badge || scoreHtml)
       ? '<span class="fly-mark">' + badge + scoreHtml + '</span>'
       : '';
+    const advice = flyingAdviceText(grade);
+    const winOdds = flyingOddsText(horse.t);
     const meta = [horse.trainer, horse.group].filter(Boolean).map(escapeHtml).join(' · ');
-    const odds = '隔夜 ' + escapeHtml(flyingDash(flyingOddsText(horse.r))) +
-      ' ／ 隔12 ' + escapeHtml(flyingDash(flyingOddsText(horse.s))) +
-      ' ／ 1hr ' + escapeHtml(flyingDash(flyingOddsText(horse.t)));
     const place = flyingPlaceHtml(horse.finish);
     const winPay = flyingMoney(horse.winPay);
     const placePay = flyingMoney(horse.placePay);
@@ -1177,12 +1195,29 @@
     if (payBits.length) resultBits.push('<span class="fly-pay">' + payBits.join(' ') + '</span>');
     return '<article class="fly-horse">' +
       '<div class="fly-horse-top"><span class="fly-horse-name">#' + escapeHtml(horse.no) +
-      ' ' + escapeHtml(horse.name) + '</span>' + mark + '</div>' +
+      ' ' + escapeHtml(horse.name) + '｜W：' + escapeHtml(winOdds || '—') + '</span>' + mark + '</div>' +
+      (advice ? '<p class="fly-advice ' + gradeClass + '">' + escapeHtml(advice) + '</p>' : '') +
       (meta ? '<p class="fly-meta">' + meta + '</p>' : '') +
-      '<p class="fly-odds">' + odds + '</p>' +
       (horse.comment ? '<p class="fly-note">' + escapeHtml(horse.comment) + '</p>' : '') +
       (resultBits.length ? '<p class="fly-result">' + resultBits.join(' ') + '</p>' : '') +
       '</article>';
+  }
+
+  function flyingPickLegendHtml() {
+    const rows = [
+      ['≥70', 'A', '主攻；可 1W3P 或加重位置'],
+      ['55–69', 'B', '正選／細注'],
+      ['40–54', 'C', '觀察或極細注'],
+    ];
+    const body = rows.map((row) =>
+      '<tr><td>' + escapeHtml(row[0]) + '</td>' +
+      '<td><span class="fly-grade ' + flyingGradeClass(row[1]) + '">' + escapeHtml(row[1]) + '</span></td>' +
+      '<td>' + escapeHtml(row[2]) + '</td></tr>'
+    ).join('');
+    return '<table class="fly-pick-legend"><colgroup>' +
+      '<col style="width:52px"><col style="width:44px"><col></colgroup>' +
+      '<thead><tr><th>分數</th><th>等級</th><th>建議</th></tr></thead><tbody>' +
+      body + '</tbody></table>';
   }
 
   function flyingRaceLabel(race) {
@@ -1269,7 +1304,8 @@
         flyingByRace(meeting.horses).map(flyingRaceHtml).join('') +
         '</div></section>';
     }).join('');
-    return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' + body + '</section>';
+    return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
+      flyingPickLegendHtml() + body + '</section>';
   }
 
   function flyingCellBlank(row, index) {

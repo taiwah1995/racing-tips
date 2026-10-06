@@ -744,8 +744,34 @@ body {
 .fly-grade-b { color: #ffe14a; }
 .fly-grade-c { color: #ff9f0a; }
 .fly-grade-d { color: #8b949e; }
+.fly-advice {
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.fly-pick-legend {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 12px;
+  line-height: 1.35;
+}
+.fly-pick-legend th,
+.fly-pick-legend td {
+  padding: 5px 8px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+.fly-pick-legend th {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.fly-pick-legend td:nth-child(2) { text-align: center; }
 .fly-meta,
-.fly-odds,
 .fly-note,
 .fly-result {
   margin-top: 2px;
