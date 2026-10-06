@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261006flying3';
+  const APP_DATA_VERSION = '20261006flying4';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1058,6 +1058,15 @@
     return t || '-';
   }
 
+  /** R / S / T odds always show one decimal. Blank and non-numeric stay unchanged. */
+  function flyingOddsText(text) {
+    const t = String(text || '').trim();
+    if (!t) return '';
+    const n = Number(t);
+    if (!Number.isFinite(n)) return t;
+    return n.toFixed(1);
+  }
+
   function flyingPlaceHtml(raw) {
     const t = String(raw || '').trim();
     if (!t) return '';
@@ -1143,9 +1152,9 @@
       ? '<span class="fly-grade ' + gradeClass + '">' + escapeHtml(grade) + '</span>'
       : '';
     const meta = [horse.trainer, horse.group].filter(Boolean).map(escapeHtml).join(' · ');
-    const odds = '隔夜 ' + escapeHtml(flyingDash(horse.r)) +
-      ' ／ 隔12 ' + escapeHtml(flyingDash(horse.s)) +
-      ' ／ 1hr ' + escapeHtml(flyingDash(horse.t));
+    const odds = '隔夜 ' + escapeHtml(flyingDash(flyingOddsText(horse.r))) +
+      ' ／ 隔12 ' + escapeHtml(flyingDash(flyingOddsText(horse.s))) +
+      ' ／ 1hr ' + escapeHtml(flyingDash(flyingOddsText(horse.t)));
     const place = flyingPlaceHtml(horse.finish);
     const winPay = flyingMoney(horse.winPay);
     const placePay = flyingMoney(horse.placePay);
