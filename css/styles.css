@@ -656,10 +656,10 @@ body {
   color: inherit;
   font: inherit;
   text-align: left;
-  cursor: pointer;
 }
 .fly-meet-title { font-weight: 700; color: var(--gold); }
 .fly-hit { font-size: 0.8rem; color: var(--text); }
+.fly-hit-line { padding: 8px 12px 0; }
 .fly-meet-body {
   display: flex;
   flex-direction: column;
@@ -782,6 +782,14 @@ body {
 }
 .fly-note,
 .fly-result { color: var(--text); }
+.fly-result {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.fly-finish { font-size: 1.05rem; line-height: 1.2; }
 .fly-pay { color: var(--text-muted); }
 .fly-seasons {
   display: flex;
