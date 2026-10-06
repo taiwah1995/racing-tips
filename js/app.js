@@ -1,12 +1,12 @@
 /**
  * TW賽馬貼士 — hash-routed SPA
- * Routes: #/  |  #/meeting/:id
+ * Routes: #/  |  #/meeting/:id  |  #/wind  |  #/flying
  */
 (function () {
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261004stresults';
+  const APP_DATA_VERSION = '20261006flying';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -24,6 +24,7 @@
   const viewHome = $('#view-home');
   const viewDetail = $('#view-detail');
   const viewWind = $('#view-wind');
+  const viewFlying = $('#view-flying');
   const btnBack = $('#btn-back');
   const pageTitle = $('#page-title');
   const pageSub = $('#page-sub');
@@ -396,6 +397,7 @@
     viewHome.hidden = false;
     viewDetail.hidden = true;
     viewWind.hidden = true;
+    viewFlying.hidden = true;
     btnBack.hidden = true;
     pageTitle.textContent = '🏇 TW賽馬貼士';
     renderAllTimeProfitSubtitle();
@@ -460,6 +462,7 @@
     viewHome.hidden = true;
     viewDetail.hidden = false;
     viewWind.hidden = true;
+    viewFlying.hidden = true;
     btnBack.hidden = false;
     const titleBase = `${formatShortDate(meeting.date)} ${meeting.venue} ${meeting.raceCount}場賽事`;
     pageTitle.textContent = meeting.label ? `${titleBase}【${meeting.label}】` : titleBase;
@@ -699,12 +702,17 @@
   const WIND_GROUPS = ['大風', '有風', '位置風', '食糊位', '其他'];
   let windLoad = 0;
 
-  function windSheetUrl(sheetName) {
+  function windSheetUrl(sheetName, extraParams) {
     const q = new URLSearchParams({
       tqx: 'out:json',
       sheet: sheetName,
       t: String(Date.now()),
     });
+    if (extraParams) {
+      Object.keys(extraParams).forEach((key) => {
+        q.set(key, extraParams[key]);
+      });
+    }
     return 'https://docs.google.com/spreadsheets/d/' + WIND_SHEET_ID + '/gviz/tq?' + q.toString();
   }
 
@@ -956,6 +964,7 @@
     viewHome.hidden = true;
     viewDetail.hidden = true;
     viewWind.hidden = false;
+    viewFlying.hidden = true;
     btnBack.hidden = false;
     pageTitle.textContent = '收風統計';
     pageSub.classList.remove('subtitle-profit');
@@ -991,12 +1000,431 @@
     }
   }
 
+  /* ---------- 賽日有飛馬 (same live sheet, separate page) ---------- */
+  const FLY_CATS = ['A1.1', 'A1.2', 'A2.1', 'A2.2', 'A2.3', 'A3.1', 'A3.2', 'A3.3', 'A3.4', 'A3.5', 'A3.6', 'A3.7', 'A3.8', 'A3.9'];
+  const FLY_BANDS = [
+    { name: 'A1', count: 2 },
+    { name: 'A2', count: 3 },
+    { name: 'A3', count: 9 },
+  ];
+  let flyingLoad = 0;
+  let flyingSeasons = { now: [], prev: [] };
+  let flyingSeason = 'now';
+
+  async function loadGvizTable(sheetName, extraParams) {
+    const res = await fetch(windSheetUrl(sheetName, extraParams));
+    if (!res.ok) throw new Error('無法載入');
+    const data = parseGviz(await res.text());
+    if (!data.table) throw new Error('無法載入');
+    return data.table;
+  }
+
+  function flyingColsOk(table) {
+    const labels = (table.cols || []).map((col) => String(col.label || '').trim());
+    return labels.includes('馬名') && labels.includes('練馬師');
+  }
+
+  function normalizeFlyingDate(cell) {
+    if (!cell) return '';
+    const v = cell.v;
+    if (typeof v === 'string') {
+      const serial = v.match(/^Date\((\d+),(\d+),(\d+)\)$/);
+      if (serial) {
+        const month = String(Number(serial[2]) + 1).padStart(2, '0');
+        const day = String(Number(serial[3])).padStart(2, '0');
+        return serial[1] + '-' + month + '-' + day;
+      }
+      const iso = v.trim().match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+      if (iso) return iso[1] + '-' + iso[2].padStart(2, '0') + '-' + iso[3].padStart(2, '0');
+    }
+    const formatted = cell.f != null ? String(cell.f).trim() : '';
+    const fromFormatted = formatted.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+    if (fromFormatted) {
+      return fromFormatted[1] + '-' + fromFormatted[2].padStart(2, '0') + '-' + fromFormatted[3].padStart(2, '0');
+    }
+    return formatted || (v == null ? '' : String(v).trim());
+  }
+
+  function flyingVenue(text) {
+    const raw = String(text || '').trim();
+    const key = raw.toUpperCase();
+    if (key === 'ST' || raw === '沙田') return '沙田';
+    if (key === 'HV' || raw === '跑馬地' || raw === '快活谷') return '跑馬地';
+    return raw;
+  }
+
+  function flyingDash(text) {
+    const t = String(text || '').trim();
+    return t || '-';
+  }
+
+  function flyingPlaceHtml(raw) {
+    const t = String(raw || '').trim();
+    if (!t) return '';
+    const n = Number(t);
+    if (n === 1) return '🏆';
+    if (n === 2) return '🥈';
+    if (n === 3) return '🥉';
+    if (n === 4) return '4️⃣';
+    if (Number.isFinite(n) && n >= 5) return escapeHtml(String(n));
+    return escapeHtml(t);
+  }
+
+  function flyingMoney(text) {
+    const t = String(text || '').trim().replace(/^\$/, '');
+    return t ? '$' + t : '';
+  }
+
+  function parseFlyingHorses(table) {
+    const index = {};
+    (table.cols || []).forEach((col, i) => {
+      index[String(col.label || '').trim()] = i;
+    });
+    const horses = [];
+    (table.rows || []).forEach((row) => {
+      const name = cellText(gvizCell(row, index['馬名'])).trim();
+      if (!name) return;
+      const finish = cellText(gvizCell(row, index['名次'])).trim();
+      horses.push({
+        date: normalizeFlyingDate(gvizCell(row, index['日期'])),
+        venue: flyingVenue(cellText(gvizCell(row, index['場地']))),
+        race: cellText(gvizCell(row, index['場次'])).trim(),
+        no: cellText(gvizCell(row, index['馬號'])).trim(),
+        name: name,
+        trainer: cellText(gvizCell(row, index['練馬師'])).trim(),
+        group: cellText(gvizCell(row, index['細組'])).trim(),
+        r: cellText(gvizCell(row, index['R'])).trim(),
+        s: cellText(gvizCell(row, index['S'])).trim(),
+        t: cellText(gvizCell(row, index['T'])).trim(),
+        score: cellText(gvizCell(row, index['評分'])).trim(),
+        grade: cellText(gvizCell(row, index['等級'])).trim(),
+        comment: cellText(gvizCell(row, index['短評'])).trim(),
+        finish: finish,
+        winPay: cellText(gvizCell(row, index['獨贏派彩'])).trim(),
+        placePay: cellText(gvizCell(row, index['位置派彩'])).trim(),
+      });
+    });
+    return horses;
+  }
+
+  function flyingMeetings(horses) {
+    const groups = new Map();
+    horses.forEach((horse) => {
+      const key = horse.date + '|' + horse.venue;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(horse);
+    });
+    const meetings = [...groups.entries()].map(([key, list]) => {
+      list.sort((a, b) => {
+        const race = (Number(a.race) || 0) - (Number(b.race) || 0);
+        if (race !== 0) return race;
+        return (Number(a.no) || 0) - (Number(b.no) || 0);
+      });
+      const [date, venue] = key.split('|');
+      const finished = list.filter((horse) => horse.finish !== '');
+      const placed = finished.filter((horse) => {
+        const n = Number(horse.finish);
+        return n === 1 || n === 2 || n === 3;
+      }).length;
+      const wins = finished.filter((horse) => Number(horse.finish) === 1).length;
+      return { date: date, venue: venue, horses: list, finished: finished.length, placed: placed, wins: wins };
+    });
+    meetings.sort((a, b) => {
+      if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+      return a.venue.localeCompare(b.venue, 'zh-HK');
+    });
+    return meetings;
+  }
+
+  function flyingHorseHtml(horse) {
+    const grade = String(horse.grade || '').trim().toUpperCase();
+    const gradeClass = { A: 'fly-grade-a', B: 'fly-grade-b', C: 'fly-grade-c', D: 'fly-grade-d' }[grade] || '';
+    const badge = grade
+      ? '<span class="fly-grade ' + gradeClass + '">' + escapeHtml(grade) + '</span>'
+      : '';
+    const meta = [horse.trainer, horse.group].filter(Boolean).map(escapeHtml).join(' · ');
+    const odds = '隔夜 ' + escapeHtml(flyingDash(horse.r)) +
+      ' ／ 隔12 ' + escapeHtml(flyingDash(horse.s)) +
+      ' ／ 1hr ' + escapeHtml(flyingDash(horse.t));
+    const place = flyingPlaceHtml(horse.finish);
+    const winPay = flyingMoney(horse.winPay);
+    const placePay = flyingMoney(horse.placePay);
+    const payBits = [];
+    if (winPay) payBits.push('W ' + escapeHtml(winPay));
+    if (placePay) payBits.push('P ' + escapeHtml(placePay));
+    const resultBits = [];
+    if (place) resultBits.push(place);
+    if (payBits.length) resultBits.push('<span class="fly-pay">' + payBits.join(' ') + '</span>');
+    return '<article class="fly-horse">' +
+      '<div class="fly-horse-top"><span class="fly-horse-name">R' + escapeHtml(horse.race) +
+      ' #' + escapeHtml(horse.no) + ' ' + escapeHtml(horse.name) + '</span>' + badge + '</div>' +
+      (meta ? '<p class="fly-meta">' + meta + '</p>' : '') +
+      '<p class="fly-odds">' + odds + '</p>' +
+      '<p class="fly-score">評分 ' + escapeHtml(flyingDash(horse.score)) + '</p>' +
+      (horse.comment ? '<p class="fly-note">' + escapeHtml(horse.comment) + '</p>' : '') +
+      (resultBits.length ? '<p class="fly-result">' + resultBits.join(' ') + '</p>' : '') +
+      '</article>';
+  }
+
+  function flyingHitHtml(meeting) {
+    if (!(meeting.finished > 0)) return '';
+    const rate = rateCellHtml(formatWindRate((meeting.placed / meeting.finished) * 100));
+    return '<span class="fly-hit">入三甲 ' + meeting.placed + ' / ' + meeting.finished + ' ' +
+      rate + ' · 頭馬 ' + meeting.wins + '</span>';
+  }
+
+  function flyingPicksHtml(table) {
+    if (!flyingColsOk(table)) {
+      return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
+        '<p class="empty">未能讀取賽日有飛馬</p></section>';
+    }
+    const meetings = flyingMeetings(parseFlyingHorses(table));
+    if (!meetings.length) {
+      return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
+        '<p class="empty">暫未有飛馬名單</p></section>';
+    }
+    const body = meetings.map((meeting, index) => {
+      const open = index === 0;
+      return '<section class="fly-meet' + (open ? ' is-open' : '') + '">' +
+        '<button type="button" class="fly-meet-head" aria-expanded="' + (open ? 'true' : 'false') + '">' +
+        '<span class="fly-meet-title">' + escapeHtml(meeting.date) + ' ' + escapeHtml(meeting.venue) +
+        ' · ' + meeting.horses.length + ' 飛馬</span>' +
+        flyingHitHtml(meeting) +
+        '</button>' +
+        '<div class="fly-meet-body"' + (open ? '' : ' hidden') + '>' +
+        meeting.horses.map(flyingHorseHtml).join('') +
+        '</div></section>';
+    }).join('');
+    return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' + body + '</section>';
+  }
+
+  function flyingCellBlank(row, index) {
+    return cellText(gvizCell(row, index)).trim() === '';
+  }
+
+  function isZeroPair(text) {
+    const parts = String(text || '').split('/').map((part) => part.trim());
+    return parts.length === 2 && parts[0] === '0' && parts[1] === '0';
+  }
+
+  function wholeCount(cell) {
+    if (!cell || cell.v == null || cell.v === '') return 0;
+    const n = Number(cell.v);
+    return Number.isFinite(n) ? n : 0;
+  }
+
+  function wholeText(n) {
+    if (!Number.isFinite(n)) return '0';
+    return Number.isInteger(n) ? String(n) : String(n);
+  }
+
+  function parseFlyingTrainers(table) {
+    const rows = table.rows || [];
+    const trainers = [];
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      if (flyingCellBlank(row, 1)) continue;
+      let follow = null;
+      const next = rows[i + 1];
+      if (next && flyingCellBlank(next, 0) && flyingCellBlank(next, 1)) {
+        follow = next;
+        i += 1;
+      }
+      const total = wholeCount(gvizCell(row, 2));
+      if (!(total > 0)) continue;
+      const cats = [];
+      for (let c = 0; c < FLY_CATS.length; c++) {
+        cats.push({
+          appear: wholeCount(gvizCell(row, 15 + c)),
+          hit: follow ? wholeCount(gvizCell(follow, 15 + c)) : 0,
+        });
+      }
+      trainers.push({
+        rank: cellText(gvizCell(row, 0)).trim(),
+        name: cellText(gvizCell(row, 1)).trim(),
+        total: cellText(gvizCell(row, 2)).trim(),
+        top3: cellText(gvizCell(row, 3)).trim(),
+        top3Rate: cellText(gvizCell(row, 4)).trim(),
+        win: cellText(gvizCell(row, 5)).trim(),
+        winRate: cellText(gvizCell(row, 6)).trim(),
+        place: cellText(gvizCell(row, 7)).trim(),
+        placeRate: cellText(gvizCell(row, 8)).trim(),
+        a1: cellText(gvizCell(row, 9)).trim(),
+        a1Rate: cellText(gvizCell(row, 10)).trim(),
+        a2: cellText(gvizCell(row, 11)).trim(),
+        a2Rate: cellText(gvizCell(row, 12)).trim(),
+        a3: cellText(gvizCell(row, 13)).trim(),
+        a3Rate: cellText(gvizCell(row, 14)).trim(),
+        cats: cats,
+      });
+    }
+    return trainers;
+  }
+
+  function flyingRateHtml(text, zeroPair) {
+    if (zeroPair) return '<span class="fly-muted">' + escapeHtml(text || '') + '</span>';
+    return rateCellHtml(text);
+  }
+
+  function flyingPairCell(pair, rate) {
+    return '<td class="fly-pair">' + escapeHtml(pair) +
+      (rate ? '<br>' + flyingRateHtml(rate, isZeroPair(pair)) : '') + '</td>';
+  }
+
+  function flyingTrainerTable(trainers) {
+    const mainHeads = ['出現', '三甲', '三甲%', 'W', 'W%', 'P', 'P%', 'A1 命中', 'A2 命中', 'A3 命中'];
+    const headMain = mainHeads.map((name) => '<th rowspan="2">' + name + '</th>').join('');
+    const bands = FLY_BANDS.map((band) =>
+      '<th class="fly-band" colspan="' + band.count + '">' + band.name + '</th>'
+    ).join('');
+    let catIndex = 0;
+    const sub = FLY_CATS.map((name) => {
+      const start = catIndex === 0 || catIndex === 2 || catIndex === 5;
+      catIndex += 1;
+      return '<th' + (start ? ' class="fly-band-start"' : '') + '>' + name + '</th>';
+    }).join('');
+    const body = trainers.map((trainer) => {
+      let seen = 0;
+      const cats = trainer.cats.map((cat) => {
+        const start = seen === 0 || seen === 2 || seen === 5;
+        seen += 1;
+        const cls = start ? ' class="fly-band-start"' : '';
+        if (!(cat.appear > 0)) return '<td' + cls + '></td>';
+        return '<td' + cls + '>' + escapeHtml(wholeText(cat.hit) + '/' + wholeText(cat.appear)) + '</td>';
+      }).join('');
+      return '<tr>' +
+        '<td class="fly-name"><span class="fly-rank">' + escapeHtml(trainer.rank) + '</span> ' + escapeHtml(trainer.name) + '</td>' +
+        '<td>' + escapeHtml(trainer.total) + '</td>' +
+        '<td>' + escapeHtml(trainer.top3) + '</td>' +
+        '<td>' + rateCellHtml(trainer.top3Rate) + '</td>' +
+        '<td>' + escapeHtml(trainer.win) + '</td>' +
+        '<td>' + escapeHtml(trainer.winRate) + '</td>' +
+        '<td>' + escapeHtml(trainer.place) + '</td>' +
+        '<td>' + escapeHtml(trainer.placeRate) + '</td>' +
+        flyingPairCell(trainer.a1, trainer.a1Rate) +
+        flyingPairCell(trainer.a2, trainer.a2Rate) +
+        flyingPairCell(trainer.a3, trainer.a3Rate) +
+        cats +
+        '</tr>';
+    }).join('');
+    return '<div class="fly-scroll"><table class="fly-table"><thead><tr>' +
+      '<th class="fly-name" rowspan="2">練馬師</th>' + headMain + bands +
+      '</tr><tr>' + sub + '</tr></thead><tbody>' + body + '</tbody></table></div>';
+  }
+
+  function flyingTrainerHtml() {
+    const trainers = flyingSeasons[flyingSeason] || [];
+    const nowActive = flyingSeason === 'now' ? ' active' : '';
+    const prevActive = flyingSeason === 'prev' ? ' active' : '';
+    const table = trainers.length
+      ? flyingTrainerTable(trainers)
+      : '<p class="empty">暫未有練馬師資料</p>';
+    return '<section class="panel" id="fly-trainers">' +
+      '<h2 class="panel-title">練馬師雙跌總表</h2>' +
+      '<div class="fly-seasons" role="tablist">' +
+      '<button type="button" class="tab' + nowActive + '" data-fly-season="now">2026-27</button>' +
+      '<button type="button" class="tab' + prevActive + '" data-fly-season="prev">2025-26</button>' +
+      '</div>' +
+      '<p class="fly-legend">入三甲/出現。 <span class="pl-pos">≥65%</span> <span class="wind-rate-mid">45–64%</span> <span class="pl-neg">&lt;45%</span> <span class="fly-muted">0/0</span></p>' +
+      table + '</section>';
+  }
+
+  function renderFlyingTrainers() {
+    const host = document.getElementById('fly-trainers');
+    if (!host) return;
+    const scroll = host.querySelector('.fly-scroll');
+    const left = scroll ? scroll.scrollLeft : 0;
+    host.outerHTML = flyingTrainerHtml();
+    const next = document.getElementById('fly-trainers');
+    const nextScroll = next && next.querySelector('.fly-scroll');
+    if (nextScroll) nextScroll.scrollLeft = left;
+  }
+
+  function bindFlyingOnce() {
+    if (viewFlying.dataset.bound === '1') return;
+    viewFlying.dataset.bound = '1';
+    viewFlying.addEventListener('click', (event) => {
+      const seasonBtn = event.target.closest('[data-fly-season]');
+      if (seasonBtn) {
+        flyingSeason = seasonBtn.getAttribute('data-fly-season') || 'now';
+        renderFlyingTrainers();
+        return;
+      }
+      const head = event.target.closest('.fly-meet-head');
+      if (!head) return;
+      const meet = head.closest('.fly-meet');
+      const body = meet && meet.querySelector('.fly-meet-body');
+      if (!body) return;
+      const open = body.hidden;
+      body.hidden = !open;
+      meet.classList.toggle('is-open', open);
+      head.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
+  async function renderFlying() {
+    const token = ++flyingLoad;
+    viewHome.hidden = true;
+    viewDetail.hidden = true;
+    viewWind.hidden = true;
+    viewFlying.hidden = false;
+    btnBack.hidden = false;
+    pageTitle.textContent = '賽日有飛馬';
+    pageSub.classList.remove('subtitle-profit');
+    pageSub.hidden = true;
+    pageSub.textContent = '';
+    const status = $('#flying-status');
+    const host = $('#flying-body');
+    if (status) {
+      status.hidden = false;
+      status.textContent = '載入中…';
+    }
+    if (host) host.innerHTML = '';
+    bindFlyingOnce();
+    try {
+      const [flyResult, nowResult, prevResult] = await Promise.allSettled([
+        loadGvizTable('賽日有飛馬', { headers: '1' }),
+        loadGvizTable('A123 分析 26/27', { headers: '0', range: 'A4:AC49' }),
+        loadGvizTable('A123 分析 26/27', { headers: '0', range: 'A58:AC105' }),
+      ]);
+      if (token !== flyingLoad || viewFlying.hidden) return;
+      flyingSeason = 'now';
+      flyingSeasons = {
+        now: nowResult.status === 'fulfilled' ? parseFlyingTrainers(nowResult.value) : [],
+        prev: prevResult.status === 'fulfilled' ? parseFlyingTrainers(prevResult.value) : [],
+      };
+      const picks = flyResult.status === 'fulfilled'
+        ? flyingPicksHtml(flyResult.value)
+        : '<section class="panel"><h2 class="panel-title">賽日推介</h2><p class="empty">未能讀取賽日有飛馬</p></section>';
+      const trainers = (nowResult.status === 'fulfilled' || prevResult.status === 'fulfilled')
+        ? flyingTrainerHtml()
+        : '<section class="panel"><h2 class="panel-title">練馬師雙跌總表</h2><p class="empty">未能讀取練馬師雙跌總表</p></section>';
+      if (host) host.innerHTML = picks + trainers;
+      if (status) status.hidden = true;
+    } catch (err) {
+      console.error(err);
+      if (token !== flyingLoad) return;
+      if (status) {
+        status.hidden = false;
+        status.textContent = '載入失敗：' + (err.message || err);
+      }
+    }
+  }
+
   /* ---------- routing ---------- */
   async function route() {
     const hash = location.hash || '#/';
     if (hash === '#/wind') {
       try {
         await renderWind();
+      } catch (err) {
+        console.error(err);
+      }
+      return;
+    }
+    if (hash === '#/flying') {
+      try {
+        await renderFlying();
       } catch (err) {
         console.error(err);
       }

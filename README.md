@@ -51,7 +51,7 @@ Example: `data/meetings/2026-09-16-hv.json` has sample `result` on races 1, 4, a
   - 「🏆 各場馬匹心水貼士」— 場次｜首選｜次選｜三選｜冷腳
   - 「🏆 全日重心馬推介」— 每日 3 隻；`馬號 馬名` then result icon (if any) then `(最終賠率 W：X.x ｜P：X.x)` from `dailyPicks.oddsWin` / `oddsPlace` (on.cc 臨場). No `(跑法)` after the name. Example: `5 櫻花酒杯 🏆 (最終賠率 W：3.1 ｜P：1.5)`
 - **Filters**: venue tabs + 賽事月份
-- **Hash routes**: `#/` home · `#/meeting/<id>` day detail
+- **Hash routes**: `#/` home · `#/meeting/<id>` day detail · `#/wind` 收風統計 · `#/flying` 賽日有飛馬
 - **Cache bust**: `APP_DATA_VERSION` in `js/app.js` (currently `20260925uiv2`) versions data fetches and asset URLs
 
 ## Add a new race day
@@ -72,6 +72,10 @@ No build step — plain HTML + CSS + JS.
 | `data/meetings/2026-09-12-st.json` | 2026-09-12 | 沙田 |
 | `data/meetings/2026-09-09-hv.json` | 2026-09-09 | 快活谷 |
 | `data/meetings/2026-09-06-st.json` | 2026-09-06 | 沙田 |
+
+## Live sheets
+
+`#/wind` and `#/flying` read Google Sheet `10vr-9Huqp6UyBJMDtRUKmjhMi_0TP0wjlYEv9ZI55co` in the browser on every open (gviz JSON). Those numbers are not copied into the repo. `#/flying` uses tabs `賽日有飛馬` and `A123 分析 26/27`.
 
 ## Tech
 

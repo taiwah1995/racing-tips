@@ -642,6 +642,119 @@ body {
 .wind-table tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
 .wind-table tbody tr:nth-child(even) td.wind-name { background: #1e2633; }
 
+/* ===== 賽日有飛馬 ===== */
+.fly-meet + .fly-meet { border-top: 1px solid var(--border); }
+.fly-meet-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.fly-meet-title { font-weight: 700; color: var(--gold); }
+.fly-hit { font-size: 0.8rem; color: var(--text); }
+.fly-horse { padding: 8px 12px 10px; border-top: 1px solid var(--border); }
+.fly-horse-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.fly-horse-name { font-weight: 700; min-width: 0; }
+.fly-grade {
+  flex-shrink: 0;
+  min-width: 1.7em;
+  padding: 1px 6px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+.fly-grade-a { color: #39ff14; }
+.fly-grade-b { color: #ffe14a; }
+.fly-grade-c { color: #ff9f0a; }
+.fly-grade-d { color: #8b949e; }
+.fly-meta,
+.fly-odds,
+.fly-score,
+.fly-note,
+.fly-result {
+  margin-top: 2px;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+.fly-note,
+.fly-result { color: var(--text); }
+.fly-pay { color: var(--text-muted); }
+.fly-seasons {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px 0;
+}
+.fly-legend {
+  padding: 8px 12px 6px;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+.fly-scroll {
+  overflow-x: auto;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+.fly-table {
+  border-collapse: collapse;
+  font-size: clamp(0.58rem, 2.7vw, 0.7rem);
+  white-space: nowrap;
+}
+.fly-table th,
+.fly-table td {
+  padding: 5px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.25;
+}
+.fly-table th {
+  background: var(--bg-elev);
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.fly-table th.fly-band { color: var(--gold); }
+.fly-table .wind-rate-mid,
+.fly-legend .wind-rate-mid,
+.fly-hit .wind-rate-mid { color: #ffe14a; }
+.fly-muted { color: #8b949e; }
+.fly-table thead tr:first-child th.fly-band,
+.fly-table thead tr:nth-child(2) th.fly-band-start,
+.fly-table tbody td.fly-band-start {
+  border-left: 1px solid var(--border);
+}
+.fly-table .fly-name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+  background: var(--bg-card);
+}
+.fly-table thead .fly-name {
+  z-index: 2;
+  background: var(--bg-elev);
+}
+.fly-table .fly-rank { color: var(--text-muted); }
+.fly-table tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
+.fly-table tbody tr:nth-child(even) td.fly-name { background: #1e2633; }
+.fly-pair { line-height: 1.2; }
+
 /* ===== Footer ===== */
 .site-footer {
   text-align: center;
