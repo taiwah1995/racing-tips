@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261006flying';
+  const APP_DATA_VERSION = '20261006flying2';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1166,9 +1166,17 @@
       '</article>';
   }
 
+  function flyingPercentText(text) {
+    const raw = String(text == null ? '' : text).trim();
+    if (!raw) return '';
+    const n = Number(raw.replace('%', ''));
+    if (!Number.isFinite(n)) return raw;
+    return String(Math.round(n)) + '%';
+  }
+
   function flyingHitHtml(meeting) {
     if (!(meeting.finished > 0)) return '';
-    const rate = rateCellHtml(formatWindRate((meeting.placed / meeting.finished) * 100));
+    const rate = rateCellHtml(flyingPercentText((meeting.placed / meeting.finished) * 100));
     return '<span class="fly-hit">入三甲 ' + meeting.placed + ' / ' + meeting.finished + ' ' +
       rate + ' · 頭馬 ' + meeting.wins + '</span>';
   }
@@ -1240,7 +1248,6 @@
         });
       }
       trainers.push({
-        rank: cellText(gvizCell(row, 0)).trim(),
         name: cellText(gvizCell(row, 1)).trim(),
         total: cellText(gvizCell(row, 2)).trim(),
         top3: cellText(gvizCell(row, 3)).trim(),
@@ -1258,7 +1265,18 @@
         cats: cats,
       });
     }
-    return trainers;
+    const numbered = [];
+    const totals = [];
+    trainers.forEach((trainer) => {
+      if (trainer.name.includes('合計')) totals.push(trainer);
+      else numbered.push(trainer);
+    });
+    let rank = 0;
+    return numbered.concat(totals).map((trainer) => {
+      const showRank = !trainer.name.includes('合計');
+      if (showRank) rank += 1;
+      return Object.assign({}, trainer, { rank: showRank ? String(rank) : '' });
+    });
   }
 
   function flyingRateHtml(text, zeroPair) {
@@ -1266,14 +1284,25 @@
     return rateCellHtml(text);
   }
 
-  function flyingPairCell(pair, rate) {
-    return '<td class="fly-pair">' + escapeHtml(pair) +
+  function flyingPairCell(pair, rate, extraClass) {
+    const cls = 'fly-pair' + (extraClass ? ' ' + extraClass : '');
+    return '<td class="' + cls + '">' + escapeHtml(pair) +
       (rate ? '<br>' + flyingRateHtml(rate, isZeroPair(pair)) : '') + '</td>';
   }
 
+  /** Same widths for both seasons. Name column matches the 2026-27 one-line width. */
+  const FLY_COL_WIDTHS = [72, 36, 36, 46, 28, 36, 28, 36, 56, 56, 56].concat(FLY_CATS.map(() => 44));
+  const FLY_SPLIT_COLS = { 1: true, 4: true, 6: true, 8: true };
+
   function flyingTrainerTable(trainers) {
     const mainHeads = ['出現', '三甲', '三甲%', 'W', 'W%', 'P', 'P%', 'A1 命中', 'A2 命中', 'A3 命中'];
-    const headMain = mainHeads.map((name) => '<th rowspan="2">' + name + '</th>').join('');
+    const headMain = mainHeads.map((name, index) => {
+      const col = index + 1;
+      const cls = FLY_SPLIT_COLS[col] ? ' class="fly-split"' : '';
+      return '<th rowspan="2"' + cls + '>' + name + '</th>';
+    }).join('');
+    const colgroup = '<colgroup>' + FLY_COL_WIDTHS.map((width) => '<col style="width:' + width + 'px">').join('') + '</colgroup>';
+    const tableWidth = FLY_COL_WIDTHS.reduce((sum, width) => sum + width, 0);
     const bands = FLY_BANDS.map((band) =>
       '<th class="fly-band" colspan="' + band.count + '">' + band.name + '</th>'
     ).join('');
@@ -1292,22 +1321,27 @@
         if (!(cat.appear > 0)) return '<td' + cls + '></td>';
         return '<td' + cls + '>' + escapeHtml(wholeText(cat.hit) + '/' + wholeText(cat.appear)) + '</td>';
       }).join('');
+      const rankHtml = trainer.rank
+        ? '<span class="fly-rank">' + escapeHtml(trainer.rank) + '</span> '
+        : '';
       return '<tr>' +
-        '<td class="fly-name"><span class="fly-rank">' + escapeHtml(trainer.rank) + '</span> ' + escapeHtml(trainer.name) + '</td>' +
-        '<td>' + escapeHtml(trainer.total) + '</td>' +
+        '<td class="fly-name">' + rankHtml + escapeHtml(trainer.name) + '</td>' +
+        '<td class="fly-split">' + escapeHtml(trainer.total) + '</td>' +
         '<td>' + escapeHtml(trainer.top3) + '</td>' +
-        '<td>' + rateCellHtml(trainer.top3Rate) + '</td>' +
-        '<td>' + escapeHtml(trainer.win) + '</td>' +
-        '<td>' + escapeHtml(trainer.winRate) + '</td>' +
-        '<td>' + escapeHtml(trainer.place) + '</td>' +
-        '<td>' + escapeHtml(trainer.placeRate) + '</td>' +
-        flyingPairCell(trainer.a1, trainer.a1Rate) +
-        flyingPairCell(trainer.a2, trainer.a2Rate) +
-        flyingPairCell(trainer.a3, trainer.a3Rate) +
+        '<td>' + rateCellHtml(flyingPercentText(trainer.top3Rate)) + '</td>' +
+        '<td class="fly-split">' + escapeHtml(trainer.win) + '</td>' +
+        '<td>' + escapeHtml(flyingPercentText(trainer.winRate)) + '</td>' +
+        '<td class="fly-split">' + escapeHtml(trainer.place) + '</td>' +
+        '<td>' + escapeHtml(flyingPercentText(trainer.placeRate)) + '</td>' +
+        flyingPairCell(trainer.a1, flyingPercentText(trainer.a1Rate), 'fly-split') +
+        flyingPairCell(trainer.a2, flyingPercentText(trainer.a2Rate)) +
+        flyingPairCell(trainer.a3, flyingPercentText(trainer.a3Rate)) +
         cats +
         '</tr>';
     }).join('');
-    return '<div class="fly-scroll"><table class="fly-table"><thead><tr>' +
+    return '<div class="fly-scroll"><table class="fly-table" style="width:' + tableWidth + 'px">' +
+      colgroup +
+      '<thead><tr>' +
       '<th class="fly-name" rowspan="2">練馬師</th>' + headMain + bands +
       '</tr><tr>' + sub + '</tr></thead><tbody>' + body + '</tbody></table></div>';
   }
@@ -1320,7 +1354,7 @@
       ? flyingTrainerTable(trainers)
       : '<p class="empty">暫未有練馬師資料</p>';
     return '<section class="panel" id="fly-trainers">' +
-      '<h2 class="panel-title">練馬師雙跌總表</h2>' +
+      '<h2 class="panel-title">賠率啟示錄</h2>' +
       '<div class="fly-seasons" role="tablist">' +
       '<button type="button" class="tab' + nowActive + '" data-fly-season="now">2026-27</button>' +
       '<button type="button" class="tab' + prevActive + '" data-fly-season="prev">2025-26</button>' +
@@ -1398,7 +1432,7 @@
         : '<section class="panel"><h2 class="panel-title">賽日推介</h2><p class="empty">未能讀取賽日有飛馬</p></section>';
       const trainers = (nowResult.status === 'fulfilled' || prevResult.status === 'fulfilled')
         ? flyingTrainerHtml()
-        : '<section class="panel"><h2 class="panel-title">練馬師雙跌總表</h2><p class="empty">未能讀取練馬師雙跌總表</p></section>';
+        : '<section class="panel"><h2 class="panel-title">賠率啟示錄</h2><p class="empty">未能讀取賠率啟示錄</p></section>';
       if (host) host.innerHTML = picks + trainers;
       if (status) status.hidden = true;
     } catch (err) {
