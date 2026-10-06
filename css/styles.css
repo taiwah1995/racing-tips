@@ -749,6 +749,13 @@ body {
   font-size: 12px;
   line-height: 1.35;
   font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.fly-advice .fly-meta {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 400;
+  color: var(--text-muted);
 }
 .fly-pick-legend {
   width: 100%;
@@ -771,7 +778,6 @@ body {
   font-weight: 600;
 }
 .fly-pick-legend td:nth-child(2) { text-align: center; }
-.fly-meta,
 .fly-note,
 .fly-result {
   margin-top: 2px;
@@ -789,7 +795,6 @@ body {
   gap: 6px;
   min-width: 0;
 }
-.fly-finish { font-size: 1.05rem; line-height: 1.2; }
 .fly-pay { color: var(--text-muted); }
 .fly-seasons {
   display: flex;
