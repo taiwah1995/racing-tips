@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261006flying6';
+  const APP_DATA_VERSION = '20261006flying7';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -570,6 +570,7 @@
     });
 
     renderAttackHot(meeting);
+    renderMeetingFlying(meeting);
 
     window.scrollTo(0, 0);
   }
@@ -1191,7 +1192,7 @@
     if (winPay) payBits.push('W ' + escapeHtml(winPay));
     if (placePay) payBits.push('P ' + escapeHtml(placePay));
     const resultBits = [];
-    if (place) resultBits.push(place);
+    if (place) resultBits.push('<span class="fly-finish">' + place + '</span>');
     if (payBits.length) resultBits.push('<span class="fly-pay">' + payBits.join(' ') + '</span>');
     return '<article class="fly-horse">' +
       '<div class="fly-horse-top"><span class="fly-horse-name">#' + escapeHtml(horse.no) +
@@ -1282,30 +1283,69 @@
       rate + ' · 頭馬 ' + meeting.wins + '</span>';
   }
 
+  function flyingRaceCardsHtml(horses) {
+    return '<div class="fly-meet-body">' + flyingByRace(horses).map(flyingRaceHtml).join('') + '</div>';
+  }
+
   function flyingPicksHtml(table) {
     if (!flyingColsOk(table)) {
       return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
         '<p class="empty">未能讀取賽日有飛馬</p></section>';
     }
     const meetings = flyingMeetings(parseFlyingHorses(table));
-    if (!meetings.length) {
+    const meeting = meetings[0];
+    if (!meeting) {
       return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
         '<p class="empty">暫未有飛馬名單</p></section>';
     }
-    const body = meetings.map((meeting, index) => {
-      const open = index === 0;
-      return '<section class="fly-meet' + (open ? ' is-open' : '') + '">' +
-        '<button type="button" class="fly-meet-head" aria-expanded="' + (open ? 'true' : 'false') + '">' +
-        '<span class="fly-meet-title">' + escapeHtml(meeting.date) + ' ' + escapeHtml(meeting.venue) +
-        ' · ' + meeting.horses.length + ' 飛馬</span>' +
-        flyingHitHtml(meeting) +
-        '</button>' +
-        '<div class="fly-meet-body"' + (open ? '' : ' hidden') + '>' +
-        flyingByRace(meeting.horses).map(flyingRaceHtml).join('') +
-        '</div></section>';
-    }).join('');
     return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
-      flyingPickLegendHtml() + body + '</section>';
+      flyingPickLegendHtml() +
+      '<section class="fly-meet is-open">' +
+      '<div class="fly-meet-head">' +
+      '<span class="fly-meet-title">' + escapeHtml(meeting.date) + ' ' + escapeHtml(meeting.venue) + '</span>' +
+      flyingHitHtml(meeting) +
+      '</div>' +
+      flyingRaceCardsHtml(meeting.horses) +
+      '</section></section>';
+  }
+
+  let meetingFlyToken = 0;
+
+  function meetingFlyMatches(meeting, horse) {
+    const date = String(meeting && meeting.date || '').trim();
+    const venue = flyingVenue((meeting && (meeting.venue || meeting.venueCode)) || '');
+    return horse.date === date && horse.venue === venue;
+  }
+
+  function flyingMeetingPanelHtml(horses) {
+    const stats = flyingMeetings(horses)[0];
+    const hit = stats ? flyingHitHtml(stats) : '';
+    return '<section class="panel" id="meeting-flying">' +
+      '<h2 class="panel-title">賽日有飛馬</h2>' +
+      (hit ? '<div class="fly-hit-line">' + hit + '</div>' : '') +
+      flyingPickLegendHtml() +
+      flyingRaceCardsHtml(horses) +
+      '</section>';
+  }
+
+  /** Live 賽日有飛馬 rows for this meeting only. A slow sheet must not block the tips table. */
+  function renderMeetingFlying(meeting) {
+    const token = ++meetingFlyToken;
+    const stale = document.getElementById('meeting-flying');
+    if (stale) stale.remove();
+    if (!meeting || !meeting.id) return;
+    const id = String(meeting.id);
+    loadGvizTable('賽日有飛馬', { headers: '1' }).then((table) => {
+      if (token !== meetingFlyToken || viewDetail.hidden) return;
+      const current = (location.hash || '').match(/^#\/meeting\/([^/?#]+)/);
+      if (!current || decodeURIComponent(current[1]) !== id) return;
+      if (!flyingColsOk(table)) return;
+      const horses = parseFlyingHorses(table).filter((horse) => meetingFlyMatches(meeting, horse));
+      if (!horses.length) return;
+      const again = document.getElementById('meeting-flying');
+      if (again) again.remove();
+      viewDetail.insertAdjacentHTML('beforeend', flyingMeetingPanelHtml(horses));
+    }).catch(() => {});
   }
 
   function flyingCellBlank(row, index) {
@@ -1487,20 +1527,9 @@
     viewFlying.dataset.bound = '1';
     viewFlying.addEventListener('click', (event) => {
       const seasonBtn = event.target.closest('[data-fly-season]');
-      if (seasonBtn) {
-        flyingSeason = seasonBtn.getAttribute('data-fly-season') || 'now';
-        renderFlyingTrainers();
-        return;
-      }
-      const head = event.target.closest('.fly-meet-head');
-      if (!head) return;
-      const meet = head.closest('.fly-meet');
-      const body = meet && meet.querySelector('.fly-meet-body');
-      if (!body) return;
-      const open = body.hidden;
-      body.hidden = !open;
-      meet.classList.toggle('is-open', open);
-      head.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (!seasonBtn) return;
+      flyingSeason = seasonBtn.getAttribute('data-fly-season') || 'now';
+      renderFlyingTrainers();
     });
   }
 
