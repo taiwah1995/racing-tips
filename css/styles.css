@@ -660,14 +660,69 @@ body {
 }
 .fly-meet-title { font-weight: 700; color: var(--gold); }
 .fly-hit { font-size: 0.8rem; color: var(--text); }
-.fly-horse { padding: 8px 12px 10px; border-top: 1px solid var(--border); }
-.fly-horse-top {
+.fly-meet-body {
   display: flex;
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 10px 12px;
+  min-width: 0;
+}
+.fly-meet-body[hidden] { display: none; }
+.fly-race {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  border-radius: 10px;
+  background: #141b26;
+}
+.fly-race-head {
+  display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 8px;
+  min-width: 0;
+  padding: 6px 10px 6px 8px;
+  background: linear-gradient(90deg, rgba(240, 193, 75, 0.2), rgba(240, 193, 75, 0.02) 78%);
 }
-.fly-horse-name { font-weight: 700; min-width: 0; }
+.fly-race-chip {
+  display: inline-block;
+  padding: 1px 8px;
+  border: 1px solid var(--gold-dim);
+  border-radius: 999px;
+  background: rgba(240, 193, 75, 0.14);
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1.45;
+}
+.fly-race-count {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.fly-horse { padding: 7px 10px 8px; min-width: 0; }
+.fly-horse + .fly-horse { border-top: 1px solid var(--border); }
+.fly-horse-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+.fly-horse-name {
+  font-weight: 700;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.fly-mark {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
 .fly-grade {
   flex-shrink: 0;
   min-width: 1.7em;
@@ -679,18 +734,24 @@ body {
   line-height: 1.4;
   text-align: center;
 }
+.fly-score-big {
+  font-size: 1.45rem;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
 .fly-grade-a { color: #39ff14; }
 .fly-grade-b { color: #ffe14a; }
 .fly-grade-c { color: #ff9f0a; }
 .fly-grade-d { color: #8b949e; }
 .fly-meta,
 .fly-odds,
-.fly-score,
 .fly-note,
 .fly-result {
   margin-top: 2px;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   line-height: 1.35;
+  overflow-wrap: anywhere;
   color: var(--text-muted);
 }
 .fly-note,
