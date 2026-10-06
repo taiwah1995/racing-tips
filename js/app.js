@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261006flying4';
+  const APP_DATA_VERSION = '20261006flying5';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1145,11 +1145,22 @@
     return meetings;
   }
 
+  function flyingGradeClass(grade) {
+    return { A: 'fly-grade-a', B: 'fly-grade-b', C: 'fly-grade-c', D: 'fly-grade-d' }[grade] || '';
+  }
+
   function flyingHorseHtml(horse) {
     const grade = String(horse.grade || '').trim().toUpperCase();
-    const gradeClass = { A: 'fly-grade-a', B: 'fly-grade-b', C: 'fly-grade-c', D: 'fly-grade-d' }[grade] || '';
+    const gradeClass = flyingGradeClass(grade);
     const badge = grade
       ? '<span class="fly-grade ' + gradeClass + '">' + escapeHtml(grade) + '</span>'
+      : '';
+    const score = String(horse.score || '').trim();
+    const scoreHtml = score
+      ? '<span class="fly-score-big ' + gradeClass + '">' + escapeHtml(score) + '</span>'
+      : '';
+    const mark = (badge || scoreHtml)
+      ? '<span class="fly-mark">' + badge + scoreHtml + '</span>'
       : '';
     const meta = [horse.trainer, horse.group].filter(Boolean).map(escapeHtml).join(' · ');
     const odds = '隔夜 ' + escapeHtml(flyingDash(flyingOddsText(horse.r))) +
@@ -1165,13 +1176,59 @@
     if (place) resultBits.push(place);
     if (payBits.length) resultBits.push('<span class="fly-pay">' + payBits.join(' ') + '</span>');
     return '<article class="fly-horse">' +
-      '<div class="fly-horse-top"><span class="fly-horse-name">R' + escapeHtml(horse.race) +
-      ' #' + escapeHtml(horse.no) + ' ' + escapeHtml(horse.name) + '</span>' + badge + '</div>' +
+      '<div class="fly-horse-top"><span class="fly-horse-name">#' + escapeHtml(horse.no) +
+      ' ' + escapeHtml(horse.name) + '</span>' + mark + '</div>' +
       (meta ? '<p class="fly-meta">' + meta + '</p>' : '') +
       '<p class="fly-odds">' + odds + '</p>' +
-      '<p class="fly-score">評分 ' + escapeHtml(flyingDash(horse.score)) + '</p>' +
       (horse.comment ? '<p class="fly-note">' + escapeHtml(horse.comment) + '</p>' : '') +
       (resultBits.length ? '<p class="fly-result">' + resultBits.join(' ') + '</p>' : '') +
+      '</article>';
+  }
+
+  function flyingRaceLabel(race) {
+    const t = String(race || '').trim();
+    if (!t) return 'R—';
+    return /^r/i.test(t) ? t.replace(/^r/i, 'R') : 'R' + t;
+  }
+
+  function flyingByRace(horses) {
+    const groups = new Map();
+    horses.forEach((horse) => {
+      const key = String(horse.race || '').trim();
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(horse);
+    });
+    return [...groups.entries()].sort((a, b) => {
+      const an = Number(a[0]);
+      const bn = Number(b[0]);
+      const aOk = Number.isFinite(an);
+      const bOk = Number.isFinite(bn);
+      if (aOk && bOk && an !== bn) return an - bn;
+      if (aOk !== bOk) return aOk ? -1 : 1;
+      return a[0].localeCompare(b[0], 'zh-HK');
+    }).map(([race, list]) => {
+      const ranked = list.slice().sort((a, b) => {
+        const as = Number(a.score);
+        const bs = Number(b.score);
+        const aOk = Number.isFinite(as);
+        const bOk = Number.isFinite(bs);
+        if (aOk && bOk && as !== bs) return bs - as;
+        if (aOk !== bOk) return aOk ? -1 : 1;
+        const no = (Number(a.no) || 0) - (Number(b.no) || 0);
+        if (no !== 0) return no;
+        return String(a.no).localeCompare(String(b.no), 'zh-HK');
+      });
+      return { race: race, horses: ranked };
+    });
+  }
+
+  function flyingRaceHtml(race) {
+    return '<article class="fly-race">' +
+      '<header class="fly-race-head">' +
+      '<span class="fly-race-chip">' + escapeHtml(flyingRaceLabel(race.race)) + '</span>' +
+      '<span class="fly-race-count">' + race.horses.length + ' 隻</span>' +
+      '</header>' +
+      race.horses.map(flyingHorseHtml).join('') +
       '</article>';
   }
 
@@ -1209,7 +1266,7 @@
         flyingHitHtml(meeting) +
         '</button>' +
         '<div class="fly-meet-body"' + (open ? '' : ' hidden') + '>' +
-        meeting.horses.map(flyingHorseHtml).join('') +
+        flyingByRace(meeting.horses).map(flyingRaceHtml).join('') +
         '</div></section>';
     }).join('');
     return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' + body + '</section>';
