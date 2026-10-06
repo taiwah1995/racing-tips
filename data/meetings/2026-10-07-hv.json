@@ -1,0 +1,337 @@
+{
+  "id": "2026-10-07-hv",
+  "date": "2026-10-07",
+  "venue": "快活谷",
+  "venueCode": "HV",
+  "raceCount": 9,
+  "label": null,
+  "tipsTable": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1800,
+      "first": {
+        "no": 1,
+        "name": "獎星",
+        "style": "前",
+        "odds": 4.3
+      },
+      "second": {
+        "no": 4,
+        "name": "竣誠駒",
+        "style": "中",
+        "odds": 5.7
+      },
+      "third": {
+        "no": 9,
+        "name": "連連好運",
+        "style": "中",
+        "odds": 8
+      },
+      "dark": {
+        "no": 3,
+        "name": "鴻圖大展",
+        "style": "中",
+        "odds": 11
+      }
+    },
+    {
+      "race": 2,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 6,
+        "name": "千杯敬典",
+        "style": "前",
+        "odds": 8.2
+      },
+      "second": {
+        "no": 2,
+        "name": "幸運愉快",
+        "style": "中",
+        "odds": 8.7
+      },
+      "third": {
+        "no": 5,
+        "name": "環球英雄",
+        "style": "前",
+        "odds": 12.0
+      },
+      "dark": {
+        "no": 4,
+        "name": "紅錢到",
+        "style": null,
+        "odds": 8.2
+      }
+    },
+    {
+      "race": 3,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 6,
+        "name": "有情有義",
+        "style": "前",
+        "odds": 6.9
+      },
+      "second": {
+        "no": 10,
+        "name": "康昌之星",
+        "style": "後",
+        "odds": 1.7
+      },
+      "third": {
+        "no": 4,
+        "name": "卓越蒨鋒",
+        "style": "後",
+        "odds": 9.2
+      },
+      "dark": {
+        "no": 8,
+        "name": "金駒永騰",
+        "style": "放",
+        "odds": 10
+      }
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 10,
+        "name": "準希望",
+        "style": "中",
+        "odds": 5.6
+      },
+      "second": {
+        "no": 2,
+        "name": "深心星",
+        "style": "放",
+        "odds": 4.2
+      },
+      "third": {
+        "no": 4,
+        "name": "先到先得",
+        "style": "後",
+        "odds": 10
+      },
+      "dark": {
+        "no": 11,
+        "name": "焦點",
+        "style": "前",
+        "odds": 24
+      }
+    },
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1000,
+      "first": {
+        "no": 4,
+        "name": "巴閉王",
+        "style": "前",
+        "odds": 3.5
+      },
+      "second": {
+        "no": 8,
+        "name": "佐治傳奇",
+        "style": "前",
+        "odds": 3.6
+      },
+      "third": {
+        "no": 1,
+        "name": "鴻圖新星",
+        "style": "中",
+        "odds": 9.4
+      },
+      "dark": {
+        "no": 6,
+        "name": "美麗登場",
+        "style": "放",
+        "odds": 10
+      }
+    },
+    {
+      "race": 6,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 10,
+        "name": "頑童",
+        "style": "前",
+        "odds": 5.2
+      },
+      "second": {
+        "no": 9,
+        "name": "後無來者",
+        "style": "中",
+        "odds": 3.9
+      },
+      "third": {
+        "no": 5,
+        "name": "加州勇勝",
+        "style": "前",
+        "odds": 7.6
+      },
+      "dark": {
+        "no": 6,
+        "name": "勝多多",
+        "style": "中",
+        "odds": 11
+      }
+    },
+    {
+      "race": 7,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 2,
+        "name": "東來欣賞",
+        "style": "前",
+        "odds": 5.3
+      },
+      "second": {
+        "no": 5,
+        "name": "觀眾之力",
+        "style": "中",
+        "odds": 3.1
+      },
+      "third": {
+        "no": 11,
+        "name": "丞匡掠影",
+        "style": "後",
+        "odds": 7.5
+      },
+      "dark": {
+        "no": 1,
+        "name": "晨曦儷人",
+        "style": "中",
+        "odds": 24
+      }
+    },
+    {
+      "race": 8,
+      "class": "三班",
+      "distance": 1650,
+      "first": {
+        "no": 2,
+        "name": "幸運派彩",
+        "style": "前",
+        "odds": 7.3
+      },
+      "second": {
+        "no": 1,
+        "name": "一定超",
+        "style": "前",
+        "odds": 3.9
+      },
+      "third": {
+        "no": 4,
+        "name": "嘉應勇將",
+        "style": "前",
+        "odds": 5.7
+      },
+      "dark": {
+        "no": 3,
+        "name": "盈好威楓",
+        "style": "中",
+        "odds": 11
+      }
+    },
+    {
+      "race": 9,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 6,
+        "name": "盈妍威楓",
+        "style": "前",
+        "odds": 7.6
+      },
+      "second": {
+        "no": 7,
+        "name": "星運少爵",
+        "style": "中",
+        "odds": 5.8
+      },
+      "third": {
+        "no": 1,
+        "name": "志滿同行",
+        "style": "後",
+        "odds": 4
+      },
+      "dark": {
+        "no": 11,
+        "name": "勇霸龍",
+        "style": "中",
+        "odds": 12
+      }
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1800,
+      "no": 1,
+      "name": "獎星",
+      "style": "前",
+      "odds": 4.3
+    },
+    {
+      "race": 8,
+      "class": "三班",
+      "distance": 1650,
+      "no": 2,
+      "name": "幸運派彩",
+      "style": "前",
+      "odds": 7.3
+    },
+    {
+      "race": 6,
+      "class": "四班",
+      "distance": 1200,
+      "no": 10,
+      "name": "頑童",
+      "style": "前",
+      "odds": 5.2
+    }
+  ],
+  "dailyPicksHint": "(賠率低於2.5只作次選推介)",
+  "attackHot": {
+    "title": "🚫 是日攻擊熱門馬｜高危馬 0 隻｜中危馬 2 隻",
+    "summary": "高危攻擊馬建議放棄投注 | 中危攻擊馬建議減注50%",
+    "high": [],
+    "watch": [
+      {
+        "race": 6,
+        "no": 9,
+        "name": "後無來者",
+        "odds": 3.9,
+        "hits": 5,
+        "signals": [
+          "轉騎",
+          "上仗爆冷",
+          "升班",
+          "初騎",
+          "評分大升"
+        ]
+      },
+      {
+        "race": 8,
+        "no": 4,
+        "name": "嘉應勇將",
+        "odds": 5.7,
+        "hits": 5,
+        "signals": [
+          "增程",
+          "上仗爆冷入位",
+          "體重",
+          "冷人",
+          "入位冇加分"
+        ]
+      }
+    ],
+    "disclaimer": "僅供參考 · 非投注建議"
+  }
+}
