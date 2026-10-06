@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261006flying2';
+  const APP_DATA_VERSION = '20261006flying3';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1319,7 +1319,13 @@
         seen += 1;
         const cls = start ? ' class="fly-band-start"' : '';
         if (!(cat.appear > 0)) return '<td' + cls + '></td>';
-        return '<td' + cls + '>' + escapeHtml(wholeText(cat.hit) + '/' + wholeText(cat.appear)) + '</td>';
+        const hit = escapeHtml(wholeText(cat.hit));
+        const appear = escapeHtml(wholeText(cat.appear));
+        const ratio = cat.hit / cat.appear;
+        let hitHtml = hit;
+        if (ratio > 0.65) hitHtml = '<span class="pl-pos">' + hit + '</span>';
+        else if (ratio > 0.5) hitHtml = '<span class="wind-rate-mid">' + hit + '</span>';
+        return '<td' + cls + '>' + hitHtml + '/' + appear + '</td>';
       }).join('');
       const rankHtml = trainer.rank
         ? '<span class="fly-rank">' + escapeHtml(trainer.rank) + '</span> '
