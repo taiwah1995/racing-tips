@@ -713,6 +713,7 @@ body {
   -webkit-overflow-scrolling: touch;
 }
 .fly-table {
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: clamp(0.58rem, 2.7vw, 0.7rem);
   white-space: nowrap;
@@ -736,7 +737,8 @@ body {
 .fly-muted { color: #8b949e; }
 .fly-table thead tr:first-child th.fly-band,
 .fly-table thead tr:nth-child(2) th.fly-band-start,
-.fly-table tbody td.fly-band-start {
+.fly-table tbody td.fly-band-start,
+.fly-table .fly-split {
   border-left: 1px solid var(--border);
 }
 .fly-table .fly-name {
@@ -745,6 +747,9 @@ body {
   z-index: 1;
   text-align: left;
   background: var(--bg-card);
+  white-space: normal;
+  word-break: break-all;
+  overflow-wrap: anywhere;
 }
 .fly-table thead .fly-name {
   z-index: 2;
