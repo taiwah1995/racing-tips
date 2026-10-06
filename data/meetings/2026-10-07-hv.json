@@ -40,28 +40,28 @@
       "class": "四班",
       "distance": 1200,
       "first": {
+        "no": 10,
+        "name": "天下寵兒",
+        "style": "放",
+        "odds": 2.5
+      },
+      "second": {
         "no": 6,
         "name": "千杯敬典",
         "style": "前",
         "odds": 8.2
       },
-      "second": {
+      "third": {
         "no": 2,
         "name": "幸運愉快",
         "style": "中",
         "odds": 8.7
       },
-      "third": {
+      "dark": {
         "no": 5,
         "name": "環球英雄",
         "style": "前",
-        "odds": 12.0
-      },
-      "dark": {
-        "no": 4,
-        "name": "紅錢到",
-        "style": null,
-        "odds": 8.2
+        "odds": 12
       }
     },
     {
