@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261007hvresults';
+  const APP_DATA_VERSION = '20261007windtab2';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -980,7 +980,7 @@
     if (host) host.innerHTML = '';
     try {
       const [trainers, days] = await Promise.all([
-        loadWindSheet('馬房累計收風統計'),
+        loadWindSheet('馬房累計收風統計 2'),
         loadWindSheet('賽日累計收風統計'),
       ]);
       if (token !== windLoad || viewWind.hidden) return;
