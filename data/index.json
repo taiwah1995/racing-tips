@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-10-11-st",
+      "date": "2026-10-11",
+      "venue": "沙田",
+      "venueCode": "ST",
+      "raceCount": 11,
+      "label": null,
+      "file": "meetings/2026-10-11-st.json",
+      "banker": {
+        "race": 8,
+        "no": 11,
+        "name": "華麗再贏",
+        "odds": 3.6
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-10-07-hv",
       "date": "2026-10-07",
       "venue": "快活谷",
