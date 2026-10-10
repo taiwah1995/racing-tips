@@ -31,7 +31,7 @@
       "dark": {
         "no": 10,
         "name": "喜行",
-        "style": "放",
+        "style": "後",
         "odds": 15
       }
     },
@@ -48,13 +48,13 @@
       "second": {
         "no": 1,
         "name": "新力驕",
-        "style": "放",
+        "style": "後",
         "odds": 7.4
       },
       "third": {
         "no": 2,
         "name": "金風萬里",
-        "style": "放",
+        "style": "後",
         "odds": 5.5
       },
       "dark": {
@@ -118,7 +118,7 @@
       "dark": {
         "no": 8,
         "name": "肯佩斯",
-        "style": "放",
+        "style": "後",
         "odds": 25
       }
     },
@@ -141,7 +141,7 @@
       "third": {
         "no": 6,
         "name": "穿甲戰鷹",
-        "style": "放",
+        "style": "後",
         "odds": 10
       },
       "dark": {
@@ -170,7 +170,7 @@
       "third": {
         "no": 3,
         "name": "皇龍天將",
-        "style": "放",
+        "style": "後",
         "odds": 5.6
       },
       "dark": {
@@ -193,7 +193,7 @@
       "second": {
         "no": 3,
         "name": "活力精神",
-        "style": "放",
+        "style": "後",
         "odds": 2.4
       },
       "third": {
@@ -222,7 +222,7 @@
       "second": {
         "no": 1,
         "name": "旌採",
-        "style": "放",
+        "style": "後",
         "odds": 7.5
       },
       "third": {
@@ -234,7 +234,7 @@
       "dark": {
         "no": 7,
         "name": "勤德天下",
-        "style": "放",
+        "style": "後",
         "odds": 11
       }
     },
@@ -263,7 +263,7 @@
       "dark": {
         "no": 2,
         "name": "閃耀天河",
-        "style": "放",
+        "style": "後",
         "odds": 12
       }
     },
@@ -286,7 +286,7 @@
       "third": {
         "no": 2,
         "name": "泰坦",
-        "style": "放",
+        "style": "後",
         "odds": 4.5
       },
       "dark": {
