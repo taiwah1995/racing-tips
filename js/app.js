@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261010st1011';
+  const APP_DATA_VERSION = '20261011stresults';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -47,25 +47,43 @@
 
   /** Map tip horse number → place icon (🏆🥈🥉4️⃣) when result present. */
   const PLACE_ICON = { '冠': '🏆', '亞': '🥈', '季': '🥉', '殿': '4️⃣' };
+  const PLACE_SLOTS = [
+    ['w', '冠', 'place-w'],
+    ['2', '亞', 'place-2'],
+    ['3', '季', 'place-3'],
+    ['4', '殿', 'place-4'],
+  ];
   function placeIconFromLabel(label) {
     return PLACE_ICON[label] || '';
   }
-  function placeBadge(h, result) {
-    if (!h || !result) return '';
-    const no = Number(h.no);
-    const map = [
-      [result.w, '冠', 'place-w'],
-      [result['2'], '亞', 'place-2'],
-      [result['3'], '季', 'place-3'],
-      [result['4'], '殿', 'place-4'],
-    ];
-    for (const [finNo, label, cls] of map) {
-      if (finNo != null && Number(finNo) === no) {
-        const icon = placeIconFromLabel(label);
-        return `<span class="place-badge ${cls}" title="${label}" aria-label="${label}">${icon}</span>`;
+  /**
+   * Finish for a horse number. A slot is a number or an array of numbers (dead heat).
+   * Returns { key, label, cls } or null. 冠 is checked before 亞, 季, then 殿.
+   */
+  function positionOf(result, no) {
+    if (!result || typeof result !== 'object') return null;
+    const n = Number(no);
+    if (!Number.isFinite(n)) return null;
+    for (let s = 0; s < PLACE_SLOTS.length; s++) {
+      const key = PLACE_SLOTS[s][0];
+      const fin = result[key];
+      if (fin == null || fin === '') continue;
+      const nums = Array.isArray(fin) ? fin : [fin];
+      for (let i = 0; i < nums.length; i++) {
+        const item = nums[i];
+        if (item != null && item !== '' && Number(item) === n) {
+          return { key: key, label: PLACE_SLOTS[s][1], cls: PLACE_SLOTS[s][2] };
+        }
       }
     }
-    return '';
+    return null;
+  }
+  function placeBadge(h, result) {
+    if (!h || !result) return '';
+    const pos = positionOf(result, h.no);
+    if (!pos) return '';
+    const icon = placeIconFromLabel(pos.label);
+    return `<span class="place-badge ${pos.cls}" title="${pos.label}" aria-label="${pos.label}">${icon}</span>`;
   }
 
   /**
@@ -239,17 +257,8 @@
   }
 
   function placeLabelForNo(no, result) {
-    const n = Number(no);
-    const map = [
-      [result.w, '冠'],
-      [result['2'], '亞'],
-      [result['3'], '季'],
-      [result['4'], '殿'],
-    ];
-    for (const [fin, label] of map) {
-      if (fin != null && fin !== '' && Number(fin) === n) return label;
-    }
-    return null;
+    const pos = positionOf(result, no);
+    return pos ? pos.label : null;
   }
 
   /**
@@ -264,9 +273,9 @@
     const race = (meeting.tipsTable || []).find((row) => Number(row.race) === Number(banker.race));
     if (!race || !hasFinishResult(race.result)) return null;
     const no = Number(banker.no);
-    const winHit = Number(race.result.w) === no;
-    const placeHit = [race.result.w, race.result['2'], race.result['3']]
-      .some((fin) => fin != null && fin !== '' && Number(fin) === no);
+    const pos = positionOf(race.result, no);
+    const winHit = !!(pos && pos.key === 'w');
+    const placeHit = !!(pos && (pos.key === 'w' || pos.key === '2' || pos.key === '3'));
     const oddsWin = toOdds(banker.oddsWin);
     const oddsPlace = toOdds(banker.oddsPlace);
     if (winHit && oddsWin == null) return null;
