@@ -556,6 +556,9 @@ body {
   font-size: 0.95rem;
   white-space: pre;
 }
+#zhiwen123 .zw-horse {
+  color: var(--accent);
+}
 #zhiwen123 .pick-card .pc-race {
   display: block;
   margin-bottom: 6px;

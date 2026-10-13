@@ -730,9 +730,9 @@
 
   function zhiwenCardHtml(item) {
     const odds = item.odds != null && item.odds !== '' ? ' @' + escapeHtml(String(item.odds)) : '';
-    const line1 =
-      escapeHtml(item.race) + '場 ' + escapeHtml(item.no) + ' ' +
-      escapeHtml(item.name || '') + odds;
+    const horse =
+      '<span class="zw-horse">' + escapeHtml(item.no) + ' ' + escapeHtml(item.name || '') + '</span>';
+    const line1 = escapeHtml(item.race) + '場 ' + horse + odds;
     const hasStake = item.stake != null && item.stake !== '';
     const hasA12 = item.a12 != null && item.a12 !== '';
     let stakeLine = '';
