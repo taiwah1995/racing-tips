@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261013hv1014';
+  const APP_DATA_VERSION = '20261014zhiwen';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -579,6 +579,7 @@
     });
 
     renderAttackHot(meeting);
+    renderZhiwen123(meeting);
     renderMeetingFlying(meeting);
 
     window.scrollTo(0, 0);
@@ -705,6 +706,46 @@
       attackRowsHtml(groups) +
       note +
       '<p class="panel-hint">' + escapeHtml(disclaimer) + '</p>';
+  }
+
+  /** 智穩123, between attack-hot and 賽日有飛馬. Hidden when the meeting has no rows. */
+  function renderZhiwen123(meeting) {
+    const existing = document.getElementById('zhiwen123');
+    const rows = meeting && Array.isArray(meeting.zhiwen123) ? meeting.zhiwen123 : [];
+    const items = rows.filter((item) => item && typeof item === 'object');
+    if (!items.length) {
+      if (existing) existing.remove();
+      return;
+    }
+    const el = existing || document.createElement('section');
+    el.id = 'zhiwen123';
+    el.className = 'panel';
+    const attack = document.getElementById('attack-hot');
+    if (attack) attack.insertAdjacentElement('afterend', el);
+    else viewDetail.appendChild(el);
+    el.innerHTML =
+      '<h2 class="panel-title">🌟 智穩123</h2>' +
+      items.map(zhiwenCardHtml).join('');
+  }
+
+  function zhiwenCardHtml(item) {
+    const odds = item.odds != null && item.odds !== '' ? ' @' + escapeHtml(String(item.odds)) : '';
+    const horse =
+      '<span class="zw-horse">' + escapeHtml(item.no) + ' ' + escapeHtml(item.name || '') + '</span>';
+    const line1 = escapeHtml(item.race) + '場 ' + horse + odds;
+    const hasStake = item.stake != null && item.stake !== '';
+    const hasA12 = item.a12 != null && item.a12 !== '';
+    let stakeLine = '';
+    if (hasStake || hasA12) {
+      const stake = hasStake ? escapeHtml(String(item.stake)) : '';
+      const a12 = hasA12 ? escapeHtml(String(item.a12)) : '';
+      const body = stake && a12 ? stake + ' ' + a12 : (stake || a12);
+      stakeLine = '<div class="pc-note">投注：' + body + '</div>';
+    }
+    const reason = item.reason != null && item.reason !== ''
+      ? '<div class="pc-note">原因：' + escapeHtml(String(item.reason)) + '</div>'
+      : '';
+    return '<div class="pick-card"><div class="pc-race">' + line1 + '</div>' + stakeLine + reason + '</div>';
   }
 
   /* ---------- 收風 dashboard (live Google Sheet, nothing stored) ---------- */
