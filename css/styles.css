@@ -459,7 +459,8 @@ body {
   margin-top: -4px;
 }
 .panel-title .panel-hint-inline,
-.panel-title .daily-picks-hint {
+.panel-title .daily-picks-hint,
+.panel-title .panel-updated {
   display: inline;
   font-size: 0.72rem;
   font-weight: 500;
