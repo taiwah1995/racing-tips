@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261014hvresults';
+  const APP_DATA_VERSION = '20261015panelupd';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -43,6 +43,49 @@
   function formatShortDate(iso) {
     const [y, m, d] = iso.split('-');
     return `${y}-${m}-${d}`;
+  }
+
+  /** `更新：M/D` with no leading zero. Empty when the date cannot be read. */
+  function formatUpdateMD(isoOrDate) {
+    let month = null;
+    let day = null;
+    if (isoOrDate instanceof Date) {
+      if (Number.isNaN(isoOrDate.getTime())) return '';
+      month = isoOrDate.getMonth() + 1;
+      day = isoOrDate.getDate();
+    } else {
+      const raw = String(isoOrDate == null ? '' : isoOrDate).trim();
+      const iso = raw.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+      const serial = raw.match(/^Date\((\d+),(\d+),(\d+)\)$/);
+      if (iso) {
+        month = Number(iso[2]);
+        day = Number(iso[3]);
+      } else if (serial) {
+        month = Number(serial[2]) + 1;
+        day = Number(serial[3]);
+      }
+    }
+    if (!Number.isInteger(month) || !Number.isInteger(day)) return '';
+    if (month < 1 || month > 12 || day < 1 || day > 31) return '';
+    return '更新：' + month + '/' + day;
+  }
+
+  function panelUpdatedHtml(isoOrDate) {
+    const text = formatUpdateMD(isoOrDate);
+    return text ? '<span class="panel-updated">' + escapeHtml(text) + '</span>' : '';
+  }
+
+  /** One place that puts the update label after whatever title HTML is already there. */
+  function panelTitleHtml(innerHtml, isoOrDate) {
+    return '<h2 class="panel-title">' + innerHtml + panelUpdatedHtml(isoOrDate) + '</h2>';
+  }
+
+  function setHeadingUpdated(heading, isoOrDate) {
+    if (!heading) return;
+    const old = heading.querySelector('.panel-updated');
+    if (old) old.remove();
+    const html = panelUpdatedHtml(isoOrDate);
+    if (html) heading.insertAdjacentHTML('beforeend', html);
   }
 
   /** Map tip horse number → place icon (🏆🥈🥉4️⃣) when result present. */
@@ -343,7 +386,19 @@
     );
   }
 
+  function ledgerUpdateDate() {
+    const settled = settledRows.map((row) => row.date).filter(Boolean).sort();
+    if (settled.length) return settled[settled.length - 1];
+    const indexed = (indexData && indexData.meetings ? indexData.meetings : [])
+      .map((m) => m.date)
+      .filter(Boolean)
+      .sort();
+    return indexed.length ? indexed[indexed.length - 1] : '';
+  }
+
   function renderWpLedger() {
+    const heading = document.querySelector('#banker-wp-book .panel-title');
+    setHeadingUpdated(heading, ledgerUpdateDate());
     const el = document.getElementById('banker-wp-ledger');
     if (!el) return;
     const rows = settledMeetings(venueFilter, monthFilter);
@@ -485,6 +540,17 @@
       pageSub.textContent = '';
       pageSub.hidden = true;
     }
+
+    const tipsTable = document.getElementById('tips-table');
+    const dailyPicks = document.getElementById('daily-picks');
+    setHeadingUpdated(
+      tipsTable && tipsTable.closest('.panel') && tipsTable.closest('.panel').querySelector('.panel-title'),
+      meeting.date
+    );
+    setHeadingUpdated(
+      dailyPicks && dailyPicks.closest('.panel') && dailyPicks.closest('.panel').querySelector('.panel-title'),
+      meeting.date
+    );
 
     const meta = $('#detail-meta');
     if (meta) meta.innerHTML = '';
@@ -700,7 +766,7 @@
       '🚫 是日攻擊熱門馬｜<span class="attack-count">高危馬 ' + groups.high.length +
       ' 隻</span>｜<span class="attack-count">中危馬 ' + groups.mid.length + ' 隻</span>';
     el.innerHTML =
-      '<h2 class="panel-title">' + heading + '</h2>' +
+      panelTitleHtml(heading, meeting && meeting.date) +
       summary +
       attackRowsHtml(groups) +
       note +
@@ -772,6 +838,30 @@
     const fromLabel = String(label).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
     if (fromLabel) return (+fromLabel[3]) * 10000 + (+fromLabel[2]) * 100 + (+fromLabel[1]);
     return null;
+  }
+
+  function isoFromSortKey(key) {
+    const n = Number(key);
+    if (!Number.isFinite(n)) return '';
+    const year = Math.floor(n / 10000);
+    const month = Math.floor((n % 10000) / 100);
+    const day = n % 100;
+    if (year < 2000 || month < 1 || month > 12 || day < 1 || day > 31) return '';
+    return year + '-' + String(month).padStart(2, '0') + '-' + String(day).padStart(2, '0');
+  }
+
+  /** Newest race day on 賽日累計收風統計. Date(y,m,d) months are 0-based. */
+  function maxWindMeetingDate(table) {
+    let best = null;
+    (table && table.rows ? table.rows : []).forEach((row) => {
+      const cell = gvizCell(row, 1);
+      const label = cellText(cell).trim();
+      if (!label || isLabelRow(label)) return;
+      const key = dateSortKey(cell);
+      if (key == null) return;
+      if (best == null || key > best) best = key;
+    });
+    return best == null ? '' : isoFromSortKey(best);
   }
 
   function isLabelRow(text) {
@@ -903,7 +993,7 @@
     return picks;
   }
 
-  function windPickHtml(picks) {
+  function windPickHtml(picks, updated) {
     const splitGroups = picks.some((pick) => pick.kind === '大風') &&
       picks.some((pick) => pick.kind === '有風');
     let splitMarked = false;
@@ -926,14 +1016,14 @@
         '</tr>';
     }).join('');
     return '<section class="panel" id="wind-picks">' +
-      '<h2 class="panel-title">風向組合推介</h2>' +
+      panelTitleHtml('風向組合推介', updated) +
       '<div class="wind-scroll">' +
       '<table class="wind-pick">' +
       '<thead><tr><th>馬房</th><th>風類</th><th>隻數</th><th>命中</th><th>Win</th><th>Place</th><th>Lose</th><th>三甲%</th></tr></thead>' +
       '<tbody>' + body + '</tbody></table></div></section>';
   }
 
-  function windTableHtml(title, nameHeader, rows) {
+  function windTableHtml(title, nameHeader, rows, updated) {
     const groupHeads = WIND_GROUPS.map((name) => '<th class="wind-group" colspan="4">' + name + '</th>').join('');
     const subHeads = WIND_GROUPS.map(() => '<th>Win</th><th>Place</th><th>Lose</th><th>三甲%</th>').join('');
     const body = rows.map((row) => {
@@ -950,7 +1040,7 @@
         '</tr>';
     }).join('');
     return '<section class="panel">' +
-      '<h2 class="panel-title">' + escapeHtml(title) + '</h2>' +
+      panelTitleHtml(escapeHtml(title), updated) +
       '<div class="wind-scroll">' +
       '<table class="wind-table">' +
       '<thead><tr>' +
@@ -994,10 +1084,11 @@
       ]);
       if (token !== windLoad || viewWind.hidden) return;
       if (host) {
+        const updated = maxWindMeetingDate(days);
         host.innerHTML =
-          windPickHtml(windPickRows(trainers)) +
-          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers)) +
-          windTableHtml('賽日累計收風統計', '賽日', meetingRows(days));
+          windPickHtml(windPickRows(trainers), updated) +
+          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers), updated) +
+          windTableHtml('賽日累計收風統計', '賽日', meetingRows(days), updated);
       }
       if (status) status.hidden = true;
     } catch (err) {
@@ -1020,6 +1111,7 @@
   let flyingLoad = 0;
   let flyingSeasons = { now: [], prev: [] };
   let flyingSeason = 'now';
+  let flyingSheetDate = '';
 
   async function loadGvizTable(sheetName, extraParams) {
     const res = await fetch(windSheetUrl(sheetName, extraParams));
@@ -1032,6 +1124,18 @@
   function flyingColsOk(table) {
     const labels = (table.cols || []).map((col) => String(col.label || '').trim());
     return labels.includes('馬名') && labels.includes('練馬師');
+  }
+
+  /** Newest 日期 on 賽日有飛馬. Used for 賠率啟示錄, which has no sheet date of its own. */
+  function maxFlyingSheetDate(table) {
+    if (!flyingColsOk(table)) return '';
+    let best = '';
+    parseFlyingHorses(table).forEach((horse) => {
+      const date = String(horse.date || '').trim();
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
+      if (date > best) best = date;
+    });
+    return best;
   }
 
   function normalizeFlyingDate(cell) {
@@ -1301,16 +1405,16 @@
 
   function flyingPicksHtml(table) {
     if (!flyingColsOk(table)) {
-      return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
+      return '<section class="panel">' + panelTitleHtml('賽日推介', '') +
         '<p class="empty">未能讀取賽日有飛馬</p></section>';
     }
     const meetings = flyingMeetings(parseFlyingHorses(table));
     const meeting = meetings[0];
     if (!meeting) {
-      return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
+      return '<section class="panel">' + panelTitleHtml('賽日推介', '') +
         '<p class="empty">暫未有飛馬名單</p></section>';
     }
-    return '<section class="panel"><h2 class="panel-title">賽日推介</h2>' +
+    return '<section class="panel">' + panelTitleHtml('賽日推介', meeting.date) +
       flyingPickLegendHtml() +
       '<section class="fly-meet is-open">' +
       '<div class="fly-meet-head">' +
@@ -1329,11 +1433,11 @@
     return horse.date === date && horse.venue === venue;
   }
 
-  function flyingMeetingPanelHtml(horses) {
+  function flyingMeetingPanelHtml(horses, date) {
     const stats = flyingMeetings(horses)[0];
     const hit = stats ? flyingHitHtml(stats) : '';
     return '<section class="panel" id="meeting-flying">' +
-      '<h2 class="panel-title">賽日有飛馬</h2>' +
+      panelTitleHtml('賽日有飛馬', date) +
       (hit ? '<div class="fly-hit-line">' + hit + '</div>' : '') +
       flyingPickLegendHtml() +
       flyingRaceCardsHtml(horses) +
@@ -1356,7 +1460,7 @@
       if (!horses.length) return;
       const again = document.getElementById('meeting-flying');
       if (again) again.remove();
-      viewDetail.insertAdjacentHTML('beforeend', flyingMeetingPanelHtml(horses));
+      viewDetail.insertAdjacentHTML('beforeend', flyingMeetingPanelHtml(horses, meeting.date));
     }).catch(() => {});
   }
 
@@ -1514,7 +1618,7 @@
       ? flyingTrainerTable(trainers)
       : '<p class="empty">暫未有練馬師資料</p>';
     return '<section class="panel" id="fly-trainers">' +
-      '<h2 class="panel-title">賠率啟示錄</h2>' +
+      panelTitleHtml('賠率啟示錄', flyingSheetDate) +
       '<div class="fly-seasons" role="tablist">' +
       '<button type="button" class="tab' + nowActive + '" data-fly-season="now">2026-27</button>' +
       '<button type="button" class="tab' + prevActive + '" data-fly-season="prev">2025-26</button>' +
@@ -1576,12 +1680,13 @@
         now: nowResult.status === 'fulfilled' ? parseFlyingTrainers(nowResult.value) : [],
         prev: prevResult.status === 'fulfilled' ? parseFlyingTrainers(prevResult.value) : [],
       };
+      flyingSheetDate = flyResult.status === 'fulfilled' ? maxFlyingSheetDate(flyResult.value) : '';
       const picks = flyResult.status === 'fulfilled'
         ? flyingPicksHtml(flyResult.value)
-        : '<section class="panel"><h2 class="panel-title">賽日推介</h2><p class="empty">未能讀取賽日有飛馬</p></section>';
+        : '<section class="panel">' + panelTitleHtml('賽日推介', '') + '<p class="empty">未能讀取賽日有飛馬</p></section>';
       const trainers = (nowResult.status === 'fulfilled' || prevResult.status === 'fulfilled')
         ? flyingTrainerHtml()
-        : '<section class="panel"><h2 class="panel-title">賠率啟示錄</h2><p class="empty">未能讀取賠率啟示錄</p></section>';
+        : '<section class="panel">' + panelTitleHtml('賠率啟示錄', flyingSheetDate) + '<p class="empty">未能讀取賠率啟示錄</p></section>';
       if (host) host.innerHTML = picks + trainers;
       if (status) status.hidden = true;
     } catch (err) {
