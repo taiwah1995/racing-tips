@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261016combo';
+  const APP_DATA_VERSION = '20261016combo2';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1704,13 +1704,14 @@
     }
   }
 
-  /* ---------- 練騎合作 (live sheet, nothing stored) ---------- */
+  /* ---------- 練騎合作 (live sheet + data/combo-seq.json) ---------- */
   const COMBO_NOW = '26-27';
   const COMBO_PREV = '25-26';
   const COMBO_JOCKEY_GID = '560967743';
   const COMBO_TRAINER_GID = '903424869';
   let comboLoad = 0;
   let comboMap = null;
+  let comboSeq = null;
   let comboMode = 'trainer';
   let comboMinN = 5;
   let comboQuery = '';
@@ -1749,6 +1750,9 @@
     const index = comboColIndex(table);
     const need = ['年度', '騎師', '練', '出賽', '勝出%', '上名%'];
     if (need.some((key) => index[key] == null)) return [];
+    const firstI = index['冠'];
+    const secondI = index['亞'];
+    const thirdI = index['季'];
     const out = [];
     (table.rows || []).forEach((row) => {
       const season = cellText(gvizCell(row, index['年度'])).trim();
@@ -1760,7 +1764,17 @@
       const win = comboNum(gvizCell(row, index['勝出%']));
       const place = comboNum(gvizCell(row, index['上名%']));
       if (n == null || win == null || place == null) return;
-      out.push({ season: season, jockey: jockey, trainer: trainer, n: n, win: win, place: place });
+      out.push({
+        season: season,
+        jockey: jockey,
+        trainer: trainer,
+        n: n,
+        win: win,
+        place: place,
+        first: firstI == null ? null : comboNum(gvizCell(row, firstI)),
+        second: secondI == null ? null : comboNum(gvizCell(row, secondI)),
+        third: thirdI == null ? null : comboNum(gvizCell(row, thirdI)),
+      });
     });
     return out;
   }
@@ -1801,6 +1815,58 @@
   function comboPairText(row) {
     if (comboMode === 'jockey') return row.jockey + ' · ' + row.trainer;
     return row.trainer + ' · ' + row.jockey;
+  }
+
+  /** trainer short | jockey full name, same key as data/combo-seq.json. */
+  function comboSeqFor(row) {
+    if (!row || !comboSeq || !comboSeq.pairs) return null;
+    const entry = comboSeq.pairs[row.trainer + '|' + row.jockey];
+    return entry && typeof entry === 'object' ? entry : null;
+  }
+
+  /** `` | 隔 x 次未上名 | 近10次成績：WWXP`` — empty when this pair was not fetched. */
+  function comboSeqSuffix(row) {
+    const entry = comboSeqFor(row);
+    if (!entry) return '';
+    const seq = String(entry.seq || '');
+    if (!/^[WPX]+$/.test(seq)) return '';
+    if (entry.gap == null || entry.gap === '') return '';
+    const gap = Number(entry.gap);
+    if (!Number.isFinite(gap) || gap < 0) return '';
+    return ' | 隔 ' + Math.round(gap) + ' 次未上名 | 近10次成績：' + seq;
+  }
+
+  function comboPairTitleHtml(row) {
+    return escapeHtml(comboPairText(row) + comboSeqSuffix(row));
+  }
+
+  function comboFinishCount(value) {
+    if (value == null || !Number.isFinite(value)) return null;
+    return Math.round(value);
+  }
+
+  function comboSuccessStatsHtml(row) {
+    const wins = comboFinishCount(row.first);
+    const second = comboFinishCount(row.second);
+    const third = comboFinishCount(row.third);
+    const placed = wins != null && second != null && third != null ? wins + second + third : null;
+    const winCount = wins != null ? ' (' + wins + '場)' : '';
+    const placeCount = placed != null ? ' (' + placed + '場)' : '';
+    return 'Win ' + comboRateHtml(row.win) + winCount +
+      ' · Place ' + comboRateHtml(row.place) + placeCount +
+      ' · 合作 ' + escapeHtml(comboCountText(row.n)) + ' 場';
+  }
+
+  /** Min–max 獨贏 of races this pair won. Omitted when either side is missing. */
+  function comboWinOddsHtml(row) {
+    const entry = comboSeqFor(row);
+    if (!entry || entry.winOddsMin == null || entry.winOddsMax == null) return '';
+    const min = Number(entry.winOddsMin);
+    const max = Number(entry.winOddsMax);
+    if (!Number.isFinite(min) || !Number.isFinite(max)) return '';
+    const fmt = (n) => (Math.round(n * 10) / 10).toFixed(1);
+    return '<div class="combo-odds">合作勝出頭馬獨贏區間 ' +
+      escapeHtml(fmt(min) + ' - ' + fmt(max) + '倍') + '</div>';
   }
 
   function comboSuccessRows(map) {
@@ -1865,11 +1931,10 @@
         ? '<span class="combo-badge combo-badge-soft">樣本細</span>'
         : '';
       return '<div class="combo-card">' +
-        '<div class="combo-pair">' + escapeHtml(comboPairText(row)) +
+        '<div class="combo-pair">' + comboPairTitleHtml(row) +
         '<span class="combo-badge">熱</span>' + small + '</div>' +
-        '<div class="combo-stats">n ' + escapeHtml(comboCountText(row.n)) +
-        ' · 勝出 ' + comboRateHtml(row.win) +
-        ' · 上名 ' + comboRateHtml(row.place) + '</div></div>';
+        '<div class="combo-stats">' + comboSuccessStatsHtml(row) + '</div>' +
+        comboWinOddsHtml(row) + '</div>';
     }).join('');
   }
 
@@ -1878,10 +1943,10 @@
     if (!rows.length) return '<p class="combo-empty">未有符合的落後組合</p>';
     return rows.map((row) => {
       return '<div class="combo-card">' +
-        '<div class="combo-pair">' + escapeHtml(comboPairText(row.now)) + '</div>' +
+        '<div class="combo-pair">' + comboPairTitleHtml(row.now) + '</div>' +
         '<div class="combo-drop">上名 ' + comboRateHtml(row.prev.place) + '→' + comboRateHtml(row.now.place) +
         ' · 勝出 ' + comboRateHtml(row.prev.win) + '→' + comboRateHtml(row.now.win) +
-        ' · n ' + escapeHtml(comboCountText(row.prev.n)) + '→' + escapeHtml(comboCountText(row.now.n)) +
+        ' · 場數 ' + escapeHtml(comboCountText(row.prev.n)) + '→' + escapeHtml(comboCountText(row.now.n)) +
         '</div></div>';
     }).join('');
   }
@@ -1921,20 +1986,20 @@
     if (rank) rank.innerHTML = comboRankHtml(comboMap);
   }
 
-  function comboShell() {
+  function comboShell(updated) {
     const trainerActive = comboMode !== 'jockey' ? ' active' : '';
     const jockeyActive = comboMode === 'jockey' ? ' active' : '';
     return '<div class="combo-modes" role="tablist">' +
       '<button type="button" class="tab' + trainerActive + '" data-combo-mode="trainer">練騎</button>' +
       '<button type="button" class="tab' + jockeyActive + '" data-combo-mode="jockey">騎練</button>' +
       '</div>' +
-      '<section class="panel">' + panelTitleHtml('要注意 · 成功組合（今季 26-27）', '') +
-      '<p class="combo-note">n≥5 · 勝出≥20% · 上名≥45%</p>' +
+      '<section class="panel" id="combo-success-panel">' + panelTitleHtml('要注意 · 成功組合（今季 26-27）', updated) +
+      '<p class="combo-note">場數≥5 · 勝出≥20% · 上名≥45%</p>' +
       '<div id="combo-success"></div></section>' +
-      '<section class="panel">' + panelTitleHtml('可追落後', '') +
+      '<section class="panel" id="combo-chase-panel">' + panelTitleHtml('可追落後', updated) +
       '<p class="combo-note">上季 25-26 → 今季 26-27</p>' +
       '<div id="combo-chase"></div></section>' +
-      '<section class="panel">' + panelTitleHtml('完整排名表（今季）', '') +
+      '<section class="panel" id="combo-rank-panel">' + panelTitleHtml('完整排名表（今季）', updated) +
       '<div class="combo-tools">' +
       '<label class="combo-field">最少出賽 <input id="combo-min" type="number" min="0" step="1" value="' + escapeAttr(String(comboMinN)) + '"></label>' +
       '<input id="combo-q" type="search" placeholder="騎師或練馬師" value="' + escapeAttr(comboQuery) + '">' +
@@ -1991,6 +2056,19 @@
     });
   }
 
+  async function loadComboSeq() {
+    try {
+      const res = await fetch(dataUrl('combo-seq.json'));
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!data || typeof data.pairs !== 'object' || data.pairs == null) return null;
+      return data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
   async function renderCombo() {
     const token = ++comboLoad;
     viewHome.hidden = true;
@@ -2012,9 +2090,10 @@
     if (host) host.innerHTML = '';
     bindComboOnce();
     try {
-      const [jockeyRes, trainerRes] = await Promise.all([
+      const [jockeyRes, trainerRes, seq] = await Promise.all([
         fetch(comboSheetUrl(COMBO_JOCKEY_GID)),
         fetch(comboSheetUrl(COMBO_TRAINER_GID)),
+        loadComboSeq(),
       ]);
       if (!jockeyRes.ok || !trainerRes.ok) throw new Error('無法載入練騎合作');
       const jockeyData = parseGviz(await jockeyRes.text());
@@ -2022,8 +2101,9 @@
       if (!jockeyData.table || !trainerData.table) throw new Error('無法載入練騎合作');
       if (token !== comboLoad || viewCombo.hidden) return;
       comboMap = buildComboMap(trainerData.table, jockeyData.table);
+      comboSeq = seq;
       if (host) {
-        host.innerHTML = comboShell();
+        host.innerHTML = comboShell(seq && seq.updated);
         paintComboPanels();
       }
       if (status) status.hidden = true;
