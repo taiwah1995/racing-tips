@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261016combo2';
+  const APP_DATA_VERSION = '20261016combo3';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1824,8 +1824,17 @@
     return entry && typeof entry === 'object' ? entry : null;
   }
 
-  /** `` | 隔 x 次未上名 | 近10次成績：WWXP`` — empty when this pair was not fetched. */
-  function comboSeqSuffix(row) {
+  /** W green, P yellow, X unchanged. Sequence is already limited to those letters. */
+  function comboSeqLettersHtml(seq) {
+    return seq.split('').map((ch) => {
+      if (ch === 'W') return '<span class="combo-pos">W</span>';
+      if (ch === 'P') return '<span class="combo-mid">P</span>';
+      return 'X';
+    }).join('');
+  }
+
+  /** `` | 隔 x 次未上名 | 近10次：WWXP`` — empty when this pair was not fetched. */
+  function comboSeqSuffixHtml(row) {
     const entry = comboSeqFor(row);
     if (!entry) return '';
     const seq = String(entry.seq || '');
@@ -1833,11 +1842,12 @@
     if (entry.gap == null || entry.gap === '') return '';
     const gap = Number(entry.gap);
     if (!Number.isFinite(gap) || gap < 0) return '';
-    return ' | 隔 ' + Math.round(gap) + ' 次未上名 | 近10次成績：' + seq;
+    return '<span class="combo-seq"> | 隔 ' + Math.round(gap) +
+      ' 次未上名 | 近10次：' + comboSeqLettersHtml(seq) + '</span>';
   }
 
   function comboPairTitleHtml(row) {
-    return escapeHtml(comboPairText(row) + comboSeqSuffix(row));
+    return escapeHtml(comboPairText(row)) + comboSeqSuffixHtml(row);
   }
 
   function comboFinishCount(value) {
