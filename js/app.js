@@ -1855,15 +1855,25 @@
     return Math.round(value);
   }
 
+  /** Share of 出賽, as a 0–100 rate. Null when a count or the denominator is missing. */
+  function comboSharePct(count, starts) {
+    if (count == null || !Number.isFinite(starts) || !(starts > 0)) return null;
+    return (count / starts) * 100;
+  }
+
+  /**
+   * Win = 冠/出賽. Place = (亞+季)/出賽, wins excluded.
+   * Selection still uses the sheet 勝出% / 上名% columns.
+   */
   function comboSuccessStatsHtml(row) {
     const wins = comboFinishCount(row.first);
     const second = comboFinishCount(row.second);
     const third = comboFinishCount(row.third);
-    const placed = wins != null && second != null && third != null ? wins + second + third : null;
+    const placed = second != null && third != null ? second + third : null;
     const winCount = wins != null ? ' (' + wins + '場)' : '';
     const placeCount = placed != null ? ' (' + placed + '場)' : '';
-    return 'Win ' + comboRateHtml(row.win) + winCount +
-      ' · Place ' + comboRateHtml(row.place) + placeCount +
+    return 'Win ' + comboRateHtml(comboSharePct(wins, row.n)) + winCount +
+      ' · Place ' + comboRateHtml(comboSharePct(placed, row.n)) + placeCount +
       ' · 合作 ' + escapeHtml(comboCountText(row.n)) + ' 場';
   }
 
