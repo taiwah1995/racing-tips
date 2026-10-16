@@ -1862,7 +1862,7 @@
   }
 
   /**
-   * Win = 冠/出賽. Place = (亞+季)/出賽, wins excluded.
+   * Win = 冠/出賽. 上名 = (亞+季)/出賽, wins excluded.
    * Selection still uses the sheet 勝出% / 上名% columns.
    */
   function comboSuccessStatsHtml(row) {
@@ -1873,7 +1873,7 @@
     const winCount = wins != null ? ' (' + wins + '場)' : '';
     const placeCount = placed != null ? ' (' + placed + '場)' : '';
     return 'Win ' + comboRateHtml(comboSharePct(wins, row.n)) + winCount +
-      ' · Place ' + comboRateHtml(comboSharePct(placed, row.n)) + placeCount +
+      ' · 上名 ' + comboRateHtml(comboSharePct(placed, row.n)) + placeCount +
       ' · 合作 ' + escapeHtml(comboCountText(row.n)) + ' 場';
   }
 
