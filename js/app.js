@@ -1855,25 +1855,19 @@
     return Math.round(value);
   }
 
-  /** Share of 出賽, as a 0–100 rate. Null when a count or the denominator is missing. */
-  function comboSharePct(count, starts) {
-    if (count == null || !Number.isFinite(starts) || !(starts > 0)) return null;
-    return (count / starts) * 100;
-  }
-
   /**
-   * Win = 冠/出賽. 上名 = (亞+季)/出賽, wins excluded.
-   * Selection still uses the sheet 勝出% / 上名% columns.
+   * Win rate is the sheet 勝出%, count is 冠.
+   * 上名 rate is the sheet 上名%, count is 冠+亞+季.
    */
   function comboSuccessStatsHtml(row) {
     const wins = comboFinishCount(row.first);
     const second = comboFinishCount(row.second);
     const third = comboFinishCount(row.third);
-    const placed = second != null && third != null ? second + third : null;
+    const top3 = wins != null && second != null && third != null ? wins + second + third : null;
     const winCount = wins != null ? ' (' + wins + '場)' : '';
-    const placeCount = placed != null ? ' (' + placed + '場)' : '';
-    return 'Win ' + comboRateHtml(comboSharePct(wins, row.n)) + winCount +
-      ' · 上名 ' + comboRateHtml(comboSharePct(placed, row.n)) + placeCount +
+    const top3Count = top3 != null ? ' (' + top3 + '場)' : '';
+    return 'Win ' + comboRateHtml(row.win) + winCount +
+      ' · 上名 ' + comboRateHtml(row.place) + top3Count +
       ' · 合作 ' + escapeHtml(comboCountText(row.n)) + ' 場';
   }
 
