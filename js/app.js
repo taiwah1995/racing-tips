@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261016combo3';
+  const APP_DATA_VERSION = '20261016combo6';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -778,6 +778,7 @@
 
   /* ---------- 收風 dashboard (live Google Sheet, nothing stored) ---------- */
   const WIND_SHEET_ID = '10vr-9Huqp6UyBJMDtRUKmjhMi_0TP0wjlYEv9ZI55co';
+  const WIND_DAY_GID = '1708201936';
   const WIND_GROUPS = ['大風', '有風', '位置風', '食糊位', '其他'];
   let windLoad = 0;
 
@@ -1062,6 +1063,63 @@
     return data.table;
   }
 
+  /**
+   * gviz types the 賽日 column as date and returns null for any date typed in as
+   * text (e.g. 11/10/2026, 14/10/2026), so those race days vanished and 「更新」
+   * stuck on the last real date cell. The untyped CSV export keeps them; fill only
+   * blank date cells, matched by the row number in column A.
+   */
+  function parseSimpleCsv(text) {
+    const rows = [];
+    let row = [];
+    let cell = '';
+    let quoted = false;
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (quoted) {
+        if (ch === '"' && text[i + 1] === '"') { cell += '"'; i++; }
+        else if (ch === '"') quoted = false;
+        else cell += ch;
+      } else if (ch === '"') quoted = true;
+      else if (ch === ',') { row.push(cell); cell = ''; }
+      else if (ch === '\n' || ch === '\r') {
+        if (ch === '\r' && text[i + 1] === '\n') i++;
+        row.push(cell); rows.push(row); row = []; cell = '';
+      } else cell += ch;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows;
+  }
+
+  async function fillWindDayDates(table, sheetGid) {
+    if (!table || !table.rows) return table;
+    const missing = table.rows.some((row) => {
+      const no = cellText(gvizCell(row, 0)).trim();
+      return /^\d+$/.test(no) && !cellText(gvizCell(row, 1)).trim() && cellText(gvizCell(row, 2)).trim();
+    });
+    if (!missing) return table;
+    try {
+      const url = 'https://docs.google.com/spreadsheets/d/' + WIND_SHEET_ID +
+        '/export?format=csv&gid=' + encodeURIComponent(sheetGid) + '&t=' + Date.now();
+      const res = await fetch(url);
+      if (!res.ok) return table;
+      const byNo = {};
+      parseSimpleCsv(await res.text()).forEach((cols) => {
+        const no = String(cols[0] || '').trim();
+        const date = String(cols[1] || '').trim();
+        if (/^\d+$/.test(no) && /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(date)) byNo[no] = date;
+      });
+      table.rows.forEach((row) => {
+        const no = cellText(gvizCell(row, 0)).trim();
+        if (!row.c || !byNo[no] || cellText(gvizCell(row, 1)).trim()) return;
+        row.c[1] = { v: byNo[no], f: byNo[no] };
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    return table;
+  }
+
   async function renderWind() {
     const token = ++windLoad;
     viewHome.hidden = true;
@@ -1084,7 +1142,7 @@
     try {
       const [trainers, days] = await Promise.all([
         loadWindSheet('馬房累計收風統計 2'),
-        loadWindSheet('賽日累計收風統計'),
+        loadWindSheet('賽日累計收風統計').then((t) => fillWindDayDates(t, WIND_DAY_GID)),
       ]);
       if (token !== windLoad || viewWind.hidden) return;
       if (host) {
@@ -1707,6 +1765,12 @@
   /* ---------- 練騎合作 (live sheet + data/combo-seq.json) ---------- */
   const COMBO_NOW = '26-27';
   const COMBO_PREV = '25-26';
+  const COMBO_PREV2 = '24-25';
+  const COMBO_SEASONS = [
+    { id: COMBO_NOW, label: '今季 26-27' },
+    { id: COMBO_PREV, label: '上季 25-26' },
+    { id: COMBO_PREV2, label: '前季 24-25' },
+  ];
   const COMBO_JOCKEY_GID = '560967743';
   const COMBO_TRAINER_GID = '903424869';
   let comboLoad = 0;
@@ -1717,6 +1781,16 @@
   let comboQuery = '';
   let comboSort = 'place';
   let comboCompare = false;
+  let comboSeason = COMBO_NOW;
+
+  function comboSeasonLabel(id) {
+    const hit = COMBO_SEASONS.find((s) => s.id === id);
+    return hit ? hit.label : COMBO_SEASONS[0].label;
+  }
+
+  function comboSuccessTitleText() {
+    return '要注意 · 成功組合（' + comboSeasonLabel(comboSeason) + '）';
+  }
 
   function comboSheetUrl(gid) {
     const q = new URLSearchParams({
@@ -1756,7 +1830,7 @@
     const out = [];
     (table.rows || []).forEach((row) => {
       const season = cellText(gvizCell(row, index['年度'])).trim();
-      if (season !== COMBO_NOW && season !== COMBO_PREV) return;
+      if (season !== COMBO_NOW && season !== COMBO_PREV && season !== COMBO_PREV2) return;
       const jockey = cellText(gvizCell(row, index['騎師'])).trim();
       const trainer = cellText(gvizCell(row, index['練'])).trim();
       if (!jockey || !trainer) return;
@@ -1846,7 +1920,12 @@
       ' 次未上名 | 近10次：' + comboSeqLettersHtml(seq) + '</span>';
   }
 
+  /** combo-seq.json is current-season only: past seasons show 「—」. */
   function comboPairTitleHtml(row) {
+    if (row.season !== COMBO_NOW) {
+      return escapeHtml(comboPairText(row)) +
+        '<span class="combo-seq"> | 隔 — 次未上名 | 近10次：—</span>';
+    }
     return escapeHtml(comboPairText(row)) + comboSeqSuffixHtml(row);
   }
 
@@ -1873,6 +1952,7 @@
 
   /** Min–max 獨贏 of races this pair won. Omitted when either side is missing. */
   function comboWinOddsHtml(row) {
+    if (row.season !== COMBO_NOW) return '<div class="combo-odds">合作勝出頭馬獨贏區間 —</div>';
     const entry = comboSeqFor(row);
     if (!entry || entry.winOddsMin == null || entry.winOddsMax == null) return '';
     const min = Number(entry.winOddsMin);
@@ -1886,7 +1966,7 @@
   function comboSuccessRows(map) {
     const rows = [];
     map.forEach((row) => {
-      if (row.season !== COMBO_NOW) return;
+      if (row.season !== comboSeason) return;
       if (row.n >= 5 && row.win >= 20 && row.place >= 45) rows.push(row);
     });
     rows.sort((a, b) => b.place - a.place || b.win - a.win || b.n - a.n);
@@ -1996,6 +2076,8 @@
     const chase = document.getElementById('combo-chase');
     const rank = document.getElementById('combo-rank-body');
     if (success) success.innerHTML = comboSuccessHtml(comboMap);
+    const successTitle = document.getElementById('combo-success-title');
+    if (successTitle) successTitle.textContent = comboSuccessTitleText();
     if (chase) chase.innerHTML = comboChaseHtml(comboMap);
     if (rank) rank.innerHTML = comboRankHtml(comboMap);
   }
@@ -2007,7 +2089,11 @@
       '<button type="button" class="tab' + trainerActive + '" data-combo-mode="trainer">練騎</button>' +
       '<button type="button" class="tab' + jockeyActive + '" data-combo-mode="jockey">騎練</button>' +
       '</div>' +
-      '<section class="panel" id="combo-success-panel">' + panelTitleHtml('要注意 · 成功組合（今季 26-27）', updated) +
+      '<section class="panel" id="combo-success-panel">' + panelTitleHtml('<span id="combo-success-title">' + escapeHtml(comboSuccessTitleText()) + '</span>', updated) +
+      '<div class="combo-tools">' +
+      '<label class="combo-field">季度 <select id="combo-season">' +
+      COMBO_SEASONS.map((s) => '<option value="' + escapeAttr(s.id) + '"' + (s.id === comboSeason ? ' selected' : '') + '>' + escapeHtml(s.label) + '</option>').join('') +
+      '</select></label></div>' +
       '<p class="combo-note">場數≥5 · 勝出≥20% · 上名≥45%</p>' +
       '<div id="combo-success"></div></section>' +
       '<section class="panel" id="combo-chase-panel">' + panelTitleHtml('可追落後', updated) +
@@ -2041,6 +2127,10 @@
     }
     if (target.id === 'combo-sort') {
       comboSort = target.value === 'win' ? 'win' : 'place';
+      return true;
+    }
+    if (target.id === 'combo-season') {
+      comboSeason = COMBO_SEASONS.some((s) => s.id === target.value) ? target.value : COMBO_NOW;
       return true;
     }
     if (target.id === 'combo-cmp') {
