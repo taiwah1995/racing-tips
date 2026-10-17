@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football3';
+  const APP_DATA_VERSION = '20261018football4';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3244,6 +3244,141 @@
     return { team: team, market: market };
   }
 
+  function footballNameKey(name) {
+    return String(name || '')
+      .replace(/[（(][^）)]*[）)]/g, '')
+      .replace(/\s+/g, '')
+      .toLowerCase();
+  }
+
+  /** Home or away when the pick name sits inside exactly one side of 場次. */
+  function footballSideOf(match, team) {
+    const parts = String(match || '').split(/\s+(?:vs|VS|對)\s+/);
+    if (parts.length < 2) return '';
+    const home = footballNameKey(parts[0]);
+    const away = footballNameKey(parts[1]);
+    const needle = footballNameKey(team);
+    if (needle.length < 2 || !home || !away) return '';
+    const homeHit = home.indexOf(needle) >= 0 || needle.indexOf(home) >= 0;
+    const awayHit = away.indexOf(needle) >= 0 || needle.indexOf(away) >= 0;
+    if (homeHit && !awayHit) return 'H';
+    if (awayHit && !homeHit) return 'A';
+    return '';
+  }
+
+  /**
+   * Signed Asian line from the picked team's point of view.
+   * 受 is positive, 讓 is negative, 平手 is 0. Null when the line is not explicit.
+   */
+  function footballAsianLine(text) {
+    const src = String(text || '').replace(/\s+/g, '').replace(/／/g, '/');
+    const tokens = [
+      ['兩球半/三', 2.75], ['兩/兩球半', 2.25], ['球半/兩球', 1.75], ['球半/兩', 1.75],
+      ['一/球半', 1.25], ['兩球半', 2.5], ['球半', 1.5], ['半/一', 0.75], ['平/半', 0.25],
+      ['三球', 3], ['兩球', 2], ['一球', 1], ['半球', 0.5], ['平手', 0]
+    ];
+    let at = -1;
+    let line = null;
+    let token = '';
+    tokens.forEach((pair) => {
+      const found = src.indexOf(pair[0]);
+      if (found < 0) return;
+      if (at < 0 || found < at || (found === at && pair[0].length > token.length)) {
+        at = found;
+        line = pair[1];
+        token = pair[0];
+      }
+    });
+    if (at < 0) {
+      const num = src.match(/(讓|受)(\d+(?:\.\d+)?)(?!X2)/);
+      if (!num || /讓球主客和/.test(src)) return null;
+      return (num[1] === '受' ? 1 : -1) * Number(num[2]);
+    }
+    if (line === 0) return 0;
+    const before = src.slice(0, at);
+    const receive = /受[^受讓]*$/.test(before) || src.indexOf('受') >= 0 && src.indexOf('讓') < 0;
+    const give = /讓[^受讓]*$/.test(before) || src.indexOf('讓') >= 0 && src.indexOf('受') < 0;
+    if (receive && !give) return line;
+    if (give && !receive) return -line;
+    return null;
+  }
+
+  function footballSettleMargin(margin, line) {
+    const quarters = Math.round(line * 4);
+    const split = Math.abs(line * 4 - quarters) < 1e-6 && Math.abs(quarters) % 2 === 1;
+    const judge = (adj) => (adj > 1e-9 ? 1 : (adj < -1e-9 ? -1 : 0));
+    if (!split) {
+      const adj = judge(margin + line);
+      if (adj > 0) return 'W';
+      if (adj < 0) return 'L';
+      return 'P';
+    }
+    const low = judge(margin + line - 0.25);
+    const high = judge(margin + line + 0.25);
+    if (low === 1 && high === 1) return 'W';
+    if (low === -1 && high === -1) return 'L';
+    if (low + high === 1) return 'WH';
+    if (low + high === -1) return 'LH';
+    return '';
+  }
+
+  function footballSettle1x2(home, away, side) {
+    const actual = home > away ? 'H' : (home < away ? 'A' : 'D');
+    if (actual === side) return 'W';
+    return 'L';
+  }
+
+  /**
+   * Fallback when neither 全日分析 W/L nor the tips sheet has a code.
+   * Returns '' when the 買法 cannot be read; the caller then shows ➖.
+   */
+  function footballDeriveAllDayWl(row) {
+    const score = String(row.result || '').match(/(\d+)\s*[-:：]\s*(\d+)/);
+    if (!score) return '';
+    const homeGoals = Number(score[1]);
+    const awayGoals = Number(score[2]);
+    const parts = footballAllDayParts(row);
+    let team = parts.team;
+    if (!team || team === '主客和' || /讓|受|主勝|客勝|平手|和局/.test(team)) team = '';
+    const market = (String(row.pick || '') + String(row.line || '') + String(parts.market || '')).replace(/\s+/g, '');
+    const hha = market.match(/讓球主客和\(([+-]?\d+(?:\.\d+)?)\)(主|客|和)?/);
+    if (hha) {
+      const shift = Number(hha[1]);
+      const bet = hha[2] === '客' ? 'A' : (hha[2] === '和' ? 'D' : (hha[2] === '主' ? 'H' : ''));
+      if (!bet || !Number.isFinite(shift)) return '';
+      const home = homeGoals;
+      const away = awayGoals + shift;
+      return footballSettle1x2(home, away, bet);
+    }
+    const line = footballAsianLine(market);
+    if (line != null) {
+      let side = team ? footballSideOf(row.match, team) : '';
+      if (!side && /平手客|客勝/.test(market) && !/主勝/.test(market)) side = 'A';
+      else if (!side && /主勝/.test(market)) side = 'H';
+      if (side !== 'H' && side !== 'A') return '';
+      const margin = side === 'H' ? homeGoals - awayGoals : awayGoals - homeGoals;
+      return footballSettleMargin(margin, line);
+    }
+    if (/讓|受/.test(market)) return '';
+    if (/和局|打和|平局/.test(market)) return footballSettle1x2(homeGoals, awayGoals, 'D');
+    if (/客勝/.test(market)) return footballSettle1x2(homeGoals, awayGoals, 'A');
+    if (/主勝/.test(market)) return footballSettle1x2(homeGoals, awayGoals, 'H');
+    return '';
+  }
+
+  /**
+   * Icon under the kickoff. Column W/L wins, then the tips sheet, then the
+   * score read against 買法. 注數 > 0 with a 賽果 never stays blank.
+   */
+  function footballAllDayIcon(row) {
+    const score = String(row.result || '').trim();
+    if (!score) return '';
+    const known = footballWlIcon(row.wl);
+    if (known) return known;
+    if (!(Number(row.stake) > 0)) return '';
+    return footballWlIcon(footballDeriveAllDayWl(row)) || '➖';
+  }
+
   function footballAllDayRowHtml(row) {
     const odds = formatFbOdds(row.odds) || '—';
     const stake = row.stake == null || !Number.isFinite(Number(row.stake))
@@ -3258,7 +3393,7 @@
       ? '<span class="fb-all-market">' + escapeHtml(parts.market) + '</span>'
       : '';
     const score = String(row.result || '').trim();
-    const icon = score ? footballWlIcon(row.wl) : '';
+    const icon = footballAllDayIcon(row);
     const iconHtml = icon ? '<span class="fb-all-icon">' + icon + '</span>' : '';
     const scoreHtml = score ? '<span class="fb-all-score">賽果 ' + escapeHtml(score) + '</span>' : '';
     return '<li class="fb-all-row"' + (stars == null ? '' : ' data-stars="' + stars + '"') + '>' +
