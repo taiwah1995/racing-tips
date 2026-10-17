@@ -1330,3 +1330,57 @@ body {
   font-weight: 700;
   overflow-wrap: anywhere;
 }
+#view-football .fb-all-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 10px 6px;
+}
+#view-football .fb-all-row {
+  padding: 7px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+#view-football .fb-all-row:last-child { border-bottom: none; }
+#view-football .fb-all-top,
+#view-football .fb-all-bot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 6px;
+  min-width: 0;
+}
+#view-football .fb-all-bot { margin-top: 2px; }
+#view-football .fb-all-time {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+#view-football .fb-all-match {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+#view-football .fb-all-pick {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+#view-football .fb-all-odds,
+#view-football .fb-all-stake {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+#view-football .fb-stars {
+  margin-left: auto;
+  letter-spacing: 0.5px;
+  font-size: 0.86rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+#view-football .fb-star { color: rgba(139, 148, 158, 0.28); }
+#view-football .fb-stars-1 .fb-star.on { color: var(--text-muted); }
+#view-football .fb-stars-2 .fb-star.on { color: #ffffff; }
+#view-football .fb-stars-3 .fb-star.on { color: #e6c35c; }
+#view-football .fb-stars-4 .fb-star.on,
+#view-football .fb-stars-5 .fb-star.on { color: #39ff14; }
