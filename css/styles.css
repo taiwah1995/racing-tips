@@ -1270,6 +1270,20 @@ body {
   overflow-wrap: anywhere;
 }
 #view-football .fb-dot { color: var(--text-muted); font-weight: 500; }
+#view-football .fb-pass-head {
+  margin: 2px 2px 8px;
+  color: var(--gold);
+  font-size: clamp(0.8rem, 3.6vw, 0.95rem);
+  font-weight: 700;
+  line-height: 1.35;
+}
+#view-football .fb-pass-head .panel-updated {
+  display: inline;
+  margin-left: 6px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
 #view-football .fb-parlay-sub {
   margin: 0;
   padding: 10px 12px 0;
@@ -1297,5 +1311,22 @@ body {
   font-size: 0.88rem;
   font-weight: 700;
   line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+#view-football .fb-five-note {
+  margin: 0;
+  padding: 4px 12px 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+#view-football .fb-five-leg {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+#view-football .fb-five-match {
+  font-weight: 700;
   overflow-wrap: anywhere;
 }
