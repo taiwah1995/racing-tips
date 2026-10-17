@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football7';
+  const APP_DATA_VERSION = '20261017football8';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3095,17 +3095,17 @@
       '<div class="fb-pad"><label class="fb-date"><span class="sr-only">日期</span>' +
       '<select id="football-date" aria-label="日期">' + options + '</select></label></div>' +
       '<ul class="fb-days">' + history + '</ul></section>' +
-      '<div id="football-summaries">' +
-      footballSummaryHtml('football-day-summary', '當日總結', selected.tips, model.unit, updated) +
-      footballSummaryHtml('football-cumulative', '累計總結', allTips, model.unit, updated) +
-      '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
-      '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>' +
       footballPassHtml(selected.tips, updated) +
       '<section class="panel" id="football-matches">' +
       panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
       selected.tips.map((tip) => footballCardHtml(tip, model.unit)).join('') +
       '</section>' +
-      footballAllDayHtml(allday, selected.date, updated);
+      footballAllDayHtml(allday, selected.date, updated) +
+      '<div id="football-summaries">' +
+      footballSummaryHtml('football-day-summary', '當日總結', selected.tips, model.unit, updated) +
+      footballSummaryHtml('football-cumulative', '累計總結', allTips, model.unit, updated) +
+      '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
+      '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>';
   }
 
   function bindFootballOnce() {
