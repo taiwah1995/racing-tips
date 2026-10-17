@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football8';
+  const APP_DATA_VERSION = '20261017football10';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2767,33 +2767,20 @@
 
   /**
    * 五串六: five 4-leg parlays plus one 5-leg parlay, $10 each ($60).
-   * Shown only when the day has at least five staked rows; if there are more,
-   * the five highest 信心% are used. Decimal d matches the 讓球 parlay.
+   * Shown only when the day has at least five staked rows. If there are more,
+   * the first five in sheet order are used — the same order as the tip cards.
+   * Decimal d matches the 讓球 parlay.
    */
   function footballFiveHtml(tips, updated) {
     const rows = [];
-    (tips || []).forEach((tip, index) => {
+    (tips || []).forEach((tip) => {
       if (!(Number(tip.stake) > 0)) return;
       const factor = footballParlayFactor(tip.odds);
       if (!factor) return;
-      rows.push({
-        tip: tip,
-        factor: factor,
-        index: index,
-        conf: footballConfidenceNumber(tip.confidence),
-      });
+      rows.push({ tip: tip, factor: factor });
     });
     if (rows.length < 5) return '';
-    let chosen = rows;
-    if (rows.length > 5) {
-      chosen = rows.slice().sort((a, b) => {
-        const ac = a.conf == null ? -Infinity : a.conf;
-        const bc = b.conf == null ? -Infinity : b.conf;
-        if (bc !== ac) return bc - ac;
-        return a.index - b.index;
-      }).slice(0, 5);
-      chosen.sort((a, b) => a.index - b.index);
-    }
+    const chosen = rows.slice(0, 5);
     const values = chosen.map((leg) => leg.factor.value);
     let fourSum = 0;
     for (let skip = 0; skip < values.length; skip++) {
@@ -2985,14 +2972,27 @@
     return html + '</span>';
   }
 
-  function footballAllDayPickText(row) {
-    const pick = String(row.pick || '').trim();
-    const line = String(row.line || '').trim();
-    if (pick && line) {
-      if (line.indexOf(pick) !== -1) return line;
-      return pick + ' ' + line;
+  /** 推介 is the team. 買法 is the market; a leading copy of the team is not repeated. */
+  function footballAllDayParts(row) {
+    let team = String(row.pick || '').trim();
+    let market = String(row.line || '').trim();
+    if (team && market) {
+      if (market === team) market = '';
+      else if (market.indexOf(team) === 0) market = market.slice(team.length).trim();
     }
-    return line || pick || '—';
+    if (!team && market && market !== '—' && market !== '-' && market !== '–') {
+      const sides = String(row.match || '').split(/\s+(?:vs|VS|對)\s+/);
+      const hit = sides.map((side) => side.trim()).filter(Boolean)
+        .sort((a, b) => b.length - a.length)
+        .find((side) => market.indexOf(side) === 0);
+      if (hit) {
+        team = hit;
+        market = market.slice(hit.length).trim();
+      }
+    }
+    if (market === '—' || market === '-' || market === '–') market = '';
+    if (!team && !market) market = '—';
+    return { team: team, market: market };
   }
 
   function footballAllDayRowHtml(row) {
@@ -3001,12 +3001,19 @@
       ? '—'
       : formatFbUnits(row.stake);
     const stars = footballStarCount(row.confidence);
+    const parts = footballAllDayParts(row);
+    const team = parts.team
+      ? '<span class="fb-all-team">' + escapeHtml(parts.team) + '</span>'
+      : '';
+    const market = parts.market
+      ? '<span class="fb-all-market">' + escapeHtml(parts.market) + '</span>'
+      : '';
     return '<li class="fb-all-row"' + (stars == null ? '' : ' data-stars="' + stars + '"') + '>' +
-      '<div class="fb-all-top">' +
-      (row.time ? '<span class="fb-all-time">' + escapeHtml(row.time) + '</span>' : '') +
-      '<span class="fb-all-match">' + escapeHtml(row.match || '—') + '</span></div>' +
+      '<span class="fb-all-time">' + escapeHtml(row.time || '') + '</span>' +
+      '<span class="fb-all-match">' + escapeHtml(row.match || '—') + '</span>' +
       '<div class="fb-all-bot">' +
-      '<span class="fb-all-pick">' + escapeHtml(footballAllDayPickText(row)) + '</span>' +
+      team +
+      market +
       '<span class="fb-all-odds">' + escapeHtml(odds) + '</span>' +
       '<span class="fb-all-stake">' + escapeHtml(stake) + '</span>' +
       footballStarsHtml(row.confidence) +

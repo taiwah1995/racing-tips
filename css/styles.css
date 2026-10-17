@@ -1396,32 +1396,47 @@ body {
   padding: 0 10px 6px;
 }
 #view-football .fb-all-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: 8px;
+  row-gap: 2px;
+  align-items: baseline;
   padding: 7px 0;
   border-bottom: 1px solid var(--border);
   font-size: 0.78rem;
   line-height: 1.35;
 }
 #view-football .fb-all-row:last-child { border-bottom: none; }
-#view-football .fb-all-top,
+#view-football .fb-all-time {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 3.1em;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+#view-football .fb-all-match {
+  grid-column: 2;
+  grid-row: 1;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
 #view-football .fb-all-bot {
+  grid-column: 2;
+  grid-row: 2;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 2px 6px;
   min-width: 0;
 }
-#view-football .fb-all-bot { margin-top: 2px; }
-#view-football .fb-all-time {
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-#view-football .fb-all-match {
+#view-football .fb-all-team {
+  color: #39ff14;
   font-weight: 700;
   overflow-wrap: anywhere;
-  min-width: 0;
 }
-#view-football .fb-all-pick {
+#view-football .fb-all-market {
   font-weight: 600;
   overflow-wrap: anywhere;
 }
