@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football5';
+  const APP_DATA_VERSION = '20261017football7';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2230,6 +2230,8 @@
   /* ---------- 波盤推介 (live gviz; JSON file only if the sheet cannot be fetched) ---------- */
   const FOOTBALL_SHEET_ID = '1UdCJnyxAt5XzV0gbY4FCKrDYio_-SPBoyaAqaBBtKXw';
   const FOOTBALL_SHEET_NAME = '波盤推介';
+  const FOOTBALL_ALLDAY_GID = '986852779';
+  const FOOTBALL_ALLDAY_SHEET = '全日分析';
   const FOOTBALL_WL = { W: '全贏', WH: '贏半', P: '走盤', LH: '輸半', L: '全輸' };
   let footballLoad = 0;
 
@@ -2527,6 +2529,119 @@
       const res = await fetch(dataUrl('football-tips.json'));
       if (!res.ok) throw new Error('無法載入波盤推介');
       return { model: footballModelFromFile(await res.json()), source: 'file' };
+    }
+  }
+
+  function footballAllDayGvizUrl(outKind) {
+    const q = new URLSearchParams({
+      tqx: 'out:' + outKind,
+      gid: FOOTBALL_ALLDAY_GID,
+      t: String(Date.now()),
+      sheet: FOOTBALL_ALLDAY_SHEET,
+    });
+    if (outKind === 'json') q.set('headers', '1');
+    return 'https://docs.google.com/spreadsheets/d/' + FOOTBALL_SHEET_ID + '/gviz/tq?' + q.toString();
+  }
+
+  /** Every row on the 全日分析 tab, including 注數 0. Stars are computed later from 信心%. */
+  function footballAllDayFromRow(cols, map, jsonRow, jsonCols) {
+    const csv = (name) => footballCsvCell(cols, map, name);
+    const json = (name) => footballJsonCell(jsonRow, jsonCols, name);
+    const date = footballRowDate(csv('日期'), json('日期'));
+    if (!date) return null;
+    const stake = footballStake(csv('注數'), json('注數'));
+    return {
+      date: date,
+      time: footballText(csv('時間'), json('時間')),
+      match: footballText(csv('場次'), json('場次')),
+      pick: footballText(csv('推介'), json('推介')),
+      line: footballText(csv('買法'), json('買法')),
+      odds: footballOdds(csv('賠率'), json('賠率')),
+      confidence: footballText(csv('信心%'), json('信心%')),
+      stake: stake,
+    };
+  }
+
+  function footballAllDayFromSheet(csvRows, table) {
+    const csvHeader = csvRows ? footballFindHeader(csvRows) : null;
+    const jsonCols = table ? footballJsonCols(table) : null;
+    const hasCsv = !!(csvHeader && csvHeader.map['注數'] != null && csvHeader.map['日期'] != null);
+    const hasJson = !!(jsonCols && jsonCols['注數'] != null && jsonCols['日期'] != null);
+    if (!hasCsv && !hasJson) return [];
+    const rows = [];
+    if (hasCsv) {
+      for (let r = csvHeader.index + 1; r < csvRows.length; r++) {
+        const jsonRow = hasJson && csvHeader.index === 0 && table.rows ? table.rows[r - 1] : null;
+        const row = footballAllDayFromRow(csvRows[r] || [], csvHeader.map, jsonRow, jsonCols);
+        if (row) rows.push(row);
+      }
+    } else {
+      (table.rows || []).forEach((row) => {
+        const item = footballAllDayFromRow(null, null, row, jsonCols);
+        if (item) rows.push(item);
+      });
+    }
+    return rows;
+  }
+
+  function footballAllDayFromFile(data) {
+    const rows = [];
+    (data && data.items ? data.items : []).forEach((item) => {
+      const date = parseFootballDate(item && item.date);
+      if (!date) return;
+      const stakeNum = item.stake == null || item.stake === '' ? null : Number(item.stake);
+      rows.push({
+        date: date,
+        time: footballStr(item.time),
+        match: footballStr(item.match),
+        pick: '',
+        line: footballStr(item.pick),
+        odds: item.odds == null || item.odds === '' ? '' : String(item.odds),
+        confidence: item.confidence == null || item.confidence === '' ? '' : String(item.confidence),
+        stake: Number.isFinite(stakeNum) ? stakeNum : null,
+      });
+    });
+    return rows;
+  }
+
+  async function loadFootballAllDaySheet() {
+    const [csvText, jsonText] = await Promise.all([
+      footballFetchText(footballAllDayGvizUrl('csv')),
+      footballFetchText(footballAllDayGvizUrl('json')),
+    ]);
+    if (csvText == null && jsonText == null) throw new Error('無法載入全日分析');
+    let csvRows = null;
+    let table = null;
+    if (csvText != null) csvRows = parseSimpleCsv(csvText);
+    if (jsonText != null) {
+      try {
+        const data = parseFootballGviz(jsonText);
+        if (!data || data.status === 'error' || !data.table) throw new Error('全日分析資料格式錯誤');
+        table = data.table;
+      } catch (err) {
+        if (csvRows == null) throw err;
+        console.error(err);
+      }
+    }
+    const rows = footballAllDayFromSheet(csvRows, table);
+    if (!rows.length) throw new Error('全日分析空白');
+    return rows;
+  }
+
+  async function loadFootballAllDay() {
+    try {
+      const rows = await loadFootballAllDaySheet();
+      return { rows: rows, source: 'sheet' };
+    } catch (err) {
+      console.error(err);
+      try {
+        const res = await fetch(dataUrl('football-allday.json'));
+        if (!res.ok) return { rows: [], source: 'file' };
+        return { rows: footballAllDayFromFile(await res.json()), source: 'file' };
+      } catch (fileErr) {
+        console.error(fileErr);
+        return { rows: [], source: 'file' };
+      }
     }
   }
 
@@ -2846,7 +2961,101 @@
       '</article>';
   }
 
-  function paintFootball(model, source, wanted) {
+  /**
+   * ≤52 → 1, 53–54 → 4, 55 → 2, 56 or ≥59 → 3, 57–58 → 5.
+   */
+  function footballStarCount(confidence) {
+    const n = footballConfidenceNumber(confidence);
+    if (n == null) return null;
+    if (n <= 52) return 1;
+    if (n <= 54) return 4;
+    if (n < 56) return 2;
+    if (n < 57 || n >= 59) return 3;
+    return 5;
+  }
+
+  function footballStarsHtml(confidence) {
+    const n = footballStarCount(confidence);
+    const cls = n == null ? 'fb-stars' : 'fb-stars fb-stars-' + n;
+    const label = n == null ? '未有星' : n + '星';
+    let html = '<span class="' + cls + '" aria-label="' + label + '">';
+    for (let i = 1; i <= 5; i++) {
+      html += '<span class="fb-star' + (n != null && i <= n ? ' on' : '') + '">★</span>';
+    }
+    return html + '</span>';
+  }
+
+  function footballAllDayPickText(row) {
+    const pick = String(row.pick || '').trim();
+    const line = String(row.line || '').trim();
+    if (pick && line) {
+      if (line.indexOf(pick) !== -1) return line;
+      return pick + ' ' + line;
+    }
+    return line || pick || '—';
+  }
+
+  function footballAllDayRowHtml(row) {
+    const odds = formatFbOdds(row.odds) || '—';
+    const stake = row.stake == null || !Number.isFinite(Number(row.stake))
+      ? '—'
+      : formatFbUnits(row.stake);
+    const stars = footballStarCount(row.confidence);
+    return '<li class="fb-all-row"' + (stars == null ? '' : ' data-stars="' + stars + '"') + '>' +
+      '<div class="fb-all-top">' +
+      (row.time ? '<span class="fb-all-time">' + escapeHtml(row.time) + '</span>' : '') +
+      '<span class="fb-all-match">' + escapeHtml(row.match || '—') + '</span></div>' +
+      '<div class="fb-all-bot">' +
+      '<span class="fb-all-pick">' + escapeHtml(footballAllDayPickText(row)) + '</span>' +
+      '<span class="fb-all-odds">' + escapeHtml(odds) + '</span>' +
+      '<span class="fb-all-stake">' + escapeHtml(stake) + '</span>' +
+      footballStarsHtml(row.confidence) +
+      '</div></li>';
+  }
+
+  function footballStarChipHtml(n) {
+    return '<label class="fb-star-chip fb-stars-' + n + '">' +
+      '<input type="checkbox" data-fb-star="' + n + '" checked>' +
+      '<span class="fb-chip-star" aria-hidden="true">★</span>' +
+      '<span>' + n + '星</span></label>';
+  }
+
+  function footballAllDayHtml(allday, date, updated) {
+    const rows = (allday && allday.rows ? allday.rows : []).filter((row) => row.date === date);
+    const source = allday && allday.source ? allday.source : '';
+    const chips = [1, 2, 3, 4, 5].map(footballStarChipHtml).join('');
+    const body = rows.length
+      ? '<div class="fb-star-filter">' +
+        '<div class="fb-star-chips" role="group" aria-label="星級篩選">' + chips + '</div>' +
+        '<p class="fb-star-count">' + rows.length + '/' + rows.length + '</p></div>' +
+        '<ul class="fb-all-list">' + rows.map(footballAllDayRowHtml).join('') + '</ul>'
+      : '<p class="fb-pending">呢日未有全日分析</p>';
+    return '<section class="panel" id="football-allday" data-source="' + escapeAttr(source) + '">' +
+      panelTitleHtml('全日分析', updated) +
+      body +
+      '</section>';
+  }
+
+  function applyFootballStarFilter() {
+    const panel = document.getElementById('football-allday');
+    if (!panel) return;
+    const selected = {};
+    panel.querySelectorAll('input[data-fb-star]').forEach((input) => {
+      if (input.checked) selected[input.getAttribute('data-fb-star')] = true;
+    });
+    let visible = 0;
+    let total = 0;
+    panel.querySelectorAll('.fb-all-row').forEach((row) => {
+      total += 1;
+      const show = !!selected[row.getAttribute('data-stars')];
+      row.hidden = !show;
+      if (show) visible += 1;
+    });
+    const count = panel.querySelector('.fb-star-count');
+    if (count) count.textContent = visible + '/' + total;
+  }
+
+  function paintFootball(model, source, wanted, allday) {
     const host = $('#football-body');
     if (!host) return;
     host.dataset.source = source;
@@ -2895,7 +3104,8 @@
       '<section class="panel" id="football-matches">' +
       panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
       selected.tips.map((tip) => footballCardHtml(tip, model.unit)).join('') +
-      '</section>';
+      '</section>' +
+      footballAllDayHtml(allday, selected.date, updated);
   }
 
   function bindFootballOnce() {
@@ -2903,7 +3113,12 @@
     viewFootball.dataset.bound = '1';
     viewFootball.addEventListener('change', (event) => {
       const target = event.target;
-      if (!target || target.id !== 'football-date') return;
+      if (!target) return;
+      if (target.matches && target.matches('input[data-fb-star]')) {
+        applyFootballStarFilter();
+        return;
+      }
+      if (target.id !== 'football-date') return;
       if (target.value) location.hash = '#/football/' + target.value;
     });
     viewFootball.addEventListener('click', (event) => {
@@ -2936,10 +3151,14 @@
     if (host) host.innerHTML = '';
     bindFootballOnce();
     try {
-      const loaded = await loadFootball();
+      const loadedPromise = loadFootball();
+      const alldayPromise = loadFootballAllDay();
+      const loaded = await loadedPromise;
+      const allday = await alldayPromise;
       if (token !== footballLoad || viewFootball.hidden) return;
       if (status) status.hidden = true;
-      paintFootball(loaded.model, loaded.source, wanted || '');
+      if (host) host.dataset.alldaySource = allday.source || '';
+      paintFootball(loaded.model, loaded.source, wanted || '', allday);
     } catch (err) {
       console.error(err);
       if (token !== footballLoad) return;
