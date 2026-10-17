@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football8';
+  const APP_DATA_VERSION = '20261017football9';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2766,9 +2766,27 @@
   }
 
   /**
+   * Minutes from the tip-day evening. A 凌晨 kickoff, or a parenthetical date
+   * on the match, is the next morning and sorts after same-day evening times.
+   * Missing times sort last. Ties keep sheet order.
+   */
+  function footballKickoffMinutes(tip) {
+    const blob = String(tip.ko || '') + ' ' + String(tip.match || '');
+    const hm = String(tip.ko || '').match(/(\d{1,2})\s*:\s*(\d{2})/);
+    if (!hm) return null;
+    const hour = Number(hm[1]);
+    const minute = Number(hm[2]);
+    if (hour > 23 || minute > 59) return null;
+    let minutes = hour * 60 + minute;
+    if (/凌晨/.test(blob) || /[（(]\s*\d{1,2}\s*[/／]\s*\d{1,2}/.test(blob)) minutes += 24 * 60;
+    return minutes;
+  }
+
+  /**
    * 五串六: five 4-leg parlays plus one 5-leg parlay, $10 each ($60).
-   * Shown only when the day has at least five staked rows; if there are more,
-   * the five highest 信心% are used. Decimal d matches the 讓球 parlay.
+   * Shown only when the day has at least five staked rows. If there are more,
+   * the five earliest kickoffs are used — never re-ranked by 信心%.
+   * Decimal d matches the 讓球 parlay.
    */
   function footballFiveHtml(tips, updated) {
     const rows = [];
@@ -2780,20 +2798,17 @@
         tip: tip,
         factor: factor,
         index: index,
-        conf: footballConfidenceNumber(tip.confidence),
+        kick: footballKickoffMinutes(tip),
       });
     });
     if (rows.length < 5) return '';
-    let chosen = rows;
-    if (rows.length > 5) {
-      chosen = rows.slice().sort((a, b) => {
-        const ac = a.conf == null ? -Infinity : a.conf;
-        const bc = b.conf == null ? -Infinity : b.conf;
-        if (bc !== ac) return bc - ac;
-        return a.index - b.index;
-      }).slice(0, 5);
-      chosen.sort((a, b) => a.index - b.index);
-    }
+    const chosen = rows.slice().sort((a, b) => {
+      if (a.kick == null && b.kick == null) return a.index - b.index;
+      if (a.kick == null) return 1;
+      if (b.kick == null) return -1;
+      if (a.kick !== b.kick) return a.kick - b.kick;
+      return a.index - b.index;
+    }).slice(0, 5);
     const values = chosen.map((leg) => leg.factor.value);
     let fourSum = 0;
     for (let skip = 0; skip < values.length; skip++) {
