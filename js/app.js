@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football12';
+  const APP_DATA_VERSION = '20261018football1';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2560,6 +2560,8 @@
       odds: footballOdds(csv('賠率'), json('賠率')),
       confidence: footballText(csv('信心%'), json('信心%')),
       stake: stake,
+      result: footballText(csv('賽果'), json('賽果')),
+      wl: normalizeFootballWl(footballText(csv('W/L'), json('W/L'))),
     };
   }
 
@@ -2601,6 +2603,8 @@
         odds: item.odds == null || item.odds === '' ? '' : String(item.odds),
         confidence: item.confidence == null || item.confidence === '' ? '' : String(item.confidence),
         stake: Number.isFinite(stakeNum) ? stakeNum : null,
+        result: footballStr(item.result),
+        wl: normalizeFootballWl(item.wl),
       });
     });
     return rows;
@@ -2901,9 +2905,51 @@
       '<span class="fb-v">' + escapeHtml(String(value)) + '</span></div>';
   }
 
+  function footballMatchKey(name) {
+    return String(name || '')
+      .replace(/[（(][^）)]*[）)]/g, '')
+      .replace(/\s+/g, '')
+      .toLowerCase();
+  }
+
+  /** W/WH ✅, L/LH ❌, P ➖. A bare score can settle a 主客和 pick when W/L is blank. */
+  function footballOutcomeIcon(wl, result, line) {
+    const fromCode = normalizeFootballWl(wl);
+    const fromResult = normalizeFootballWl(result);
+    const code = (fromCode === 'W' || fromCode === 'WH' || fromCode === 'L' || fromCode === 'LH' || fromCode === 'P')
+      ? fromCode
+      : ((fromResult === 'W' || fromResult === 'WH' || fromResult === 'L' || fromResult === 'LH' || fromResult === 'P') ? fromResult : '');
+    if (code === 'W' || code === 'WH') return '✅';
+    if (code === 'L' || code === 'LH') return '❌';
+    if (code === 'P') return '➖';
+    const text = String(result || '').trim();
+    if (!text) return '';
+    if (/走盤|走水|push/i.test(text)) return '➖';
+    if (/贏半|赢半/.test(text)) return '✅';
+    if (/輸半|输半/.test(text)) return '❌';
+    if (/全贏|全赢/.test(text)) return '✅';
+    if (/全輸|全输/.test(text)) return '❌';
+    const score = text.match(/(\d+)\s*[-:：]\s*(\d+)/);
+    if (!score) return '';
+    const market = String(line || '');
+    if (/讓球|受讓/.test(market)) return '';
+    const home = Number(score[1]);
+    const away = Number(score[2]);
+    const actual = home > away ? 'H' : (home < away ? 'A' : 'D');
+    let side = '';
+    if (/主勝/.test(market)) side = 'H';
+    else if (/客勝/.test(market)) side = 'A';
+    else if (/和局|打和|平局/.test(market)) side = 'D';
+    if (!side) return '';
+    return actual === side ? '✅' : '❌';
+  }
+
   function footballResultHtml(tip) {
     const parts = [];
-    if (tip.result) parts.push('<span>賽果 ' + escapeHtml(tip.result) + '</span>');
+    const icon = footballOutcomeIcon(tip.wl, tip.result, tip.line);
+    const iconHtml = icon ? '<span class="fb-result-icon">' + icon + '</span>' : '';
+    if (tip.result) parts.push('<span>' + iconHtml + '賽果 ' + escapeHtml(tip.result) + '</span>');
+    else if (icon) parts.push('<span>' + iconHtml + '</span>');
     if (tip.wl) {
       const label = FOOTBALL_WL[tip.wl] ? tip.wl + ' ' + FOOTBALL_WL[tip.wl] : tip.wl;
       const cls = tip.wl === 'W' || tip.wl === 'WH' ? 'pl-pos' : (tip.wl === 'L' || tip.wl === 'LH' ? 'pl-neg' : '');
@@ -3019,7 +3065,31 @@
       '<span class="fb-all-odds">' + escapeHtml(odds) + '</span>' +
       '<span class="fb-all-stake">' + escapeHtml(stake) + '</span>' +
       footballStarsHtml(row.confidence) +
-      '</div></li>';
+      '</div>' +
+      footballAllDayResultHtml(row) +
+      '</li>';
+  }
+
+  function footballAllDayResultHtml(row) {
+    const icon = footballOutcomeIcon(row.wl, row.result, row.line);
+    if (!icon && !row.result) return '';
+    const iconHtml = icon ? '<span class="fb-result-icon">' + icon + '</span>' : '';
+    const text = row.result ? '賽果 ' + escapeHtml(row.result) : '';
+    return '<p class="fb-all-result">' + iconHtml + text + '</p>';
+  }
+
+  function footballAttachResults(rows, tips) {
+    const byMatch = new Map();
+    (tips || []).forEach((tip) => {
+      const key = footballMatchKey(tip.match);
+      if (key && (tip.wl || tip.result)) byMatch.set(key, tip);
+    });
+    return (rows || []).map((row) => {
+      if (row.wl || row.result) return row;
+      const hit = byMatch.get(footballMatchKey(row.match));
+      if (!hit) return row;
+      return Object.assign({}, row, { wl: hit.wl, result: hit.result });
+    });
   }
 
   function footballStarChipHtml(n) {
@@ -3070,9 +3140,12 @@
       .map((entry) => entry.item);
   }
 
-  function footballAllDayHtml(allday, date, updated) {
+  function footballAllDayHtml(allday, date, updated, tips) {
     const rows = footballByKickoff(
-      (allday && allday.rows ? allday.rows : []).filter((row) => row.date === date),
+      footballAttachResults(
+        (allday && allday.rows ? allday.rows : []).filter((row) => row.date === date),
+        tips
+      ),
       date
     );
     const source = allday && allday.source ? allday.source : '';
@@ -3143,7 +3216,7 @@
       panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
       footballByKickoff(selected.tips, selected.date).map((tip) => footballCardHtml(tip, model.unit)).join('') +
       '</section>' +
-      footballAllDayHtml(allday, selected.date, updated) +
+      footballAllDayHtml(allday, selected.date, updated, selected.tips) +
       '<div id="football-summaries">' +
       footballSummaryHtml('football-day-summary', '當日總結', selected.tips, model.unit, updated) +
       footballSummaryHtml('football-cumulative', '累計總結', allTips, model.unit, updated) +
