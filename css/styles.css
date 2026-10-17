@@ -1110,7 +1110,7 @@ body {
   padding: 0 2px;
 }
 #view-football .fb-pad {
-  padding: 10px 12px 0;
+  padding: 10px 12px 12px;
 }
 #view-football .fb-date {
   display: block;
@@ -1128,48 +1128,6 @@ body {
   outline: none;
 }
 #view-football .fb-date select:focus { border-color: var(--gold-dim); }
-#view-football .fb-days {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px 12px 12px;
-}
-#view-football .fb-day {
-  width: 100%;
-  text-align: left;
-  min-height: var(--tap);
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--bg-elev);
-  color: var(--text);
-  font: inherit;
-  cursor: pointer;
-}
-#view-football .fb-day.active {
-  border-color: var(--gold);
-  background: rgba(240, 193, 75, 0.12);
-}
-#view-football .fb-day-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 8px;
-  font-weight: 700;
-}
-#view-football .fb-day-sub {
-  display: block;
-  margin-top: 2px;
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-#view-football .fb-latest {
-  color: var(--gold);
-  font-size: 0.72rem;
-  font-weight: 700;
-}
 #view-football .fb-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
