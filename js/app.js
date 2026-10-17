@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football4';
+  const APP_DATA_VERSION = '20261017football5';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2634,10 +2634,86 @@
       return '<li class="fb-parlay-leg">' + footballPickBits(leg.tip).join(' ') + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
-      panelTitleHtml('是日過關推介', updated) +
+      panelTitleHtml('穩陣過關', updated) +
       '<p class="fb-parlay-sub">讓球過關 ' + legs.length + '×1</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
       '<p class="fb-parlay-odds">' + escapeHtml(formula) + '</p></section>';
+  }
+
+  function footballConfidenceNumber(text) {
+    const t = String(text || '').trim().replace(/％/g, '%');
+    if (!t) return null;
+    const hasPct = t.indexOf('%') >= 0;
+    const n = Number(t.replace('%', ''));
+    if (!Number.isFinite(n)) return null;
+    if (!hasPct && n > 0 && n <= 1) return n * 100;
+    return n;
+  }
+
+  /**
+   * 五串六: five 4-leg parlays plus one 5-leg parlay, $10 each ($60).
+   * Shown only when the day has at least five staked rows; if there are more,
+   * the five highest 信心% are used. Decimal d matches the 讓球 parlay.
+   */
+  function footballFiveHtml(tips, updated) {
+    const rows = [];
+    (tips || []).forEach((tip, index) => {
+      if (!(Number(tip.stake) > 0)) return;
+      const factor = footballParlayFactor(tip.odds);
+      if (!factor) return;
+      rows.push({
+        tip: tip,
+        factor: factor,
+        index: index,
+        conf: footballConfidenceNumber(tip.confidence),
+      });
+    });
+    if (rows.length < 5) return '';
+    let chosen = rows;
+    if (rows.length > 5) {
+      chosen = rows.slice().sort((a, b) => {
+        const ac = a.conf == null ? -Infinity : a.conf;
+        const bc = b.conf == null ? -Infinity : b.conf;
+        if (bc !== ac) return bc - ac;
+        return a.index - b.index;
+      }).slice(0, 5);
+      chosen.sort((a, b) => a.index - b.index);
+    }
+    const values = chosen.map((leg) => leg.factor.value);
+    let fourSum = 0;
+    for (let skip = 0; skip < values.length; skip++) {
+      let product = 1;
+      for (let i = 0; i < values.length; i++) if (i !== skip) product *= values[i];
+      fourSum += product;
+    }
+    const five = values.reduce((total, value) => total * value, 1);
+    const payout = Math.round(((fourSum + five) * 10 + Number.EPSILON) * 100) / 100;
+    const net = Math.round((payout - 60) * 100) / 100;
+    const netClass = net > 0 ? 'pl-pos' : (net < 0 ? 'pl-neg' : '');
+    const items = chosen.map((leg) => {
+      const match = leg.tip.match
+        ? '<span class="fb-five-match">' + escapeHtml(leg.tip.match) + '</span>'
+        : '';
+      return '<li class="fb-parlay-leg fb-five-leg">' + match +
+        '<span class="fb-five-pick">' + footballPickBits(leg.tip).join(' ') + '</span></li>';
+    }).join('');
+    return '<section class="panel" id="football-five">' +
+      panelTitleHtml('刀仔鋸大樹', updated) +
+      '<p class="fb-parlay-sub">五串六（5×6）</p>' +
+      '<p class="fb-five-note">5×6 = 5 組四串一 + 1 組五串一，共 6 注 · 每注 $10，投注 $60</p>' +
+      '<ul class="fb-parlay-list">' + items + '</ul>' +
+      '<p class="fb-parlay-odds">全中派彩 ' + escapeHtml(formatFbMoney(payout)) +
+      ' · 盈虧 <span class="' + netClass + '">' + escapeHtml(formatFbSigned(net)) + '</span></p>' +
+      '<p class="fb-note">註：最少要中四場先有錢收。</p></section>';
+  }
+
+  function footballPassHtml(tips, updated) {
+    const parlay = footballParlayHtml(tips, updated);
+    const five = footballFiveHtml(tips, updated);
+    if (!parlay && !five) return '';
+    return '<div id="football-pass">' +
+      '<h2 class="fb-pass-head">是日過關推介' + panelUpdatedHtml(updated) + '</h2>' +
+      parlay + five + '</div>';
   }
 
   function formatFbStake(stake, unit) {
@@ -2815,7 +2891,7 @@
       footballSummaryHtml('football-cumulative', '累計總結', allTips, model.unit, updated) +
       '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
       '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>' +
-      footballParlayHtml(selected.tips, updated) +
+      footballPassHtml(selected.tips, updated) +
       '<section class="panel" id="football-matches">' +
       panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
       selected.tips.map((tip) => footballCardHtml(tip, model.unit)).join('') +
