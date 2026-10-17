@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football10';
+  const APP_DATA_VERSION = '20261017football11';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2553,6 +2553,7 @@
     return {
       date: date,
       time: footballText(csv('時間'), json('時間')),
+      league: footballText(csv('聯賽'), json('聯賽')),
       match: footballText(csv('場次'), json('場次')),
       pick: footballText(csv('推介'), json('推介')),
       line: footballText(csv('買法'), json('買法')),
@@ -2593,6 +2594,7 @@
       rows.push({
         date: date,
         time: footballStr(item.time),
+        league: footballStr(item.league),
         match: footballStr(item.match),
         pick: '',
         line: footballStr(item.pick),
@@ -3027,8 +3029,52 @@
       '<span>' + n + '星</span></label>';
   }
 
+  function footballAddDays(iso, days) {
+    const matched = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!matched) return '';
+    const dt = new Date(Date.UTC(+matched[1], +matched[2] - 1, +matched[3]));
+    dt.setUTCDate(dt.getUTCDate() + days);
+    return dt.getUTCFullYear() + '-' +
+      String(dt.getUTCMonth() + 1).padStart(2, '0') + '-' +
+      String(dt.getUTCDate()).padStart(2, '0');
+  }
+
+  /**
+   * Minutes after the selected day's midnight. A kickoff before 12:00 rolls to
+   * the next morning when 場次/聯賽 says 凌晨, or the row date / a parenthetical
+   * date is the next calendar day. Sheet order breaks ties.
+   */
+  function footballKickoffRank(item, dayIso) {
+    const timeText = String(item.time || item.ko || '');
+    const blob = timeText + ' ' + String(item.match || '') + ' ' + String(item.league || '');
+    const hm = timeText.match(/(\d{1,2})\s*:\s*(\d{2})/);
+    const hour = hm ? Number(hm[1]) : null;
+    const minute = hm ? Number(hm[2]) : 0;
+    const valid = hour != null && hour <= 23 && minute <= 59;
+    const nextDay = footballAddDays(dayIso, 1);
+    const nextParts = nextDay.match(/-(\d{2})-(\d{2})$/);
+    const paren = blob.match(/[（(]\s*(\d{1,2})\s*[/／]\s*(\d{1,2})/);
+    const parenNext = !!(paren && nextParts &&
+      Number(paren[1]) === Number(nextParts[1]) && Number(paren[2]) === Number(nextParts[2]));
+    const roll = valid && hour < 12 && (/凌晨/.test(blob) || parenNext || item.date === nextDay);
+    if (!valid) return 3 * 24 * 60;
+    return (roll ? 24 * 60 : 0) + hour * 60 + minute;
+  }
+
+  function footballByKickoff(items, dayIso) {
+    return (items || []).map((item, index) => ({ item: item, index: index }))
+      .sort((a, b) => {
+        const delta = footballKickoffRank(a.item, dayIso) - footballKickoffRank(b.item, dayIso);
+        return delta || a.index - b.index;
+      })
+      .map((entry) => entry.item);
+  }
+
   function footballAllDayHtml(allday, date, updated) {
-    const rows = (allday && allday.rows ? allday.rows : []).filter((row) => row.date === date);
+    const rows = footballByKickoff(
+      (allday && allday.rows ? allday.rows : []).filter((row) => row.date === date),
+      date
+    );
     const source = allday && allday.source ? allday.source : '';
     const chips = [1, 2, 3, 4, 5].map(footballStarChipHtml).join('');
     const body = rows.length
@@ -3105,7 +3151,7 @@
       footballPassHtml(selected.tips, updated) +
       '<section class="panel" id="football-matches">' +
       panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
-      selected.tips.map((tip) => footballCardHtml(tip, model.unit)).join('') +
+      footballByKickoff(selected.tips, selected.date).map((tip) => footballCardHtml(tip, model.unit)).join('') +
       '</section>' +
       footballAllDayHtml(allday, selected.date, updated) +
       '<div id="football-summaries">' +
