@@ -1089,3 +1089,174 @@ body {
   text-align: left;
   font-weight: 700;
 }
+
+/* ===== 波盤推介 (#/football). Scoped so racing pages stay unchanged. ===== */
+#view-football {
+  overflow-x: hidden;
+}
+#view-football .fb-note,
+#view-football .fb-rule {
+  margin: 0 0 10px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+#view-football .fb-note {
+  margin: 0;
+  padding: 0 12px 12px;
+}
+#view-football .fb-rule {
+  margin: 0 2px 4px;
+  padding: 0 2px;
+}
+#view-football .fb-pad {
+  padding: 10px 12px 0;
+}
+#view-football .fb-date {
+  display: block;
+}
+#view-football .fb-date select {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elev);
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  outline: none;
+}
+#view-football .fb-date select:focus { border-color: var(--gold-dim); }
+#view-football .fb-days {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px 12px;
+}
+#view-football .fb-day {
+  width: 100%;
+  text-align: left;
+  min-height: var(--tap);
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-elev);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+#view-football .fb-day.active {
+  border-color: var(--gold);
+  background: rgba(240, 193, 75, 0.12);
+}
+#view-football .fb-day-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  font-weight: 700;
+}
+#view-football .fb-day-sub {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+#view-football .fb-latest {
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+#view-football .fb-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 10px 12px 12px;
+}
+#view-football .fb-stat {
+  min-width: 0;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+#view-football .fb-stat-wide { grid-column: 1 / -1; }
+#view-football .fb-stat .fb-k {
+  display: block;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+#view-football .fb-stat .fb-n {
+  display: block;
+  margin-top: 2px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+#view-football .fb-card {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+}
+#view-football .fb-card:last-child { border-bottom: none; }
+#view-football .fb-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+#view-football .fb-ko {
+  min-width: 0;
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 0.88rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+#view-football .fb-status {
+  flex-shrink: 0;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+#view-football .fb-status-ok {
+  background: var(--gold);
+  color: #0d1117;
+}
+#view-football .fb-status-wait {
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+#view-football .fb-match {
+  margin-top: 4px;
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+#view-football .fb-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 12px;
+  margin-top: 6px;
+}
+#view-football .fb-field { min-width: 0; font-size: 0.82rem; line-height: 1.4; }
+#view-football .fb-field-wide { grid-column: 1 / -1; }
+#view-football .fb-field .fb-k { color: var(--text-muted); margin-right: 4px; }
+#view-football .fb-field .fb-v { font-weight: 600; overflow-wrap: anywhere; }
+#view-football .fb-pending {
+  margin: 8px 0 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+#view-football .fb-settled {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+#view-football .fb-dot { color: var(--text-muted); font-weight: 500; }

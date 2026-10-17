@@ -1,12 +1,12 @@
 /**
  * TW賽馬貼士 — hash-routed SPA
- * Routes: #/  |  #/meeting/:id  |  #/wind  |  #/flying  |  #/combo
+ * Routes: #/  |  #/meeting/:id  |  #/wind  |  #/flying  |  #/combo  |  #/football
  */
 (function () {
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261016combo6';
+  const APP_DATA_VERSION = '20261017football1';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -26,6 +26,7 @@
   const viewWind = $('#view-wind');
   const viewFlying = $('#view-flying');
   const viewCombo = $('#view-combo');
+  const viewFootball = $('#view-football');
   const btnBack = $('#btn-back');
   const pageTitle = $('#page-title');
   const pageSub = $('#page-sub');
@@ -464,6 +465,7 @@
     viewWind.hidden = true;
     viewFlying.hidden = true;
     viewCombo.hidden = true;
+    viewFootball.hidden = true;
     btnBack.hidden = true;
     pageTitle.textContent = '🏇 TW賽馬貼士';
     renderAllTimeProfitSubtitle();
@@ -530,6 +532,7 @@
     viewWind.hidden = true;
     viewFlying.hidden = true;
     viewCombo.hidden = true;
+    viewFootball.hidden = true;
     btnBack.hidden = false;
     const titleBase = `${formatShortDate(meeting.date)} ${meeting.venue} ${meeting.raceCount}場賽事`;
     pageTitle.textContent = meeting.label ? `${titleBase}【${meeting.label}】` : titleBase;
@@ -1127,6 +1130,7 @@
     viewWind.hidden = false;
     viewFlying.hidden = true;
     viewCombo.hidden = true;
+    viewFootball.hidden = true;
     btnBack.hidden = false;
     pageTitle.textContent = '收風統計';
     pageSub.classList.remove('subtitle-profit');
@@ -1718,6 +1722,7 @@
     viewWind.hidden = true;
     viewFlying.hidden = false;
     viewCombo.hidden = true;
+    viewFootball.hidden = true;
     btnBack.hidden = false;
     pageTitle.textContent = '賽日有飛馬';
     pageSub.classList.remove('subtitle-profit');
@@ -2180,6 +2185,7 @@
     viewWind.hidden = true;
     viewFlying.hidden = true;
     viewCombo.hidden = false;
+    viewFootball.hidden = true;
     btnBack.hidden = false;
     pageTitle.textContent = '練騎合作';
     pageSub.classList.remove('subtitle-profit');
@@ -2221,9 +2227,601 @@
     }
   }
 
+  /* ---------- 波盤推介 (live gviz; JSON file only if the sheet cannot be fetched) ---------- */
+  const FOOTBALL_SHEET_ID = '1UdCJnyxAt5XzV0gbY4FCKrDYio_-SPBoyaAqaBBtKXw';
+  const FOOTBALL_SHEET_NAME = '波盤推介';
+  const FOOTBALL_WL = { W: '全贏', WH: '贏半', P: '走盤', LH: '輸半', L: '全輸' };
+  let footballLoad = 0;
+
+  function footballGvizUrl(outKind) {
+    const q = new URLSearchParams({
+      tqx: 'out:' + outKind,
+      gid: '0',
+      t: String(Date.now()),
+    });
+    // CSV is the text feed (gid=0). JSON keeps Date() values; headers=1 names the columns.
+    if (outKind === 'json') q.set('headers', '1');
+    q.set('sheet', FOOTBALL_SHEET_NAME);
+    return 'https://docs.google.com/spreadsheets/d/' + FOOTBALL_SHEET_ID + '/gviz/tq?' + q.toString();
+  }
+
+  function parseFootballGviz(text) {
+    const start = text.indexOf('{');
+    const end = text.lastIndexOf('}');
+    if (start < 0 || end < start) throw new Error('波盤資料格式錯誤');
+    return JSON.parse(text.slice(start, end + 1));
+  }
+
+  function footballYmd(y, m, d) {
+    if (!Number.isInteger(y) || !Number.isInteger(m) || !Number.isInteger(d)) return '';
+    if (y < 2000 || y > 2100 || m < 1 || m > 12 || d < 1 || d > 31) return '';
+    return y + '-' + String(m).padStart(2, '0') + '-' + String(d).padStart(2, '0');
+  }
+
+  /** yyyy-mm-dd, dd/mm/yyyy, or gviz Date(y,m,d) with a 0-based month. */
+  function parseFootballDate(raw) {
+    const text = String(raw == null ? '' : raw).trim();
+    if (!text) return '';
+    const serial = text.match(/^Date\((\d+),(\d+),(\d+)\)$/);
+    if (serial) return footballYmd(+serial[1], +serial[2] + 1, +serial[3]);
+    const iso = text.match(/^(\d{4})[-/](\d{1,2})[-/](\d{1,2})/);
+    if (iso) return footballYmd(+iso[1], +iso[2], +iso[3]);
+    const dmy = text.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (dmy) return footballYmd(+dmy[3], +dmy[2], +dmy[1]);
+    return '';
+  }
+
+  function footballDateFromCell(cell) {
+    if (!cell) return '';
+    if (typeof cell.v === 'string') {
+      const fromValue = parseFootballDate(cell.v);
+      if (fromValue) return fromValue;
+    }
+    if (cell.f != null) {
+      const fromFormatted = parseFootballDate(cell.f);
+      if (fromFormatted) return fromFormatted;
+    }
+    return '';
+  }
+
+  /** CSV text wins. A blank text date falls back to the gviz Date() / formatted cell. */
+  function footballRowDate(text, cell) {
+    return parseFootballDate(text) || footballDateFromCell(cell);
+  }
+
+  function footballHeaderMap(cells) {
+    const map = {};
+    (cells || []).forEach((cell, i) => {
+      const name = String(cell || '').trim().replace(/^\uFEFF/, '').replace(/％/g, '%');
+      if (name && map[name] == null) map[name] = i;
+    });
+    return map;
+  }
+
+  function footballFindHeader(rows) {
+    for (let i = 0; i < rows.length; i++) {
+      const map = footballHeaderMap(rows[i]);
+      if (map['日期'] != null && map['注數'] != null) return { index: i, map: map };
+    }
+    return null;
+  }
+
+  function footballJsonCols(table) {
+    const map = {};
+    (table.cols || []).forEach((col, i) => {
+      const name = String(col.label || '').trim().replace(/％/g, '%');
+      if (name && map[name] == null) map[name] = i;
+    });
+    return map;
+  }
+
+  function footballCsvCell(cols, map, name) {
+    if (!cols || !map || map[name] == null) return '';
+    return String(cols[map[name]] == null ? '' : cols[map[name]]).trim();
+  }
+
+  function footballJsonCell(row, cols, name) {
+    if (!row || !cols || cols[name] == null) return null;
+    return gvizCell(row, cols[name]);
+  }
+
+  function footballText(csvText, cell) {
+    if (csvText) return csvText;
+    return cellText(cell).trim();
+  }
+
+  function footballStr(value) {
+    return value == null ? '' : String(value).trim();
+  }
+
+  function parseFootballStake(text) {
+    const t = String(text == null ? '' : text).trim().replace(/,/g, '');
+    if (!t) return null;
+    const matched = t.match(/^(-?\d+(?:\.\d+)?)(?:注)?$/);
+    if (!matched) return null;
+    const n = Number(matched[1]);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function footballStake(text, cell) {
+    const fromText = parseFootballStake(text);
+    if (fromText != null) return fromText;
+    if (cell && typeof cell.v === 'number' && Number.isFinite(cell.v)) return cell.v;
+    return parseFootballStake(cellText(cell));
+  }
+
+  function footballOdds(text, cell) {
+    const t = String(text == null ? '' : text).trim();
+    if (t) return t;
+    if (cell && typeof cell.v === 'number' && Number.isFinite(cell.v)) return cell.v.toFixed(2);
+    return cellText(cell).trim();
+  }
+
+  function footballProfit(text, cell) {
+    const t = String(text == null ? '' : text).trim();
+    if (t && t !== '—' && t !== '-' && t !== '–') {
+      const n = Number(t.replace(/[$,，\s]/g, '').replace(/^\+/, ''));
+      return Number.isFinite(n) ? n : null;
+    }
+    if (!t && cell && typeof cell.v === 'number' && Number.isFinite(cell.v)) return cell.v;
+    return null;
+  }
+
+  function normalizeFootballWl(raw) {
+    const text = String(raw == null ? '' : raw).trim();
+    if (!text) return '';
+    const zh = { '全贏': 'W', '贏半': 'WH', '走盤': 'P', '輸半': 'LH', '全輸': 'L' };
+    if (zh[text]) return zh[text];
+    const up = text.toUpperCase().replace(/\s+/g, '');
+    if (up === 'W' || up === 'WH' || up === 'P' || up === 'LH' || up === 'L') return up;
+    return text;
+  }
+
+  /** Sheet column is capped at 30 characters. Longer text is cut so the card stays one block. */
+  function footballReason(text) {
+    const t = String(text || '').trim();
+    if (!t) return '';
+    const chars = Array.from(t);
+    if (chars.length <= 30) return t;
+    return chars.slice(0, 30).join('') + '…';
+  }
+
+  function footballTipFromRow(cols, map, jsonRow, jsonCols) {
+    const csv = (name) => footballCsvCell(cols, map, name);
+    const json = (name) => footballJsonCell(jsonRow, jsonCols, name);
+    const date = footballRowDate(csv('日期'), json('日期'));
+    if (!date) return null;
+    const stake = footballStake(csv('注數'), json('注數'));
+    if (!(stake > 0)) return null;
+    return {
+      date: date,
+      ko: footballText(csv('時間'), json('時間')),
+      league: footballText(csv('聯賽'), json('聯賽')),
+      match: footballText(csv('場次'), json('場次')),
+      pick: footballText(csv('推介'), json('推介')),
+      line: footballText(csv('買法'), json('買法')),
+      odds: footballOdds(csv('賠率'), json('賠率')),
+      confidence: footballText(csv('信心%'), json('信心%')),
+      stake: stake,
+      status: footballText(csv('狀態'), json('狀態')),
+      reason: footballReason(footballText(csv('推介原因'), json('推介原因'))),
+      result: footballText(csv('賽果'), json('賽果')),
+      wl: normalizeFootballWl(footballText(csv('W/L'), json('W/L'))),
+      profit: footballProfit(csv('利潤'), json('利潤')),
+    };
+  }
+
+  function footballGroupDays(tips) {
+    const map = new Map();
+    tips.forEach((tip) => {
+      if (!map.has(tip.date)) map.set(tip.date, []);
+      map.get(tip.date).push(tip);
+    });
+    return [...map.keys()].sort().map((date) => ({
+      date: date,
+      label: '',
+      tips: map.get(date),
+    }));
+  }
+
+  function footballModelFromSheet(csvRows, table) {
+    const csvHeader = csvRows ? footballFindHeader(csvRows) : null;
+    const jsonCols = table ? footballJsonCols(table) : null;
+    const hasCsv = !!(csvHeader && csvHeader.map['注數'] != null && csvHeader.map['日期'] != null);
+    const hasJson = !!(jsonCols && jsonCols['注數'] != null && jsonCols['日期'] != null);
+    if (!hasCsv && !hasJson) return null;
+    const tips = [];
+    if (hasCsv) {
+      for (let r = csvHeader.index + 1; r < csvRows.length; r++) {
+        const jsonRow = hasJson && csvHeader.index === 0 && table.rows ? table.rows[r - 1] : null;
+        const tip = footballTipFromRow(csvRows[r] || [], csvHeader.map, jsonRow, jsonCols);
+        if (tip) tips.push(tip);
+      }
+    } else {
+      (table.rows || []).forEach((row) => {
+        const tip = footballTipFromRow(null, null, row, jsonCols);
+        if (tip) tips.push(tip);
+      });
+    }
+    return { unit: 100, days: footballGroupDays(tips) };
+  }
+
+  function footballModelFromFile(data) {
+    const unitNum = Number(data && data.unit);
+    const unit = Number.isFinite(unitNum) && unitNum > 0 ? unitNum : 100;
+    const days = [];
+    (data && data.days ? data.days : []).forEach((day) => {
+      const date = parseFootballDate(day && day.date);
+      if (!date) return;
+      const tips = [];
+      (day.tips || []).forEach((tip) => {
+        const stake = Number(tip && tip.stake);
+        if (!(stake > 0)) return;
+        const odds = tip.odds == null || tip.odds === ''
+          ? ''
+          : (typeof tip.odds === 'number' ? tip.odds.toFixed(2) : String(tip.odds));
+        tips.push({
+          date: date,
+          ko: footballStr(tip.ko),
+          league: footballStr(tip.league),
+          match: footballStr(tip.match),
+          pick: footballStr(tip.pick),
+          line: footballStr(tip.market != null && tip.market !== '' ? tip.market : tip['買法']),
+          odds: odds,
+          confidence: tip.confidence == null || tip.confidence === '' ? '' : String(tip.confidence),
+          stake: stake,
+          status: footballStr(tip.status),
+          reason: footballReason(footballStr(tip.reason != null ? tip.reason : tip['推介原因'])),
+          result: footballStr(tip.result),
+          wl: normalizeFootballWl(tip.wl),
+          profit: tip.profit == null || tip.profit === '' || !Number.isFinite(Number(tip.profit)) ? null : Number(tip.profit),
+        });
+      });
+      if (tips.length) days.push({ date: date, label: footballStr(day.label), tips: tips });
+    });
+    days.sort((a, b) => a.date.localeCompare(b.date));
+    return { unit: unit, days: days };
+  }
+
+  async function footballFetchText(url) {
+    try {
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      return await res.text();
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  async function loadFootballSheet() {
+    const [csvText, jsonText] = await Promise.all([
+      footballFetchText(footballGvizUrl('csv')),
+      footballFetchText(footballGvizUrl('json')),
+    ]);
+    if (csvText == null && jsonText == null) throw new Error('無法載入波盤推介');
+    let csvRows = null;
+    let table = null;
+    if (csvText != null) csvRows = parseSimpleCsv(csvText);
+    if (jsonText != null) {
+      try {
+        const data = parseFootballGviz(jsonText);
+        if (!data || data.status === 'error' || !data.table) throw new Error('波盤資料格式錯誤');
+        table = data.table;
+      } catch (err) {
+        if (csvRows == null) throw err;
+        console.error(err);
+      }
+    }
+    const model = footballModelFromSheet(csvRows, table);
+    if (!model) throw new Error('波盤資料格式錯誤');
+    return model;
+  }
+
+  async function loadFootball() {
+    try {
+      const model = await loadFootballSheet();
+      return { model: model, source: 'sheet' };
+    } catch (err) {
+      console.error(err);
+      const res = await fetch(dataUrl('football-tips.json'));
+      if (!res.ok) throw new Error('無法載入波盤推介');
+      return { model: footballModelFromFile(await res.json()), source: 'file' };
+    }
+  }
+
+  function footballDayLabel(day) {
+    if (day && day.label) return day.label;
+    const matched = day && String(day.date || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    if (!matched) return day && day.date ? day.date : '';
+    return Number(matched[2]) + '月' + Number(matched[3]) + '日';
+  }
+
+  function formatFbMoney(n) {
+    const rounded = Math.round(Math.abs(Number(n) || 0) * 100) / 100;
+    const text = Number.isInteger(rounded)
+      ? String(rounded)
+      : rounded.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+    return '$' + text;
+  }
+
+  function formatFbSigned(n) {
+    const rounded = Math.round(Number(n) * 100) / 100;
+    if (rounded > 0) return '+' + formatFbMoney(rounded);
+    if (rounded < 0) return '-' + formatFbMoney(rounded);
+    return '$0';
+  }
+
+  function formatFbUnits(n) {
+    const rounded = Math.round(Number(n) * 100) / 100;
+    const text = Number.isInteger(rounded) ? String(rounded) : String(rounded);
+    return text + '注';
+  }
+
+  function formatFbPct(hits, decided) {
+    if (!decided) return '—';
+    const pct = Math.round((hits / decided) * 1000) / 10;
+    const text = Number.isInteger(pct) ? String(pct) : pct.toFixed(1);
+    return text + '%（' + hits + '/' + decided + '）';
+  }
+
+  function formatFbConfidence(text) {
+    const t = String(text || '').trim();
+    if (!t) return '';
+    if (t.indexOf('%') >= 0 || t.indexOf('％') >= 0) return t.replace(/％/g, '%');
+    const n = Number(t);
+    if (!Number.isFinite(n)) return t;
+    const pct = n > 0 && n <= 1 ? n * 100 : n;
+    const rounded = Math.round(pct * 10) / 10;
+    return (Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1)) + '%';
+  }
+
+  function formatFbStake(stake, unit) {
+    return formatFbUnits(stake) + '（' + formatFbMoney(Number(stake) * unit) + '）';
+  }
+
+  function summarizeFootball(tips, unit) {
+    const out = {
+      units: 0,
+      staked: 0,
+      payout: 0,
+      profit: 0,
+      profitKnown: 0,
+      settledStake: 0,
+      hits: 0,
+      decided: 0,
+      pending: 0,
+      count: tips.length,
+    };
+    tips.forEach((tip) => {
+      const units = Number(tip.stake) || 0;
+      const amt = units * unit;
+      out.units += units;
+      out.staked += amt;
+      const wl = tip.wl;
+      const known = wl === 'W' || wl === 'WH' || wl === 'P' || wl === 'LH' || wl === 'L';
+      const hasProfit = tip.profit != null && Number.isFinite(Number(tip.profit));
+      if (!known && !hasProfit) {
+        out.pending += 1;
+        return;
+      }
+      if (hasProfit) {
+        const profit = Number(tip.profit);
+        out.profit += profit;
+        out.payout += amt + profit;
+        out.settledStake += amt;
+        out.profitKnown += 1;
+      }
+      if (wl === 'W' || wl === 'WH') {
+        out.hits += 1;
+        out.decided += 1;
+      } else if (wl === 'L' || wl === 'LH') {
+        out.decided += 1;
+      }
+    });
+    return out;
+  }
+
+  function footballStatHtml(label, value, valueClass, wide) {
+    return '<div class="fb-stat' + (wide ? ' fb-stat-wide' : '') + '">' +
+      '<span class="fb-k">' + label + '</span>' +
+      '<span class="fb-n' + (valueClass ? ' ' + valueClass : '') + '">' + escapeHtml(value) + '</span></div>';
+  }
+
+  function footballSummaryHtml(id, title, tips, unit, updated) {
+    const stats = summarizeFootball(tips, unit);
+    const payout = stats.profitKnown ? formatFbMoney(stats.payout) : '—';
+    const profitText = stats.profitKnown ? formatFbSigned(stats.profit) : '—';
+    const profitClass = !stats.profitKnown ? '' : (stats.profit > 0 ? 'pl-pos' : (stats.profit < 0 ? 'pl-neg' : ''));
+    let extra = '';
+    if (stats.pending && stats.profitKnown) {
+      extra = '<p class="fb-note">已結投注 ' + escapeHtml(formatFbMoney(stats.settledStake)) +
+        ' · 未結 ' + stats.pending + ' 場</p>';
+    } else if (stats.pending) {
+      extra = '<p class="fb-note">未結 ' + stats.pending + ' 場</p>';
+    }
+    return '<section class="panel" id="' + id + '">' + panelTitleHtml(escapeHtml(title), updated) +
+      '<div class="fb-stats">' +
+      footballStatHtml('總注數', formatFbUnits(stats.units)) +
+      footballStatHtml('投注額', formatFbMoney(stats.staked)) +
+      footballStatHtml('派彩', payout) +
+      footballStatHtml('盈虧', profitText, profitClass) +
+      footballStatHtml('命中率', formatFbPct(stats.hits, stats.decided), '', true) +
+      '</div>' + extra + '</section>';
+  }
+
+  function footballFieldHtml(label, value, wide) {
+    if (value == null || String(value).trim() === '') return '';
+    return '<div class="fb-field' + (wide ? ' fb-field-wide' : '') + '">' +
+      '<span class="fb-k">' + label + '</span>' +
+      '<span class="fb-v">' + escapeHtml(String(value)) + '</span></div>';
+  }
+
+  function footballResultHtml(tip) {
+    const parts = [];
+    if (tip.result) parts.push('<span>賽果 ' + escapeHtml(tip.result) + '</span>');
+    if (tip.wl) {
+      const label = FOOTBALL_WL[tip.wl] ? tip.wl + ' ' + FOOTBALL_WL[tip.wl] : tip.wl;
+      const cls = tip.wl === 'W' || tip.wl === 'WH' ? 'pl-pos' : (tip.wl === 'L' || tip.wl === 'LH' ? 'pl-neg' : '');
+      parts.push('<span class="' + cls + '">' + escapeHtml(label) + '</span>');
+    }
+    if (tip.profit != null && Number.isFinite(Number(tip.profit))) {
+      const profit = Number(tip.profit);
+      const cls = profit > 0 ? 'pl-pos' : (profit < 0 ? 'pl-neg' : '');
+      parts.push('<span class="' + cls + '">' + escapeHtml(formatFbSigned(profit)) + '</span>');
+    }
+    if (!parts.length) return '<p class="fb-pending">未有賽果</p>';
+    return '<p class="fb-settled">' + parts.join('<span class="fb-dot"> · </span>') + '</p>';
+  }
+
+  function footballCardHtml(tip, unit) {
+    const bits = [];
+    if (tip.ko) bits.push(tip.ko);
+    if (tip.league) bits.push(tip.league);
+    const head = bits.length
+      ? '<span class="fb-ko">' + escapeHtml(bits.join(' · ')) + '</span>'
+      : '<span class="fb-ko"></span>';
+    const status = tip.status
+      ? '<span class="fb-status ' + (tip.status === '確認' ? 'fb-status-ok' : 'fb-status-wait') + '">' +
+        escapeHtml(tip.status) + '</span>'
+      : '';
+    const match = tip.match ? '<p class="fb-match">' + escapeHtml(tip.match) + '</p>' : '';
+    return '<article class="fb-card">' +
+      '<div class="fb-top">' + head + status + '</div>' +
+      match +
+      '<div class="fb-fields">' +
+      footballFieldHtml('推介', tip.pick) +
+      footballFieldHtml('買法', tip.line) +
+      footballFieldHtml('賠率', tip.odds) +
+      footballFieldHtml('信心', formatFbConfidence(tip.confidence)) +
+      footballFieldHtml('注碼', formatFbStake(tip.stake, unit), true) +
+      footballFieldHtml('推介原因', tip.reason, true) +
+      '</div>' +
+      footballResultHtml(tip) +
+      '</article>';
+  }
+
+  function paintFootball(model, source, wanted) {
+    const host = $('#football-body');
+    if (!host) return;
+    host.dataset.source = source;
+    const days = model.days || [];
+    const latest = days.reduce((best, day) => (!best || day.date > best.date ? day : best), null);
+    const selected = days.find((day) => day.date === wanted) || latest;
+    const updated = latest ? latest.date : '';
+    pageTitle.textContent = '波盤推介';
+    pageSub.classList.remove('subtitle-profit');
+    pageSub.hidden = false;
+    if (!selected) {
+      pageSub.textContent = '暫未有推介';
+      host.innerHTML = '<p class="empty">暫未有注數大於 0 的推介</p>';
+      return;
+    }
+    pageSub.textContent = footballDayLabel(selected) + ' · ' + selected.tips.length + '場';
+    const ordered = days.slice().sort((a, b) => b.date.localeCompare(a.date));
+    const options = ordered.map((day) => {
+      const latestMark = latest && day.date === latest.date ? '（最新）' : '';
+      return '<option value="' + escapeAttr(day.date) + '"' +
+        (day.date === selected.date ? ' selected' : '') + '>' +
+        escapeHtml(footballDayLabel(day) + ' ' + day.date + latestMark) + '</option>';
+    }).join('');
+    const history = ordered.map((day) => {
+      const stats = summarizeFootball(day.tips, model.unit);
+      const active = day.date === selected.date ? ' active' : '';
+      const latestMark = latest && day.date === latest.date ? '<span class="fb-latest">最新</span>' : '<span></span>';
+      return '<li><button type="button" class="fb-day' + active + '" data-fb-date="' + escapeAttr(day.date) + '">' +
+        '<span class="fb-day-top"><span>' + escapeHtml(footballDayLabel(day)) + '</span>' + latestMark + '</span>' +
+        '<span class="fb-day-sub">' + escapeHtml(day.date) + ' · ' + day.tips.length + '場 · ' +
+        escapeHtml(formatFbUnits(stats.units)) + '</span></button></li>';
+    }).join('');
+    const allTips = days.reduce((list, day) => list.concat(day.tips), []);
+    host.innerHTML =
+      '<section class="panel" id="football-history">' +
+      panelTitleHtml('過往日期', updated) +
+      '<div class="fb-pad"><label class="fb-date"><span class="sr-only">日期</span>' +
+      '<select id="football-date" aria-label="日期">' + options + '</select></label></div>' +
+      '<ul class="fb-days">' + history + '</ul></section>' +
+      '<div id="football-summaries">' +
+      footballSummaryHtml('football-day-summary', '當日總結', selected.tips, model.unit, updated) +
+      footballSummaryHtml('football-cumulative', '累計總結', allTips, model.unit, updated) +
+      '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
+      '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>' +
+      '<section class="panel" id="football-matches">' +
+      panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
+      selected.tips.map((tip) => footballCardHtml(tip, model.unit)).join('') +
+      '</section>';
+  }
+
+  function bindFootballOnce() {
+    if (!viewFootball || viewFootball.dataset.bound === '1') return;
+    viewFootball.dataset.bound = '1';
+    viewFootball.addEventListener('change', (event) => {
+      const target = event.target;
+      if (!target || target.id !== 'football-date') return;
+      if (target.value) location.hash = '#/football/' + target.value;
+    });
+    viewFootball.addEventListener('click', (event) => {
+      const btn = event.target.closest('[data-fb-date]');
+      if (!btn) return;
+      const date = btn.getAttribute('data-fb-date');
+      if (date) location.hash = '#/football/' + date;
+    });
+  }
+
+  async function renderFootball(wanted) {
+    const token = ++footballLoad;
+    viewHome.hidden = true;
+    viewDetail.hidden = true;
+    viewWind.hidden = true;
+    viewFlying.hidden = true;
+    viewCombo.hidden = true;
+    viewFootball.hidden = false;
+    btnBack.hidden = false;
+    pageTitle.textContent = '波盤推介';
+    pageSub.classList.remove('subtitle-profit');
+    pageSub.hidden = false;
+    pageSub.textContent = '載入中…';
+    const status = $('#football-status');
+    const host = $('#football-body');
+    if (status) {
+      status.hidden = false;
+      status.textContent = '載入中…';
+    }
+    if (host) host.innerHTML = '';
+    bindFootballOnce();
+    try {
+      const loaded = await loadFootball();
+      if (token !== footballLoad || viewFootball.hidden) return;
+      if (status) status.hidden = true;
+      paintFootball(loaded.model, loaded.source, wanted || '');
+    } catch (err) {
+      console.error(err);
+      if (token !== footballLoad) return;
+      if (status) {
+        status.hidden = false;
+        status.textContent = '載入失敗：' + (err.message || err);
+      }
+    }
+  }
+
   /* ---------- routing ---------- */
   async function route() {
     const hash = location.hash || '#/';
+    const footer = document.querySelector('.site-footer');
+    if (footer) {
+      footer.textContent = /^#\/football(?:\/|$)/.test(hash)
+        ? '足球投注有輸錢風險，以上只係分析。'
+        : '僅供參考 · 非投注建議';
+    }
+    const football = hash.match(/^#\/football(?:\/(\d{4}-\d{2}-\d{2}))?\/?$/);
+    if (football) {
+      try {
+        await renderFootball(football[1] || '');
+      } catch (err) {
+        console.error(err);
+      }
+      return;
+    }
     if (hash === '#/wind') {
       try {
         await renderWind();

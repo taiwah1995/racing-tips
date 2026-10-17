@@ -77,6 +77,37 @@ No build step — plain HTML + CSS + JS.
 
 `#/wind` and `#/flying` read Google Sheet `10vr-9Huqp6UyBJMDtRUKmjhMi_0TP0wjlYEv9ZI55co` in the browser on every open (gviz JSON). Those numbers are not copied into the repo. `#/flying` uses tabs `賽日有飛馬` and `A123 分析 26/27`.
 
+## 波盤推介
+
+`#/football` reads Google Sheet `1UdCJnyxAt5XzV0gbY4FCKrDYio_-SPBoyaAqaBBtKXw` (tab `波盤推介`, `gid=0`) live in the browser:
+
+```
+/gviz/tq?tqx=out:csv&gid=0&sheet=波盤推介
+/gviz/tq?tqx=out:json&gid=0&headers=1&sheet=波盤推介
+```
+
+Row 1 headers, exactly: `日期 | 時間 | 聯賽 | 場次 | 推介 | 買法 | 賠率 | 信心% | 注數 | 狀態 | 推介原因 | 賽果 | W/L | 利潤`.
+
+- `日期` accepts `yyyy-mm-dd`, `dd/mm/yyyy`, and gviz `Date(y,m,d)` (month is 0-based). A date gviz leaves blank is filled from the CSV text.
+- Only rows with `注數` > 0 are shown. Rows are grouped by `日期`. The panel `更新：` date is the latest day.
+- `#/football` opens that latest day. The date picker and the list under `過往日期` open an older day at `#/football/yyyy-mm-dd`.
+- `買法` is the line. `推介原因` is shown when the cell has text, cut at 30 characters.
+- `1注=$100`. 總注數 and 投注額 include every shown row. 派彩, 盈虧, and 命中率 use settled rows only. 命中 is `W` and `WH`; `P` is left out; `LH` and `L` are misses. Empty `W/L` and `利潤` stay `未有賽果`.
+- If both gviz fetches fail, the page uses `data/football-tips.json` with no extra notice. That file is not read when the sheet loads.
+
+### Update the sheet
+
+Append one row per match. Keep row 1 as the headers above. Put `yyyy-mm-dd` in `日期`. After full time, fill `賽果`, `W/L` (`W` / `WH` / `P` / `LH` / `L`), and `利潤` (profit, not the stake returned). Leave those three blank while the match is still open.
+
+### Update the JSON fallback
+
+Used only when the sheet cannot be fetched. Copy the same matches into `data/football-tips.json`:
+
+1. Append a day to `days[]` with `date` (`yyyy-mm-dd`) and `label`.
+2. Each tip uses `ko`, `league`, `match`, `pick`, `market` (this is 買法), `odds`, `confidence`, `stake`, `status` (`暫定` or `確認`). Add `reason` when there is a 推介原因. Leave `result`, `wl`, and `profit` empty (`profit: null`) until the match is settled, then set `wl` and the profit number.
+3. Tips with `stake` ≤ 0 are hidden. `unit` stays `100`.
+4. Bump `APP_DATA_VERSION` in `js/app.js` and the `?v=` on CSS/JS in `index.html` so phones pick up the new file.
+
 ## Tech
 
 Static site only. Zero dependencies. Served with `python3 -m http.server`.
