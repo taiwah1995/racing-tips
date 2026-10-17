@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football1';
+  const APP_DATA_VERSION = '20261017football2';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2576,6 +2576,24 @@
     return (Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1)) + '%';
   }
 
+  /** Sheet odds stay as written; the card always shows two decimals. */
+  function formatFbOdds(text) {
+    const t = String(text == null ? '' : text).trim().replace(/倍$/, '');
+    if (!t) return '';
+    const n = Number(t);
+    if (!Number.isFinite(n)) return t;
+    return n.toFixed(2);
+  }
+
+  function footballPickLine(tip) {
+    const parts = [];
+    if (tip.pick) parts.push(tip.pick);
+    if (tip.line) parts.push('(' + tip.line + ')');
+    const odds = formatFbOdds(tip.odds);
+    if (odds) parts.push(odds + '倍');
+    return parts.join(' ');
+  }
+
   function formatFbStake(stake, unit) {
     return formatFbUnits(stake) + '（' + formatFbMoney(Number(stake) * unit) + '）';
   }
@@ -2685,15 +2703,20 @@
       ? '<span class="fb-status ' + (tip.status === '確認' ? 'fb-status-ok' : 'fb-status-wait') + '">' +
         escapeHtml(tip.status) + '</span>'
       : '';
-    const match = tip.match ? '<p class="fb-match">' + escapeHtml(tip.match) + '</p>' : '';
+    const conf = formatFbConfidence(tip.confidence);
+    let match = '';
+    if (tip.match || conf) {
+      match = '<p class="fb-match">' +
+        (tip.match ? '<span class="fb-match-name">' + escapeHtml(tip.match) + '</span>' : '') +
+        (tip.match && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
+        (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
+        '</p>';
+    }
     return '<article class="fb-card">' +
       '<div class="fb-top">' + head + status + '</div>' +
       match +
       '<div class="fb-fields">' +
-      footballFieldHtml('推介', tip.pick) +
-      footballFieldHtml('買法', tip.line) +
-      footballFieldHtml('賠率', tip.odds) +
-      footballFieldHtml('信心', formatFbConfidence(tip.confidence)) +
+      footballFieldHtml('推介', footballPickLine(tip), true) +
       footballFieldHtml('注碼', formatFbStake(tip.stake, unit), true) +
       footballFieldHtml('推介原因', tip.reason, true) +
       '</div>' +

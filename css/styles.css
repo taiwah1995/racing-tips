@@ -1232,11 +1232,21 @@ body {
   border: 1px solid var(--border);
 }
 #view-football .fb-match {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 4px;
   margin-top: 4px;
   font-size: 1.02rem;
   font-weight: 700;
   line-height: 1.35;
-  overflow-wrap: anywhere;
+}
+#view-football .fb-match-name { overflow-wrap: anywhere; }
+#view-football .fb-conf-sep,
+#view-football .fb-conf {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.82rem;
 }
 #view-football .fb-fields {
   display: grid;
