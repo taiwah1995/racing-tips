@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football2';
+  const APP_DATA_VERSION = '20261017football3';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2585,13 +2585,17 @@
     return n.toFixed(2);
   }
 
-  function footballPickLine(tip) {
-    const parts = [];
-    if (tip.pick) parts.push(tip.pick);
-    if (tip.line) parts.push('(' + tip.line + ')');
+  /** Team and 買法 use the same green as a winning W. Odds stay the normal value colour. */
+  function footballPickHtml(tip) {
+    const bits = [];
+    if (tip.pick) bits.push('<span class="pl-pos">' + escapeHtml(tip.pick) + '</span>');
+    if (tip.line) bits.push('<span class="pl-pos">(' + escapeHtml(tip.line) + ')</span>');
     const odds = formatFbOdds(tip.odds);
-    if (odds) parts.push(odds + '倍');
-    return parts.join(' ');
+    if (odds) bits.push(escapeHtml(odds + '倍'));
+    if (!bits.length) return '';
+    return '<div class="fb-field fb-field-wide">' +
+      '<span class="fb-k">推介</span>' +
+      '<span class="fb-v">' + bits.join(' ') + '</span></div>';
   }
 
   function formatFbStake(stake, unit) {
@@ -2716,7 +2720,7 @@
       '<div class="fb-top">' + head + status + '</div>' +
       match +
       '<div class="fb-fields">' +
-      footballFieldHtml('推介', footballPickLine(tip), true) +
+      footballPickHtml(tip) +
       footballFieldHtml('注碼', formatFbStake(tip.stake, unit), true) +
       footballFieldHtml('推介原因', tip.reason, true) +
       '</div>' +
