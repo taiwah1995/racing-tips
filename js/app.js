@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football6';
+  const APP_DATA_VERSION = '20261017football7';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3000,7 +3000,8 @@
     const stake = row.stake == null || !Number.isFinite(Number(row.stake))
       ? '—'
       : formatFbUnits(row.stake);
-    return '<li class="fb-all-row">' +
+    const stars = footballStarCount(row.confidence);
+    return '<li class="fb-all-row"' + (stars == null ? '' : ' data-stars="' + stars + '"') + '>' +
       '<div class="fb-all-top">' +
       (row.time ? '<span class="fb-all-time">' + escapeHtml(row.time) + '</span>' : '') +
       '<span class="fb-all-match">' + escapeHtml(row.match || '—') + '</span></div>' +
@@ -3012,16 +3013,46 @@
       '</div></li>';
   }
 
+  function footballStarChipHtml(n) {
+    return '<label class="fb-star-chip fb-stars-' + n + '">' +
+      '<input type="checkbox" data-fb-star="' + n + '" checked>' +
+      '<span class="fb-chip-star" aria-hidden="true">★</span>' +
+      '<span>' + n + '星</span></label>';
+  }
+
   function footballAllDayHtml(allday, date, updated) {
     const rows = (allday && allday.rows ? allday.rows : []).filter((row) => row.date === date);
     const source = allday && allday.source ? allday.source : '';
+    const chips = [1, 2, 3, 4, 5].map(footballStarChipHtml).join('');
     const body = rows.length
-      ? '<ul class="fb-all-list">' + rows.map(footballAllDayRowHtml).join('') + '</ul>'
+      ? '<div class="fb-star-filter">' +
+        '<div class="fb-star-chips" role="group" aria-label="星級篩選">' + chips + '</div>' +
+        '<p class="fb-star-count">' + rows.length + '/' + rows.length + '</p></div>' +
+        '<ul class="fb-all-list">' + rows.map(footballAllDayRowHtml).join('') + '</ul>'
       : '<p class="fb-pending">呢日未有全日分析</p>';
     return '<section class="panel" id="football-allday" data-source="' + escapeAttr(source) + '">' +
       panelTitleHtml('全日分析', updated) +
       body +
       '</section>';
+  }
+
+  function applyFootballStarFilter() {
+    const panel = document.getElementById('football-allday');
+    if (!panel) return;
+    const selected = {};
+    panel.querySelectorAll('input[data-fb-star]').forEach((input) => {
+      if (input.checked) selected[input.getAttribute('data-fb-star')] = true;
+    });
+    let visible = 0;
+    let total = 0;
+    panel.querySelectorAll('.fb-all-row').forEach((row) => {
+      total += 1;
+      const show = !!selected[row.getAttribute('data-stars')];
+      row.hidden = !show;
+      if (show) visible += 1;
+    });
+    const count = panel.querySelector('.fb-star-count');
+    if (count) count.textContent = visible + '/' + total;
   }
 
   function paintFootball(model, source, wanted, allday) {
@@ -3082,7 +3113,12 @@
     viewFootball.dataset.bound = '1';
     viewFootball.addEventListener('change', (event) => {
       const target = event.target;
-      if (!target || target.id !== 'football-date') return;
+      if (!target) return;
+      if (target.matches && target.matches('input[data-fb-star]')) {
+        applyFootballStarFilter();
+        return;
+      }
+      if (target.id !== 'football-date') return;
       if (target.value) location.hash = '#/football/' + target.value;
     });
     viewFootball.addEventListener('click', (event) => {
