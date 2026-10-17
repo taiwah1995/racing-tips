@@ -90,7 +90,7 @@ Row 1 headers, exactly: `日期 | 時間 | 聯賽 | 場次 | 推介 | 買法 | �
 
 - `日期` accepts `yyyy-mm-dd`, `dd/mm/yyyy`, and gviz `Date(y,m,d)` (month is 0-based). A date gviz leaves blank is filled from the CSV text.
 - Only rows with `注數` > 0 are shown. Rows are grouped by `日期`. The panel `更新：` date is the latest day.
-- `#/football` opens that latest day. The date picker and the list under `過往日期` open an older day at `#/football/yyyy-mm-dd`.
+- `#/football` opens that latest day. The date picker under `過往日期` opens an older day at `#/football/yyyy-mm-dd`.
 - Card title is `場次｜信心 N%`. The 推介 row is `推介 (買法) 賠率倍`, with odds forced to two decimals. 注碼, 推介原因, 賽果, and the 暫定/確認 badge stay. `推介原因` is cut at 30 characters.
 - 是日過關推介 is the heading above the two pass panels. 穩陣過關 is the 讓球 2×1 parlay (at least two rows with 注數 > 0 and 買法 starting with 讓球). Subtitle is `讓球過關 N×1`. 過關賠率 uses `1+odds` when odds are under 1.2, otherwise the odds, and shows the product to 2 decimals.
 - 刀仔鋸大樹 is the panel under it. Subtitle is `五串六（5×6）`: five 4-leg combos plus one 5-leg combo, $10 each, stake $60. It needs five rows with 注數 > 0. If there are more, it keeps the first five in sheet order, the same order as the tip cards. It does not re-rank by 信心% or kickoff. 全中派彩 is $10 times the sum of those six decimal products. Net is that payout minus $60.

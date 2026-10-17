@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football11';
+  const APP_DATA_VERSION = '20261017football12';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3132,22 +3132,12 @@
         (day.date === selected.date ? ' selected' : '') + '>' +
         escapeHtml(footballDayLabel(day) + ' ' + day.date + latestMark) + '</option>';
     }).join('');
-    const history = ordered.map((day) => {
-      const stats = summarizeFootball(day.tips, model.unit);
-      const active = day.date === selected.date ? ' active' : '';
-      const latestMark = latest && day.date === latest.date ? '<span class="fb-latest">最新</span>' : '<span></span>';
-      return '<li><button type="button" class="fb-day' + active + '" data-fb-date="' + escapeAttr(day.date) + '">' +
-        '<span class="fb-day-top"><span>' + escapeHtml(footballDayLabel(day)) + '</span>' + latestMark + '</span>' +
-        '<span class="fb-day-sub">' + escapeHtml(day.date) + ' · ' + day.tips.length + '場 · ' +
-        escapeHtml(formatFbUnits(stats.units)) + '</span></button></li>';
-    }).join('');
     const allTips = days.reduce((list, day) => list.concat(day.tips), []);
     host.innerHTML =
       '<section class="panel" id="football-history">' +
       panelTitleHtml('過往日期', updated) +
       '<div class="fb-pad"><label class="fb-date"><span class="sr-only">日期</span>' +
-      '<select id="football-date" aria-label="日期">' + options + '</select></label></div>' +
-      '<ul class="fb-days">' + history + '</ul></section>' +
+      '<select id="football-date" aria-label="日期">' + options + '</select></label></div></section>' +
       footballPassHtml(selected.tips, updated) +
       '<section class="panel" id="football-matches">' +
       panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
@@ -3173,12 +3163,6 @@
       }
       if (target.id !== 'football-date') return;
       if (target.value) location.hash = '#/football/' + target.value;
-    });
-    viewFootball.addEventListener('click', (event) => {
-      const btn = event.target.closest('[data-fb-date]');
-      if (!btn) return;
-      const date = btn.getAttribute('data-fb-date');
-      if (date) location.hash = '#/football/' + date;
     });
   }
 
