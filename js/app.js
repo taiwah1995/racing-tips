@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261017football3';
+  const APP_DATA_VERSION = '20261017football4';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2586,16 +2586,58 @@
   }
 
   /** Team and 買法 use the same green as a winning W. Odds stay the normal value colour. */
-  function footballPickHtml(tip) {
+  function footballPickBits(tip) {
     const bits = [];
     if (tip.pick) bits.push('<span class="pl-pos">' + escapeHtml(tip.pick) + '</span>');
     if (tip.line) bits.push('<span class="pl-pos">(' + escapeHtml(tip.line) + ')</span>');
     const odds = formatFbOdds(tip.odds);
     if (odds) bits.push(escapeHtml(odds + '倍'));
+    return bits;
+  }
+
+  function footballPickHtml(tip) {
+    const bits = footballPickBits(tip);
     if (!bits.length) return '';
     return '<div class="fb-field fb-field-wide">' +
       '<span class="fb-k">推介</span>' +
       '<span class="fb-v">' + bits.join(' ') + '</span></div>';
+  }
+
+  /**
+   * 讓球 parlay for one day. Net odds (under 1.2) convert as 1+odds; longer
+   * prices are already decimal. Hidden unless there are at least two legs.
+   */
+  function footballParlayFactor(oddsText) {
+    const shown = formatFbOdds(oddsText);
+    const n = Number(shown);
+    if (!shown || !Number.isFinite(n)) return null;
+    const rounded = Number(n.toFixed(2));
+    if (rounded < 1.2) return { text: '(1+' + rounded.toFixed(2) + ')', value: 1 + rounded };
+    return { text: rounded.toFixed(2), value: rounded };
+  }
+
+  function footballParlayHtml(tips, updated) {
+    const legs = [];
+    (tips || []).forEach((tip) => {
+      if (!(Number(tip.stake) > 0)) return;
+      const line = String(tip.line || '').trim();
+      if (line.indexOf('讓球') !== 0) return;
+      const factor = footballParlayFactor(tip.odds);
+      if (!factor) return;
+      legs.push({ tip: tip, factor: factor });
+    });
+    if (legs.length < 2) return '';
+    const product = legs.reduce((total, leg) => total * leg.factor.value, 1);
+    const productText = (Math.round((product + Number.EPSILON) * 100) / 100).toFixed(2);
+    const formula = '過關賠率：' + legs.map((leg) => leg.factor.text).join('×') + '=' + productText + '倍';
+    const items = legs.map((leg) => {
+      return '<li class="fb-parlay-leg">' + footballPickBits(leg.tip).join(' ') + '</li>';
+    }).join('');
+    return '<section class="panel" id="football-parlay">' +
+      panelTitleHtml('是日過關推介', updated) +
+      '<p class="fb-parlay-sub">讓球過關 ' + legs.length + '×1</p>' +
+      '<ul class="fb-parlay-list">' + items + '</ul>' +
+      '<p class="fb-parlay-odds">' + escapeHtml(formula) + '</p></section>';
   }
 
   function formatFbStake(stake, unit) {
@@ -2773,6 +2815,7 @@
       footballSummaryHtml('football-cumulative', '累計總結', allTips, model.unit, updated) +
       '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
       '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>' +
+      footballParlayHtml(selected.tips, updated) +
       '<section class="panel" id="football-matches">' +
       panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
       selected.tips.map((tip) => footballCardHtml(tip, model.unit)).join('') +
