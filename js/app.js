@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football2';
+  const APP_DATA_VERSION = '20261018football3';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2893,6 +2893,8 @@
           pick: spec.pick,
           line: spec.line,
           odds: spec.odds,
+          result: hit && hit.result ? hit.result : '',
+          wl: hit && hit.wl ? hit.wl : '',
         };
       });
     }
@@ -2900,6 +2902,29 @@
       if (!(Number(tip.stake) > 0)) return false;
       return FOOTBALL_AUTO_HANDICAP.test(String(tip.line || '').trim());
     });
+  }
+
+  /** Fill 賽果 and W/L from the tips sheet when a lock row does not carry them. */
+  function footballCopyTipResult(leg, tips) {
+    if (!leg) return leg;
+    if (String(leg.result || '').trim() || String(leg.wl || '').trim()) return leg;
+    const key = footballMatchKey(leg.match);
+    if (!key) return leg;
+    const hit = (tips || []).find((tip) => {
+      return footballMatchKey(tip.match) === key &&
+        (String(tip.result || '').trim() || String(tip.wl || '').trim());
+    });
+    if (!hit) return leg;
+    return Object.assign({}, leg, { result: hit.result, wl: hit.wl });
+  }
+
+  /** Right-hand mark. Hidden until that 場次 has a 賽果. */
+  function footballLegResultHtml(tip) {
+    const result = String(tip && tip.result || '').trim();
+    if (!result) return '';
+    const icon = footballOutcomeIcon(tip.wl, result, tip.line);
+    const iconHtml = icon ? '<span class="fb-result-icon">' + icon + '</span>' : '';
+    return '<span class="fb-leg-result">' + iconHtml + '賽果 ' + escapeHtml(result) + '</span>';
   }
 
   function footballParlayHtml(tips, updated) {
@@ -2914,7 +2939,9 @@
     const productText = (Math.round((product + Number.EPSILON) * 100) / 100).toFixed(2);
     const formula = '過關賠率：' + legs.map((leg) => leg.factor.text).join('×') + '=' + productText + '倍';
     const items = legs.map((leg) => {
-      return '<li class="fb-parlay-leg">' + footballPickBits(leg.tip).join(' ') + '</li>';
+      return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
+        footballPickBits(leg.tip).join(' ') + '</span>' +
+        footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
       panelTitleHtml('穩陣過關', updated) +
@@ -2964,8 +2991,9 @@
       const match = leg.tip.match
         ? '<span class="fb-five-match">' + escapeHtml(leg.tip.match) + '</span>'
         : '';
-      return '<li class="fb-parlay-leg fb-five-leg">' + match +
-        '<span class="fb-five-pick">' + footballPickBits(leg.tip).join(' ') + '</span></li>';
+      return '<li class="fb-parlay-leg fb-five-leg"><span class="fb-leg-main">' + match +
+        '<span class="fb-five-pick">' + footballPickBits(leg.tip).join(' ') + '</span></span>' +
+        footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-five">' +
       panelTitleHtml('刀仔鋸大樹', updated) +
@@ -2978,7 +3006,9 @@
   }
 
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
-    const parlay = footballParlayHtml(footballStableLegs(tips, date, locks, sheetRows), updated);
+    const legs = footballStableLegs(tips, date, locks, sheetRows)
+      .map((leg) => footballCopyTipResult(leg, tips));
+    const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated);
     if (!parlay && !five) return '';
     return '<div id="football-pass">' +
@@ -3072,6 +3102,15 @@
       .replace(/[（(][^）)]*[）)]/g, '')
       .replace(/\s+/g, '')
       .toLowerCase();
+  }
+
+  /** Icon from a W/L code only. A bare score does not invent one. */
+  function footballWlIcon(wl) {
+    const code = normalizeFootballWl(wl);
+    if (code === 'W' || code === 'WH') return '✅';
+    if (code === 'L' || code === 'LH') return '❌';
+    if (code === 'P') return '➖';
+    return '';
   }
 
   /** W/WH ✅, L/LH ❌, P ➖. A bare score can settle a 主客和 pick when W/L is blank. */
@@ -3218,26 +3257,23 @@
     const market = parts.market
       ? '<span class="fb-all-market">' + escapeHtml(parts.market) + '</span>'
       : '';
+    const score = String(row.result || '').trim();
+    const icon = score ? footballWlIcon(row.wl) : '';
+    const iconHtml = icon ? '<span class="fb-all-icon">' + icon + '</span>' : '';
+    const scoreHtml = score ? '<span class="fb-all-score">賽果 ' + escapeHtml(score) + '</span>' : '';
     return '<li class="fb-all-row"' + (stars == null ? '' : ' data-stars="' + stars + '"') + '>' +
       '<span class="fb-all-time">' + escapeHtml(row.time || '') + '</span>' +
+      iconHtml +
       '<span class="fb-all-match">' + escapeHtml(row.match || '—') + '</span>' +
       '<div class="fb-all-bot">' +
       team +
       market +
       '<span class="fb-all-odds">' + escapeHtml(odds) + '</span>' +
       '<span class="fb-all-stake">' + escapeHtml(stake) + '</span>' +
+      scoreHtml +
       footballStarsHtml(row.confidence) +
       '</div>' +
-      footballAllDayResultHtml(row) +
       '</li>';
-  }
-
-  function footballAllDayResultHtml(row) {
-    const icon = footballOutcomeIcon(row.wl, row.result, row.line);
-    if (!icon && !row.result) return '';
-    const iconHtml = icon ? '<span class="fb-result-icon">' + icon + '</span>' : '';
-    const text = row.result ? '賽果 ' + escapeHtml(row.result) : '';
-    return '<p class="fb-all-result">' + iconHtml + text + '</p>';
   }
 
   function footballAttachResults(rows, tips) {
@@ -3247,10 +3283,11 @@
       if (key && (tip.wl || tip.result)) byMatch.set(key, tip);
     });
     return (rows || []).map((row) => {
-      if (row.wl || row.result) return row;
       const hit = byMatch.get(footballMatchKey(row.match));
-      if (!hit) return row;
-      return Object.assign({}, row, { wl: hit.wl, result: hit.result });
+      const result = String(row.result || '').trim() || (hit ? String(hit.result || '').trim() : '');
+      const wl = String(row.wl || '').trim() || (hit ? String(hit.wl || '').trim() : '');
+      if (result === String(row.result || '').trim() && wl === String(row.wl || '').trim()) return row;
+      return Object.assign({}, row, { result: result, wl: wl });
     });
   }
 
