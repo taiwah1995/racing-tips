@@ -1255,12 +1255,27 @@ body {
   padding: 4px 12px 0;
 }
 #view-football .fb-parlay-leg {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   padding: 8px 0;
   border-bottom: 1px solid var(--border);
   font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.4;
+}
+#view-football .fb-leg-main {
+  min-width: 0;
+  flex: 1 1 auto;
   overflow-wrap: anywhere;
+}
+#view-football .fb-leg-result {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
 }
 #view-football .fb-parlay-leg:last-child { border-bottom: none; }
 #view-football .fb-parlay-odds {
@@ -1278,7 +1293,7 @@ body {
   font-size: 0.78rem;
   line-height: 1.45;
 }
-#view-football .fb-five-leg {
+#view-football .fb-five-leg .fb-leg-main {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -1419,11 +1434,14 @@ body {
 #view-football .fb-stars-4 .fb-star.on { color: #39ff14; }
 #view-football .fb-stars-5 .fb-star.on { color: #58a6ff; }
 #view-football .fb-result-icon { margin-right: 4px; }
-#view-football .fb-all-result {
-  grid-column: 2;
-  grid-row: 3;
-  margin: 0;
-  font-size: 0.75rem;
+#view-football .fb-all-icon {
+  grid-column: 1;
+  grid-row: 2;
+  justify-self: center;
+  font-size: 0.85rem;
+  line-height: 1;
+}
+#view-football .fb-all-score {
   font-weight: 700;
-  line-height: 1.35;
+  white-space: nowrap;
 }
