@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football31';
+  const APP_DATA_VERSION = '20261018football32';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3427,10 +3427,9 @@
   }
 
   /**
-   * 讓球 刀仔 unit = max(10, ceil(200 / n_bets)).
-   * 5串6 is 6 bets: ceil(200/6) = 34, so 每注 $34 and 投注 $204.
-   * 4串5 is $40; 3串4 is $50. Stakes are whole dollars, rounded up.
-   * A package with no 讓球 leg stays at the $10 minimum.
+   * 5串6 is the fixed exception: 每注 $40, 投注 $240.
+   * Other 讓球 packages use max(10, ceil(200 / n_bets)), whole dollars.
+   * 4串5 is $40; 3串4 is $50. No 讓球 leg stays at the $10 minimum.
    */
   function footballDaoziHandicap(legs) {
     const list = legs || [];
@@ -3444,7 +3443,9 @@
   function footballFiveStake(legCount, legs) {
     const betsByLegs = { 5: 6, 4: 5, 3: 4 };
     const bets = betsByLegs[legCount] || (legCount + 1);
-    const unit = Math.ceil(footballDaoziHandicap(legs) ? Math.max(10, Math.ceil(200 / bets)) : 10);
+    const unit = bets === 6
+      ? 40
+      : Math.ceil(footballDaoziHandicap(legs) ? Math.max(10, Math.ceil(200 / bets)) : 10);
     const total = Math.ceil(unit * bets);
     return {
       bets: bets,
