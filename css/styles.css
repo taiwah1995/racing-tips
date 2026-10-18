@@ -1179,6 +1179,13 @@ body {
   color: var(--text-muted);
   font-weight: 600;
 }
+#view-football {
+  --fb-star-1: #8b949e;
+  --fb-star-2: #ffffff;
+  --fb-star-3: #e6c35c;
+  --fb-star-4: #39ff14;
+  --fb-star-5: #58a6ff;
+}
 #view-football .fb-card {
   padding: 12px;
   border-bottom: 1px solid var(--border);
@@ -1545,11 +1552,11 @@ body {
   white-space: nowrap;
 }
 #view-football .fb-star { color: rgba(139, 148, 158, 0.28); }
-#view-football .fb-stars-1 .fb-star.on { color: var(--fb-star-1); }
-#view-football .fb-stars-2 .fb-star.on { color: var(--fb-star-2); }
-#view-football .fb-stars-3 .fb-star.on { color: var(--fb-star-3); }
-#view-football .fb-stars-4 .fb-star.on { color: var(--fb-star-4); }
-#view-football .fb-stars-5 .fb-star.on { color: var(--fb-star-5); }
+#view-football .fb-stars-1 .fb-star.on { color: var(--fb-star-1, #8b949e); }
+#view-football .fb-stars-2 .fb-star.on { color: var(--fb-star-2, #ffffff); }
+#view-football .fb-stars-3 .fb-star.on { color: var(--fb-star-3, #e6c35c); }
+#view-football .fb-stars-4 .fb-star.on { color: var(--fb-star-4, #39ff14); }
+#view-football .fb-stars-5 .fb-star.on { color: var(--fb-star-5, #58a6ff); }
 #view-football .fb-match .fb-stars {
   margin-left: 4px;
   font-size: 0.82rem;

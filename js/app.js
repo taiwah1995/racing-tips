@@ -4942,7 +4942,7 @@
     const source = allday && allday.source ? allday.source : '';
     const chips = [1, 2, 3, 4, 5].map(footballStarChipHtml).join('');
     const starredHits = rows
-      .filter((row) => Number(row.stake) > 0 && footballRowStars(row) != null)
+      .filter((row) => footballRowStars(row) != null)
       .map((row) => ({ wl: footballResolvedWl(row) }));
     const body = rows.length
       ? '<div class="fb-star-filter">' +
@@ -4972,15 +4972,11 @@
     });
     const counted = [];
     panel.querySelectorAll('.fb-all-row').forEach((row) => {
-      if (row.getAttribute('data-unrated') === '1') {
-        row.hidden = any;
-        return;
-      }
+      const unrated = row.getAttribute('data-unrated') === '1';
       const stars = row.getAttribute('data-stars');
-      const show = !any ? true : !!selected[stars];
+      const show = any ? (!unrated && !!stars && !!selected[stars]) : true;
       row.hidden = !show;
-      if (!show || !stars) return;
-      if (!(Number(row.getAttribute('data-stake')) > 0)) return;
+      if (!show) return;
       counted.push({ wl: row.getAttribute('data-wl') });
     });
     const count = panel.querySelector('.fb-star-count');
@@ -5040,6 +5036,7 @@
       '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
       '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>' +
       footballAllDayHtml(allday, selected.date, updated, selected.tips);
+    applyFootballStarFilter();
   }
 
   function bindFootballOnce() {
