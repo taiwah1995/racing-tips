@@ -811,7 +811,8 @@
             "market": "讓球 客勝 +0.5/+1",
             "odds": "1.74",
             "confidence": 54,
-            "stake": 2
+            "stake": 2,
+            "stars": 4
           },
           {
             "ko": "20:00",
@@ -820,7 +821,8 @@
             "market": "讓球 客勝 +0/+0.5",
             "odds": "2.00",
             "confidence": 53,
-            "stake": 2
+            "stake": 2,
+            "stars": 4
           }
         ]
       }
