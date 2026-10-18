@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football42';
+  const APP_DATA_VERSION = '20261018football43';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -4222,9 +4222,11 @@
         '</span>' + foot + '</span>';
     }
     if (!name && !conf) return '';
+    const stars = footballStarsHtml(tip.confidence, true);
     return '<p class="fb-match">' + name +
       (name && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
       (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
+      stars +
       '</p>';
   }
 
@@ -4263,9 +4265,10 @@
     return 5;
   }
 
-  function footballStarsHtml(confidence) {
+  function footballStarsHtml(confidence, plain) {
     const n = footballStarCount(confidence);
-    const cls = n == null ? 'fb-stars' : 'fb-stars fb-stars-' + n;
+    if (plain && n == null) return '';
+    const cls = (n == null ? 'fb-stars' : 'fb-stars fb-stars-' + n) + (plain ? ' fb-stars-card' : '');
     const label = n == null ? '未有星' : n + '星';
     let html = '<span class="' + cls + '" aria-label="' + label + '">';
     for (let i = 1; i <= 5; i++) {

@@ -1542,6 +1542,11 @@ body {
 #view-football .fb-stars-3 .fb-star.on { color: #e6c35c; }
 #view-football .fb-stars-4 .fb-star.on { color: #39ff14; }
 #view-football .fb-stars-5 .fb-star.on { color: #58a6ff; }
+#view-football .fb-match .fb-stars {
+  margin-left: 4px;
+  font-size: 0.82rem;
+}
+#view-football .fb-stars.fb-stars-card .fb-star.on { color: var(--text); }
 #view-football .fb-result-icon { margin-right: 4px; }
 #view-football .fb-all-icon {
   grid-column: 1;
