@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football15';
+  const APP_DATA_VERSION = '20261018football16';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2379,6 +2379,17 @@
     return text;
   }
 
+  /**
+   * Card note from 推介原因. Only a positive midweek or European note is shown.
+   * 無週中* stays hidden, including leftover sheet text. Blank and any other note stay hidden.
+   */
+  function footballShownNote(text) {
+    const t = String(text || '').trim();
+    if (!t || t.indexOf('無週中') >= 0) return '';
+    if (/歐聯|歐霸|歐協|歐戰|週中/.test(t)) return t;
+    return '';
+  }
+
   /** Sheet column is capped at 30 characters. Longer text is cut so the card stays one block. */
   function footballReason(text) {
     const t = String(text || '').trim();
@@ -3636,13 +3647,18 @@
         (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
         '</p>';
     }
+    const note = footballShownNote(tip.reason);
+    const noteHtml = note
+      ? '<div class="fb-field fb-field-wide"><span class="fb-k">推介原因</span>' +
+        '<span class="fb-v fb-euro-note">' + escapeHtml(note) + '</span></div>'
+      : '';
     return '<article class="fb-card">' +
       '<div class="fb-top">' + head + status + '</div>' +
       match +
       '<div class="fb-fields">' +
       footballPickHtml(tip) +
       footballFieldHtml('注碼', formatFbStake(tip.stake, unit), true) +
-      footballFieldHtml('推介原因', tip.reason, true) +
+      noteHtml +
       '</div>' +
       footballResultHtml(tip) +
       '</article>';
