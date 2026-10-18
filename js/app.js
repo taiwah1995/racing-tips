@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football21';
+  const APP_DATA_VERSION = '20261018football24';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3097,6 +3097,49 @@
   ];
 
   /**
+   * Settled 刀仔 days. The list is the published set, in this order.
+   * Do not re-sort or replace a locked day from the sheet.
+   * 2026-10-17 second set: stake $10×6 = $60, payout $898.4, profit +$838.4.
+   */
+  const FOOTBALL_FIVE_LOCKS = {
+    '2026-10-17': {
+      stakeLabel: '注碼$10×6（$60）',
+      stake: 60,
+      payout: 898.4,
+      profit: 838.4,
+      legs: [
+        { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83', ko: '21:30', wl: 'W', result: '4-3' },
+        { match: '布里斯托城', pick: '布里斯托城', line: '主客和 主勝', odds: '2.04', ko: '22:00', wl: 'L', result: '0-1' },
+        { match: '史篤城', pick: '史篤城', line: '主客和 客勝', odds: '2.27', ko: '22:00', wl: 'W', result: '0-1' },
+        { match: '域斯咸', pick: '域斯咸', line: '主客和 主勝', odds: '1.50', ko: '22:00', wl: 'W', result: '4-1' },
+        { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.93', ko: '03:00', wl: 'W', result: '0-0' },
+      ],
+    },
+  };
+
+  function footballFiveLock(date) {
+    return FOOTBALL_FIVE_LOCKS[date] || null;
+  }
+
+  function footballLockedFiveRows(lock, tips) {
+    return lock.legs.map((spec) => {
+      const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
+      return {
+        tip: {
+          ko: spec.ko,
+          match: hit && hit.match ? hit.match : spec.match,
+          pick: spec.pick,
+          line: spec.line,
+          odds: spec.odds,
+          wl: spec.wl,
+          result: spec.result,
+        },
+        factor: footballParlayFactor(spec.odds),
+      };
+    });
+  }
+
+  /**
    * 穩陣過關 legs, first match wins:
    * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, including 時間. Do not copy 時間 from 波盤推介.
    * 2. Tips column 過關 is Y/是/1 on any row that day → only those rows, sheet odds.
@@ -3306,11 +3349,14 @@
   }
 
   /**
-   * Staked rows with a price, earliest kickoff first, then the first five.
-   * Sorting before the slice keeps the five time-ordered when the sheet is
-   * later listed by 信心%. Sheet order breaks a tie. Confidence is not used.
+   * A locked day returns that published set, unsorted.
+   * An unlocked day sorts staked rows by kickoff, then takes the first five.
+   * Sheet order breaks a tie. Confidence is not used.
    */
   function footballFiveChosen(tips, date) {
+    const hinted = date || ((tips || [])[0] && tips[0].date) || '';
+    const lock = footballFiveLock(hinted);
+    if (lock) return footballLockedFiveRows(lock, tips);
     const rows = [];
     (tips || []).forEach((tip) => {
       if (!(Number(tip.stake) > 0)) return;
@@ -3327,10 +3373,12 @@
   /**
    * 五串六: five 4-leg parlays plus one 5-leg parlay.
    * Shown only when the day has at least five priced, staked rows.
-   * Those rows are sorted by kickoff, then the first five are the legs.
-   * Decimal d matches the 讓球 parlay. Footer stake text is the fixed $600 label.
+   * Unlocked days sort by kickoff, then take the first five.
+   * A locked day keeps its published legs and settlement.
+   * Decimal d matches the 讓球 parlay. Unlocked footer stake text is $600.
    */
   function footballFiveHtml(tips, updated, date) {
+    const lock = footballFiveLock(date);
     const chosen = footballFiveChosen(tips, date);
     if (chosen.length < 5) return '';
     const values = chosen.map((leg) => leg.factor.value);
@@ -3357,7 +3405,9 @@
       '<p class="fb-parlay-sub">五串六（5×6）</p>' +
       '<p class="fb-five-note">5×6 = 5 組四串一 + 1 組五串一，共 6 注</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
-      footballPassFooterHtml(fullText, '注碼1注（$600）', 600, settled) +
+      (lock
+        ? footballLockedFiveFooter(lock, fullText)
+        : footballPassFooterHtml(fullText, '注碼1注（$600）', 600, settled)) +
       '<p class="fb-note">註：最少要中四場先有錢收。</p></section>';
   }
 
@@ -3389,7 +3439,24 @@
     };
   }
 
+  function footballLockedFiveFooter(lock, fullText) {
+    const netClass = lock.profit > 0 ? 'pl-pos' : (lock.profit < 0 ? 'pl-neg' : '');
+    return '<div class="fb-pass-footers">' +
+      '<p class="fb-parlay-odds">' + escapeHtml('全中過關賠率：' + fullText + '倍｜' + lock.stakeLabel) + '</p>' +
+      '<p class="fb-parlay-odds">派彩 ' + escapeHtml(formatFbMoney(lock.payout)) + ' · 盈虧 ' +
+      '<span class="' + netClass + '">' + escapeHtml(formatFbSigned(lock.profit)) + '</span></p></div>';
+  }
+
   function footballFiveBook(tips, date) {
+    const lock = footballFiveLock(date);
+    if (lock) {
+      return {
+        item: '刀仔鋸大樹',
+        stake: lock.stake,
+        payout: lock.payout,
+        profit: lock.profit,
+      };
+    }
     const chosen = footballFiveChosen(tips, date);
     if (chosen.length < 5) return null;
     const settledSum = footballFiveSettledSum(chosen);
@@ -3533,8 +3600,9 @@
   }
 
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
-    const legs = footballSortByKickoff(footballStableLegs(tips, date, locks, sheetRows)
-      .map((leg) => footballCopyTipResult(leg, tips)));
+    let legs = footballStableLegs(tips, date, locks, sheetRows)
+      .map((leg) => footballCopyTipResult(leg, tips));
+    if (date !== FOOTBALL_LOCKED_DAY) legs = footballSortByKickoff(legs);
     const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated, date);
     if (!parlay && !five) return '';
