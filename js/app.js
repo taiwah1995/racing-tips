@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football32';
+  const APP_DATA_VERSION = '20261018football33';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3427,31 +3427,21 @@
   }
 
   /**
-   * 5串6 is the fixed exception: 每注 $40, 投注 $240.
-   * Other 讓球 packages use max(10, ceil(200 / n_bets)), whole dollars.
-   * 4串5 is $40; 3串4 is $50. No 讓球 leg stays at the $10 minimum.
+   * Fixed 刀仔 stakes, whole dollars.
+   * 3串4 $50 × 4 = $200. 4串5 $40 × 5 = $200. 5串6 $40 × 6 = $240.
    */
-  function footballDaoziHandicap(legs) {
-    const list = legs || [];
-    if (!list.length) return true;
-    return list.some((leg) => {
-      const tip = leg && leg.tip ? leg.tip : leg;
-      return /讓球/.test(String(tip && (tip.line || tip.market) || ''));
-    });
-  }
-
-  function footballFiveStake(legCount, legs) {
-    const betsByLegs = { 5: 6, 4: 5, 3: 4 };
-    const bets = betsByLegs[legCount] || (legCount + 1);
-    const unit = bets === 6
-      ? 40
-      : Math.ceil(footballDaoziHandicap(legs) ? Math.max(10, Math.ceil(200 / bets)) : 10);
-    const total = Math.ceil(unit * bets);
+  function footballFiveStake(legCount) {
+    const table = {
+      3: { bets: 4, unit: 50, total: 200 },
+      4: { bets: 5, unit: 40, total: 200 },
+      5: { bets: 6, unit: 40, total: 240 },
+    };
+    const row = table[legCount] || { bets: legCount + 1, unit: 40, total: 40 * (legCount + 1) };
     return {
-      bets: bets,
-      unit: unit,
-      total: total,
-      label: '每注 ' + formatFbMoney(unit) + '，投注 ' + formatFbMoney(total),
+      bets: row.bets,
+      unit: row.unit,
+      total: row.total,
+      label: '每注 ' + formatFbMoney(row.unit) + '，投注 ' + formatFbMoney(row.total),
     };
   }
 
@@ -3494,7 +3484,7 @@
     const fullText = footballRound2((fourSum + five) / 6).toFixed(2);
     const settledSum = footballFiveSettledSum(chosen);
     const settled = settledSum == null ? null : settledSum / 6;
-    const stake = footballFiveStake(chosen.length, chosen);
+    const stake = footballFiveStake(chosen.length);
     const items = chosen.map((leg) => {
       const match = leg.tip.match
         ? '<span class="fb-five-match">' + footballLegKoHtml(leg.tip) + escapeHtml(leg.tip.match) + '</span>'
@@ -3543,7 +3533,7 @@
   }
 
   function footballLockedFiveFooter(lock, fullText, stake) {
-    const pack = stake || footballFiveStake(lock.legs.length, lock.legs);
+    const pack = stake || footballFiveStake(lock.legs.length);
     const money = footballScaledLockMoney(lock, pack.total);
     const payout = money ? money.payout : lock.payout;
     const profit = money ? money.profit : lock.profit;
@@ -3557,7 +3547,7 @@
   function footballFiveBook(tips, date) {
     const lock = footballFiveLock(date);
     if (lock) {
-      const pack = footballFiveStake(lock.legs.length, lock.legs);
+      const pack = footballFiveStake(lock.legs.length);
       const money = footballScaledLockMoney(lock, pack.total);
       return {
         item: '刀仔鋸大樹',
@@ -3568,7 +3558,7 @@
     }
     const chosen = footballFiveChosen(tips, date);
     if (chosen.length < 5) return null;
-    const pack = footballFiveStake(chosen.length, chosen);
+    const pack = footballFiveStake(chosen.length);
     const settledSum = footballFiveSettledSum(chosen);
     const settled = settledSum == null ? null : settledSum / 6;
     const money = footballPackageMoney(pack.total, settled);
