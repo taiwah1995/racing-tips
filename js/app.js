@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football22';
+  const APP_DATA_VERSION = '20261018football23';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -4019,7 +4019,7 @@
     return footballWlIcon(footballDeriveAllDayWl(row)) || '➖';
   }
 
-  function footballAllDayRowHtml(row) {
+  function footballAllDayRowHtml(row, dayIso) {
     const odds = formatFbOdds(row.odds) || '—';
     const stake = row.stake == null || !Number.isFinite(Number(row.stake))
       ? '—'
@@ -4041,7 +4041,7 @@
       (stars == null ? '' : ' data-stars="' + stars + '"') +
       ' data-stake="' + (Number.isFinite(stakeNum) ? stakeNum : '') + '"' +
       ' data-wl="' + escapeAttr(footballResolvedWl(row)) + '">' +
-      '<span class="fb-all-time">' + escapeHtml(row.time || '') + '</span>' +
+      '<span class="fb-all-time">' + escapeHtml(footballAllDayTimeLabel(row, dayIso)) + '</span>' +
       iconHtml +
       '<span class="fb-all-match">' + escapeHtml(row.match || '—') + '</span>' +
       '<div class="fb-all-bot">' +
@@ -4118,8 +4118,71 @@
       .map((entry) => entry.item);
   }
 
+  /** Clock on a 全日分析 row. Invalid times stay unsorted at the end. */
+  function footballAllDayClock(item) {
+    const timeText = String(item && (item.time || item.ko) || '');
+    const hm = timeText.match(/(\d{1,2})\s*:\s*(\d{2})/);
+    if (!hm) return null;
+    const hour = Number(hm[1]);
+    const minute = Number(hm[2]);
+    if (hour > 23 || minute > 59) return null;
+    return {
+      hour: hour,
+      minute: minute,
+      text: String(hour).padStart(2, '0') + ':' + String(minute).padStart(2, '0'),
+    };
+  }
+
+  /**
+   * Betting day is 08:00 through 07:59 the next calendar day.
+   * A kickoff before 08:00 is that next morning. So is a later kickoff the
+   * sheet already marks 凌晨 or with the next day's date.
+   */
+  function footballAllDayNextMorning(item, dayIso) {
+    const clock = footballAllDayClock(item);
+    if (!clock) return false;
+    if (clock.hour < 8) return true;
+    const day = dayIso || (item && item.date) || '';
+    const blob = String(item.time || '') + ' ' + String(item.ko || '') + ' ' +
+      String(item.match || '') + ' ' + String(item.league || '');
+    if (/凌晨/.test(blob)) return true;
+    const nextDay = footballAddDays(day, 1);
+    const nextParts = nextDay.match(/-(\d{2})-(\d{2})$/);
+    const paren = blob.match(/[（(]\s*(\d{1,2})\s*[/／]\s*(\d{1,2})/);
+    const parenNext = !!(paren && nextParts &&
+      Number(paren[1]) === Number(nextParts[1]) && Number(paren[2]) === Number(nextParts[2]));
+    return parenNext || item.date === nextDay;
+  }
+
+  function footballAllDayRank(item, dayIso) {
+    const clock = footballAllDayClock(item);
+    if (!clock) return 3 * 24 * 60;
+    const minutes = clock.hour * 60 + clock.minute;
+    return footballAllDayNextMorning(item, dayIso) ? minutes + 24 * 60 : minutes;
+  }
+
+  function footballAllDayByKickoff(items, dayIso) {
+    return (items || []).map((item, index) => ({ item: item, index: index }))
+      .sort((a, b) => {
+        const delta = footballAllDayRank(a.item, dayIso) - footballAllDayRank(b.item, dayIso);
+        return delta || a.index - b.index;
+      })
+      .map((entry) => entry.item);
+  }
+
+  /** `10/19 03:00` for a kickoff on the next calendar day. Same-day times stay as written. */
+  function footballAllDayTimeLabel(row, dayIso) {
+    const clock = footballAllDayClock(row);
+    const raw = String(row && (row.time || row.ko) || '');
+    if (!clock || !footballAllDayNextMorning(row, dayIso)) return raw;
+    const next = footballAddDays((row && row.date) || dayIso || '', 1);
+    const parts = next.match(/-(\d{2})-(\d{2})$/);
+    if (!parts) return clock.text;
+    return Number(parts[1]) + '/' + Number(parts[2]) + ' ' + clock.text;
+  }
+
   function footballAllDayHtml(allday, date, updated, tips) {
-    const rows = footballByKickoff(
+    const rows = footballAllDayByKickoff(
       footballAttachResults(
         (allday && allday.rows ? allday.rows : []).filter((row) => row.date === date),
         tips
@@ -4135,7 +4198,7 @@
       ? '<div class="fb-star-filter">' +
         '<div class="fb-star-chips" role="group" aria-label="星級篩選">' + chips + '</div>' +
         '<p class="fb-star-count">' + footballHitFraction(starredHits) + '</p></div>' +
-        '<ul class="fb-all-list">' + rows.map(footballAllDayRowHtml).join('') + '</ul>'
+        '<ul class="fb-all-list">' + rows.map((row) => footballAllDayRowHtml(row, date)).join('') + '</ul>'
       : '<p class="fb-pending">呢日未有全日分析</p>';
     const hitRows = rows
       .filter((row) => Number(row.stake) > 0)
