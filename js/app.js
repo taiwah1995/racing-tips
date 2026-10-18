@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football38';
+  const APP_DATA_VERSION = '20261018football39';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -4010,8 +4010,6 @@
     const hits = footballEuroHits(tip && tip.reason);
     const parts = footballMatchParts(tip && tip.match);
     const blank = { home: '', away: '', parts: parts };
-    const match = String(tip && tip.match || '');
-    if (match.indexOf('馬拉加') >= 0 && match.indexOf('蘇斯達') >= 0) return blank;
     if (!hits.length) return blank;
     if (!parts) {
       const seen = [];
