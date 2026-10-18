@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football25';
+  const APP_DATA_VERSION = '20261018football28';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2570,15 +2570,27 @@
     return model;
   }
 
+  async function loadFootballFileData() {
+    try {
+      const res = await fetch(dataUrl('football-tips.json'));
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
   async function loadFootball() {
+    const fileData = await loadFootballFileData();
+    footballSetFileLocks(fileData);
     try {
       const model = await loadFootballSheet();
       return { model: model, source: 'sheet' };
     } catch (err) {
       console.error(err);
-      const res = await fetch(dataUrl('football-tips.json'));
-      if (!res.ok) throw new Error('無法載入波盤推介');
-      return { model: footballModelFromFile(await res.json()), source: 'file' };
+      if (!fileData) throw new Error('無法載入波盤推介');
+      return { model: footballModelFromFile(fileData), source: 'file' };
     }
   }
 
@@ -3101,8 +3113,76 @@
     },
   };
 
+  /** Locks read from data/football-tips.json. Empty until that file is fetched. */
+  let footballDaoziByDate = {};
+  let footballStableByDate = {};
+
+  function footballNormalizeLockLeg(spec) {
+    return {
+      ko: footballStr(spec && spec.ko),
+      match: footballStr(spec && spec.match),
+      pick: footballStr(spec && spec.pick),
+      line: footballStr(spec && (spec.line || spec.market || spec['買法'])),
+      odds: spec && spec.odds != null && spec.odds !== '' ? String(spec.odds) : '',
+      wl: normalizeFootballWl(spec && spec.wl),
+      result: footballStr(spec && spec.result),
+    };
+  }
+
+  function footballLocksFromFile(data) {
+    const daozi = {};
+    const stable = {};
+    (data && data.days ? data.days : []).forEach((day) => {
+      const date = parseFootballDate(day && day.date);
+      if (!date) return;
+      const five = day.daozi_lock;
+      if (five && Array.isArray(five.legs) && five.legs.length >= 5) {
+        daozi[date] = {
+          stakeLabel: footballStr(five.stake_label) || '注碼$10×6（$60）',
+          stake: Number(five.stake),
+          payout: Number(five.payout),
+          profit: Number(five.profit),
+          legs: five.legs.slice(0, 5).map(footballNormalizeLockLeg),
+        };
+      }
+      const pass = day.stable_lock;
+      if (pass && Array.isArray(pass.legs) && pass.legs.length >= 2) {
+        stable[date] = { legs: pass.legs.map(footballNormalizeLockLeg) };
+      }
+    });
+    return { daozi: daozi, stable: stable };
+  }
+
+  function footballSetFileLocks(data) {
+    const parsed = footballLocksFromFile(data);
+    footballDaoziByDate = parsed.daozi;
+    footballStableByDate = parsed.stable;
+  }
+
   function footballFiveLock(date) {
+    if (date && footballDaoziByDate[date]) return footballDaoziByDate[date];
     return FOOTBALL_FIVE_LOCKS[date] || null;
+  }
+
+  function footballStableLockLegs(date, tips) {
+    const fromFile = date && footballStableByDate[date];
+    if (fromFile) {
+      return fromFile.legs.map((leg) => Object.assign({ date: date }, leg));
+    }
+    if (date !== FOOTBALL_LOCKED_DAY) return null;
+    return FOOTBALL_LOCKED_LEGS.map((spec) => {
+      const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
+      return {
+        date: date,
+        ko: spec.ko,
+        match: hit && hit.match ? hit.match : spec.match,
+        pick: spec.pick,
+        line: spec.line,
+        odds: spec.odds,
+        result: hit && hit.result ? hit.result : '',
+        wl: hit && hit.wl ? hit.wl : '',
+      };
+    });
   }
 
   function footballLockedFiveRows(lock, tips) {
@@ -3124,33 +3204,20 @@
   }
 
   /**
-   * 穩陣過關 legs, first match wins:
+   * 穩陣過關 legs. A locked day returns its frozen list and ignores the sheet.
+   * An unlocked day uses the first source that applies:
    * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, including 時間. Do not copy 時間 from 波盤推介.
    * 2. Tips column 過關 is Y/是/1 on any row that day → only those rows, sheet odds.
-   * 3. 2026-10-17 with no sheet rows → locked 艾華斯堡 21:30 讓球 主勝 +0 at 0.83 and 華倫西亞 03:00 讓球 主勝 +0/0.5 at 0.90.
-   * 4. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
+   * 3. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
    * Fewer than two priced legs hides the panel.
    */
   function footballStableLegs(tips, date, locks, sheetRows) {
+    const frozen = footballStableLockLegs(date, tips);
+    if (frozen) return frozen;
     const fromSheet = (sheetRows || []).filter((row) => row.date === date);
     if (fromSheet.length >= 2) return fromSheet;
     const marked = (locks || []).filter((row) => row.date === date);
     if (marked.length) return marked;
-    if (date === FOOTBALL_LOCKED_DAY) {
-      return FOOTBALL_LOCKED_LEGS.map((spec) => {
-        const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
-        return {
-          date: date,
-          ko: spec.ko,
-          match: hit && hit.match ? hit.match : spec.match,
-          pick: spec.pick,
-          line: spec.line,
-          odds: spec.odds,
-          result: hit && hit.result ? hit.result : '',
-          wl: hit && hit.wl ? hit.wl : '',
-        };
-      });
-    }
     return (tips || []).filter((tip) => {
       if (!(Number(tip.stake) > 0)) return false;
       return FOOTBALL_AUTO_HANDICAP.test(String(tip.line || '').trim());
@@ -3586,7 +3653,7 @@
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
     let legs = footballStableLegs(tips, date, locks, sheetRows)
       .map((leg) => footballCopyTipResult(leg, tips));
-    if (date !== FOOTBALL_LOCKED_DAY) legs = footballSortByKickoff(legs);
+    if (!footballStableLockLegs(date, tips)) legs = footballSortByKickoff(legs);
     const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated, date);
     if (!parlay && !five) return '';
