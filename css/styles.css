@@ -1154,6 +1154,31 @@ body {
   font-weight: 700;
   overflow-wrap: anywhere;
 }
+#view-football .fb-day-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0 12px 12px;
+}
+#view-football .fb-day-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  line-height: 1.35;
+}
+#view-football .fb-day-name {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+#view-football .fb-day-amt {
+  min-width: 0;
+  text-align: right;
+  color: var(--text-muted);
+  font-weight: 600;
+}
 #view-football .fb-card {
   padding: 12px;
   border-bottom: 1px solid var(--border);
