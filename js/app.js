@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football40';
+  const APP_DATA_VERSION = '20261018football41';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2905,30 +2905,70 @@
     return rows;
   }
 
-  /** Missing tab, or a ledger still labelled 全日分析, yields no rows for the panel. */
+  function footballDayBookFromFile(data) {
+    const rows = [];
+    (data && data.rows ? data.rows : []).forEach((item) => {
+      if (!item) return;
+      const itemText = footballStr(item.item);
+      const kind = footballLedgerKind(itemText);
+      if (!kind) return;
+      const date = kind === 'cumulative' ? '' : parseFootballDate(item.date);
+      if (!date && kind !== 'cumulative') return;
+      const num = (value) => {
+        if (value == null || value === '') return null;
+        const n = Number(value);
+        return Number.isFinite(n) ? n : null;
+      };
+      rows.push({
+        date: date,
+        item: itemText,
+        kind: kind,
+        stake: num(item.stake),
+        payout: num(item.payout),
+        profit: num(item.profit),
+        units: num(item.units),
+      });
+    });
+    return rows;
+  }
+
+  async function loadFootballDayBookFile() {
+    try {
+      const res = await fetch(dataUrl('football-daybook.json'));
+      if (!res.ok) return [];
+      return footballDayBookFromFile(await res.json());
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  }
+
+  /** Sheet tab first. A missing tab, or a ledger still labelled 全日分析, uses the JSON copy. */
   async function loadFootballDayBook() {
     try {
       const [csvText, jsonText] = await Promise.all([
         footballFetchText(footballNamedGvizUrl('當日總結', 'csv')),
         footballFetchText(footballNamedGvizUrl('當日總結', 'json')),
       ]);
-      if (csvText == null && jsonText == null) return [];
-      let csvRows = null;
-      let table = null;
-      if (csvText != null) csvRows = parseSimpleCsv(csvText);
-      if (jsonText != null) {
-        try {
-          const data = parseFootballGviz(jsonText);
-          if (data && data.status !== 'error' && data.table) table = data.table;
-        } catch (err) {
-          console.error(err);
+      if (csvText != null || jsonText != null) {
+        let csvRows = null;
+        let table = null;
+        if (csvText != null) csvRows = parseSimpleCsv(csvText);
+        if (jsonText != null) {
+          try {
+            const data = parseFootballGviz(jsonText);
+            if (data && data.status !== 'error' && data.table) table = data.table;
+          } catch (err) {
+            console.error(err);
+          }
         }
+        const rows = footballDayBookFromSheet(csvRows, table) || [];
+        if (rows.length) return rows;
       }
-      return footballDayBookFromSheet(csvRows, table) || [];
     } catch (err) {
       console.error(err);
-      return [];
     }
+    return loadFootballDayBookFile();
   }
 
   function footballDayLabel(day) {
