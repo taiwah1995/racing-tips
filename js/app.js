@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football5';
+  const APP_DATA_VERSION = '20261018football6';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2931,6 +2931,85 @@
     return '<span class="fb-leg-result">' + iconHtml + '賽果 ' + escapeHtml(result) + '</span>';
   }
 
+  function footballRound2(n) {
+    return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+  }
+
+  /**
+   * Settlement multiple on the decimal price.
+   * W = D, WH = (D+1)/2, P = 1, LH = 0.5, L = 0. Blank W/L is still open.
+   */
+  function footballResultFactor(decimal, wl) {
+    const code = normalizeFootballWl(wl);
+    if (code === 'W') return decimal;
+    if (code === 'WH') return (decimal + 1) / 2;
+    if (code === 'P') return 1;
+    if (code === 'LH') return 0.5;
+    if (code === 'L') return 0;
+    return null;
+  }
+
+  /**
+   * Product of settled leg factors.
+   * A lost leg zeros the parlay even when another leg is still open.
+   * Any other open leg leaves the product unknown.
+   */
+  function footballSettledProduct(legs) {
+    let product = 1;
+    let open = false;
+    for (let i = 0; i < legs.length; i++) {
+      const factor = footballResultFactor(legs[i].factor.value, legs[i].tip.wl);
+      if (factor === 0) return 0;
+      if (factor == null) open = true;
+      else product *= factor;
+    }
+    return open ? null : product;
+  }
+
+  /**
+   * Sum of the six 五串六 combo returns.
+   * A combo that includes a loss is 0. Any other open combo leaves the sum unknown.
+   */
+  function footballFiveSettledSum(legs) {
+    const factors = legs.map((leg) => footballResultFactor(leg.factor.value, leg.tip.wl));
+    let sum = 0;
+    for (let skip = 0; skip <= factors.length; skip++) {
+      let product = 1;
+      let open = false;
+      let lost = false;
+      for (let i = 0; i < factors.length; i++) {
+        if (i === skip) continue;
+        const factor = factors[i];
+        if (factor === 0) lost = true;
+        else if (factor == null) open = true;
+        else product *= factor;
+      }
+      if (lost) continue;
+      if (open) return null;
+      sum += product;
+    }
+    return sum;
+  }
+
+  /** Two footer lines. Stake labels are the published text, not derived from leg count. */
+  function footballPassFooterHtml(fullText, stakeLabel, stake, settled) {
+    const line1 = '全中過關賠率：' + fullText + '倍｜' + stakeLabel;
+    if (settled == null) {
+      return '<div class="fb-pass-footers">' +
+        '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
+        '<p class="fb-parlay-odds">派彩 — · 盈虧 —</p></div>';
+    }
+    const shown = footballRound2(settled);
+    const payout = footballRound2(stake * shown);
+    const net = footballRound2(payout - stake);
+    const netClass = net > 0 ? 'pl-pos' : (net < 0 ? 'pl-neg' : '');
+    const line2 = '派彩 ' + formatFbMoney(payout) + ' (' + shown.toFixed(2) + '倍) · 盈虧 ';
+    return '<div class="fb-pass-footers">' +
+      '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
+      '<p class="fb-parlay-odds">' + escapeHtml(line2) +
+      '<span class="' + netClass + '">' + escapeHtml(formatFbSigned(net)) + '</span></p></div>';
+  }
+
   function footballParlayHtml(tips, updated) {
     const legs = [];
     (tips || []).forEach((tip) => {
@@ -2940,8 +3019,8 @@
     });
     if (legs.length < 2) return '';
     const product = legs.reduce((total, leg) => total * leg.factor.value, 1);
-    const productText = (Math.round((product + Number.EPSILON) * 100) / 100).toFixed(2);
-    const formula = '過關賠率：' + legs.map((leg) => leg.factor.text).join('×') + '=' + productText + '倍';
+    const productText = footballRound2(product).toFixed(2);
+    const settled = footballSettledProduct(legs);
     const items = legs.map((leg) => {
       return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
         footballPickBits(leg.tip).join(' ') + '</span>' +
@@ -2951,7 +3030,8 @@
       panelTitleHtml('穩陣過關', updated) +
       '<p class="fb-parlay-sub">讓球過關 ' + legs.length + '×1</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
-      '<p class="fb-parlay-odds">' + escapeHtml(formula) + '</p></section>';
+      footballPassFooterHtml(productText, '注碼2注（$200）', 200, settled) +
+      '</section>';
   }
 
   function footballConfidenceNumber(text) {
@@ -2965,10 +3045,10 @@
   }
 
   /**
-   * 五串六: five 4-leg parlays plus one 5-leg parlay, $10 each ($60).
+   * 五串六: five 4-leg parlays plus one 5-leg parlay.
    * Shown only when the day has at least five staked rows. If there are more,
    * the first five in sheet order are used — the same order as the tip cards.
-   * Decimal d matches the 讓球 parlay.
+   * Decimal d matches the 讓球 parlay. Footer stake text is the fixed $600 label.
    */
   function footballFiveHtml(tips, updated) {
     const rows = [];
@@ -2988,9 +3068,9 @@
       fourSum += product;
     }
     const five = values.reduce((total, value) => total * value, 1);
-    const payout = Math.round(((fourSum + five) * 10 + Number.EPSILON) * 100) / 100;
-    const net = Math.round((payout - 60) * 100) / 100;
-    const netClass = net > 0 ? 'pl-pos' : (net < 0 ? 'pl-neg' : '');
+    const fullText = footballRound2((fourSum + five) / 6).toFixed(2);
+    const settledSum = footballFiveSettledSum(chosen);
+    const settled = settledSum == null ? null : settledSum / 6;
     const items = chosen.map((leg) => {
       const match = leg.tip.match
         ? '<span class="fb-five-match">' + escapeHtml(leg.tip.match) + '</span>'
@@ -3002,10 +3082,9 @@
     return '<section class="panel" id="football-five">' +
       panelTitleHtml('刀仔鋸大樹', updated) +
       '<p class="fb-parlay-sub">五串六（5×6）</p>' +
-      '<p class="fb-five-note">5×6 = 5 組四串一 + 1 組五串一，共 6 注 · 每注 $10，投注 $60</p>' +
+      '<p class="fb-five-note">5×6 = 5 組四串一 + 1 組五串一，共 6 注</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
-      '<p class="fb-parlay-odds">全中派彩 ' + escapeHtml(formatFbMoney(payout)) +
-      ' · 盈虧 <span class="' + netClass + '">' + escapeHtml(formatFbSigned(net)) + '</span></p>' +
+      footballPassFooterHtml(fullText, '注碼1注（$600）', 600, settled) +
       '<p class="fb-note">註：最少要中四場先有錢收。</p></section>';
   }
 

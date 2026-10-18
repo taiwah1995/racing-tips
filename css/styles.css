@@ -1286,6 +1286,18 @@ body {
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
+#view-football .fb-pass-footers {
+  padding: 2px 12px 10px;
+}
+#view-football .fb-pass-footers .fb-parlay-odds {
+  padding: 0;
+  font-size: clamp(0.68rem, 3.15vw, 0.8rem);
+  line-height: 1.5;
+  white-space: nowrap;
+}
+#view-football .fb-pass-footers .fb-parlay-odds + .fb-parlay-odds {
+  margin-top: 2px;
+}
 #view-football .fb-five-note {
   margin: 0;
   padding: 4px 12px 0;
