@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football16';
+  const APP_DATA_VERSION = '20261018football17';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2380,14 +2380,25 @@
   }
 
   /**
-   * Card note from 推介原因. Only a positive midweek or European note is shown.
-   * 無週中* stays hidden, including leftover sheet text. Blank and any other note stay hidden.
+   * The midweek / European phrase inside 推介原因.
+   * Stars and the rest of the line stay outside this match.
    */
-  function footballShownNote(text) {
-    const t = String(text || '').trim();
-    if (!t || t.indexOf('無週中') >= 0) return '';
-    if (/歐聯|歐霸|歐協|歐戰|週中/.test(t)) return t;
-    return '';
+  const FOOTBALL_EURO_PHRASE = /回補[・·‧．.]?(?:上週|週中)?(?:歐聯|歐霸|歐協|歐戰)|上週(?:歐聯|歐霸|歐協)|週中有賽事|週中(?:歐聯|歐霸|歐協|歐戰)|歐戰/;
+
+  /**
+   * 推介原因 stays off the card unless it has a positive midweek or European phrase.
+   * 無週中* stays hidden. Only that phrase is wrapped for the red colour.
+   */
+  function footballEuroNoteHtml(text) {
+    const full = String(text || '');
+    if (!full.trim() || full.indexOf('無週中') >= 0) return '';
+    const phrase = (full.match(FOOTBALL_EURO_PHRASE) || [])[0];
+    if (!phrase) return '';
+    const at = full.indexOf(phrase);
+    return '<div class="fb-field fb-field-wide"><span class="fb-k">推介原因</span>' +
+      '<span class="fb-v">' + escapeHtml(full.slice(0, at)) +
+      '<span class="fb-euro-note">' + escapeHtml(phrase) + '</span>' +
+      escapeHtml(full.slice(at + phrase.length)) + '</span></div>';
   }
 
   /** Sheet column is capped at 30 characters. Longer text is cut so the card stays one block. */
@@ -3647,11 +3658,7 @@
         (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
         '</p>';
     }
-    const note = footballShownNote(tip.reason);
-    const noteHtml = note
-      ? '<div class="fb-field fb-field-wide"><span class="fb-k">推介原因</span>' +
-        '<span class="fb-v fb-euro-note">' + escapeHtml(note) + '</span></div>'
-      : '';
+    const noteHtml = footballEuroNoteHtml(tip.reason);
     return '<article class="fb-card">' +
       '<div class="fb-top">' + head + status + '</div>' +
       match +
