@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football7';
+  const APP_DATA_VERSION = '20261018football8';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2815,9 +2815,8 @@
 
   /**
    * Same 命中率 as 當日總結: W/WH hit, L/LH miss, P and unfinished left out.
-   * Null until at least one decided row, so the heading omits the chip.
    */
-  function footballHitRate(rows) {
+  function footballHitStats(rows) {
     let hits = 0;
     let decided = 0;
     (rows || []).forEach((row) => {
@@ -2829,9 +2828,20 @@
         decided += 1;
       }
     });
-    if (!decided) return null;
-    const pct = Math.round((hits / decided) * 100);
-    return '命中 ' + hits + '/' + decided + ' • ' + pct + '%';
+    return { hits: hits, decided: decided };
+  }
+
+  /** Null until at least one decided row, so the heading omits the chip. */
+  function footballHitRate(rows) {
+    const stats = footballHitStats(rows);
+    if (!stats.decided) return null;
+    const pct = Math.round((stats.hits / stats.decided) * 100);
+    return '命中 ' + stats.hits + '/' + stats.decided + ' • ' + pct + '%';
+  }
+
+  function footballHitFraction(rows) {
+    const stats = footballHitStats(rows);
+    return stats.hits + '/' + stats.decided;
   }
 
   function footballHitHtml(rows) {
@@ -3523,7 +3533,11 @@
     const icon = footballAllDayIcon(row);
     const iconHtml = icon ? '<span class="fb-all-icon">' + icon + '</span>' : '';
     const scoreHtml = score ? '<span class="fb-all-score">賽果 ' + escapeHtml(score) + '</span>' : '';
-    return '<li class="fb-all-row"' + (stars == null ? '' : ' data-stars="' + stars + '"') + '>' +
+    const stakeNum = Number(row.stake);
+    return '<li class="fb-all-row"' +
+      (stars == null ? '' : ' data-stars="' + stars + '"') +
+      ' data-stake="' + (Number.isFinite(stakeNum) ? stakeNum : '') + '"' +
+      ' data-wl="' + escapeAttr(footballResolvedWl(row)) + '">' +
       '<span class="fb-all-time">' + escapeHtml(row.time || '') + '</span>' +
       iconHtml +
       '<span class="fb-all-match">' + escapeHtml(row.match || '—') + '</span>' +
@@ -3611,10 +3625,13 @@
     );
     const source = allday && allday.source ? allday.source : '';
     const chips = [1, 2, 3, 4, 5].map(footballStarChipHtml).join('');
+    const starredHits = rows
+      .filter((row) => Number(row.stake) > 0 && footballStarCount(row.confidence) != null)
+      .map((row) => ({ wl: footballResolvedWl(row) }));
     const body = rows.length
       ? '<div class="fb-star-filter">' +
         '<div class="fb-star-chips" role="group" aria-label="星級篩選">' + chips + '</div>' +
-        '<p class="fb-star-count">' + rows.length + '/' + rows.length + '</p></div>' +
+        '<p class="fb-star-count">' + footballHitFraction(starredHits) + '</p></div>' +
         '<ul class="fb-all-list">' + rows.map(footballAllDayRowHtml).join('') + '</ul>'
       : '<p class="fb-pending">呢日未有全日分析</p>';
     const hitRows = rows
@@ -3630,19 +3647,23 @@
     const panel = document.getElementById('football-allday');
     if (!panel) return;
     const selected = {};
+    let any = false;
     panel.querySelectorAll('input[data-fb-star]').forEach((input) => {
-      if (input.checked) selected[input.getAttribute('data-fb-star')] = true;
+      if (input.checked) {
+        selected[input.getAttribute('data-fb-star')] = true;
+        any = true;
+      }
     });
-    let visible = 0;
-    let total = 0;
+    const counted = [];
     panel.querySelectorAll('.fb-all-row').forEach((row) => {
-      total += 1;
       const show = !!selected[row.getAttribute('data-stars')];
       row.hidden = !show;
-      if (show) visible += 1;
+      if (any && !show) return;
+      if (!(Number(row.getAttribute('data-stake')) > 0)) return;
+      counted.push({ wl: row.getAttribute('data-wl') });
     });
     const count = panel.querySelector('.fb-star-count');
-    if (count) count.textContent = visible + '/' + total;
+    if (count) count.textContent = footballHitFraction(counted);
   }
 
   function paintFootball(model, source, wanted, allday, stableRows) {
