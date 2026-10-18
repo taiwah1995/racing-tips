@@ -50,7 +50,7 @@
         {"no":7,"ko":"21:30","league":"德甲","match":"利華古遜 vs 弗賴堡","pick":"弗賴堡","market":"讓球 客勝 +0.5/+1","odds":1.97,"confidence":57,"stake":2,"status":"暫定","reason":"★★★★★ 利華上週歐霸；弗賴上週歐協；受半/一","result":"","wl":"","profit":null},
         {"no":8,"ko":"00:30","league":"西甲","match":"馬拉加 vs 皇家蘇斯達（10/19凌晨）","pick":"馬拉加","market":"讓球 主勝 +0/+0.5","odds":1.95,"confidence":55,"stake":2,"status":"暫定","reason":"★★ 蘇斯達上週歐霸；主受平/半","result":"","wl":"","profit":null},
         {"no":9,"ko":"02:00","league":"荷甲","match":"川迪 vs 烏德勒支（10/19凌晨）","pick":"烏德勒支","market":"讓球 客勝 +1/+1.5","odds":2.0,"confidence":58,"stake":2,"status":"暫定","reason":"★★★★★ 川迪上週歐協；客+1.5","result":"","wl":"","profit":null},
-        {"no":10,"ko":"03:00","league":"西甲","match":"皇家馬德里 vs 西維爾（10/19凌晨）","pick":"西維爾","market":"讓球 客勝 +2","odds":1.8,"confidence":60,"stake":2,"status":"暫定","reason":"★★★ 皇馬上週歐聯；客+2","result":"","wl":"","profit":null}
+        {"no":10,"ko":"03:00","league":"西甲","match":"皇家馬德里 vs 西維爾（10/19凌晨）","pick":"西維爾","market":"讓球 客勝 +2","odds":1.8,"confidence":60,"stake":2,"status":"暫定","reason":"★★★ 皇家馬德里上週歐聯；客+2","eu_teams":["皇家馬德里"],"result":"","wl":"","profit":null}
       ],
       "stable_lock": {
         "legs": [
