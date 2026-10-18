@@ -1402,6 +1402,22 @@ body {
   font-size: 0.78rem;
   line-height: 1.45;
 }
+#view-football .fb-settle-pick {
+  margin: 0;
+  padding: 6px 12px 12px;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+#view-football .fb-settle-pick p {
+  margin: 0 0 4px;
+}
+#view-football .fb-settle-label {
+  margin-top: 8px;
+  font-weight: 700;
+}
+#view-football .fb-settle-flag {
+  color: var(--text-muted);
+}
 #view-football .fb-five-leg .fb-leg-main {
   display: flex;
   flex-direction: column;

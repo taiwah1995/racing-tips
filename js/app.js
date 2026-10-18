@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football34';
+  const APP_DATA_VERSION = '20261018football35';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3099,8 +3099,9 @@
    * footballSortByKickoff apply only to an unlocked day.
    * 2026-10-17 刀仔 is the frozen 第二組. Stake and payout are not taken from
    * these money fields. 五串六 pays only the combos that survive: one lost leg
-   * kills the 五串一 and every 四串一 that includes it. 華倫西亞 0-0 on +0/0.5
-   * is a half-win.
+   * kills the 五串一 and every 四串一 that includes it. 2026-10-17 lists 甲
+   * (華倫西亞 0-0 on +0/0.5 as 贏半) and 乙 (that draw as a full win) at
+   * $10 and $40. The footer does not publish one payout until the user picks.
    */
   const FOOTBALL_FIVE_LOCKS = {
     '2026-10-17': {
@@ -3337,19 +3338,19 @@
     return '';
   }
 
-  function footballFiveLegFactor(leg) {
-    const code = footballParlayOutcome(leg && leg.tip);
-    if (!code) return null;
-    return footballResultFactor(leg.factor.value, code);
-  }
-
   /**
    * Sum of the six 五串六 combo returns.
    * A combo that includes a loss is 0. Any other open combo leaves the sum unknown.
    * One lost leg leaves only the 四串一 of the other four.
+   * Pass whAs 'W' to price a 贏半 leg as a full win. Any other value keeps HKJC.
    */
-  function footballFiveSettledSum(legs) {
-    const factors = legs.map(footballFiveLegFactor);
+  function footballFiveSettledSum(legs, whAs) {
+    const factors = legs.map((leg) => {
+      const code = footballParlayOutcome(leg && leg.tip);
+      if (!code) return null;
+      const use = whAs === 'W' && code === 'WH' ? 'W' : code;
+      return footballResultFactor(leg.factor.value, use);
+    });
     let sum = 0;
     for (let skip = 0; skip <= factors.length; skip++) {
       let product = 1;
@@ -3510,6 +3511,64 @@
     };
   }
 
+  function footballTrimFactor(n) {
+    const rounded = Math.round(Number(n) * 10000) / 10000;
+    if (Math.abs(rounded * 100 - Math.round(rounded * 100)) < 1e-6) return rounded.toFixed(2);
+    return String(rounded);
+  }
+
+  /** Winning legs only, in lock order. A loss is left out of the chain. */
+  function footballFiveChain(legs, whAs) {
+    const bits = [];
+    (legs || []).forEach((leg) => {
+      const code = footballParlayOutcome(leg && leg.tip);
+      if (!code || code === 'L' || code === 'LH') return;
+      const use = whAs === 'W' && code === 'WH' ? 'W' : code;
+      const factor = footballResultFactor(leg.factor.value, use);
+      if (factor == null) return;
+      bits.push(footballTrimFactor(factor));
+    });
+    return bits.join('×');
+  }
+
+  function footballFiveQuote(product, unit, bets) {
+    const payout = footballRound2(unit * product);
+    const profit = footballRound2(payout - unit * bets);
+    return formatFbMoney(unit) + '×' + bets + '（' + formatFbMoney(unit * bets) + '）派彩 ' +
+      formatFbMoney(payout) + ' · 盈虧 ' + formatFbSigned(profit);
+  }
+
+  /**
+   * 2026-10-17 only. Two readings of the same surviving 四串一, at both stakes.
+   * 甲 is the HKJC half-win. 乙 counts that 0-0 as a full win. Neither line
+   * is the published payout.
+   */
+  function footballFivePickHtml(legs, fullText, stakeLabel) {
+    const half = footballFiveSettledSum(legs, 'WH');
+    const full = footballFiveSettledSum(legs, 'W');
+    const line1 = '全中過關賠率：' + fullText + '倍｜' + stakeLabel;
+    const block = (title, product, whAs) => {
+      if (product == null) {
+        return '<p class="fb-settle-label">' + escapeHtml(title) + '</p><p>派彩 — · 盈虧 —</p>';
+      }
+      return '<p class="fb-settle-label">' + escapeHtml(title) + '</p>' +
+        '<p>' + escapeHtml(footballFiveChain(legs, whAs) + ' = ' + footballTrimFactor(product)) + '</p>' +
+        '<p>' + escapeHtml(footballFiveQuote(product, 10, legs.length + 1)) + '</p>' +
+        '<p>' + escapeHtml(footballFiveQuote(product, 40, legs.length + 1)) + '</p>';
+    };
+    return '<div class="fb-pass-footers">' +
+      '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
+      '<p class="fb-parlay-odds">派彩待揀</p></div>' +
+      '<div class="fb-settle-pick">' +
+      '<p>只得一組四串一：艾華斯堡、史篤城、域斯咸、華倫西亞。五串一同其餘四組四串一因布里斯托全輸，回報 0。</p>' +
+      '<p>賠率低過 1.2 用 1+賠率：0.83→1.83，0.93→1.93。2.27 同 1.50 照寫。</p>' +
+      block('甲 · 華倫西亞 0-0 作贏半', half, 'WH') +
+      block('乙 · 華倫西亞 0-0 作全贏', full, 'W') +
+      '<p class="fb-settle-flag">$898.4 / +$838.4 等於六注全中 × $10（布里斯托都當贏）。甲同乙都唔係呢個數。</p>' +
+      '<p class="fb-settle-flag">製圖約 $365 / +$125 對上甲嘅 $40：$365.15 / +$125.15。</p>' +
+      '</div>';
+  }
+
   function footballFiveFooter(fullText, stakeLabel, money) {
     const line1 = '全中過關賠率：' + fullText + '倍｜' + stakeLabel;
     if (!money) {
@@ -3558,7 +3617,9 @@
       '<p class="fb-parlay-sub">五串六（5×6）</p>' +
       '<p class="fb-five-note">5×6 = 5 組四串一 + 1 組五串一，共 6 注</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
-      footballFiveFooter(fullText, stake.label, money) +
+      (date === '2026-10-17'
+        ? footballFivePickHtml(chosen, fullText, stake.label)
+        : footballFiveFooter(fullText, stake.label, money)) +
       '<p class="fb-note">註：最少要中四場先有錢收。</p></section>';
   }
 
