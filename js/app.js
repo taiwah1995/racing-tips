@@ -2612,7 +2612,7 @@
     return 'https://docs.google.com/spreadsheets/d/' + FOOTBALL_SHEET_ID + '/gviz/tq?' + q.toString();
   }
 
-  /** Every row on the 全日分析 tab, including 注數 0. Stars come from the stars field only. */
+  /** Every row on the 全日分析 tab, including 注數 0. Stars come from the confidence map. */
   function footballAllDayFromRow(cols, map, jsonRow, jsonCols) {
     const csv = (name) => footballCsvCell(cols, map, name);
     const json = (name) => footballJsonCell(jsonRow, jsonCols, name);
@@ -3200,6 +3200,8 @@
   /** Locks read from data/football-tips.json. Empty until that file is fetched. */
   let footballDaoziByDate = {};
   let footballStableByDate = {};
+  /** Null when data/football-stars-map.json did not load. Stars stay off. */
+  let footballStarsMap = null;
 
   function footballNormalizeLockLeg(spec) {
     return {
@@ -3211,6 +3213,7 @@
       wl: normalizeFootballWl(spec && spec.wl),
       result: footballStr(spec && spec.result),
       ko_note: footballStr(spec && spec.ko_note),
+      confidence: spec && spec.confidence != null && spec.confidence !== '' ? spec.confidence : '',
       stars: footballStoredStars(spec && spec.stars),
     };
   }
@@ -3355,6 +3358,10 @@
           wl: spec.wl,
           result: spec.result,
           ko_note: spec.ko_note || (hit && hit.ko_note) || '',
+          confidence: spec.confidence != null && spec.confidence !== ''
+            ? spec.confidence
+            : ((hit && hit.confidence) || ''),
+          stars: spec.stars != null && spec.stars !== '' ? spec.stars : ((hit && hit.stars) || ''),
         },
         factor: footballParlayFactor(spec.odds),
       };
@@ -3663,7 +3670,7 @@
     const items = legs.map((leg) => {
       return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
         footballLegKoHtml(leg.tip) + footballPickBits(leg.tip).join(' ') +
-        footballStarsHtml(leg.tip.stars) + '</span>' +
+        footballStarsHtml(footballRowStars(leg.tip)) + '</span>' +
         footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
@@ -3859,7 +3866,7 @@
         : footballLegKoHtml(tip);
       return '<li class="fb-parlay-leg fb-five-leg"><span class="fb-leg-main">' + match +
         '<span class="fb-five-pick">' + footballPickBits(tip).join(' ') +
-        footballStarsHtml(tip.stars) + '</span></span>' +
+        footballStarsHtml(footballRowStars(tip)) + '</span></span>' +
         footballLegResultHtml(tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-five">' +
@@ -4066,7 +4073,8 @@
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
     let legs = footballStableLegs(tips, date, locks, sheetRows)
       .map((leg) => footballCopyTipResult(leg, tips))
-      .map((leg) => footballAttachDawn(leg, tips));
+      .map((leg) => footballAttachDawn(leg, tips))
+      .map((leg) => footballStarRow(leg, tips));
     if (!footballStableLockLegs(date, tips)) legs = footballSortByKickoff(legs);
     const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated, date);
@@ -4441,7 +4449,7 @@
         '</span>' + foot + '</span>';
     }
     if (!name && !conf) return '';
-    const stars = footballStarsHtml(tip.stars);
+    const stars = footballStarsHtml(footballRowStars(tip));
     const confLine = (conf || stars)
       ? '<span class="fb-conf-line">' +
         (name && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
@@ -4484,7 +4492,105 @@
     return n;
   }
 
-  /** Stars render only from a 1–5 stars field. Confidence is not used. */
+  async function loadFootballStarsMap() {
+    try {
+      const res = await fetch(dataUrl('football-stars-map.json'));
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!data || !Array.isArray(data.rules) || !data.colors) return null;
+      return data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  function footballApplyStarColors(map) {
+    const host = document.getElementById('view-football');
+    if (!host) return;
+    for (let n = 1; n <= 5; n++) host.style.removeProperty('--fb-star-' + n);
+    const colors = map && map.colors;
+    if (!colors) return;
+    Object.keys(colors).forEach((key) => {
+      const hex = String(colors[key] || '').trim();
+      if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return;
+      host.style.setProperty('--fb-star-' + key, hex);
+    });
+  }
+
+  /** First matching rule. Confidence is rounded to an integer. Null when the map is missing. */
+  function footballStarsFromMap(confidence) {
+    const map = footballStarsMap;
+    if (!map || !Array.isArray(map.rules)) return null;
+    const raw = footballConfidenceNumber(confidence);
+    if (raw == null) return null;
+    const n = Math.round(raw);
+    for (let i = 0; i < map.rules.length; i++) {
+      const rule = map.rules[i];
+      const stars = footballStoredStars(rule && rule.stars);
+      if (stars == null) continue;
+      const min = rule.min == null || rule.min === '' ? null : Number(rule.min);
+      const max = rule.max == null || rule.max === '' ? null : Number(rule.max);
+      if (min != null && !(n >= min)) continue;
+      if (max != null && !(n <= max)) continue;
+      return stars;
+    }
+    return null;
+  }
+
+  /**
+   * 信心% uses the map. A blank confidence uses the stars field.
+   * Neither, or a map that did not load, shows no stars.
+   */
+  function footballRowStars(row) {
+    if (!footballStarsMap) return null;
+    if (footballConfidenceNumber(row && row.confidence) != null) return footballStarsFromMap(row.confidence);
+    return footballStoredStars(row && row.stars);
+  }
+
+  function footballStarKind(row) {
+    if (!footballStarsMap) return 'none';
+    if (footballConfidenceNumber(row && row.confidence) != null) {
+      return footballStarsFromMap(row.confidence) == null ? 'none' : 'map';
+    }
+    return footballStoredStars(row && row.stars) == null ? 'none' : 'field';
+  }
+
+  /** A leg with no 信心 and no stars uses the matched tip, confidence first. */
+  function footballStarRow(row, tips) {
+    if (!row || footballConfidenceNumber(row.confidence) != null || footballStoredStars(row.stars) != null) return row;
+    const key = footballMatchKey(row.match);
+    if (!key) return row;
+    const hit = (tips || []).find((tip) => tip !== row && footballMatchKey(tip.match) === key);
+    if (!hit) return row;
+    if (footballConfidenceNumber(hit.confidence) != null) return Object.assign({}, row, { confidence: hit.confidence });
+    if (footballStoredStars(hit.stars) != null) return Object.assign({}, row, { stars: hit.stars });
+    return row;
+  }
+
+  function footballStarCensus(model, allday) {
+    const tally = { map: 0, field: 0, none: 0, cards: 0, allday: 0, legs: 0, fieldRows: [], noneRows: [] };
+    const add = (row, bucket) => {
+      tally[bucket] += 1;
+      const kind = footballStarKind(row);
+      tally[kind] += 1;
+      const label = (row && row.date ? row.date + ' ' : '') + String(row && (row.match || row.pick) || '');
+      if (kind === 'field') tally.fieldRows.push(label);
+      if (kind === 'none') tally.noneRows.push(label);
+    };
+    ((model && model.days) || []).forEach((day) => {
+      const tips = day.tips || [];
+      tips.forEach((tip) => add(tip, 'cards'));
+      const stable = footballStableByDate[day.date];
+      if (stable) stable.legs.forEach((leg) => add(footballStarRow(leg, tips), 'legs'));
+      const daozi = footballDaoziByDate[day.date];
+      if (daozi) daozi.legs.forEach((leg) => add(footballStarRow(leg, tips), 'legs'));
+    });
+    ((allday && allday.rows) || []).forEach((row) => add(row, 'allday'));
+    return tally;
+  }
+
+  /** Render a resolved 1–5 count. A null count draws nothing. */
   function footballStarsHtml(value) {
     const n = footballStoredStars(value);
     if (n == null) return '';
@@ -4683,7 +4789,7 @@
     const stake = row.stake == null || !Number.isFinite(Number(row.stake))
       ? '—'
       : formatFbUnits(row.stake);
-    const stars = footballStoredStars(row.stars);
+    const stars = footballRowStars(row);
     const parts = footballAllDayParts(row);
     const team = parts.team
       ? '<span class="fb-all-team">' + escapeHtml(parts.team) + '</span>'
@@ -4709,7 +4815,7 @@
       '<span class="fb-all-odds">' + escapeHtml(odds) + '</span>' +
       '<span class="fb-all-stake">' + escapeHtml(stake) + '</span>' +
       scoreHtml +
-      footballStarsHtml(row.stars) +
+      footballStarsHtml(stars) +
       '</div>' +
       '</li>';
   }
@@ -4851,7 +4957,7 @@
     const source = allday && allday.source ? allday.source : '';
     const chips = [1, 2, 3, 4, 5].map(footballStarChipHtml).join('');
     const starredHits = rows
-      .filter((row) => Number(row.stake) > 0 && footballStoredStars(row.stars) != null)
+      .filter((row) => Number(row.stake) > 0 && footballRowStars(row) != null)
       .map((row) => ({ wl: footballResolvedWl(row) }));
     const body = rows.length
       ? '<div class="fb-star-filter">' +
@@ -4882,9 +4988,10 @@
     const counted = [];
     panel.querySelectorAll('.fb-all-row').forEach((row) => {
       const stars = row.getAttribute('data-stars');
-      const show = stars ? !!selected[stars] : true;
+      const show = !any ? true : (stars ? !!selected[stars] : true);
       row.hidden = !show;
-      if (any && !show) return;
+      if (!show) return;
+      if (any && !stars) return;
       if (!(Number(row.getAttribute('data-stake')) > 0)) return;
       counted.push({ wl: row.getAttribute('data-wl') });
     });
@@ -4896,6 +5003,7 @@
     const host = $('#football-body');
     if (!host) return;
     host.dataset.source = source;
+    host.dataset.starReport = JSON.stringify(footballStarCensus(model, allday));
     const days = model.days || [];
     const latest = days.reduce((best, day) => (!best || day.date > best.date ? day : best), null);
     const selected = days.find((day) => day.date === wanted) || latest;
@@ -4987,10 +5095,13 @@
       const alldayPromise = loadFootballAllDay();
       const stablePromise = loadFootballStable();
       const dayBookPromise = loadFootballDayBook();
+      const mapPromise = loadFootballStarsMap();
       const loaded = await loadedPromise;
       const allday = await alldayPromise;
       const stableRows = await stablePromise;
       const dayBook = await dayBookPromise;
+      footballStarsMap = await mapPromise;
+      footballApplyStarColors(footballStarsMap);
       if (token !== footballLoad || viewFootball.hidden) return;
       if (status) status.hidden = true;
       if (host) host.dataset.alldaySource = allday.source || '';
