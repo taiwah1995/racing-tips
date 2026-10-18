@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football4';
+  const APP_DATA_VERSION = '20261018football5';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2833,7 +2833,11 @@
     return n.toFixed(2);
   }
 
-  /** Team and 買法 use the same green as a winning W. Odds stay the normal value colour. */
+  /**
+   * Team and 買法 use the same green as a winning W. Odds stay the normal value colour.
+   * 買法 is the sheet text, including +0.5, +0/0.5, 受半/一, or a parenthetical line.
+   * A bare 讓球 主勝 is shown as written; this does not invent a line.
+   */
   function footballPickBits(tip) {
     const bits = [];
     if (tip.pick) bits.push('<span class="pl-pos">' + escapeHtml(tip.pick) + '</span>');
@@ -2867,15 +2871,15 @@
   const FOOTBALL_AUTO_HANDICAP = /^讓球\s*(主勝|客勝)/;
   const FOOTBALL_LOCKED_DAY = '2026-10-17';
   const FOOTBALL_LOCKED_LEGS = [
-    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝', odds: '0.83' },
-    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝', odds: '0.90' },
+    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83' },
+    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.90' },
   ];
 
   /**
    * 穩陣過關 legs, first match wins:
    * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, odds from the tab.
    * 2. Tips column 過關 is Y/是/1 on any row that day → only those rows, sheet odds.
-   * 3. 2026-10-17 with no marks → 艾華斯堡 0.83 and 華倫西亞 0.90 (odds stay locked).
+   * 3. 2026-10-17 with no marks → 艾華斯堡 讓球 主勝 +0 at 0.83 and 華倫西亞 讓球 主勝 +0/0.5 at 0.90.
    * 4. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
    * Fewer than two priced legs hides the panel.
    */
@@ -3221,7 +3225,7 @@
     return html + '</span>';
   }
 
-  /** 推介 is the team. 買法 is the market; a leading copy of the team is not repeated. */
+  /** 推介 is the team. 買法 stays verbatim after a leading copy of the team; the line is not stripped. */
   function footballAllDayParts(row) {
     let team = String(row.pick || '').trim();
     let market = String(row.line || '').trim();
