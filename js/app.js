@@ -3744,7 +3744,7 @@
   }
 
   /**
-   * Which side of 場次 gets the red ★ and the red footnote.
+   * Which side of 場次 gets the red * and the red footnote.
    * A named team wins. Both names mark both sides. Otherwise the pick's side.
    */
   function footballEuroMarks(tip) {
@@ -3770,7 +3770,7 @@
   }
 
   function footballSideHtml(name, marked, phrase, suffix) {
-    const star = marked ? '<span class="fb-euro-star" aria-hidden="true">★</span>' : '';
+    const star = marked ? '<span class="fb-euro-star" aria-hidden="true">*</span>' : '';
     const extra = suffix ? '<span class="fb-side-suffix">' + escapeHtml(suffix) + '</span>' : '';
     const foot = marked
       ? '<span class="fb-euro-foot">' + escapeHtml(phrase) + '</span>'
@@ -3790,7 +3790,7 @@
         footballSideHtml(mark.parts.away, mark.away, mark.phrase, mark.parts.suffix) +
         '</span>';
     } else if (tip.match) {
-      const star = mark.phrase ? '<span class="fb-euro-star" aria-hidden="true">★</span>' : '';
+      const star = mark.phrase ? '<span class="fb-euro-star" aria-hidden="true">*</span>' : '';
       const foot = mark.phrase
         ? '<span class="fb-euro-foot">' + escapeHtml(mark.phrase) + '</span>'
         : '';
