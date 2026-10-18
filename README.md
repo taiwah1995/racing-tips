@@ -112,7 +112,8 @@ Used only when the sheet cannot be fetched. Copy the same matches into `data/foo
 2. Each tip uses `ko`, `league`, `match`, `pick`, `market` (this is 買法), `odds`, `confidence`, `stake`, `status` (`暫定` or `確認`). Add `reason` when there is a 推介原因. Leave `result`, `wl`, and `profit` empty (`profit: null`) until the match is settled, then set `wl` and the profit number.
 3. Tips with `stake` ≤ 0 are hidden. `unit` stays `100`.
 4. Copy tab `當日總結` into `data/football-daybook.json` as `rows[]` (`date`, `item`, `kind` of `part` / `day-total` / `cumulative`, `stake`, `payout`, `profit`, `units`). The cumulative row may leave `date` empty. The page uses that file only when the tab cannot be fetched.
-5. Bump `APP_DATA_VERSION` in `js/app.js` and the `?v=` on CSS/JS in `index.html` so phones pick up the new file.
+5. `data/football-tips.json` also holds the historical tip days 2026-10-14 (10), 2026-10-15 (10), and 2026-10-16 (1). Those rows use status `回填`. The page shows the tip cards and 全日分析, and leaves 穩陣過關 and 刀仔鋸大樹 off unless that day has a lock. 10/15 里昂 vs 水晶宮, 芝加哥火燄 vs 費城聯, and 富明尼斯 vs 彭美拉斯 are away `讓球 客勝 +0`. A day may lock 穩陣 with `stable` or `stable_lock`. 2026-10-17 `stable` is 2注: 艾華斯堡 and 華倫西亞, 派彩 `$530`, 盈虧 `+$330`. `daozi_lock` legs may be objects or `match｜pick｜line｜odds｜W/L score` strings. The 刀仔 panel still settles from those odds, so 10/17 stays 派彩 `$365.15` and 盈虧 `+$125.15`. The 當日總結 line for 刀仔 stays `$912` / `+$312`. `data/football-allday.json` lists 217 rows from 2026-10-05 through 2026-10-18. A pick written `隊名｜買法` is split for the row.
+6. Bump `APP_DATA_VERSION` in `js/app.js` and the `?v=` on CSS/JS in `index.html` so phones pick up the new file.
 
 ## Tech
 

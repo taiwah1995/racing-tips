@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football41';
+  const APP_DATA_VERSION = '20261018football42';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2657,13 +2657,17 @@
       const date = parseFootballDate(item && item.date);
       if (!date) return;
       const stakeNum = item.stake == null || item.stake === '' ? null : Number(item.stake);
+      const written = footballStr(item.pick);
+      const split = written.split('｜');
+      const team = split.length > 1 ? split[0].trim() : '';
+      const market = split.length > 1 ? split.slice(1).join('｜').trim() : written;
       rows.push({
         date: date,
         time: footballStr(item.time),
         league: footballStr(item.league),
         match: footballStr(item.match),
-        pick: '',
-        line: footballStr(item.pick),
+        pick: team,
+        line: market,
         odds: item.odds == null || item.odds === '' ? '' : String(item.odds),
         confidence: item.confidence == null || item.confidence === '' ? '' : String(item.confidence),
         stake: Number.isFinite(stakeNum) ? stakeNum : null,
@@ -3170,11 +3174,39 @@
       ko: footballStr(spec && spec.ko),
       match: footballStr(spec && spec.match),
       pick: footballStr(spec && spec.pick),
-      line: footballStr(spec && (spec.line || spec.market || spec['買法'])),
+      line: footballLockLine(spec && (spec.line || spec.market || spec['買法'])),
       odds: spec && spec.odds != null && spec.odds !== '' ? String(spec.odds) : '',
       wl: normalizeFootballWl(spec && spec.wl),
       result: footballStr(spec && spec.result),
     };
+  }
+
+  /** HAD主 / 讓球主+0 from a string lock, written the same way as the tip cards. */
+  function footballLockLine(line) {
+    let text = String(line || '').trim();
+    if (/^HAD\s*主$/i.test(text)) return '主客和 主勝';
+    if (/^HAD\s*客$/i.test(text)) return '主客和 客勝';
+    text = text.replace(/^讓球主(?!客)/, '讓球 主勝 ');
+    text = text.replace(/^讓球客/, '讓球 客勝 ');
+    return text.replace(/\s+/g, ' ').trim();
+  }
+
+  /** Object legs, or `match｜pick｜line｜odds｜W 4-3` strings. */
+  function footballLockLeg(spec) {
+    if (typeof spec === 'string') {
+      const parts = spec.split('｜').map((part) => part.trim());
+      const tail = parts[4] || '';
+      const coded = tail.match(/^(WH|LH|W|L|P)\s*(.*)$/i);
+      spec = {
+        match: parts[0] || '',
+        pick: parts[1] || '',
+        line: parts[2] || '',
+        odds: parts[3] || '',
+        wl: coded ? coded[1] : '',
+        result: coded ? coded[2] : tail,
+      };
+    }
+    return footballNormalizeLockLeg(spec);
   }
 
   function footballLocksFromFile(data) {
@@ -3185,17 +3217,23 @@
       if (!date) return;
       const five = day.daozi_lock;
       if (five && Array.isArray(five.legs) && five.legs.length >= 5) {
-        daozi[date] = {
-          stakeLabel: footballStr(five.stake_label) || '注碼$10×6（$60）',
-          stake: Number(five.stake),
-          payout: Number(five.payout),
-          profit: Number(five.profit),
-          legs: five.legs.slice(0, 5).map(footballNormalizeLockLeg),
-        };
+        const legs = five.legs.slice(0, 5).map(footballLockLeg);
+        if (legs.every((leg) => leg.match && leg.odds)) {
+          daozi[date] = {
+            stakeLabel: footballStr(five.stake_label) || '注碼$10×6（$60）',
+            stake: Number(five.stake),
+            payout: Number(five.payout),
+            profit: Number(five.profit),
+            legs: legs,
+          };
+        }
       }
-      const pass = day.stable_lock;
+      const pass = day.stable_lock || day.stable;
       if (pass && Array.isArray(pass.legs) && pass.legs.length >= 2) {
-        stable[date] = { legs: pass.legs.map(footballNormalizeLockLeg) };
+        const legs = pass.legs.map(footballLockLeg);
+        if (legs.every((leg) => leg.match && leg.odds)) {
+          stable[date] = { legs: legs };
+        }
       }
     });
     return { daozi: daozi, stable: stable };
@@ -3238,7 +3276,7 @@
       const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
       return {
         tip: {
-          ko: spec.ko,
+          ko: spec.ko || (hit && hit.ko) || '',
           match: hit && hit.match ? hit.match : spec.match,
           pick: spec.pick,
           line: spec.line,
@@ -3259,9 +3297,16 @@
    * 3. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
    * Fewer than two priced legs hides the panel.
    */
+  /** Historical backfill days are tip cards only. 穩陣 and 刀仔 stay off unless locked. */
+  function footballBackfillOnly(tips) {
+    const rows = tips || [];
+    return rows.length > 0 && rows.every((tip) => String(tip.status || '').trim() === '回填');
+  }
+
   function footballStableLegs(tips, date, locks, sheetRows) {
     const frozen = footballStableLockLegs(date, tips);
     if (frozen) return frozen;
+    if (footballBackfillOnly(tips)) return [];
     const fromSheet = (sheetRows || []).filter((row) => row.date === date);
     if (fromSheet.length >= 2) return fromSheet;
     const marked = (locks || []).filter((row) => row.date === date);
@@ -3336,13 +3381,19 @@
     return open ? null : product;
   }
 
-  /** Signed handicap written as +0/0.5 or +0. Null when the line has no number. */
+  /**
+   * Signed handicap. +0/0.5 and +0/+0.5 are both the quarter line (average of the two).
+   * A bare +0 stays 0. Null when the line has no number.
+   */
   function footballQuotedHandicap(line) {
     const src = String(line || '').replace(/\s+/g, '');
-    const pair = src.match(/([+-])(\d+(?:\.\d+)?)\/(\d+(?:\.\d+)?)/);
+    const pair = src.match(/([+-])(\d+(?:\.\d+)?)\/([+-])?(\d+(?:\.\d+)?)/);
     if (pair) {
       const sign = pair[1] === '-' ? -1 : 1;
-      return sign * (Number(pair[2]) + Number(pair[3])) / 2;
+      const left = sign * Number(pair[2]);
+      const rightSign = pair[3] === '-' ? -1 : (pair[3] === '+' ? 1 : sign);
+      const right = rightSign * Number(pair[4]);
+      return (left + right) / 2;
     }
     const one = src.match(/([+-])(\d+(?:\.\d+)?)/);
     if (one) return (one[1] === '-' ? -1 : 1) * Number(one[2]);
@@ -3508,6 +3559,7 @@
     const hinted = date || ((tips || [])[0] && tips[0].date) || '';
     const lock = footballFiveLock(hinted);
     if (lock) return footballLockedFiveRows(lock, tips);
+    if (footballBackfillOnly(tips)) return [];
     const rows = [];
     (tips || []).forEach((tip) => {
       if (!(Number(tip.stake) > 0)) return;
@@ -4223,9 +4275,21 @@
   }
 
   /** 推介 is the team. 買法 stays verbatim after a leading copy of the team; the line is not stripped. */
+  function footballSplitPick(text) {
+    const parts = String(text || '').split('｜').map((part) => part.trim()).filter(Boolean);
+    if (parts.length < 2) return null;
+    return { team: parts[0], market: parts.slice(1).join('｜') };
+  }
+
   function footballAllDayParts(row) {
     let team = String(row.pick || '').trim();
     let market = String(row.line || '').trim();
+    const split = footballSplitPick(team) || footballSplitPick(market);
+    if (split) {
+      team = split.team;
+      market = split.market;
+    }
+    market = market.replace(/^[|｜]\s*/, '');
     if (team && market) {
       if (market === team) market = '';
       else if (market.indexOf(team) === 0) market = market.slice(team.length).trim();
