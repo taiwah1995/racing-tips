@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018st1019';
+  const APP_DATA_VERSION = '20261018football45';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2593,6 +2593,7 @@
       const model = await loadFootballSheet();
       footballStampEuTeams(model, fileData);
       footballStampStars(model, fileData);
+      footballStampMissingTips(model, fileData);
       return { model: model, source: 'sheet' };
     } catch (err) {
       console.error(err);
@@ -2719,6 +2720,33 @@
     ].join('|');
   }
 
+  /**
+   * A sheet row with a blank 注數 is dropped. If the file still has that match
+   * at stake > 0, add that tip. Existing sheet tips and the locks stay put.
+   */
+  function footballStampMissingTips(model, data) {
+    if (!model || !data) return;
+    const fileModel = footballModelFromFile(data);
+    const have = new Set();
+    (model.days || []).forEach((day) => {
+      (day.tips || []).forEach((tip) => {
+        have.add(tip.date + '|' + footballMatchKey(tip.match));
+      });
+    });
+    (fileModel.days || []).forEach((day) => {
+      const missing = (day.tips || []).filter((tip) => !have.has(tip.date + '|' + footballMatchKey(tip.match)));
+      if (!missing.length) return;
+      let host = (model.days || []).find((item) => item.date === day.date);
+      if (!host) {
+        host = { date: day.date, label: day.label || '', tips: [] };
+        model.days = model.days || [];
+        model.days.push(host);
+        model.days.sort((a, b) => a.date.localeCompare(b.date));
+      }
+      missing.forEach((tip) => host.tips.push(tip));
+    });
+  }
+
   /** File stars win over the sheet. A row the file does not rate stays unstarred. */
   function footballStampAllDayStars(rows, data) {
     const map = {};
@@ -2729,6 +2757,24 @@
     (rows || []).forEach((row) => {
       const stars = map[footballAllDayStarKey(row)];
       if (stars != null) row.stars = stars;
+    });
+  }
+
+  /** Blank sheet 信心% and 賠率 take the file value. A blank file confidence stays 無評級. */
+  function footballStampAllDayBlanks(rows, data) {
+    const map = {};
+    footballAllDayFromFile(data).forEach((row) => {
+      map[footballAllDayStarKey(row)] = row;
+    });
+    (rows || []).forEach((row) => {
+      const file = map[footballAllDayStarKey(row)];
+      if (!file) return;
+      if (footballConfidenceNumber(row.confidence) == null && footballConfidenceNumber(file.confidence) != null) {
+        row.confidence = file.confidence;
+      }
+      if ((row.odds == null || row.odds === '') && file.odds != null && file.odds !== '') {
+        row.odds = file.odds;
+      }
     });
   }
 
@@ -2748,6 +2794,7 @@
     try {
       const rows = await loadFootballAllDaySheet();
       footballStampAllDayStars(rows, fileData);
+      footballStampAllDayBlanks(rows, fileData);
       return { rows: rows, source: 'sheet' };
     } catch (err) {
       console.error(err);
