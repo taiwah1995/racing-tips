@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football17';
+  const APP_DATA_VERSION = '20261018football18';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2390,7 +2390,7 @@
    * 無週中* stays hidden. Only that phrase is wrapped for the red colour.
    */
   function footballEuroNoteHtml(text) {
-    const full = String(text || '');
+    const full = footballReasonWithoutLineEcho(text);
     if (!full.trim() || full.indexOf('無週中') >= 0) return '';
     const phrase = (full.match(FOOTBALL_EURO_PHRASE) || [])[0];
     if (!phrase) return '';
@@ -3032,21 +3032,44 @@
   }
 
   /**
-   * Team and 買法 use the same green as a winning W. Odds stay the normal value colour.
-   * 買法 is the sheet text, including +0.5, +0/0.5, 受半/一, or a parenthetical line.
-   * A bare 讓球 主勝 is shown as written; this does not invent a line.
+   * Tip-card 買法. A side label such as 讓球 主勝, 受讓評判, or 主讓評判 is dropped
+   * when the handicap line itself is still there (+0.5, 一球, 受平/半).
    */
-  function footballPickBits(tip) {
+  function footballCardLine(line) {
+    let text = String(line || '').replace(/評判/g, '').replace(/\s+/g, ' ').trim();
+    if (!text) return '';
+    let mixed = text.match(/^(?:讓球\s*)?(?:主勝|客勝)?\s*(?:受|讓)?(?:平\/半|半\/一|平手|半球|一球|球半|兩球半|兩球)\s+([+-]?\d+(?:\.\d+)?(?:\s*\/\s*[+-]?\d+(?:\.\d+)?)*)\s*$/);
+    if (mixed) return mixed[1];
+    let pref = text.match(/^(?:讓球\s+)?(?:主勝|客勝)\s+([+-]\d+(?:\.\d+)?(?:\s*\/\s*[+-]?\d+(?:\.\d+)?)*)\s*$/);
+    if (pref) return pref[1];
+    let named = text.match(/^(?:主讓|客讓|主受|客受|受讓|讓)\s+((?:平手|平\/半|半\/一|半球|一球|球半|兩球).*)$/);
+    if (named) return named[1].trim();
+    let hha = text.match(/^讓球主客和\(([+-]?\d+(?:\.\d+)?)\)\s*(?:主勝|客勝|和局)?\s*$/);
+    if (hha) return hha[1];
+    return text;
+  }
+
+  /** Drop a reason clause that only repeats the handicap already shown on the pick. */
+  function footballReasonWithoutLineEcho(text) {
+    return String(text || '')
+      .replace(/評判/g, '')
+      .replace(/[；;]\s*(?:主|客)?(?:受|讓)?(?:平\/半|半\/一|平手|半球|一球|球半|兩球|[+-]?\d+(?:\.\d+)?(?:\/[+-]?\d+(?:\.\d+)?)*)\s*$/, '')
+      .replace(/[，,]\s*(?:主|客)?(?:受|讓)?(?:平\/半|半\/一|平手|半球|一球|球半)(?:有值)?\s*$/, '')
+      .trim();
+  }
+
+  function footballPickBits(tip, lineOverride) {
+    const line = lineOverride == null ? tip.line : lineOverride;
     const bits = [];
     if (tip.pick) bits.push('<span class="pl-pos">' + escapeHtml(tip.pick) + '</span>');
-    if (tip.line) bits.push('<span class="pl-pos">(' + escapeHtml(tip.line) + ')</span>');
+    if (line) bits.push('<span class="pl-pos">(' + escapeHtml(line) + ')</span>');
     const odds = formatFbOdds(tip.odds);
     if (odds) bits.push(escapeHtml(odds + '倍'));
     return bits;
   }
 
   function footballPickHtml(tip) {
-    const bits = footballPickBits(tip);
+    const bits = footballPickBits(tip, footballCardLine(tip.line));
     if (!bits.length) return '';
     return '<div class="fb-field fb-field-wide">' +
       '<span class="fb-k">推介</span>' +
