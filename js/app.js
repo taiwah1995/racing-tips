@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football14';
+  const APP_DATA_VERSION = '20261018football15';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2408,6 +2408,7 @@
     if (!date) return null;
     return {
       date: date,
+      ko: footballText(csv('時間'), json('時間')),
       match: footballText(csv('場次'), json('場次')),
       pick: footballText(csv('推介'), json('推介')),
       line: footballText(csv('買法'), json('買法')),
@@ -2514,6 +2515,7 @@
         if (footballPassMarked(tip.pass != null ? tip.pass : tip['過關'])) {
           locks.push({
             date: date,
+            ko: footballStr(tip.ko),
             match: footballStr(tip.match),
             pick: footballStr(tip.pick),
             line: footballStr(tip.market != null && tip.market !== '' ? tip.market : tip['買法']),
@@ -2727,7 +2729,15 @@
     const odds = footballOdds(csv('賠率'), json('賠率'));
     if (!match && !pick) return null;
     if (!odds) return null;
-    return { date: date, match: match, pick: pick, line: line, odds: odds };
+    // 時間 is the column after 日期 on tab 穩陣過關. Do not fill it from 波盤推介.
+    return {
+      date: date,
+      ko: footballText(csv('時間'), json('時間')),
+      match: match,
+      pick: pick,
+      line: line,
+      odds: odds,
+    };
   }
 
   function footballStableFromSheet(csvRows, table) {
@@ -3037,15 +3047,15 @@
   const FOOTBALL_AUTO_HANDICAP = /^讓球\s*(主勝|客勝)/;
   const FOOTBALL_LOCKED_DAY = '2026-10-17';
   const FOOTBALL_LOCKED_LEGS = [
-    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83' },
-    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.90' },
+    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83', ko: '21:30' },
+    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.90', ko: '03:00' },
   ];
 
   /**
    * 穩陣過關 legs, first match wins:
-   * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, odds from the tab.
+   * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, including 時間. Do not copy 時間 from 波盤推介.
    * 2. Tips column 過關 is Y/是/1 on any row that day → only those rows, sheet odds.
-   * 3. 2026-10-17 with no marks → 艾華斯堡 讓球 主勝 +0 at 0.83 and 華倫西亞 讓球 主勝 +0/0.5 at 0.90.
+   * 3. 2026-10-17 with no sheet rows → locked 艾華斯堡 21:30 讓球 主勝 +0 at 0.83 and 華倫西亞 03:00 讓球 主勝 +0/0.5 at 0.90.
    * 4. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
    * Fewer than two priced legs hides the panel.
    */
@@ -3059,6 +3069,7 @@
         const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
         return {
           date: date,
+          ko: spec.ko,
           match: hit && hit.match ? hit.match : spec.match,
           pick: spec.pick,
           line: spec.line,
@@ -3072,6 +3083,12 @@
       if (!(Number(tip.stake) > 0)) return false;
       return FOOTBALL_AUTO_HANDICAP.test(String(tip.line || '').trim());
     });
+  }
+
+  function footballLegKoHtml(tip) {
+    const ko = String(tip && tip.ko || '').trim();
+    if (!ko) return '';
+    return '<span class="fb-leg-ko">' + escapeHtml(ko) + '</span>';
   }
 
   /** Fill 賽果 and W/L from the tips sheet when a lock row does not carry them. */
@@ -3196,7 +3213,7 @@
     const settled = footballSettledProduct(legs);
     const items = legs.map((leg) => {
       return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
-        footballPickBits(leg.tip).join(' ') + '</span>' +
+        footballLegKoHtml(leg.tip) + footballPickBits(leg.tip).join(' ') + '</span>' +
         footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
@@ -3246,8 +3263,8 @@
     const settled = settledSum == null ? null : settledSum / 6;
     const items = chosen.map((leg) => {
       const match = leg.tip.match
-        ? '<span class="fb-five-match">' + escapeHtml(leg.tip.match) + '</span>'
-        : '';
+        ? '<span class="fb-five-match">' + footballLegKoHtml(leg.tip) + escapeHtml(leg.tip.match) + '</span>'
+        : footballLegKoHtml(leg.tip);
       return '<li class="fb-parlay-leg fb-five-leg"><span class="fb-leg-main">' + match +
         '<span class="fb-five-pick">' + footballPickBits(leg.tip).join(' ') + '</span></span>' +
         footballLegResultHtml(leg.tip) + '</li>';
