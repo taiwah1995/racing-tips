@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football14';
+  const APP_DATA_VERSION = '20261018football15';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2408,6 +2408,7 @@
     if (!date) return null;
     return {
       date: date,
+      ko: footballText(csv('時間'), json('時間')),
       match: footballText(csv('場次'), json('場次')),
       pick: footballText(csv('推介'), json('推介')),
       line: footballText(csv('買法'), json('買法')),
@@ -2514,6 +2515,7 @@
         if (footballPassMarked(tip.pass != null ? tip.pass : tip['過關'])) {
           locks.push({
             date: date,
+            ko: footballStr(tip.ko),
             match: footballStr(tip.match),
             pick: footballStr(tip.pick),
             line: footballStr(tip.market != null && tip.market !== '' ? tip.market : tip['買法']),
@@ -2727,7 +2729,14 @@
     const odds = footballOdds(csv('賠率'), json('賠率'));
     if (!match && !pick) return null;
     if (!odds) return null;
-    return { date: date, match: match, pick: pick, line: line, odds: odds };
+    return {
+      date: date,
+      ko: footballText(csv('時間'), json('時間')),
+      match: match,
+      pick: pick,
+      line: line,
+      odds: odds,
+    };
   }
 
   function footballStableFromSheet(csvRows, table) {
@@ -3037,8 +3046,8 @@
   const FOOTBALL_AUTO_HANDICAP = /^讓球\s*(主勝|客勝)/;
   const FOOTBALL_LOCKED_DAY = '2026-10-17';
   const FOOTBALL_LOCKED_LEGS = [
-    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83' },
-    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.90' },
+    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83', ko: '21:30' },
+    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.90', ko: '03:00' },
   ];
 
   /**
@@ -3059,6 +3068,7 @@
         const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
         return {
           date: date,
+          ko: spec.ko || (hit && hit.ko) || '',
           match: hit && hit.match ? hit.match : spec.match,
           pick: spec.pick,
           line: spec.line,
@@ -3072,6 +3082,49 @@
       if (!(Number(tip.stake) > 0)) return false;
       return FOOTBALL_AUTO_HANDICAP.test(String(tip.line || '').trim());
     });
+  }
+
+  /**
+   * Kickoff for a 穩陣 leg. The tab often has no 時間 column, so the time comes
+   * from the same date and 場次 on 波盤推介. The 2026-10-17 lock is the last resort.
+   */
+  function footballFindDayTip(tips, leg) {
+    const key = footballMatchKey(leg && leg.match);
+    if (!key) return null;
+    const sameDay = (tips || []).filter((tip) => !leg.date || !tip.date || tip.date === leg.date);
+    const exact = sameDay.find((tip) => footballMatchKey(tip.match) === key);
+    if (exact) return exact;
+    return sameDay.find((tip) => {
+      const other = footballMatchKey(tip.match);
+      if (!other) return false;
+      const shorter = key.length <= other.length ? key : other;
+      if (shorter.length < 3) return false;
+      return other.indexOf(key) >= 0 || key.indexOf(other) >= 0;
+    }) || null;
+  }
+
+  function footballLockedKickoff(leg) {
+    if (!leg || (leg.date && leg.date !== FOOTBALL_LOCKED_DAY)) return '';
+    const text = String(leg.match || '') + String(leg.pick || '');
+    const spec = FOOTBALL_LOCKED_LEGS.find((item) => text.indexOf(item.match) >= 0);
+    return spec && spec.ko ? spec.ko : '';
+  }
+
+  function footballAttachKickoff(leg, tips) {
+    if (!leg) return leg;
+    if (String(leg.ko || '').trim()) return leg;
+    const hit = footballFindDayTip(tips, leg);
+    const ko = hit && String(hit.ko || '').trim();
+    if (ko) return Object.assign({}, leg, { ko: ko });
+    const locked = footballLockedKickoff(leg);
+    if (!locked) return leg;
+    return Object.assign({}, leg, { ko: locked });
+  }
+
+  function footballLegKoHtml(tip) {
+    const ko = String(tip && tip.ko || '').trim();
+    if (!ko) return '';
+    return '<span class="fb-leg-ko">' + escapeHtml(ko) + '</span>';
   }
 
   /** Fill 賽果 and W/L from the tips sheet when a lock row does not carry them. */
@@ -3196,7 +3249,7 @@
     const settled = footballSettledProduct(legs);
     const items = legs.map((leg) => {
       return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
-        footballPickBits(leg.tip).join(' ') + '</span>' +
+        footballLegKoHtml(leg.tip) + footballPickBits(leg.tip).join(' ') + '</span>' +
         footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
@@ -3246,8 +3299,8 @@
     const settled = settledSum == null ? null : settledSum / 6;
     const items = chosen.map((leg) => {
       const match = leg.tip.match
-        ? '<span class="fb-five-match">' + escapeHtml(leg.tip.match) + '</span>'
-        : '';
+        ? '<span class="fb-five-match">' + footballLegKoHtml(leg.tip) + escapeHtml(leg.tip.match) + '</span>'
+        : footballLegKoHtml(leg.tip);
       return '<li class="fb-parlay-leg fb-five-leg"><span class="fb-leg-main">' + match +
         '<span class="fb-five-pick">' + footballPickBits(leg.tip).join(' ') + '</span></span>' +
         footballLegResultHtml(leg.tip) + '</li>';
@@ -3441,7 +3494,7 @@
 
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
     const legs = footballStableLegs(tips, date, locks, sheetRows)
-      .map((leg) => footballCopyTipResult(leg, tips));
+      .map((leg) => footballAttachKickoff(footballCopyTipResult(leg, tips), tips));
     const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated);
     if (!parlay && !five) return '';
