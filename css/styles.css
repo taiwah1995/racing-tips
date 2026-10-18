@@ -1390,7 +1390,7 @@ body {
   padding: 0;
   font-size: clamp(0.68rem, 3.15vw, 0.8rem);
   line-height: 1.5;
-  white-space: nowrap;
+  white-space: normal;
 }
 #view-football .fb-pass-footers .fb-parlay-odds + .fb-parlay-odds {
   margin-top: 2px;

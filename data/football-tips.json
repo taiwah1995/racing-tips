@@ -1,6 +1,6 @@
 {
   "unit": 100,
-  "note": "1注=$100；只收有落注嘅場。試算表讀到時，推介卡用試算表，唔用呢度嘅 tips。daozi_lock 同 stable_lock 就算試算表讀到都鎖定當日過關，唔再跟有注頭五或開波時間重排。daozi_lock 嘅 stake/payout/profit 係每注 $10 嘅已確認數（投注 $60、派彩 $898.4、盈虧 +$838.4）。頁面唔顯示 $60。刀仔注碼固定：3串4 每注 $50（$200）、4串5 每注 $40（$200）、5串6 每注 $40（$240），派彩同盈虧按 240/60 放大。result/wl/profit 完場後更新（W=全贏, WH=贏半, P=走盤, LH=輸半, L=全輸）。market=買法，reason=推介原因。",
+  "note": "1注=$100；只收有落注嘅場。試算表讀到時，推介卡用試算表，唔用呢度嘅 tips。daozi_lock 同 stable_lock 就算試算表讀到都鎖定當日過關，唔再跟有注頭五或開波時間重排。刀仔注碼固定：3串4 每注 $50（$200）、4串5 每注 $40（$200）、5串6 每注 $40（$240）。10/17 五串六只計唔包含布里斯托嘅四串一。華倫西亞 +0/0.5 對 0-0 係贏半。每注 $40 派彩 $365.15，盈虧 +$125.15。全中過關賠率係理論全中，實際派彩率先係結算。result/wl/profit 完場後更新（W=全贏, WH=贏半, P=走盤, LH=輸半, L=全輸）。market=買法，reason=推介原因。",
   "days": [
     {
       "date": "2026-10-17",
@@ -18,22 +18,44 @@
         {"no":10,"ko":"03:00","league":"西甲","match":"華倫西亞 vs 畢爾包","pick":"華倫西亞","market":"受平/半","odds":"0.90","confidence":56,"stake":2,"status":"暫定","reason":"畢爾包缺雙核兼生疏，資金跟主","result":"","wl":"","profit":null}
       ],
       "daozi_lock": {
-        "stake": 60,
-        "stake_label": "注碼$10×6（$60）",
-        "payout": 898.4,
-        "profit": 838.4,
+        "stake": 240,
+        "stake_label": "每注 $40，投注 $240",
+        "payout": null,
+        "profit": null,
         "legs": [
           {"ko":"21:30","match":"艾華斯堡 vs 奧格斯堡","pick":"艾華斯堡","line":"讓球 主勝 +0","odds":"0.83","wl":"W","result":"4-3"},
           {"ko":"22:00","match":"布里斯托城 vs 錫菲聯","pick":"布里斯托城","line":"主客和 主勝","odds":"2.04","wl":"L","result":"0-1"},
           {"ko":"22:00","match":"打比郡 vs 史篤城","pick":"史篤城","line":"主客和 客勝","odds":"2.27","wl":"W","result":"0-1"},
           {"ko":"22:00","match":"域斯咸 vs 普雷斯頓","pick":"域斯咸","line":"主客和 主勝","odds":"1.50","wl":"W","result":"4-1"},
-          {"ko":"03:00","match":"華倫西亞 vs 畢爾包（10/18凌晨）","pick":"華倫西亞","line":"讓球 主勝 +0/0.5","odds":"0.93","wl":"W","result":"0-0"}
+          {"ko":"03:00","match":"華倫西亞 vs 畢爾包（10/18凌晨）","pick":"華倫西亞","line":"讓球 主勝 +0/0.5","odds":"0.93","wl":"WH","result":"0-0"}
         ]
       },
       "stable_lock": {
         "legs": [
           {"ko":"21:30","match":"艾華斯堡 vs 奧格斯堡","pick":"艾華斯堡","line":"讓球 主勝 +0","odds":"0.83","wl":"W","result":"4-3"},
           {"ko":"03:00","match":"華倫西亞 vs 畢爾包（10/18凌晨）","pick":"華倫西亞","line":"讓球 主勝 +0/0.5","odds":"0.90","wl":"WH","result":"0-0"}
+        ]
+      }
+    },
+    {
+      "date": "2026-10-18",
+      "label": "10月18日",
+      "tips": [
+        {"no":1,"ko":"18:15","league":"荷甲","match":"施禾利 vs 伊高斯","pick":"伊高斯","market":"讓球 客勝 -0/-0.5","odds":1.71,"confidence":56,"stake":2,"status":"暫定","reason":"★★★ 質素優平/半","result":"","wl":"","profit":null},
+        {"no":2,"ko":"18:30","league":"意甲","match":"烏甸尼斯 vs 萊切","pick":"萊切","market":"讓球 客勝 +0.5/+1","odds":1.74,"confidence":54,"stake":2,"status":"暫定","reason":"★★★★ 意甲命中高；烏甸傷缺多","result":"","wl":"","profit":null},
+        {"no":3,"ko":"20:00","league":"西甲","match":"奧沙辛拿 vs 桑坦德","pick":"桑坦德","market":"讓球 客勝 +0/+0.5","odds":2.0,"confidence":53,"stake":2,"status":"暫定","reason":"★★★★ 西甲命中高；保級客受","result":"","wl":"","profit":null},
+        {"no":4,"ko":"20:30","league":"荷甲","match":"甘堡爾 vs 阿爾克馬爾","pick":"甘堡爾","market":"讓球 主勝 +1/+1.5","odds":1.86,"confidence":58,"stake":2,"status":"暫定","reason":"★★★★★ 阿爾克馬爾週中歐霸；主+1.5","result":"","wl":"","profit":null},
+        {"no":5,"ko":"21:00","league":"意甲","match":"費倫天拿 vs 科木","pick":"費倫天拿","market":"讓球 主勝 +0/+0.5","odds":1.98,"confidence":58,"stake":2,"status":"暫定","reason":"★★★★★ 科木上週歐聯；受平/半","result":"","wl":"","profit":null},
+        {"no":6,"ko":"21:00","league":"英超","match":"白禮頓 vs 水晶宮","pick":"水晶宮","market":"讓球 客勝 +1","odds":1.99,"confidence":57,"stake":0,"status":"擋住","reason":"覆核擋：稿客+1 vs 馬會客+1.25","result":"","wl":"","profit":null},
+        {"no":7,"ko":"21:30","league":"德甲","match":"利華古遜 vs 弗賴堡","pick":"弗賴堡","market":"讓球 客勝 +0.5/+1","odds":1.97,"confidence":57,"stake":2,"status":"暫定","reason":"★★★★★ 利華上週歐霸；弗賴上週歐協；受半/一","result":"","wl":"","profit":null},
+        {"no":8,"ko":"00:30","league":"西甲","match":"馬拉加 vs 皇家蘇斯達（10/19凌晨）","pick":"馬拉加","market":"讓球 主勝 +0/+0.5","odds":1.95,"confidence":55,"stake":2,"status":"暫定","reason":"★★ 蘇斯達上週歐霸；主受平/半","result":"","wl":"","profit":null},
+        {"no":9,"ko":"02:00","league":"荷甲","match":"川迪 vs 烏德勒支（10/19凌晨）","pick":"烏德勒支","market":"讓球 客勝 +1/+1.5","odds":2.0,"confidence":58,"stake":2,"status":"暫定","reason":"★★★★★ 川迪上週歐協；客+1.5","result":"","wl":"","profit":null},
+        {"no":10,"ko":"03:00","league":"西甲","match":"皇家馬德里 vs 西維爾（10/19凌晨）","pick":"西維爾","market":"讓球 客勝 +2","odds":1.8,"confidence":60,"stake":2,"status":"暫定","reason":"★★★ 皇馬上週歐聯；客+2","result":"","wl":"","profit":null}
+      ],
+      "stable_lock": {
+        "legs": [
+          {"ko":"18:30","match":"烏甸尼斯 vs 萊切","pick":"萊切","line":"讓球 客勝 +0.5/+1","odds":"1.74","wl":"","result":""},
+          {"ko":"20:00","match":"奧沙辛拿 vs 桑坦德","pick":"桑坦德","line":"讓球 客勝 +0/+0.5","odds":"2.00","wl":"","result":""}
         ]
       }
     }
