@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football3';
+  const APP_DATA_VERSION = '20261018football7';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2813,6 +2813,39 @@
     return text + '%（' + hits + '/' + decided + '）';
   }
 
+  /**
+   * Same 命中率 as 當日總結: W/WH hit, L/LH miss, P and unfinished left out.
+   * Null until at least one decided row, so the heading omits the chip.
+   */
+  function footballHitRate(rows) {
+    let hits = 0;
+    let decided = 0;
+    (rows || []).forEach((row) => {
+      const code = normalizeFootballWl(row && row.wl);
+      if (code === 'W' || code === 'WH') {
+        hits += 1;
+        decided += 1;
+      } else if (code === 'L' || code === 'LH') {
+        decided += 1;
+      }
+    });
+    if (!decided) return null;
+    const pct = Math.round((hits / decided) * 100);
+    return '命中 ' + hits + '/' + decided + ' • ' + pct + '%';
+  }
+
+  function footballHitHtml(rows) {
+    const text = footballHitRate(rows);
+    if (!text) return '';
+    return '<span class="fb-hit">' + escapeHtml(text) + '</span>';
+  }
+
+  function footballSectionTitle(titleHtml, updated, rows) {
+    return '<h2 class="panel-title fb-title-row"><span class="fb-title-main">' +
+      titleHtml + panelUpdatedHtml(updated) + '</span>' +
+      footballHitHtml(rows) + '</h2>';
+  }
+
   function formatFbConfidence(text) {
     const t = String(text || '').trim();
     if (!t) return '';
@@ -2833,7 +2866,11 @@
     return n.toFixed(2);
   }
 
-  /** Team and 買法 use the same green as a winning W. Odds stay the normal value colour. */
+  /**
+   * Team and 買法 use the same green as a winning W. Odds stay the normal value colour.
+   * 買法 is the sheet text, including +0.5, +0/0.5, 受半/一, or a parenthetical line.
+   * A bare 讓球 主勝 is shown as written; this does not invent a line.
+   */
   function footballPickBits(tip) {
     const bits = [];
     if (tip.pick) bits.push('<span class="pl-pos">' + escapeHtml(tip.pick) + '</span>');
@@ -2867,15 +2904,15 @@
   const FOOTBALL_AUTO_HANDICAP = /^讓球\s*(主勝|客勝)/;
   const FOOTBALL_LOCKED_DAY = '2026-10-17';
   const FOOTBALL_LOCKED_LEGS = [
-    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝', odds: '0.83' },
-    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝', odds: '0.90' },
+    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83' },
+    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.90' },
   ];
 
   /**
    * 穩陣過關 legs, first match wins:
    * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, odds from the tab.
    * 2. Tips column 過關 is Y/是/1 on any row that day → only those rows, sheet odds.
-   * 3. 2026-10-17 with no marks → 艾華斯堡 0.83 and 華倫西亞 0.90 (odds stay locked).
+   * 3. 2026-10-17 with no marks → 艾華斯堡 讓球 主勝 +0 at 0.83 and 華倫西亞 讓球 主勝 +0/0.5 at 0.90.
    * 4. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
    * Fewer than two priced legs hides the panel.
    */
@@ -2927,6 +2964,85 @@
     return '<span class="fb-leg-result">' + iconHtml + '賽果 ' + escapeHtml(result) + '</span>';
   }
 
+  function footballRound2(n) {
+    return Math.round((Number(n) + Number.EPSILON) * 100) / 100;
+  }
+
+  /**
+   * Settlement multiple on the decimal price.
+   * W = D, WH = (D+1)/2, P = 1, LH = 0.5, L = 0. Blank W/L is still open.
+   */
+  function footballResultFactor(decimal, wl) {
+    const code = normalizeFootballWl(wl);
+    if (code === 'W') return decimal;
+    if (code === 'WH') return (decimal + 1) / 2;
+    if (code === 'P') return 1;
+    if (code === 'LH') return 0.5;
+    if (code === 'L') return 0;
+    return null;
+  }
+
+  /**
+   * Product of settled leg factors.
+   * A lost leg zeros the parlay even when another leg is still open.
+   * Any other open leg leaves the product unknown.
+   */
+  function footballSettledProduct(legs) {
+    let product = 1;
+    let open = false;
+    for (let i = 0; i < legs.length; i++) {
+      const factor = footballResultFactor(legs[i].factor.value, legs[i].tip.wl);
+      if (factor === 0) return 0;
+      if (factor == null) open = true;
+      else product *= factor;
+    }
+    return open ? null : product;
+  }
+
+  /**
+   * Sum of the six 五串六 combo returns.
+   * A combo that includes a loss is 0. Any other open combo leaves the sum unknown.
+   */
+  function footballFiveSettledSum(legs) {
+    const factors = legs.map((leg) => footballResultFactor(leg.factor.value, leg.tip.wl));
+    let sum = 0;
+    for (let skip = 0; skip <= factors.length; skip++) {
+      let product = 1;
+      let open = false;
+      let lost = false;
+      for (let i = 0; i < factors.length; i++) {
+        if (i === skip) continue;
+        const factor = factors[i];
+        if (factor === 0) lost = true;
+        else if (factor == null) open = true;
+        else product *= factor;
+      }
+      if (lost) continue;
+      if (open) return null;
+      sum += product;
+    }
+    return sum;
+  }
+
+  /** Two footer lines. Stake labels are the published text, not derived from leg count. */
+  function footballPassFooterHtml(fullText, stakeLabel, stake, settled) {
+    const line1 = '全中過關賠率：' + fullText + '倍｜' + stakeLabel;
+    if (settled == null) {
+      return '<div class="fb-pass-footers">' +
+        '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
+        '<p class="fb-parlay-odds">派彩 — · 盈虧 —</p></div>';
+    }
+    const shown = footballRound2(settled);
+    const payout = footballRound2(stake * shown);
+    const net = footballRound2(payout - stake);
+    const netClass = net > 0 ? 'pl-pos' : (net < 0 ? 'pl-neg' : '');
+    const line2 = '派彩 ' + formatFbMoney(payout) + ' (' + shown.toFixed(2) + '倍) · 盈虧 ';
+    return '<div class="fb-pass-footers">' +
+      '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
+      '<p class="fb-parlay-odds">' + escapeHtml(line2) +
+      '<span class="' + netClass + '">' + escapeHtml(formatFbSigned(net)) + '</span></p></div>';
+  }
+
   function footballParlayHtml(tips, updated) {
     const legs = [];
     (tips || []).forEach((tip) => {
@@ -2936,18 +3052,19 @@
     });
     if (legs.length < 2) return '';
     const product = legs.reduce((total, leg) => total * leg.factor.value, 1);
-    const productText = (Math.round((product + Number.EPSILON) * 100) / 100).toFixed(2);
-    const formula = '過關賠率：' + legs.map((leg) => leg.factor.text).join('×') + '=' + productText + '倍';
+    const productText = footballRound2(product).toFixed(2);
+    const settled = footballSettledProduct(legs);
     const items = legs.map((leg) => {
       return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
         footballPickBits(leg.tip).join(' ') + '</span>' +
         footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
-      panelTitleHtml('穩陣過關', updated) +
+      footballSectionTitle('穩陣過關', updated, legs.map((leg) => leg.tip)) +
       '<p class="fb-parlay-sub">讓球過關 ' + legs.length + '×1</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
-      '<p class="fb-parlay-odds">' + escapeHtml(formula) + '</p></section>';
+      footballPassFooterHtml(productText, '注碼2注（$200）', 200, settled) +
+      '</section>';
   }
 
   function footballConfidenceNumber(text) {
@@ -2961,10 +3078,10 @@
   }
 
   /**
-   * 五串六: five 4-leg parlays plus one 5-leg parlay, $10 each ($60).
+   * 五串六: five 4-leg parlays plus one 5-leg parlay.
    * Shown only when the day has at least five staked rows. If there are more,
    * the first five in sheet order are used — the same order as the tip cards.
-   * Decimal d matches the 讓球 parlay.
+   * Decimal d matches the 讓球 parlay. Footer stake text is the fixed $600 label.
    */
   function footballFiveHtml(tips, updated) {
     const rows = [];
@@ -2984,9 +3101,9 @@
       fourSum += product;
     }
     const five = values.reduce((total, value) => total * value, 1);
-    const payout = Math.round(((fourSum + five) * 10 + Number.EPSILON) * 100) / 100;
-    const net = Math.round((payout - 60) * 100) / 100;
-    const netClass = net > 0 ? 'pl-pos' : (net < 0 ? 'pl-neg' : '');
+    const fullText = footballRound2((fourSum + five) / 6).toFixed(2);
+    const settledSum = footballFiveSettledSum(chosen);
+    const settled = settledSum == null ? null : settledSum / 6;
     const items = chosen.map((leg) => {
       const match = leg.tip.match
         ? '<span class="fb-five-match">' + escapeHtml(leg.tip.match) + '</span>'
@@ -2996,12 +3113,11 @@
         footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-five">' +
-      panelTitleHtml('刀仔鋸大樹', updated) +
+      footballSectionTitle('刀仔鋸大樹', updated, chosen.map((leg) => leg.tip)) +
       '<p class="fb-parlay-sub">五串六（5×6）</p>' +
-      '<p class="fb-five-note">5×6 = 5 組四串一 + 1 組五串一，共 6 注 · 每注 $10，投注 $60</p>' +
+      '<p class="fb-five-note">5×6 = 5 組四串一 + 1 組五串一，共 6 注</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
-      '<p class="fb-parlay-odds">全中派彩 ' + escapeHtml(formatFbMoney(payout)) +
-      ' · 盈虧 <span class="' + netClass + '">' + escapeHtml(formatFbSigned(net)) + '</span></p>' +
+      footballPassFooterHtml(fullText, '注碼1注（$600）', 600, settled) +
       '<p class="fb-note">註：最少要中四場先有錢收。</p></section>';
   }
 
@@ -3221,7 +3337,7 @@
     return html + '</span>';
   }
 
-  /** 推介 is the team. 買法 is the market; a leading copy of the team is not repeated. */
+  /** 推介 is the team. 買法 stays verbatim after a leading copy of the team; the line is not stripped. */
   function footballAllDayParts(row) {
     let team = String(row.pick || '').trim();
     let market = String(row.line || '').trim();
@@ -3244,6 +3360,152 @@
     return { team: team, market: market };
   }
 
+  function footballNameKey(name) {
+    return String(name || '')
+      .replace(/[（(][^）)]*[）)]/g, '')
+      .replace(/\s+/g, '')
+      .toLowerCase();
+  }
+
+  /** Home or away when the pick name sits inside exactly one side of 場次. */
+  function footballSideOf(match, team) {
+    const parts = String(match || '').split(/\s+(?:vs|VS|對)\s+/);
+    if (parts.length < 2) return '';
+    const home = footballNameKey(parts[0]);
+    const away = footballNameKey(parts[1]);
+    const needle = footballNameKey(team);
+    if (needle.length < 2 || !home || !away) return '';
+    const homeHit = home.indexOf(needle) >= 0 || needle.indexOf(home) >= 0;
+    const awayHit = away.indexOf(needle) >= 0 || needle.indexOf(away) >= 0;
+    if (homeHit && !awayHit) return 'H';
+    if (awayHit && !homeHit) return 'A';
+    return '';
+  }
+
+  /**
+   * Signed Asian line from the picked team's point of view.
+   * 受 is positive, 讓 is negative, 平手 is 0. Null when the line is not explicit.
+   */
+  function footballAsianLine(text) {
+    const src = String(text || '').replace(/\s+/g, '').replace(/／/g, '/');
+    const tokens = [
+      ['兩球半/三', 2.75], ['兩/兩球半', 2.25], ['球半/兩球', 1.75], ['球半/兩', 1.75],
+      ['一/球半', 1.25], ['兩球半', 2.5], ['球半', 1.5], ['半/一', 0.75], ['平/半', 0.25],
+      ['三球', 3], ['兩球', 2], ['一球', 1], ['半球', 0.5], ['平手', 0]
+    ];
+    let at = -1;
+    let line = null;
+    let token = '';
+    tokens.forEach((pair) => {
+      const found = src.indexOf(pair[0]);
+      if (found < 0) return;
+      if (at < 0 || found < at || (found === at && pair[0].length > token.length)) {
+        at = found;
+        line = pair[1];
+        token = pair[0];
+      }
+    });
+    if (at < 0) {
+      const num = src.match(/(讓|受)(\d+(?:\.\d+)?)(?!X2)/);
+      if (!num || /讓球主客和/.test(src)) return null;
+      return (num[1] === '受' ? 1 : -1) * Number(num[2]);
+    }
+    if (line === 0) return 0;
+    const before = src.slice(0, at);
+    const receive = /受[^受讓]*$/.test(before) || src.indexOf('受') >= 0 && src.indexOf('讓') < 0;
+    const give = /讓[^受讓]*$/.test(before) || src.indexOf('讓') >= 0 && src.indexOf('受') < 0;
+    if (receive && !give) return line;
+    if (give && !receive) return -line;
+    return null;
+  }
+
+  function footballSettleMargin(margin, line) {
+    const quarters = Math.round(line * 4);
+    const split = Math.abs(line * 4 - quarters) < 1e-6 && Math.abs(quarters) % 2 === 1;
+    const judge = (adj) => (adj > 1e-9 ? 1 : (adj < -1e-9 ? -1 : 0));
+    if (!split) {
+      const adj = judge(margin + line);
+      if (adj > 0) return 'W';
+      if (adj < 0) return 'L';
+      return 'P';
+    }
+    const low = judge(margin + line - 0.25);
+    const high = judge(margin + line + 0.25);
+    if (low === 1 && high === 1) return 'W';
+    if (low === -1 && high === -1) return 'L';
+    if (low + high === 1) return 'WH';
+    if (low + high === -1) return 'LH';
+    return '';
+  }
+
+  function footballSettle1x2(home, away, side) {
+    const actual = home > away ? 'H' : (home < away ? 'A' : 'D');
+    if (actual === side) return 'W';
+    return 'L';
+  }
+
+  /**
+   * Fallback when neither 全日分析 W/L nor the tips sheet has a code.
+   * Returns '' when the 買法 cannot be read; the caller then shows ➖.
+   */
+  function footballDeriveAllDayWl(row) {
+    const score = String(row.result || '').match(/(\d+)\s*[-:：]\s*(\d+)/);
+    if (!score) return '';
+    const homeGoals = Number(score[1]);
+    const awayGoals = Number(score[2]);
+    const parts = footballAllDayParts(row);
+    let team = parts.team;
+    if (!team || team === '主客和' || /讓|受|主勝|客勝|平手|和局/.test(team)) team = '';
+    const market = (String(row.pick || '') + String(row.line || '') + String(parts.market || '')).replace(/\s+/g, '');
+    const hha = market.match(/讓球主客和\(([+-]?\d+(?:\.\d+)?)\)(主|客|和)?/);
+    if (hha) {
+      const shift = Number(hha[1]);
+      const bet = hha[2] === '客' ? 'A' : (hha[2] === '和' ? 'D' : (hha[2] === '主' ? 'H' : ''));
+      if (!bet || !Number.isFinite(shift)) return '';
+      const home = homeGoals;
+      const away = awayGoals + shift;
+      return footballSettle1x2(home, away, bet);
+    }
+    const line = footballAsianLine(market);
+    if (line != null) {
+      let side = team ? footballSideOf(row.match, team) : '';
+      if (!side && /平手客|客勝/.test(market) && !/主勝/.test(market)) side = 'A';
+      else if (!side && /主勝/.test(market)) side = 'H';
+      if (side !== 'H' && side !== 'A') return '';
+      const margin = side === 'H' ? homeGoals - awayGoals : awayGoals - homeGoals;
+      return footballSettleMargin(margin, line);
+    }
+    if (/讓|受/.test(market)) return '';
+    if (/和局|打和|平局/.test(market)) return footballSettle1x2(homeGoals, awayGoals, 'D');
+    if (/客勝/.test(market)) return footballSettle1x2(homeGoals, awayGoals, 'A');
+    if (/主勝/.test(market)) return footballSettle1x2(homeGoals, awayGoals, 'H');
+    return '';
+  }
+
+  /** Sheet or tips W/L, else the same score reading the icon uses. */
+  function footballResolvedWl(row) {
+    const code = normalizeFootballWl(row && row.wl);
+    if (code === 'W' || code === 'WH' || code === 'L' || code === 'LH' || code === 'P') return code;
+    if (!(Number(row && row.stake) > 0)) return '';
+    if (!String(row && row.result || '').trim()) return '';
+    const derived = normalizeFootballWl(footballDeriveAllDayWl(row));
+    if (derived === 'W' || derived === 'WH' || derived === 'L' || derived === 'LH' || derived === 'P') return derived;
+    return '';
+  }
+
+  /**
+   * Icon under the kickoff. Column W/L wins, then the tips sheet, then the
+   * score read against 買法. 注數 > 0 with a 賽果 never stays blank.
+   */
+  function footballAllDayIcon(row) {
+    const score = String(row.result || '').trim();
+    if (!score) return '';
+    const known = footballWlIcon(row.wl);
+    if (known) return known;
+    if (!(Number(row.stake) > 0)) return '';
+    return footballWlIcon(footballDeriveAllDayWl(row)) || '➖';
+  }
+
   function footballAllDayRowHtml(row) {
     const odds = formatFbOdds(row.odds) || '—';
     const stake = row.stake == null || !Number.isFinite(Number(row.stake))
@@ -3258,7 +3520,7 @@
       ? '<span class="fb-all-market">' + escapeHtml(parts.market) + '</span>'
       : '';
     const score = String(row.result || '').trim();
-    const icon = score ? footballWlIcon(row.wl) : '';
+    const icon = footballAllDayIcon(row);
     const iconHtml = icon ? '<span class="fb-all-icon">' + icon + '</span>' : '';
     const scoreHtml = score ? '<span class="fb-all-score">賽果 ' + escapeHtml(score) + '</span>' : '';
     return '<li class="fb-all-row"' + (stars == null ? '' : ' data-stars="' + stars + '"') + '>' +
@@ -3355,8 +3617,11 @@
         '<p class="fb-star-count">' + rows.length + '/' + rows.length + '</p></div>' +
         '<ul class="fb-all-list">' + rows.map(footballAllDayRowHtml).join('') + '</ul>'
       : '<p class="fb-pending">呢日未有全日分析</p>';
+    const hitRows = rows
+      .filter((row) => Number(row.stake) > 0)
+      .map((row) => ({ wl: footballResolvedWl(row) }));
     return '<section class="panel" id="football-allday" data-source="' + escapeAttr(source) + '">' +
-      panelTitleHtml('全日分析', updated) +
+      footballSectionTitle('全日分析', updated, hitRows) +
       body +
       '</section>';
   }
@@ -3412,7 +3677,7 @@
       '<select id="football-date" aria-label="日期">' + options + '</select></label></div></section>' +
       footballPassHtml(selected.tips, updated, selected.date, model.locks || [], stableRows || []) +
       '<section class="panel" id="football-matches">' +
-      panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
+      footballSectionTitle(escapeHtml(footballDayLabel(selected) + '推介'), updated, selected.tips) +
       footballByKickoff(selected.tips, selected.date).map((tip) => footballCardHtml(tip, model.unit)).join('') +
       '</section>' +
       footballAllDayHtml(allday, selected.date, updated, selected.tips) +
