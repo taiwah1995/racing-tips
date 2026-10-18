@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football21';
+  const APP_DATA_VERSION = '20261018football22';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2381,25 +2381,9 @@
 
   /**
    * The midweek / European phrase inside 推介原因.
-   * Stars and the rest of the line stay outside this match.
+   * 無週中* is rejected before this runs, so 無週中歐戰 does not match 歐戰.
    */
   const FOOTBALL_EURO_PHRASE = /回補[・·‧．.]?(?:上週|週中)?(?:歐聯|歐霸|歐協|歐戰)|上週(?:歐聯|歐霸|歐協)|週中有賽事|週中(?:歐聯|歐霸|歐協|歐戰)|歐戰/;
-
-  /**
-   * 推介原因 stays off the card unless it has a positive midweek or European phrase.
-   * 無週中* stays hidden. Only that phrase is wrapped for the red colour.
-   */
-  function footballEuroNoteHtml(text) {
-    const full = footballReasonWithoutLineEcho(text);
-    if (!full.trim() || full.indexOf('無週中') >= 0) return '';
-    const phrase = (full.match(FOOTBALL_EURO_PHRASE) || [])[0];
-    if (!phrase) return '';
-    const at = full.indexOf(phrase);
-    return '<div class="fb-field fb-field-wide"><span class="fb-k">推介原因</span>' +
-      '<span class="fb-v">' + escapeHtml(full.slice(0, at)) +
-      '<span class="fb-euro-note">' + escapeHtml(phrase) + '</span>' +
-      escapeHtml(full.slice(at + phrase.length)) + '</span></div>';
-  }
 
   /** Sheet column is capped at 30 characters. Longer text is cut so the card stays one block. */
   function footballReason(text) {
@@ -3692,6 +3676,134 @@
     return '<p class="fb-settled">' + parts.join('<span class="fb-dot"> · </span>') + '</p>';
   }
 
+  /** Positive midweek / European phrase, or empty when the note must stay hidden. */
+  function footballEuroPhrase(text) {
+    const full = String(text || '');
+    if (!full.trim() || full.indexOf('無週中') >= 0) return '';
+    return (full.match(FOOTBALL_EURO_PHRASE) || [])[0] || '';
+  }
+
+  /** Home and away from 場次. A trailing （10/18凌晨） stays off the away name. */
+  function footballMatchParts(match) {
+    const raw = String(match || '').trim();
+    if (!raw) return null;
+    const paren = raw.match(/[（(][^）)]*[）)]\s*$/);
+    const core = (paren ? raw.slice(0, paren.index) : raw).trim();
+    const split = core.split(/\s+(?:vs\.?|VS\.?|對|对)\s+/);
+    if (split.length < 2 || !split[0].trim() || !split.slice(1).join('').trim()) return null;
+    return {
+      home: split[0].trim(),
+      away: split.slice(1).join(' vs ').trim(),
+      suffix: paren ? paren[0].trim() : '',
+    };
+  }
+
+  /** Team names written in the reason. A longer name is taken before a shorter one inside it. */
+  function footballNamedSides(reason, home, away) {
+    const names = [
+      { side: 'home', name: home },
+      { side: 'away', name: away },
+    ].filter((item) => item.name && item.name.length >= 2)
+      .sort((a, b) => b.name.length - a.name.length);
+    let masked = String(reason || '');
+    const hits = [];
+    names.forEach((item) => {
+      if (masked.indexOf(item.name) < 0) return;
+      hits.push(item.side);
+      masked = masked.split(item.name).join(' ');
+    });
+    return hits;
+  }
+
+  /**
+   * 主 / 客 left after the euro phrase and the handicap echo are removed.
+   * 客+1 on the line is not a side.
+   */
+  function footballEuroSideHint(reason) {
+    const stripped = footballReasonWithoutLineEcho(reason)
+      .replace(FOOTBALL_EURO_PHRASE, '')
+      .replace(/[★☆]/g, '');
+    const home = stripped.indexOf('主') >= 0;
+    const away = stripped.indexOf('客') >= 0;
+    if (home && away) return 'both';
+    if (home) return 'home';
+    if (away) return 'away';
+    return '';
+  }
+
+  function footballPickSide(pick, home, away) {
+    const name = String(pick || '').trim();
+    if (!name) return '';
+    const hit = (side) => side && (name === side || side.indexOf(name) >= 0 || name.indexOf(side) >= 0);
+    const homeHit = hit(home);
+    const awayHit = hit(away);
+    if (homeHit && awayHit) return name === away ? 'away' : 'home';
+    if (homeHit) return 'home';
+    if (awayHit) return 'away';
+    return '';
+  }
+
+  /**
+   * Which side of 場次 gets the red ★ and the red footnote.
+   * A named team wins. Both names mark both sides. Otherwise the pick's side.
+   */
+  function footballEuroMarks(tip) {
+    const phrase = footballEuroPhrase(tip && tip.reason);
+    const parts = footballMatchParts(tip && tip.match);
+    const none = { phrase: '', home: false, away: false, parts: parts };
+    if (!phrase) return none;
+    if (!parts) return { phrase: phrase, home: false, away: false, parts: null };
+    const named = footballNamedSides(tip.reason, parts.home, parts.away);
+    let home = named.indexOf('home') >= 0;
+    let away = named.indexOf('away') >= 0;
+    if (!home && !away) {
+      const hint = footballEuroSideHint(tip.reason);
+      if (hint === 'both' || hint === 'home') home = true;
+      if (hint === 'both' || hint === 'away') away = true;
+    }
+    if (!home && !away) {
+      const pickSide = footballPickSide(tip.pick, parts.home, parts.away);
+      if (pickSide === 'away') away = true;
+      else home = true;
+    }
+    return { phrase: phrase, home: home, away: away, parts: parts };
+  }
+
+  function footballSideHtml(name, marked, phrase, suffix) {
+    const star = marked ? '<span class="fb-euro-star" aria-hidden="true">★</span>' : '';
+    const extra = suffix ? '<span class="fb-side-suffix">' + escapeHtml(suffix) + '</span>' : '';
+    const foot = marked
+      ? '<span class="fb-euro-foot">' + escapeHtml(phrase) + '</span>'
+      : '';
+    return '<span class="fb-side"><span class="fb-side-name">' + escapeHtml(name) + star + extra +
+      '</span>' + foot + '</span>';
+  }
+
+  function footballMatchTitleHtml(tip) {
+    const conf = formatFbConfidence(tip.confidence);
+    const mark = footballEuroMarks(tip);
+    let name = '';
+    if (mark.parts) {
+      name = '<span class="fb-sides">' +
+        footballSideHtml(mark.parts.home, mark.home, mark.phrase, '') +
+        '<span class="fb-vs">vs</span>' +
+        footballSideHtml(mark.parts.away, mark.away, mark.phrase, mark.parts.suffix) +
+        '</span>';
+    } else if (tip.match) {
+      const star = mark.phrase ? '<span class="fb-euro-star" aria-hidden="true">★</span>' : '';
+      const foot = mark.phrase
+        ? '<span class="fb-euro-foot">' + escapeHtml(mark.phrase) + '</span>'
+        : '';
+      name = '<span class="fb-side"><span class="fb-side-name">' + escapeHtml(tip.match) + star +
+        '</span>' + foot + '</span>';
+    }
+    if (!name && !conf) return '';
+    return '<p class="fb-match">' + name +
+      (name && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
+      (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
+      '</p>';
+  }
+
   function footballCardHtml(tip, unit) {
     const bits = [];
     if (tip.ko) bits.push(tip.ko);
@@ -3703,23 +3815,12 @@
       ? '<span class="fb-status ' + (tip.status === '確認' ? 'fb-status-ok' : 'fb-status-wait') + '">' +
         escapeHtml(tip.status) + '</span>'
       : '';
-    const conf = formatFbConfidence(tip.confidence);
-    let match = '';
-    if (tip.match || conf) {
-      match = '<p class="fb-match">' +
-        (tip.match ? '<span class="fb-match-name">' + escapeHtml(tip.match) + '</span>' : '') +
-        (tip.match && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
-        (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
-        '</p>';
-    }
-    const noteHtml = footballEuroNoteHtml(tip.reason);
     return '<article class="fb-card">' +
       '<div class="fb-top">' + head + status + '</div>' +
-      match +
+      footballMatchTitleHtml(tip) +
       '<div class="fb-fields">' +
       footballPickHtml(tip) +
       footballFieldHtml('注碼', formatFbStake(tip.stake, unit), true) +
-      noteHtml +
       '</div>' +
       footballResultHtml(tip) +
       '</article>';

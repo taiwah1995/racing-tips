@@ -1217,7 +1217,7 @@ body {
 #view-football .fb-match {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: flex-start;
   gap: 0 4px;
   margin-top: 4px;
   font-size: 1.02rem;
@@ -1225,6 +1225,36 @@ body {
   line-height: 1.35;
 }
 #view-football .fb-match-name { overflow-wrap: anywhere; }
+#view-football .fb-sides {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 4px;
+  min-width: 0;
+  max-width: 100%;
+}
+#view-football .fb-side {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+#view-football .fb-side-name { overflow-wrap: anywhere; }
+#view-football .fb-vs { line-height: 1.35; }
+#view-football .fb-euro-star,
+#view-football .fb-euro-foot {
+  color: #ff3b30;
+}
+#view-football .fb-euro-star {
+  margin-left: 3px;
+  font-weight: 700;
+}
+#view-football .fb-euro-foot {
+  display: block;
+  margin-top: 1px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
 #view-football .fb-conf-sep,
 #view-football .fb-conf {
   color: var(--text-muted);
@@ -1241,7 +1271,6 @@ body {
 #view-football .fb-field-wide { grid-column: 1 / -1; }
 #view-football .fb-field .fb-k { color: var(--text-muted); margin-right: 4px; }
 #view-football .fb-field .fb-v { font-weight: 600; overflow-wrap: anywhere; }
-#view-football .fb-euro-note { color: #ff3b30; }
 #view-football .fb-pending {
   margin: 8px 0 0;
   color: var(--text-muted);
