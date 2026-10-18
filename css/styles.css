@@ -1241,6 +1241,7 @@ body {
 #view-football .fb-field-wide { grid-column: 1 / -1; }
 #view-football .fb-field .fb-k { color: var(--text-muted); margin-right: 4px; }
 #view-football .fb-field .fb-v { font-weight: 600; overflow-wrap: anywhere; }
+#view-football .fb-euro-note { color: #ff3b30; }
 #view-football .fb-pending {
   margin: 8px 0 0;
   color: var(--text-muted);

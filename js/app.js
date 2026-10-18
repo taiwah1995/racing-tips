@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football15';
+  const APP_DATA_VERSION = '20261018football18';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2379,6 +2379,28 @@
     return text;
   }
 
+  /**
+   * The midweek / European phrase inside 推介原因.
+   * Stars and the rest of the line stay outside this match.
+   */
+  const FOOTBALL_EURO_PHRASE = /回補[・·‧．.]?(?:上週|週中)?(?:歐聯|歐霸|歐協|歐戰)|上週(?:歐聯|歐霸|歐協)|週中有賽事|週中(?:歐聯|歐霸|歐協|歐戰)|歐戰/;
+
+  /**
+   * 推介原因 stays off the card unless it has a positive midweek or European phrase.
+   * 無週中* stays hidden. Only that phrase is wrapped for the red colour.
+   */
+  function footballEuroNoteHtml(text) {
+    const full = footballReasonWithoutLineEcho(text);
+    if (!full.trim() || full.indexOf('無週中') >= 0) return '';
+    const phrase = (full.match(FOOTBALL_EURO_PHRASE) || [])[0];
+    if (!phrase) return '';
+    const at = full.indexOf(phrase);
+    return '<div class="fb-field fb-field-wide"><span class="fb-k">推介原因</span>' +
+      '<span class="fb-v">' + escapeHtml(full.slice(0, at)) +
+      '<span class="fb-euro-note">' + escapeHtml(phrase) + '</span>' +
+      escapeHtml(full.slice(at + phrase.length)) + '</span></div>';
+  }
+
   /** Sheet column is capped at 30 characters. Longer text is cut so the card stays one block. */
   function footballReason(text) {
     const t = String(text || '').trim();
@@ -3010,21 +3032,44 @@
   }
 
   /**
-   * Team and 買法 use the same green as a winning W. Odds stay the normal value colour.
-   * 買法 is the sheet text, including +0.5, +0/0.5, 受半/一, or a parenthetical line.
-   * A bare 讓球 主勝 is shown as written; this does not invent a line.
+   * Tip-card 買法. A side label such as 讓球 主勝, 受讓評判, or 主讓評判 is dropped
+   * when the handicap line itself is still there (+0.5, 一球, 受平/半).
    */
-  function footballPickBits(tip) {
+  function footballCardLine(line) {
+    let text = String(line || '').replace(/評判/g, '').replace(/\s+/g, ' ').trim();
+    if (!text) return '';
+    let mixed = text.match(/^(?:讓球\s*)?(?:主勝|客勝)?\s*(?:受|讓)?(?:平\/半|半\/一|平手|半球|一球|球半|兩球半|兩球)\s+([+-]?\d+(?:\.\d+)?(?:\s*\/\s*[+-]?\d+(?:\.\d+)?)*)\s*$/);
+    if (mixed) return mixed[1];
+    let pref = text.match(/^(?:讓球\s+)?(?:主勝|客勝)\s+([+-]\d+(?:\.\d+)?(?:\s*\/\s*[+-]?\d+(?:\.\d+)?)*)\s*$/);
+    if (pref) return pref[1];
+    let named = text.match(/^(?:主讓|客讓|主受|客受|受讓|讓)\s+((?:平手|平\/半|半\/一|半球|一球|球半|兩球).*)$/);
+    if (named) return named[1].trim();
+    let hha = text.match(/^讓球主客和\(([+-]?\d+(?:\.\d+)?)\)\s*(?:主勝|客勝|和局)?\s*$/);
+    if (hha) return hha[1];
+    return text;
+  }
+
+  /** Drop a reason clause that only repeats the handicap already shown on the pick. */
+  function footballReasonWithoutLineEcho(text) {
+    return String(text || '')
+      .replace(/評判/g, '')
+      .replace(/[；;]\s*(?:主|客)?(?:受|讓)?(?:平\/半|半\/一|平手|半球|一球|球半|兩球|[+-]?\d+(?:\.\d+)?(?:\/[+-]?\d+(?:\.\d+)?)*)\s*$/, '')
+      .replace(/[，,]\s*(?:主|客)?(?:受|讓)?(?:平\/半|半\/一|平手|半球|一球|球半)(?:有值)?\s*$/, '')
+      .trim();
+  }
+
+  function footballPickBits(tip, lineOverride) {
+    const line = lineOverride == null ? tip.line : lineOverride;
     const bits = [];
     if (tip.pick) bits.push('<span class="pl-pos">' + escapeHtml(tip.pick) + '</span>');
-    if (tip.line) bits.push('<span class="pl-pos">(' + escapeHtml(tip.line) + ')</span>');
+    if (line) bits.push('<span class="pl-pos">(' + escapeHtml(line) + ')</span>');
     const odds = formatFbOdds(tip.odds);
     if (odds) bits.push(escapeHtml(odds + '倍'));
     return bits;
   }
 
   function footballPickHtml(tip) {
-    const bits = footballPickBits(tip);
+    const bits = footballPickBits(tip, footballCardLine(tip.line));
     if (!bits.length) return '';
     return '<div class="fb-field fb-field-wide">' +
       '<span class="fb-k">推介</span>' +
@@ -3636,13 +3681,14 @@
         (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
         '</p>';
     }
+    const noteHtml = footballEuroNoteHtml(tip.reason);
     return '<article class="fb-card">' +
       '<div class="fb-top">' + head + status + '</div>' +
       match +
       '<div class="fb-fields">' +
       footballPickHtml(tip) +
       footballFieldHtml('注碼', formatFbStake(tip.stake, unit), true) +
-      footballFieldHtml('推介原因', tip.reason, true) +
+      noteHtml +
       '</div>' +
       footballResultHtml(tip) +
       '</article>';
