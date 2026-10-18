@@ -1334,7 +1334,8 @@ body {
 #view-football .fb-leg-ko {
   margin-right: 6px;
   color: var(--gold);
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 0.78em;
   white-space: nowrap;
 }
 #view-football .fb-leg-result {
