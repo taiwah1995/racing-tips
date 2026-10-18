@@ -1554,7 +1554,6 @@ body {
   margin-left: 4px;
   font-size: 0.82rem;
 }
-#view-football .fb-stars.fb-stars-card .fb-star.on { color: var(--text); }
 #view-football .fb-result-icon { margin-right: 4px; }
 #view-football .fb-all-icon {
   grid-column: 1;

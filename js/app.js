@@ -4451,7 +4451,8 @@
   }
 
   /**
-   * 全日分析 only. Not monotonic: ≤52 → 1, 53–54 → 4, 55 → 2, 56 or ≥59 → 3, 57–58 → 5.
+   * Backtest table for tip cards and 全日分析.
+   * ≤52 → 1, 53–54 → 4, 55 → 2, 56 or ≥59 → 3, 57–58 → 5.
    */
   function footballStarCount(confidence) {
     const n = footballConfidenceNumber(confidence);
@@ -4463,28 +4464,17 @@
     return 5;
   }
 
-  /** Tip cards when stars is absent. ≤52 → 1, 53–54 → 2, 55–56 → 3, 57–58 → 4, ≥59 → 5. */
-  function footballCardStarCount(confidence) {
-    const n = footballConfidenceNumber(confidence);
-    if (n == null) return null;
-    if (n <= 52) return 1;
-    if (n <= 54) return 2;
-    if (n <= 56) return 3;
-    if (n <= 58) return 4;
-    return 5;
-  }
-
-  /** A stored 1–5 stars field wins. Otherwise the monotonic card scale. */
+  /** A stored 1–5 stars field wins. Otherwise the backtest table. */
   function footballCardStars(tip) {
     const stored = footballStoredStars(tip && tip.stars);
     if (stored != null) return stored;
-    return footballCardStarCount(tip && tip.confidence);
+    return footballStarCount(tip && tip.confidence);
   }
 
   function footballStarsHtml(confidence, plain, forced) {
     const n = plain ? forced : footballStarCount(confidence);
     if (plain && n == null) return '';
-    const cls = (n == null ? 'fb-stars' : 'fb-stars fb-stars-' + n) + (plain ? ' fb-stars-card' : '');
+    const cls = n == null ? 'fb-stars' : 'fb-stars fb-stars-' + n;
     const label = n == null ? '未有星' : n + '星';
     let html = '<span class="' + cls + '" aria-label="' + label + '">';
     for (let i = 1; i <= 5; i++) {
