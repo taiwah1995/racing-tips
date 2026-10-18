@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football43';
+  const APP_DATA_VERSION = '20261018football44';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2444,6 +2444,8 @@
       result: footballText(csv('賽果'), json('賽果')),
       wl: normalizeFootballWl(footballText(csv('W/L'), json('W/L'))),
       profit: footballProfit(csv('利潤'), json('利潤')),
+      ko_note: footballText(csv('ko_note'), json('ko_note')),
+      stars: footballStoredStars(footballText(csv('stars'), json('stars'))),
     };
   }
 
@@ -2518,6 +2520,8 @@
           result: footballStr(tip.result),
           wl: normalizeFootballWl(tip.wl),
           profit: tip.profit == null || tip.profit === '' || !Number.isFinite(Number(tip.profit)) ? null : Number(tip.profit),
+          ko_note: footballStr(tip.ko_note),
+          stars: footballStoredStars(tip.stars),
         });
         if (footballPassMarked(tip.pass != null ? tip.pass : tip['過關'])) {
           locks.push({
@@ -2588,6 +2592,7 @@
     try {
       const model = await loadFootballSheet();
       footballStampEuTeams(model, fileData);
+      footballStampStars(model, fileData);
       return { model: model, source: 'sheet' };
     } catch (err) {
       console.error(err);
@@ -2607,7 +2612,7 @@
     return 'https://docs.google.com/spreadsheets/d/' + FOOTBALL_SHEET_ID + '/gviz/tq?' + q.toString();
   }
 
-  /** Every row on the 全日分析 tab, including 注數 0. Stars are computed later from 信心%. */
+  /** Every row on the 全日分析 tab, including 注數 0. Stars come from the confidence map. */
   function footballAllDayFromRow(cols, map, jsonRow, jsonCols) {
     const csv = (name) => footballCsvCell(cols, map, name);
     const json = (name) => footballJsonCell(jsonRow, jsonCols, name);
@@ -2626,6 +2631,7 @@
       stake: stake,
       result: footballText(csv('賽果'), json('賽果')),
       wl: normalizeFootballWl(footballText(csv('W/L'), json('W/L'))),
+      stars: footballStoredStars(footballText(csv('stars'), json('stars'))),
     };
   }
 
@@ -2673,6 +2679,7 @@
         stake: Number.isFinite(stakeNum) ? stakeNum : null,
         result: footballStr(item.result),
         wl: normalizeFootballWl(item.wl),
+        stars: footballStoredStars(item.stars),
       });
     });
     return rows;
@@ -2702,20 +2709,49 @@
     return rows;
   }
 
+  function footballAllDayStarKey(row) {
+    const parts = footballAllDayParts(row);
+    return [
+      row && row.date || '',
+      footballMatchKey(row && row.match),
+      String(parts.team || '').replace(/\s+/g, ''),
+      String(parts.market || '').replace(/\s+/g, ''),
+    ].join('|');
+  }
+
+  /** File stars win over the sheet. A row the file does not rate stays unstarred. */
+  function footballStampAllDayStars(rows, data) {
+    const map = {};
+    footballAllDayFromFile(data).forEach((row) => {
+      if (row.stars == null) return;
+      map[footballAllDayStarKey(row)] = row.stars;
+    });
+    (rows || []).forEach((row) => {
+      const stars = map[footballAllDayStarKey(row)];
+      if (stars != null) row.stars = stars;
+    });
+  }
+
+  async function loadFootballAllDayFile() {
+    try {
+      const res = await fetch(dataUrl('football-allday.json'));
+      if (!res.ok) return null;
+      return await res.json();
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
   async function loadFootballAllDay() {
+    const fileData = await loadFootballAllDayFile();
     try {
       const rows = await loadFootballAllDaySheet();
+      footballStampAllDayStars(rows, fileData);
       return { rows: rows, source: 'sheet' };
     } catch (err) {
       console.error(err);
-      try {
-        const res = await fetch(dataUrl('football-allday.json'));
-        if (!res.ok) return { rows: [], source: 'file' };
-        return { rows: footballAllDayFromFile(await res.json()), source: 'file' };
-      } catch (fileErr) {
-        console.error(fileErr);
-        return { rows: [], source: 'file' };
-      }
+      return { rows: footballAllDayFromFile(fileData), source: 'file' };
     }
   }
 
@@ -2983,10 +3019,8 @@
   }
 
   function formatFbMoney(n) {
-    const rounded = Math.round(Math.abs(Number(n) || 0) * 100) / 100;
-    const text = Number.isInteger(rounded)
-      ? String(rounded)
-      : rounded.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+    const rounded = Math.round((Math.abs(Number(n) || 0) + Number.EPSILON) * 100) / 100;
+    const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2);
     return '$' + text;
   }
 
@@ -3103,7 +3137,8 @@
   function footballPickBits(tip, lineOverride) {
     const line = lineOverride == null ? tip.line : lineOverride;
     const bits = [];
-    if (tip.pick) bits.push('<span class="pl-pos">' + escapeHtml(tip.pick) + '</span>');
+    const pick = footballMatchLabel(tip.pick);
+    if (pick) bits.push('<span class="pl-pos">' + escapeHtml(pick) + '</span>');
     if (line) bits.push('<span class="pl-pos">(' + escapeHtml(line) + ')</span>');
     const odds = formatFbOdds(tip.odds);
     if (odds) bits.push(escapeHtml(odds + '倍'));
@@ -3132,19 +3167,16 @@
 
   /** Auto legs only. 讓球主客和 does not match. */
   const FOOTBALL_AUTO_HANDICAP = /^讓球\s*(主勝|客勝)/;
-  const FOOTBALL_LOCKED_DAY = '2026-10-17';
-  const FOOTBALL_LOCKED_LEGS = [
-    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83', ko: '21:30' },
-    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.90', ko: '03:00' },
-  ];
 
   /**
    * 穩陣過關 and 刀仔鋸大樹: candidates first, the user confirms, then LOCK.
    * A locked day keeps this frozen list. Do not change its legs or their order
    * unless the user gives a new explicit instruction. footballByKickoff and
    * footballSortByKickoff apply only to an unlocked day.
-   * 2026-10-17 刀仔 is the frozen 第二組. Stake and payout are not taken from
-   * these money fields. 五串六 pays only the combos that survive: one lost leg
+   * 2026-10-17 刀仔 is the frozen 第二組. Public stake and payout come from the
+   * lock's numeric fields or page_footer. The legacy 注碼1注（$600） line is not
+   * that stake, and user_footer is never shown. Otherwise 五串六 pays only the
+   * combos that survive: one lost leg
    * kills the 五串一 and every 四串一 that includes it. 華倫西亞 0-0 on +0/0.5
    * is a half-win. 全中過關賠率 is the theoretical full-hit average. The cash
    * line is the surviving combo times the unit stake.
@@ -3168,6 +3200,8 @@
   /** Locks read from data/football-tips.json. Empty until that file is fetched. */
   let footballDaoziByDate = {};
   let footballStableByDate = {};
+  /** Null when data/football-stars-map.json did not load. Stars stay off. */
+  let footballStarsMap = null;
 
   function footballNormalizeLockLeg(spec) {
     return {
@@ -3178,6 +3212,9 @@
       odds: spec && spec.odds != null && spec.odds !== '' ? String(spec.odds) : '',
       wl: normalizeFootballWl(spec && spec.wl),
       result: footballStr(spec && spec.result),
+      ko_note: footballStr(spec && spec.ko_note),
+      confidence: spec && spec.confidence != null && spec.confidence !== '' ? spec.confidence : '',
+      stars: footballStoredStars(spec && spec.stars),
     };
   }
 
@@ -3220,10 +3257,10 @@
         const legs = five.legs.slice(0, 5).map(footballLockLeg);
         if (legs.every((leg) => leg.match && leg.odds)) {
           daozi[date] = {
-            stakeLabel: footballStr(five.stake_label) || '注碼$10×6（$60）',
-            stake: Number(five.stake),
-            payout: Number(five.payout),
-            profit: Number(five.profit),
+            stake: footballFinite(five.stake),
+            payout: footballFinite(five.payout),
+            profit: footballFinite(five.profit),
+            pageFooter: footballStr(five.page_footer),
             legs: legs,
           };
         }
@@ -3232,7 +3269,8 @@
       if (pass && Array.isArray(pass.legs) && pass.legs.length >= 2) {
         const legs = pass.legs.map(footballLockLeg);
         if (legs.every((leg) => leg.match && leg.odds)) {
-          stable[date] = { legs: legs };
+          const pack = footballStableDollars(pass);
+          stable[date] = { legs: legs, dollars: pack.dollars, label: pack.label };
         }
       }
     });
@@ -3250,25 +3288,61 @@
     return FOOTBALL_FIVE_LOCKS[date] || null;
   }
 
-  function footballStableLockLegs(date, tips) {
+  function footballStableLockLegs(date) {
     const fromFile = date && footballStableByDate[date];
-    if (fromFile) {
-      return fromFile.legs.map((leg) => Object.assign({ date: date }, leg));
+    if (!fromFile) return null;
+    return fromFile.legs.map((leg) => Object.assign({ date: date }, leg));
+  }
+
+  function footballFinite(value) {
+    if (value == null || value === '') return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  /** Dollar stake from the lock label or stake. Odds stay on the legs. */
+  function footballStableDollars(pass) {
+    const label = footballStr(pass && pass.stake_label);
+    const written = label.match(/\$(\d+(?:\.\d+)?)/);
+    if (written) return { dollars: Number(written[1]), label: label };
+    const stake = footballFinite(pass && pass.stake);
+    if (stake != null && stake > 0) {
+      const dollars = stake >= 20 ? stake : stake * 100;
+      const text = stake >= 20 ? '注碼' + formatFbMoney(dollars) : '注碼' + stake + '注（' + formatFbMoney(dollars) + '）';
+      return { dollars: dollars, label: text };
     }
-    if (date !== FOOTBALL_LOCKED_DAY) return null;
-    return FOOTBALL_LOCKED_LEGS.map((spec) => {
-      const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
-      return {
-        date: date,
-        ko: spec.ko,
-        match: hit && hit.match ? hit.match : spec.match,
-        pick: spec.pick,
-        line: spec.line,
-        odds: spec.odds,
-        result: hit && hit.result ? hit.result : '',
-        wl: hit && hit.wl ? hit.wl : '',
-      };
-    });
+    return { dollars: 200, label: '注碼2注（$200）' };
+  }
+
+  function footballStablePackage(date) {
+    const fromFile = date && footballStableByDate[date];
+    if (fromFile && fromFile.dollars != null) return { dollars: fromFile.dollars, label: fromFile.label };
+    return { dollars: 200, label: '注碼2注（$200）' };
+  }
+
+  /**
+   * page_footer amounts. 注碼1注（$600） is the old ledger line, not the
+   * public 刀仔 stake, so it does not count.
+   */
+  function footballParseFooterMoney(text) {
+    const src = String(text || '');
+    if (!src || /注碼\s*1\s*注/.test(src) && /\$\s*600\b/.test(src)) return null;
+    const amount = (re) => {
+      const matched = src.match(re);
+      if (!matched) return null;
+      const n = Number(matched[1]);
+      return Number.isFinite(n) ? n : null;
+    };
+    const signed = src.match(/盈(?:虧)?\s*([+＋\-−－])?\s*\$(\d+(?:\.\d+)?)/);
+    let profit = null;
+    if (signed) {
+      profit = Number(signed[2]);
+      if (/[-−－]/.test(signed[1] || '')) profit = -profit;
+    }
+    const stake = amount(/投注\s*\$(\d+(?:\.\d+)?)/);
+    const payout = amount(/派彩\s*\$(\d+(?:\.\d+)?)/);
+    if (stake == null && payout == null && profit == null) return null;
+    return { stake: stake, payout: payout, profit: profit };
   }
 
   function footballLockedFiveRows(lock, tips) {
@@ -3283,6 +3357,8 @@
           odds: spec.odds,
           wl: spec.wl,
           result: spec.result,
+          ko_note: spec.ko_note || (hit && hit.ko_note) || '',
+          confidence: spec.confidence != null && spec.confidence !== '' ? spec.confidence : '',
         },
         factor: footballParlayFactor(spec.odds),
       };
@@ -3317,10 +3393,71 @@
     });
   }
 
+  /**
+   * Trailing （M/D凌晨） or (M/D凌晨), full- or half-width parentheses.
+   * The stored match string stays as written. Display drops the note.
+   */
+  function footballDawnLabel(month, day) {
+    return Number(month) + '/' + Number(day) + '凌晨';
+  }
+
+  function footballStripDawn(text) {
+    const raw = String(text || '');
+    const matched = raw.match(/[（(]\s*(\d{1,2})\s*[/／]\s*(\d{1,2})\s*凌晨\s*[）)]\s*$/);
+    if (!matched) return { text: raw.trim(), note: '' };
+    return {
+      text: raw.slice(0, matched.index).trim(),
+      note: footballDawnLabel(matched[1], matched[2]),
+    };
+  }
+
+  /** ko_note wins when set. A wrapped or bare M/D凌晨 is shown without parentheses. */
+  function footballDawnNote(tip) {
+    const explicit = String(tip && tip.ko_note || '').trim();
+    if (explicit) {
+      const wrapped = explicit.match(/^[（(]\s*(\d{1,2})\s*[/／]\s*(\d{1,2})\s*凌晨\s*[）)]$/);
+      const bare = explicit.match(/^(\d{1,2})\s*[/／]\s*(\d{1,2})\s*凌晨$/);
+      const hit = wrapped || bare;
+      return hit ? footballDawnLabel(hit[1], hit[2]) : explicit;
+    }
+    return footballStripDawn(tip && tip.match).note;
+  }
+
+  function footballMatchLabel(match) {
+    return footballStripDawn(match).text;
+  }
+
+  /** A dawn parenthesis is the meta note, not a team-name suffix. */
+  function footballSideSuffix(suffix) {
+    const parsed = footballStripDawn(suffix);
+    if (parsed.note && !parsed.text) return '';
+    return suffix || '';
+  }
+
+  /**
+   * A lock leg can omit the parenthesis that the tip still carries.
+   * Copy that note so 穩陣 and 刀仔 show the same kickoff line.
+   */
+  function footballAttachDawn(leg, tips) {
+    if (!leg || footballDawnNote(leg)) return leg;
+    const key = footballMatchKey(leg.match);
+    if (!key) return leg;
+    const hit = (tips || []).find((tip) => footballMatchKey(tip.match) === key);
+    const note = hit && footballDawnNote(hit);
+    if (!note) return leg;
+    return Object.assign({}, leg, { ko_note: note });
+  }
+
   function footballLegKoHtml(tip) {
+    const bits = [];
     const ko = String(tip && tip.ko || '').trim();
-    if (!ko) return '';
-    return '<span class="fb-leg-ko">' + escapeHtml(ko) + '</span>';
+    const league = String(tip && tip.league || '').trim();
+    const note = footballDawnNote(tip);
+    if (ko) bits.push(ko);
+    if (league) bits.push(league);
+    if (note) bits.push(note);
+    if (!bits.length) return '';
+    return '<span class="fb-leg-ko">' + escapeHtml(bits.join(' · ')) + '</span>';
   }
 
   /** Fill 賽果 and W/L from the tips sheet when a lock row does not carry them. */
@@ -3464,10 +3601,9 @@
   /** Stake times the factor already rounded to 2 decimals, so the footer matches the money. */
   function footballPackageMoney(stake, settled) {
     if (settled == null) return null;
-    const shown = footballRound2(settled);
-    const payout = footballRound2(stake * shown);
+    const payout = footballRound2(stake * settled);
     const profit = footballRound2(payout - stake);
-    return { shown: shown, stake: stake, payout: payout, profit: profit };
+    return { shown: settled, stake: stake, payout: payout, profit: profit };
   }
 
   /**
@@ -3483,7 +3619,7 @@
         '<p class="fb-parlay-odds">實際派彩率：— · 派彩 — · 盈虧 —</p></div>';
     }
     const netClass = money.profit > 0 ? 'pl-pos' : (money.profit < 0 ? 'pl-neg' : '');
-    const line2 = '實際派彩率：' + money.shown.toFixed(2) + '倍 · 派彩 ' + formatFbMoney(money.payout) + ' · 盈虧 ';
+    const line2 = '實際派彩率：' + footballTrimFactor(money.shown) + '倍 · 派彩 ' + formatFbMoney(money.payout) + ' · 盈虧 ';
     return '<div class="fb-pass-footers">' +
       '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
       '<p class="fb-parlay-odds">' + escapeHtml(line2) +
@@ -3527,16 +3663,18 @@
     const product = legs.reduce((total, leg) => total * leg.factor.value, 1);
     const productText = footballRound2(product).toFixed(2);
     const settled = footballSettledProduct(legs);
+    const pack = footballStablePackage(legs[0] && legs[0].tip && legs[0].tip.date);
     const items = legs.map((leg) => {
       return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
-        footballLegKoHtml(leg.tip) + footballPickBits(leg.tip).join(' ') + '</span>' +
+        footballLegKoHtml(leg.tip) + footballPickBits(leg.tip).join(' ') +
+        footballRatingHtml(leg.tip) + '</span>' +
         footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
       footballSectionTitle('穩陣過關', updated, legs.map((leg) => leg.tip)) +
       '<p class="fb-parlay-sub">讓球過關 ' + legs.length + '×1</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
-      footballPassFooterHtml(productText, '注碼2注（$200）', 200, settled) +
+      footballPassFooterHtml(productText, pack.label, pack.dollars, settled) +
       '</section>';
   }
 
@@ -3593,8 +3731,38 @@
   }
 
   /**
+   * Public 刀仔 money. Numeric fields, then page_footer, then the $40×6 table.
+   * user_footer is never read. 注碼1注（$600） is not the public stake.
+   */
+  function footballDaoziPack(lock, legCount) {
+    const table = footballFiveStake(legCount);
+    const parsed = footballParseFooterMoney(lock && lock.pageFooter);
+    const fieldStake = footballFinite(lock && lock.stake);
+    let total = table.total;
+    let unit = table.unit;
+    let label = table.label;
+    if (parsed && parsed.stake != null) {
+      total = parsed.stake;
+      label = '投注 ' + formatFbMoney(total);
+    } else if (fieldStake != null) {
+      total = fieldStake >= 20 ? fieldStake : fieldStake * 100;
+      label = '投注 ' + formatFbMoney(total);
+    }
+    const payout = footballFinite(lock && lock.payout);
+    const profit = footballFinite(lock && lock.profit);
+    return {
+      unit: unit,
+      total: total,
+      label: label,
+      payout: parsed && parsed.payout != null ? parsed.payout : payout,
+      profit: parsed && parsed.profit != null ? parsed.profit : profit,
+    };
+  }
+
+  /**
    * Each 五串六 bet is the unit stake. Payout is the unit times the sum of the
-   * combo returns. Dead combos add nothing. A stored lock payout is not used.
+   * combo returns, unless the lock already gives payout and profit.
+   * user_footer is not used.
    */
   function footballFiveMoney(legs, unit, total) {
     const sum = footballFiveSettledSum(legs);
@@ -3662,7 +3830,7 @@
    * Shown only when the day has at least five priced, staked rows.
    * Unlocked days sort by kickoff, then take the first five.
    * A locked day keeps its published legs.
-   * Stake is the HKJC package, not a hardcoded $60 or $600.
+   * Stake comes from the lock when it is not the legacy $600 line.
    */
   function footballFiveHtml(tips, updated, date) {
     const chosen = footballFiveChosen(tips, date);
@@ -3676,15 +3844,27 @@
     }
     const five = values.reduce((total, value) => total * value, 1);
     const fullText = footballRound2((fourSum + five) / 6).toFixed(2);
-    const stake = footballFiveStake(chosen.length);
-    const money = footballFiveMoney(chosen, stake.unit, stake.total);
+    const hinted = date || ((tips || [])[0] && tips[0].date) || '';
+    const pack = footballDaoziPack(footballFiveLock(hinted), chosen.length);
+    const stake = { unit: pack.unit, total: pack.total, label: pack.label };
+    let money = footballFiveMoney(chosen, pack.unit, pack.total);
+    if (pack.payout != null && pack.profit != null) {
+      money = {
+        rate: money ? money.rate : null,
+        payout: pack.payout,
+        profit: pack.profit,
+      };
+    }
     const items = chosen.map((leg) => {
-      const match = leg.tip.match
-        ? '<span class="fb-five-match">' + footballLegKoHtml(leg.tip) + escapeHtml(leg.tip.match) + '</span>'
-        : footballLegKoHtml(leg.tip);
+      const tip = footballAttachDawn(leg.tip, tips);
+      const label = footballMatchLabel(tip.match);
+      const match = label
+        ? '<span class="fb-five-match">' + footballLegKoHtml(tip) + escapeHtml(label) + '</span>'
+        : footballLegKoHtml(tip);
       return '<li class="fb-parlay-leg fb-five-leg"><span class="fb-leg-main">' + match +
-        '<span class="fb-five-pick">' + footballPickBits(leg.tip).join(' ') + '</span></span>' +
-        footballLegResultHtml(leg.tip) + '</li>';
+        '<span class="fb-five-pick">' + footballPickBits(tip).join(' ') +
+        footballRatingHtml(tip) + '</span></span>' +
+        footballLegResultHtml(tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-five">' +
       footballSectionTitle('刀仔鋸大樹', updated, chosen.map((leg) => leg.tip)) +
@@ -3714,10 +3894,11 @@
       legs.push({ tip: tip, factor: factor });
     });
     if (legs.length < 2) return null;
-    const money = footballPackageMoney(200, footballSettledProduct(legs));
+    const pack = footballStablePackage(legs[0] && legs[0].tip && legs[0].tip.date);
+    const money = footballPackageMoney(pack.dollars, footballSettledProduct(legs));
     return {
       item: '穩陣過關',
-      stake: 200,
+      stake: pack.dollars,
       payout: money ? money.payout : null,
       profit: money ? money.profit : null,
     };
@@ -3726,8 +3907,11 @@
   function footballFiveBook(tips, date) {
     const chosen = footballFiveChosen(tips, date);
     if (chosen.length < 5) return null;
-    const pack = footballFiveStake(chosen.length);
-    const money = footballFiveMoney(chosen, pack.unit, pack.total);
+    const pack = footballDaoziPack(footballFiveLock(date), chosen.length);
+    let money = footballFiveMoney(chosen, pack.unit, pack.total);
+    if (pack.payout != null && pack.profit != null) {
+      money = { payout: pack.payout, profit: pack.profit };
+    }
     return {
       item: '刀仔鋸大樹',
       stake: pack.total,
@@ -3772,6 +3956,24 @@
     }
     if (!parts.length) return null;
     return { total: footballSumBooks(parts), parts: parts };
+  }
+
+  function footballDataCumulative(model, stableRows) {
+    const parts = [];
+    ((model && model.days) || []).forEach((day) => {
+      const book = footballComputedDayBook(
+        day.tips, model.unit, day.date, model.locks || [], stableRows || []
+      );
+      if (!book || !book.total || book.total.payout == null || book.total.profit == null) return;
+      parts.push({
+        item: footballDayLabel(day),
+        stake: book.total.stake,
+        payout: book.total.payout,
+        profit: book.total.profit,
+      });
+    });
+    if (!parts.length) return null;
+    return { total: footballSumBooks(parts), parts: parts.length > 1 ? parts : [] };
   }
 
   function footballCumulativeBook(rows, model, stableRows) {
@@ -3867,7 +4069,8 @@
 
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
     let legs = footballStableLegs(tips, date, locks, sheetRows)
-      .map((leg) => footballCopyTipResult(leg, tips));
+      .map((leg) => footballCopyTipResult(leg, tips))
+      .map((leg) => footballAttachDawn(leg, tips));
     if (!footballStableLockLegs(date, tips)) legs = footballSortByKickoff(legs);
     const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated, date);
@@ -4123,6 +4326,26 @@
     });
   }
 
+  /** File stars win over the sheet, the same way eu_teams does. */
+  function footballStampStars(model, data) {
+    const map = {};
+    (data && data.days ? data.days : []).forEach((day) => {
+      const date = parseFootballDate(day && day.date);
+      if (!date) return;
+      (day.tips || []).forEach((tip) => {
+        const stars = footballStoredStars(tip && tip.stars);
+        if (stars == null) return;
+        map[date + '|' + footballMatchKey(tip.match)] = stars;
+      });
+    });
+    (model && model.days ? model.days : []).forEach((day) => {
+      (day.tips || []).forEach((tip) => {
+        const stars = map[tip.date + '|' + footballMatchKey(tip.match)];
+        if (stars != null) tip.stars = stars;
+      });
+    });
+  }
+
   function footballListedSide(sideName, names) {
     let best = 0;
     (names || []).forEach((name) => {
@@ -4208,9 +4431,9 @@
     let name = '';
     if (mark.parts) {
       name = '<span class="fb-sides">' +
-        footballSideHtml(mark.parts.home, mark.home, '') +
+        footballSideHtml(footballMatchLabel(mark.parts.home), mark.home, '') +
         '<span class="fb-vs">vs</span>' +
-        footballSideHtml(mark.parts.away, mark.away, mark.parts.suffix) +
+        footballSideHtml(footballMatchLabel(mark.parts.away), mark.away, footballSideSuffix(mark.parts.suffix)) +
         '</span>';
     } else if (tip.match) {
       const phrase = mark.home || mark.away;
@@ -4218,22 +4441,27 @@
       const foot = phrase
         ? '<span class="fb-euro-foot">' + escapeHtml(phrase) + '</span>'
         : '';
-      name = '<span class="fb-side"><span class="fb-side-name">' + escapeHtml(tip.match) + star +
+      name = '<span class="fb-side"><span class="fb-side-name">' + escapeHtml(footballMatchLabel(tip.match)) + star +
         '</span>' + foot + '</span>';
     }
     if (!name && !conf) return '';
-    const stars = footballStarsHtml(tip.confidence, true);
-    return '<p class="fb-match">' + name +
-      (name && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
-      (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
-      stars +
-      '</p>';
+    const stars = footballRatingHtml(tip);
+    const confLine = (conf || stars)
+      ? '<span class="fb-conf-line">' +
+        (name && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
+        (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
+        stars +
+        '</span>'
+      : '';
+    return '<p class="fb-match">' + name + confLine + '</p>';
   }
 
   function footballCardHtml(tip, unit) {
     const bits = [];
     if (tip.ko) bits.push(tip.ko);
     if (tip.league) bits.push(tip.league);
+    const dawn = footballDawnNote(tip);
+    if (dawn) bits.push(dawn);
     const head = bits.length
       ? '<span class="fb-ko">' + escapeHtml(bits.join(' · ')) + '</span>'
       : '<span class="fb-ko"></span>';
@@ -4252,24 +4480,106 @@
       '</article>';
   }
 
-  /**
-   * ≤52 → 1, 53–54 → 4, 55 → 2, 56 or ≥59 → 3, 57–58 → 5.
-   */
-  function footballStarCount(confidence) {
-    const n = footballConfidenceNumber(confidence);
-    if (n == null) return null;
-    if (n <= 52) return 1;
-    if (n <= 54) return 4;
-    if (n < 56) return 2;
-    if (n < 57 || n >= 59) return 3;
-    return 5;
+  /** 1–5 from a tip's stars field. Anything else is missing. */
+  function footballStoredStars(value) {
+    if (value == null || value === '') return null;
+    const n = Number(String(value).trim());
+    if (!Number.isInteger(n) || n < 1 || n > 5) return null;
+    return n;
   }
 
-  function footballStarsHtml(confidence, plain) {
-    const n = footballStarCount(confidence);
-    if (plain && n == null) return '';
-    const cls = (n == null ? 'fb-stars' : 'fb-stars fb-stars-' + n) + (plain ? ' fb-stars-card' : '');
-    const label = n == null ? '未有星' : n + '星';
+  async function loadFootballStarsMap() {
+    try {
+      const res = await fetch(dataUrl('football-stars-map.json'));
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!data || !Array.isArray(data.rules) || !data.colors) return null;
+      return data;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
+  }
+
+  function footballApplyStarColors(map) {
+    const host = document.getElementById('view-football');
+    if (!host) return;
+    for (let n = 1; n <= 5; n++) host.style.removeProperty('--fb-star-' + n);
+    const colors = map && map.colors;
+    if (!colors) return;
+    Object.keys(colors).forEach((key) => {
+      const hex = String(colors[key] || '').trim();
+      if (!/^#[0-9a-fA-F]{6}$/.test(hex)) return;
+      host.style.setProperty('--fb-star-' + key, hex);
+    });
+  }
+
+  /** First matching rule. Confidence is rounded to an integer. Null when the map is missing. */
+  function footballStarsFromMap(confidence) {
+    const map = footballStarsMap;
+    if (!map || !Array.isArray(map.rules)) return null;
+    const raw = footballConfidenceNumber(confidence);
+    if (raw == null) return null;
+    const n = Math.round(raw);
+    for (let i = 0; i < map.rules.length; i++) {
+      const rule = map.rules[i];
+      const stars = footballStoredStars(rule && rule.stars);
+      if (stars == null) continue;
+      const min = rule.min == null || rule.min === '' ? null : Number(rule.min);
+      const max = rule.max == null || rule.max === '' ? null : Number(rule.max);
+      if (min != null && !(n >= min)) continue;
+      if (max != null && !(n <= max)) continue;
+      return stars;
+    }
+    return null;
+  }
+
+  /** Stars come only from 信心% and the map. The data stars field is not a fallback. */
+  function footballRowStars(row) {
+    if (footballConfidenceNumber(row && row.confidence) == null) return null;
+    return footballStarsFromMap(row.confidence);
+  }
+
+  function footballStarKind(row) {
+    if (footballConfidenceNumber(row && row.confidence) == null) return 'unrated';
+    if (footballRowStars(row) == null) return 'none';
+    return 'map';
+  }
+
+  function footballStarCensus(model, allday) {
+    const tally = { map: 0, unrated: 0, none: 0, cards: 0, allday: 0, legs: 0, unratedRows: [] };
+    const add = (row, bucket) => {
+      tally[bucket] += 1;
+      const kind = footballStarKind(row);
+      tally[kind] += 1;
+      if (kind !== 'unrated') return;
+      tally.unratedRows.push((row && row.date ? row.date + ' ' : '') + String(row && (row.match || row.pick) || ''));
+    };
+    ((model && model.days) || []).forEach((day) => {
+      (day.tips || []).forEach((tip) => add(tip, 'cards'));
+      const stable = footballStableByDate[day.date];
+      if (stable) stable.legs.forEach((leg) => add(leg, 'legs'));
+      const daozi = footballDaoziByDate[day.date];
+      if (daozi) daozi.legs.forEach((leg) => add(leg, 'legs'));
+    });
+    ((allday && allday.rows) || []).forEach((row) => add(row, 'allday'));
+    return tally;
+  }
+
+  /** No 信心% shows 無評級. A loaded map draws stars. A missing map draws nothing. */
+  function footballRatingHtml(row) {
+    if (footballConfidenceNumber(row && row.confidence) == null) {
+      return '<span class="fb-unrated">無評級</span>';
+    }
+    return footballStarsHtml(footballRowStars(row));
+  }
+
+  /** Render a resolved 1–5 count. A null count draws nothing. */
+  function footballStarsHtml(value) {
+    const n = footballStoredStars(value);
+    if (n == null) return '';
+    const cls = 'fb-stars fb-stars-' + n;
+    const label = n + '星';
     let html = '<span class="' + cls + '" aria-label="' + label + '">';
     for (let i = 1; i <= 5; i++) {
       html += '<span class="fb-star' + (n != null && i <= n ? ' on' : '') + '">★</span>';
@@ -4463,7 +4773,8 @@
     const stake = row.stake == null || !Number.isFinite(Number(row.stake))
       ? '—'
       : formatFbUnits(row.stake);
-    const stars = footballStarCount(row.confidence);
+    const stars = footballRowStars(row);
+    const unrated = footballConfidenceNumber(row.confidence) == null;
     const parts = footballAllDayParts(row);
     const team = parts.team
       ? '<span class="fb-all-team">' + escapeHtml(parts.team) + '</span>'
@@ -4477,7 +4788,7 @@
     const scoreHtml = score ? '<span class="fb-all-score">賽果 ' + escapeHtml(score) + '</span>' : '';
     const stakeNum = Number(row.stake);
     return '<li class="fb-all-row"' +
-      (stars == null ? '' : ' data-stars="' + stars + '"') +
+      (unrated ? ' data-unrated="1" hidden' : (stars == null ? '' : ' data-stars="' + stars + '"')) +
       ' data-stake="' + (Number.isFinite(stakeNum) ? stakeNum : '') + '"' +
       ' data-wl="' + escapeAttr(footballResolvedWl(row)) + '">' +
       '<span class="fb-all-time">' + escapeHtml(footballAllDayTimeLabel(row, dayIso)) + '</span>' +
@@ -4489,7 +4800,7 @@
       '<span class="fb-all-odds">' + escapeHtml(odds) + '</span>' +
       '<span class="fb-all-stake">' + escapeHtml(stake) + '</span>' +
       scoreHtml +
-      footballStarsHtml(row.confidence) +
+      footballRatingHtml(row) +
       '</div>' +
       '</li>';
   }
@@ -4631,7 +4942,7 @@
     const source = allday && allday.source ? allday.source : '';
     const chips = [1, 2, 3, 4, 5].map(footballStarChipHtml).join('');
     const starredHits = rows
-      .filter((row) => Number(row.stake) > 0 && footballStarCount(row.confidence) != null)
+      .filter((row) => footballRowStars(row) != null)
       .map((row) => ({ wl: footballResolvedWl(row) }));
     const body = rows.length
       ? '<div class="fb-star-filter">' +
@@ -4661,10 +4972,11 @@
     });
     const counted = [];
     panel.querySelectorAll('.fb-all-row').forEach((row) => {
-      const show = !!selected[row.getAttribute('data-stars')];
+      const unrated = row.getAttribute('data-unrated') === '1';
+      const stars = row.getAttribute('data-stars');
+      const show = any ? (!unrated && !!stars && !!selected[stars]) : true;
       row.hidden = !show;
-      if (any && !show) return;
-      if (!(Number(row.getAttribute('data-stake')) > 0)) return;
+      if (!show) return;
       counted.push({ wl: row.getAttribute('data-wl') });
     });
     const count = panel.querySelector('.fb-star-count');
@@ -4675,6 +4987,7 @@
     const host = $('#football-body');
     if (!host) return;
     host.dataset.source = source;
+    host.dataset.starReport = JSON.stringify(footballStarCensus(model, allday));
     const days = model.days || [];
     const latest = days.reduce((best, day) => (!best || day.date > best.date ? day : best), null);
     const selected = days.find((day) => day.date === wanted) || latest;
@@ -4707,13 +5020,14 @@
       '</section>' +
       '<div id="football-summaries">' +
       footballDayBookHtml(
-        footballSheetDayBook(dayBook, selected.date) ||
-        footballComputedDayBook(selected.tips, model.unit, selected.date, model.locks || [], stableRows || []),
+        footballComputedDayBook(selected.tips, model.unit, selected.date, model.locks || [], stableRows || []) ||
+        footballSheetDayBook(dayBook, selected.date),
         updated,
         'football-day-summary',
         '當日總結'
       ) +
       footballDayBookHtml(
+        footballDataCumulative(model, stableRows || []) ||
         footballCumulativeBook(dayBook, model, stableRows || []),
         updated,
         'football-cumulative',
@@ -4722,6 +5036,7 @@
       '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
       '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>' +
       footballAllDayHtml(allday, selected.date, updated, selected.tips);
+    applyFootballStarFilter();
   }
 
   function bindFootballOnce() {
@@ -4765,10 +5080,13 @@
       const alldayPromise = loadFootballAllDay();
       const stablePromise = loadFootballStable();
       const dayBookPromise = loadFootballDayBook();
+      const mapPromise = loadFootballStarsMap();
       const loaded = await loadedPromise;
       const allday = await alldayPromise;
       const stableRows = await stablePromise;
       const dayBook = await dayBookPromise;
+      footballStarsMap = await mapPromise;
+      footballApplyStarColors(footballStarsMap);
       if (token !== footballLoad || viewFootball.hidden) return;
       if (status) status.hidden = true;
       if (host) host.dataset.alldaySource = allday.source || '';

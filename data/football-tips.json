@@ -15,13 +15,14 @@
           "market": "讓球 主勝 -0.75",
           "odds": "1.77",
           "confidence": "60",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★ 維拉 -0.75",
-          "result": "",
-          "wl": "",
-          "profit": "",
-          "midweek_eu": true
+          "result": "6-0",
+          "wl": "W",
+          "profit": 154.0,
+          "midweek_eu": true,
+          "stars": 3
         },
         {
           "no": 2,
@@ -35,9 +36,10 @@
           "stake": 1,
           "status": "回填",
           "reason": "★★★★★ 昆士柏流浪 主勝",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "4-1",
+          "wl": "W",
+          "profit": 61.0,
+          "stars": 5
         },
         {
           "no": 3,
@@ -48,13 +50,14 @@
           "market": "讓球 主勝 +0.25",
           "odds": "1.69",
           "confidence": "58",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★★★ tipsme賠率回填",
-          "result": "",
-          "wl": "",
-          "profit": "",
-          "midweek_eu": true
+          "result": "3-2",
+          "wl": "W",
+          "profit": 138.0,
+          "midweek_eu": true,
+          "stars": 5
         },
         {
           "no": 4,
@@ -65,13 +68,14 @@
           "market": "讓球 客勝 -1.25",
           "odds": "1.86",
           "confidence": "58",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★★★ 利物浦 -1.25",
-          "result": "",
-          "wl": "",
-          "profit": "",
-          "midweek_eu": true
+          "result": "3-6",
+          "wl": "W",
+          "profit": 172.0,
+          "midweek_eu": true,
+          "stars": 5
         },
         {
           "no": 5,
@@ -82,13 +86,14 @@
           "market": "讓球 主勝 +0.25",
           "odds": "1.95",
           "confidence": "57",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★★★ 波杜 +0.25",
-          "result": "",
-          "wl": "",
-          "profit": "",
-          "midweek_eu": true
+          "result": "1-0",
+          "wl": "W",
+          "profit": 190.0,
+          "midweek_eu": true,
+          "stars": 5
         },
         {
           "no": 6,
@@ -99,12 +104,13 @@
           "market": "讓球 客勝 +1.25",
           "odds": "1.99",
           "confidence": "56",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★ 牙買加女足 +1.25",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "3-1",
+          "wl": "L",
+          "profit": -200,
+          "stars": 3
         },
         {
           "no": 7,
@@ -115,12 +121,13 @@
           "market": "讓球 主勝 +0.25",
           "odds": "2.0",
           "confidence": "56",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★ 艾塔亞文 +0.25",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "2-1",
+          "wl": "W",
+          "profit": 200.0,
+          "stars": 3
         },
         {
           "no": 8,
@@ -131,12 +138,13 @@
           "market": "讓球 主勝 -0.75",
           "odds": "1.86",
           "confidence": "55",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★ 墨爾本勝利 讓半球/一(-0.75)",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "3-0",
+          "wl": "W",
+          "profit": 172.0,
+          "stars": 2
         },
         {
           "no": 9,
@@ -147,12 +155,13 @@
           "market": "讓球 客勝 +0.25",
           "odds": "1.97",
           "confidence": "55",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★ 華斯高 +0.25",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "0-1",
+          "wl": "W",
+          "profit": 194.0,
+          "stars": 2
         },
         {
           "no": 10,
@@ -166,9 +175,10 @@
           "stake": 1,
           "status": "回填",
           "reason": "★★ 錫菲聯 客勝",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "3-2",
+          "wl": "L",
+          "profit": -100,
+          "stars": 2
         }
       ],
       "note": "歷史回填；Top10 信心↓；衛星／次選入全日；破例非API可上卡"
@@ -183,15 +193,16 @@
           "league": "美職",
           "match": "科羅拉多急流 vs 明尼蘇達聯",
           "pick": "科羅拉多急流",
-          "market": "讓球 主勝 +0.75",
+          "market": "讓球 主勝 -0.75",
           "odds": "2.01",
           "confidence": "61",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★ 賽果: theScore/MLS官網",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "2-2",
+          "wl": "L",
+          "profit": -200,
+          "stars": 3
         },
         {
           "no": 2,
@@ -202,12 +213,13 @@
           "market": "讓球 客勝 +0",
           "odds": "1.82",
           "confidence": "60",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★ tipsme賠率回填",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "3-2",
+          "wl": "L",
+          "profit": -200,
+          "stars": 3
         },
         {
           "no": 3,
@@ -218,12 +230,13 @@
           "market": "讓球 客勝 +0",
           "odds": "1.89",
           "confidence": "60",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★ 賽果: theScore/MLS官網",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "1-3",
+          "wl": "W",
+          "profit": 178.0,
+          "stars": 3
         },
         {
           "no": 4,
@@ -234,28 +247,30 @@
           "market": "讓球 主勝 +0.25",
           "odds": "2.02",
           "confidence": "59",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★ tipsme賠率回填",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "1-2",
+          "wl": "L",
+          "profit": -200,
+          "stars": 3
         },
         {
           "no": 5,
           "ko": "",
           "league": "美職",
           "match": "皇家鹽湖城 vs 聖荷西地震",
-          "pick": "皇家鹽湖城",
-          "market": "讓球 主勝 +0.75",
+          "pick": "聖荷西地震",
+          "market": "讓球 客勝 +0.75",
           "odds": "1.65",
           "confidence": "59",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★ 賽果: theScore/MLS官網",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "1-1",
+          "wl": "W",
+          "profit": 130.0,
+          "stars": 3
         },
         {
           "no": 6,
@@ -269,9 +284,10 @@
           "stake": 1,
           "status": "回填",
           "reason": "★★★★★ 細2.5",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "1-1",
+          "wl": "W",
+          "profit": 75.0,
+          "stars": 5
         },
         {
           "no": 7,
@@ -282,12 +298,13 @@
           "market": "讓球 主勝 +0.25",
           "odds": "2.13",
           "confidence": "58",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★★★ 學生隊 受讓平/半",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "0-0",
+          "wl": "WH",
+          "profit": 113.0,
+          "stars": 5
         },
         {
           "no": 8,
@@ -298,12 +315,13 @@
           "market": "讓球 主勝 +0.5",
           "odds": "1.7",
           "confidence": "58",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★★★ tipsme賠率回填",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "0-4",
+          "wl": "L",
+          "profit": -200,
+          "stars": 5
         },
         {
           "no": 9,
@@ -317,9 +335,10 @@
           "stake": 1,
           "status": "回填",
           "reason": "★★★★★ 賽果: theScore/MLS官網 | tip",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "4-0",
+          "wl": "WH",
+          "profit": 42.0,
+          "stars": 5
         },
         {
           "no": 10,
@@ -330,12 +349,13 @@
           "market": "讓球 客勝 +0",
           "odds": "1.87",
           "confidence": "57",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★★★ 賠率=1.84–1.90中位; 賽果AP/CON",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "1-2",
+          "wl": "W",
+          "profit": 174.0,
+          "stars": 5
         }
       ],
       "note": "歷史回填；Top10 信心↓；衛星／次選入全日；破例非API可上卡"
@@ -353,12 +373,13 @@
           "market": "讓球 主勝 +0",
           "odds": "1.83",
           "confidence": "58",
-          "stake": 1,
+          "stake": 2,
           "status": "回填",
           "reason": "★★★★★ 賽果: Agência Brasil/GZH;",
-          "result": "",
-          "wl": "",
-          "profit": ""
+          "result": "2-0",
+          "wl": "W",
+          "profit": 166.0,
+          "stars": 5
         }
       ],
       "note": "歷史回填；Top10 信心↓；衛星／次選入全日；破例非API可上卡"
@@ -381,7 +402,8 @@
           "reason": "★★★★ 奧格斯堡傷缺多，平手有緩衝",
           "result": "4-3",
           "wl": "W",
-          "profit": 166
+          "profit": 166,
+          "stars": 4
         },
         {
           "no": 2,
@@ -397,7 +419,8 @@
           "reason": "★★★★ 主場硬淨，錫菲聯缺人",
           "result": "0-1",
           "wl": "L",
-          "profit": -100
+          "profit": -100,
+          "stars": 4
         },
         {
           "no": 3,
@@ -413,7 +436,8 @@
           "reason": "★★★ 打比郡缺10人，歐盤跟客",
           "result": "0-1",
           "wl": "W",
-          "profit": 254
+          "profit": 254,
+          "stars": 3
         },
         {
           "no": 4,
@@ -429,7 +453,8 @@
           "reason": "★★★★★ 主場戰意高，貼門檻細注",
           "result": "4-1",
           "wl": "W",
-          "profit": 50
+          "profit": 50,
+          "stars": 5
         },
         {
           "no": 5,
@@ -445,7 +470,8 @@
           "reason": "★★★ 名單已出，畢爾包仍缺雙核",
           "result": "0-0",
           "wl": "WH",
-          "profit": 93
+          "profit": 93,
+          "stars": 3
         },
         {
           "no": 6,
@@ -461,7 +487,8 @@
           "reason": "★★★★ 布力般缺6人含主射，跟主",
           "result": "3-2",
           "wl": "W",
-          "profit": 80
+          "profit": 80,
+          "stars": 4
         },
         {
           "no": 7,
@@ -477,7 +504,8 @@
           "reason": "★★★★ 拿玻里歐戰疲，受半/一有值",
           "result": "1-0",
           "wl": "W",
-          "profit": 194
+          "profit": 194,
+          "stars": 4
         },
         {
           "no": 8,
@@ -493,7 +521,8 @@
           "reason": "★★★ 車路士歐戰疲，受平/半",
           "result": "0-2",
           "wl": "L",
-          "profit": -200
+          "profit": -200,
+          "stars": 3
         },
         {
           "no": 9,
@@ -509,7 +538,8 @@
           "reason": "★★★★ 國米缺主射，讓一球有值",
           "result": "1-3",
           "wl": "W",
-          "profit": 184
+          "profit": 184,
+          "stars": 4
         },
         {
           "no": 10,
@@ -525,7 +555,8 @@
           "reason": "★★ 名單已出，里爾歐戰後客+1",
           "result": "1-1",
           "wl": "W",
-          "profit": 164
+          "profit": 164,
+          "stars": 2
         },
         {
           "no": 11,
@@ -541,7 +572,8 @@
           "reason": "★★★★ 維拉近況勁＋歐盤跟客，紐卡傷缺4人受平/半",
           "result": "0-1",
           "wl": "W",
-          "profit": 192
+          "profit": 192,
+          "stars": 4
         }
       ],
       "daozi_lock": {
@@ -556,7 +588,7 @@
           "華倫西亞 vs 畢爾包（10/18凌晨）｜華倫西亞｜讓球主+0/0.5｜0.93｜WH 0-0"
         ],
         "user_footer": "五串六 $10×6=$60｜派彩$898.4｜盈+$838.4｜註最少中四場",
-        "page_footer": "注碼1注（$600）｜派彩$912｜盈+$312（公開頁口徑）",
+        "page_footer": "每注$40×6＝投注$240｜派彩$365.15｜盈+$125.15（公開頁口徑；1.83×2.27×1.50×1.465×$40）",
         "note": "鎖版後禁止自動重排／重揀；要用戶准許先改"
       },
       "stable": {
@@ -566,7 +598,7 @@
         "combined_odds": 3.48,
         "combined_odds_effective": 2.6535,
         "footer_line1": "全中展示3.48倍｜有效2.6535倍｜注碼2注（$200）",
-        "footer_line2": "派彩$530 · 盈虧+$330（公開頁口徑；鎖版兩腳）",
+        "footer_line2": "派彩$530.70 · 盈虧+$330.70（公開頁口徑；鎖版兩腳；1.83×1.45×$200）",
         "status": "settled",
         "legs": [
           {
@@ -608,7 +640,8 @@
           "reason": "★★★ 質素優平/半",
           "result": "",
           "wl": "",
-          "profit": null
+          "profit": null,
+          "stars": 3
         },
         {
           "no": 2,
@@ -625,7 +658,8 @@
           "result": "",
           "wl": "",
           "profit": null,
-          "guoguan": true
+          "guoguan": true,
+          "stars": 4
         },
         {
           "no": 3,
@@ -642,7 +676,8 @@
           "result": "",
           "wl": "",
           "profit": null,
-          "guoguan": true
+          "guoguan": true,
+          "stars": 4
         },
         {
           "no": 4,
@@ -659,7 +694,8 @@
           "result": "",
           "wl": "",
           "profit": null,
-          "midweek_eu": true
+          "midweek_eu": true,
+          "stars": 5
         },
         {
           "no": 5,
@@ -676,7 +712,8 @@
           "result": "",
           "wl": "",
           "profit": null,
-          "midweek_eu": true
+          "midweek_eu": true,
+          "stars": 5
         },
         {
           "no": 6,
@@ -693,7 +730,8 @@
           "result": "",
           "wl": "",
           "profit": null,
-          "midweek_eu": true
+          "midweek_eu": true,
+          "stars": 5
         },
         {
           "no": 7,
@@ -713,7 +751,8 @@
           "midweek_eu": true,
           "eu_teams": [
             "皇家蘇斯達"
-          ]
+          ],
+          "stars": 2
         },
         {
           "no": 8,
@@ -730,7 +769,8 @@
           "result": "",
           "wl": "",
           "profit": null,
-          "midweek_eu": true
+          "midweek_eu": true,
+          "stars": 5
         },
         {
           "no": 9,
@@ -750,7 +790,8 @@
           "midweek_eu": true,
           "eu_teams": [
             "皇家馬德里"
-          ]
+          ],
+          "stars": 3
         }
       ],
       "note": "歐協聯納入週中歐戰排除後重篩；候選僅7場（川迪/摩納哥/阿積士等剔走）；穩陣過關已鎖版二串一（開波序）：①18:30 烏甸尼斯vs萊切→萊切 讓球客勝 +0.5/+1｜1.74｜54%｜2注；②20:00 奧沙辛拿vs桑坦德→桑坦德 讓球客勝 +0/+0.5｜2.00｜53%｜2注；全中過關賠率3.48倍｜注碼2注（$200）；派彩 — · 盈虧 —（待結算）；覆核擋白禮頓vs水晶宮（稿+1／馬會+1.25）",
@@ -770,7 +811,8 @@
             "market": "讓球 客勝 +0.5/+1",
             "odds": "1.74",
             "confidence": 54,
-            "stake": 2
+            "stake": 2,
+            "stars": 4
           },
           {
             "ko": "20:00",
@@ -779,7 +821,8 @@
             "market": "讓球 客勝 +0/+0.5",
             "odds": "2.00",
             "confidence": 53,
-            "stake": 2
+            "stake": 2,
+            "stars": 4
           }
         ]
       }
