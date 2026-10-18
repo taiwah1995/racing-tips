@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football6';
+  const APP_DATA_VERSION = '20261018football7';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2813,6 +2813,39 @@
     return text + '%（' + hits + '/' + decided + '）';
   }
 
+  /**
+   * Same 命中率 as 當日總結: W/WH hit, L/LH miss, P and unfinished left out.
+   * Null until at least one decided row, so the heading omits the chip.
+   */
+  function footballHitRate(rows) {
+    let hits = 0;
+    let decided = 0;
+    (rows || []).forEach((row) => {
+      const code = normalizeFootballWl(row && row.wl);
+      if (code === 'W' || code === 'WH') {
+        hits += 1;
+        decided += 1;
+      } else if (code === 'L' || code === 'LH') {
+        decided += 1;
+      }
+    });
+    if (!decided) return null;
+    const pct = Math.round((hits / decided) * 100);
+    return '命中 ' + hits + '/' + decided + ' • ' + pct + '%';
+  }
+
+  function footballHitHtml(rows) {
+    const text = footballHitRate(rows);
+    if (!text) return '';
+    return '<span class="fb-hit">' + escapeHtml(text) + '</span>';
+  }
+
+  function footballSectionTitle(titleHtml, updated, rows) {
+    return '<h2 class="panel-title fb-title-row"><span class="fb-title-main">' +
+      titleHtml + panelUpdatedHtml(updated) + '</span>' +
+      footballHitHtml(rows) + '</h2>';
+  }
+
   function formatFbConfidence(text) {
     const t = String(text || '').trim();
     if (!t) return '';
@@ -3027,7 +3060,7 @@
         footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
-      panelTitleHtml('穩陣過關', updated) +
+      footballSectionTitle('穩陣過關', updated, legs.map((leg) => leg.tip)) +
       '<p class="fb-parlay-sub">讓球過關 ' + legs.length + '×1</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
       footballPassFooterHtml(productText, '注碼2注（$200）', 200, settled) +
@@ -3080,7 +3113,7 @@
         footballLegResultHtml(leg.tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-five">' +
-      panelTitleHtml('刀仔鋸大樹', updated) +
+      footballSectionTitle('刀仔鋸大樹', updated, chosen.map((leg) => leg.tip)) +
       '<p class="fb-parlay-sub">五串六（5×6）</p>' +
       '<p class="fb-five-note">5×6 = 5 組四串一 + 1 組五串一，共 6 注</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
@@ -3449,6 +3482,17 @@
     return '';
   }
 
+  /** Sheet or tips W/L, else the same score reading the icon uses. */
+  function footballResolvedWl(row) {
+    const code = normalizeFootballWl(row && row.wl);
+    if (code === 'W' || code === 'WH' || code === 'L' || code === 'LH' || code === 'P') return code;
+    if (!(Number(row && row.stake) > 0)) return '';
+    if (!String(row && row.result || '').trim()) return '';
+    const derived = normalizeFootballWl(footballDeriveAllDayWl(row));
+    if (derived === 'W' || derived === 'WH' || derived === 'L' || derived === 'LH' || derived === 'P') return derived;
+    return '';
+  }
+
   /**
    * Icon under the kickoff. Column W/L wins, then the tips sheet, then the
    * score read against 買法. 注數 > 0 with a 賽果 never stays blank.
@@ -3573,8 +3617,11 @@
         '<p class="fb-star-count">' + rows.length + '/' + rows.length + '</p></div>' +
         '<ul class="fb-all-list">' + rows.map(footballAllDayRowHtml).join('') + '</ul>'
       : '<p class="fb-pending">呢日未有全日分析</p>';
+    const hitRows = rows
+      .filter((row) => Number(row.stake) > 0)
+      .map((row) => ({ wl: footballResolvedWl(row) }));
     return '<section class="panel" id="football-allday" data-source="' + escapeAttr(source) + '">' +
-      panelTitleHtml('全日分析', updated) +
+      footballSectionTitle('全日分析', updated, hitRows) +
       body +
       '</section>';
   }
@@ -3630,7 +3677,7 @@
       '<select id="football-date" aria-label="日期">' + options + '</select></label></div></section>' +
       footballPassHtml(selected.tips, updated, selected.date, model.locks || [], stableRows || []) +
       '<section class="panel" id="football-matches">' +
-      panelTitleHtml(escapeHtml(footballDayLabel(selected) + '推介'), updated) +
+      footballSectionTitle(escapeHtml(footballDayLabel(selected) + '推介'), updated, selected.tips) +
       footballByKickoff(selected.tips, selected.date).map((tip) => footballCardHtml(tip, model.unit)).join('') +
       '</section>' +
       footballAllDayHtml(allday, selected.date, updated, selected.tips) +

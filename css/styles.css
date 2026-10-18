@@ -1228,6 +1228,24 @@ body {
   overflow-wrap: anywhere;
 }
 #view-football .fb-dot { color: var(--text-muted); font-weight: 500; }
+#view-football .fb-title-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+#view-football .fb-title-main {
+  min-width: 0;
+}
+#view-football .fb-hit {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
 #view-football .fb-pass-head {
   margin: 2px 2px 8px;
   color: var(--gold);
