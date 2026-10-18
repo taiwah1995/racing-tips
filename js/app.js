@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football43';
+  const APP_DATA_VERSION = '20261018football44';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2983,10 +2983,8 @@
   }
 
   function formatFbMoney(n) {
-    const rounded = Math.round(Math.abs(Number(n) || 0) * 100) / 100;
-    const text = Number.isInteger(rounded)
-      ? String(rounded)
-      : rounded.toFixed(2).replace(/0+$/, '').replace(/\.$/, '');
+    const rounded = Math.round((Math.abs(Number(n) || 0) + Number.EPSILON) * 100) / 100;
+    const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(2);
     return '$' + text;
   }
 
@@ -3132,19 +3130,16 @@
 
   /** Auto legs only. 讓球主客和 does not match. */
   const FOOTBALL_AUTO_HANDICAP = /^讓球\s*(主勝|客勝)/;
-  const FOOTBALL_LOCKED_DAY = '2026-10-17';
-  const FOOTBALL_LOCKED_LEGS = [
-    { match: '艾華斯堡', pick: '艾華斯堡', line: '讓球 主勝 +0', odds: '0.83', ko: '21:30' },
-    { match: '華倫西亞', pick: '華倫西亞', line: '讓球 主勝 +0/0.5', odds: '0.90', ko: '03:00' },
-  ];
 
   /**
    * 穩陣過關 and 刀仔鋸大樹: candidates first, the user confirms, then LOCK.
    * A locked day keeps this frozen list. Do not change its legs or their order
    * unless the user gives a new explicit instruction. footballByKickoff and
    * footballSortByKickoff apply only to an unlocked day.
-   * 2026-10-17 刀仔 is the frozen 第二組. Stake and payout are not taken from
-   * these money fields. 五串六 pays only the combos that survive: one lost leg
+   * 2026-10-17 刀仔 is the frozen 第二組. Public stake and payout come from the
+   * lock's numeric fields or page_footer. The legacy 注碼1注（$600） line is not
+   * that stake, and user_footer is never shown. Otherwise 五串六 pays only the
+   * combos that survive: one lost leg
    * kills the 五串一 and every 四串一 that includes it. 華倫西亞 0-0 on +0/0.5
    * is a half-win. 全中過關賠率 is the theoretical full-hit average. The cash
    * line is the surviving combo times the unit stake.
@@ -3220,10 +3215,10 @@
         const legs = five.legs.slice(0, 5).map(footballLockLeg);
         if (legs.every((leg) => leg.match && leg.odds)) {
           daozi[date] = {
-            stakeLabel: footballStr(five.stake_label) || '注碼$10×6（$60）',
-            stake: Number(five.stake),
-            payout: Number(five.payout),
-            profit: Number(five.profit),
+            stake: footballFinite(five.stake),
+            payout: footballFinite(five.payout),
+            profit: footballFinite(five.profit),
+            pageFooter: footballStr(five.page_footer),
             legs: legs,
           };
         }
@@ -3232,7 +3227,8 @@
       if (pass && Array.isArray(pass.legs) && pass.legs.length >= 2) {
         const legs = pass.legs.map(footballLockLeg);
         if (legs.every((leg) => leg.match && leg.odds)) {
-          stable[date] = { legs: legs };
+          const pack = footballStableDollars(pass);
+          stable[date] = { legs: legs, dollars: pack.dollars, label: pack.label };
         }
       }
     });
@@ -3250,25 +3246,61 @@
     return FOOTBALL_FIVE_LOCKS[date] || null;
   }
 
-  function footballStableLockLegs(date, tips) {
+  function footballStableLockLegs(date) {
     const fromFile = date && footballStableByDate[date];
-    if (fromFile) {
-      return fromFile.legs.map((leg) => Object.assign({ date: date }, leg));
+    if (!fromFile) return null;
+    return fromFile.legs.map((leg) => Object.assign({ date: date }, leg));
+  }
+
+  function footballFinite(value) {
+    if (value == null || value === '') return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  /** Dollar stake from the lock label or stake. Odds stay on the legs. */
+  function footballStableDollars(pass) {
+    const label = footballStr(pass && pass.stake_label);
+    const written = label.match(/\$(\d+(?:\.\d+)?)/);
+    if (written) return { dollars: Number(written[1]), label: label };
+    const stake = footballFinite(pass && pass.stake);
+    if (stake != null && stake > 0) {
+      const dollars = stake >= 20 ? stake : stake * 100;
+      const text = stake >= 20 ? '注碼' + formatFbMoney(dollars) : '注碼' + stake + '注（' + formatFbMoney(dollars) + '）';
+      return { dollars: dollars, label: text };
     }
-    if (date !== FOOTBALL_LOCKED_DAY) return null;
-    return FOOTBALL_LOCKED_LEGS.map((spec) => {
-      const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
-      return {
-        date: date,
-        ko: spec.ko,
-        match: hit && hit.match ? hit.match : spec.match,
-        pick: spec.pick,
-        line: spec.line,
-        odds: spec.odds,
-        result: hit && hit.result ? hit.result : '',
-        wl: hit && hit.wl ? hit.wl : '',
-      };
-    });
+    return { dollars: 200, label: '注碼2注（$200）' };
+  }
+
+  function footballStablePackage(date) {
+    const fromFile = date && footballStableByDate[date];
+    if (fromFile && fromFile.dollars != null) return { dollars: fromFile.dollars, label: fromFile.label };
+    return { dollars: 200, label: '注碼2注（$200）' };
+  }
+
+  /**
+   * page_footer amounts. 注碼1注（$600） is the old ledger line, not the
+   * public 刀仔 stake, so it does not count.
+   */
+  function footballParseFooterMoney(text) {
+    const src = String(text || '');
+    if (!src || /注碼\s*1\s*注/.test(src) && /\$\s*600\b/.test(src)) return null;
+    const amount = (re) => {
+      const matched = src.match(re);
+      if (!matched) return null;
+      const n = Number(matched[1]);
+      return Number.isFinite(n) ? n : null;
+    };
+    const signed = src.match(/盈(?:虧)?\s*([+＋\-−－])?\s*\$(\d+(?:\.\d+)?)/);
+    let profit = null;
+    if (signed) {
+      profit = Number(signed[2]);
+      if (/[-−－]/.test(signed[1] || '')) profit = -profit;
+    }
+    const stake = amount(/投注\s*\$(\d+(?:\.\d+)?)/);
+    const payout = amount(/派彩\s*\$(\d+(?:\.\d+)?)/);
+    if (stake == null && payout == null && profit == null) return null;
+    return { stake: stake, payout: payout, profit: profit };
   }
 
   function footballLockedFiveRows(lock, tips) {
@@ -3464,10 +3496,9 @@
   /** Stake times the factor already rounded to 2 decimals, so the footer matches the money. */
   function footballPackageMoney(stake, settled) {
     if (settled == null) return null;
-    const shown = footballRound2(settled);
-    const payout = footballRound2(stake * shown);
+    const payout = footballRound2(stake * settled);
     const profit = footballRound2(payout - stake);
-    return { shown: shown, stake: stake, payout: payout, profit: profit };
+    return { shown: settled, stake: stake, payout: payout, profit: profit };
   }
 
   /**
@@ -3483,7 +3514,7 @@
         '<p class="fb-parlay-odds">實際派彩率：— · 派彩 — · 盈虧 —</p></div>';
     }
     const netClass = money.profit > 0 ? 'pl-pos' : (money.profit < 0 ? 'pl-neg' : '');
-    const line2 = '實際派彩率：' + money.shown.toFixed(2) + '倍 · 派彩 ' + formatFbMoney(money.payout) + ' · 盈虧 ';
+    const line2 = '實際派彩率：' + footballTrimFactor(money.shown) + '倍 · 派彩 ' + formatFbMoney(money.payout) + ' · 盈虧 ';
     return '<div class="fb-pass-footers">' +
       '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
       '<p class="fb-parlay-odds">' + escapeHtml(line2) +
@@ -3527,6 +3558,7 @@
     const product = legs.reduce((total, leg) => total * leg.factor.value, 1);
     const productText = footballRound2(product).toFixed(2);
     const settled = footballSettledProduct(legs);
+    const pack = footballStablePackage(legs[0] && legs[0].tip && legs[0].tip.date);
     const items = legs.map((leg) => {
       return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
         footballLegKoHtml(leg.tip) + footballPickBits(leg.tip).join(' ') + '</span>' +
@@ -3536,7 +3568,7 @@
       footballSectionTitle('穩陣過關', updated, legs.map((leg) => leg.tip)) +
       '<p class="fb-parlay-sub">讓球過關 ' + legs.length + '×1</p>' +
       '<ul class="fb-parlay-list">' + items + '</ul>' +
-      footballPassFooterHtml(productText, '注碼2注（$200）', 200, settled) +
+      footballPassFooterHtml(productText, pack.label, pack.dollars, settled) +
       '</section>';
   }
 
@@ -3593,8 +3625,38 @@
   }
 
   /**
+   * Public 刀仔 money. Numeric fields, then page_footer, then the $40×6 table.
+   * user_footer is never read. 注碼1注（$600） is not the public stake.
+   */
+  function footballDaoziPack(lock, legCount) {
+    const table = footballFiveStake(legCount);
+    const parsed = footballParseFooterMoney(lock && lock.pageFooter);
+    const fieldStake = footballFinite(lock && lock.stake);
+    let total = table.total;
+    let unit = table.unit;
+    let label = table.label;
+    if (parsed && parsed.stake != null) {
+      total = parsed.stake;
+      label = '投注 ' + formatFbMoney(total);
+    } else if (fieldStake != null) {
+      total = fieldStake >= 20 ? fieldStake : fieldStake * 100;
+      label = '投注 ' + formatFbMoney(total);
+    }
+    const payout = footballFinite(lock && lock.payout);
+    const profit = footballFinite(lock && lock.profit);
+    return {
+      unit: unit,
+      total: total,
+      label: label,
+      payout: parsed && parsed.payout != null ? parsed.payout : payout,
+      profit: parsed && parsed.profit != null ? parsed.profit : profit,
+    };
+  }
+
+  /**
    * Each 五串六 bet is the unit stake. Payout is the unit times the sum of the
-   * combo returns. Dead combos add nothing. A stored lock payout is not used.
+   * combo returns, unless the lock already gives payout and profit.
+   * user_footer is not used.
    */
   function footballFiveMoney(legs, unit, total) {
     const sum = footballFiveSettledSum(legs);
@@ -3662,7 +3724,7 @@
    * Shown only when the day has at least five priced, staked rows.
    * Unlocked days sort by kickoff, then take the first five.
    * A locked day keeps its published legs.
-   * Stake is the HKJC package, not a hardcoded $60 or $600.
+   * Stake comes from the lock when it is not the legacy $600 line.
    */
   function footballFiveHtml(tips, updated, date) {
     const chosen = footballFiveChosen(tips, date);
@@ -3676,8 +3738,17 @@
     }
     const five = values.reduce((total, value) => total * value, 1);
     const fullText = footballRound2((fourSum + five) / 6).toFixed(2);
-    const stake = footballFiveStake(chosen.length);
-    const money = footballFiveMoney(chosen, stake.unit, stake.total);
+    const hinted = date || ((tips || [])[0] && tips[0].date) || '';
+    const pack = footballDaoziPack(footballFiveLock(hinted), chosen.length);
+    const stake = { unit: pack.unit, total: pack.total, label: pack.label };
+    let money = footballFiveMoney(chosen, pack.unit, pack.total);
+    if (pack.payout != null && pack.profit != null) {
+      money = {
+        rate: money ? money.rate : null,
+        payout: pack.payout,
+        profit: pack.profit,
+      };
+    }
     const items = chosen.map((leg) => {
       const match = leg.tip.match
         ? '<span class="fb-five-match">' + footballLegKoHtml(leg.tip) + escapeHtml(leg.tip.match) + '</span>'
@@ -3714,10 +3785,11 @@
       legs.push({ tip: tip, factor: factor });
     });
     if (legs.length < 2) return null;
-    const money = footballPackageMoney(200, footballSettledProduct(legs));
+    const pack = footballStablePackage(legs[0] && legs[0].tip && legs[0].tip.date);
+    const money = footballPackageMoney(pack.dollars, footballSettledProduct(legs));
     return {
       item: '穩陣過關',
-      stake: 200,
+      stake: pack.dollars,
       payout: money ? money.payout : null,
       profit: money ? money.profit : null,
     };
@@ -3726,8 +3798,11 @@
   function footballFiveBook(tips, date) {
     const chosen = footballFiveChosen(tips, date);
     if (chosen.length < 5) return null;
-    const pack = footballFiveStake(chosen.length);
-    const money = footballFiveMoney(chosen, pack.unit, pack.total);
+    const pack = footballDaoziPack(footballFiveLock(date), chosen.length);
+    let money = footballFiveMoney(chosen, pack.unit, pack.total);
+    if (pack.payout != null && pack.profit != null) {
+      money = { payout: pack.payout, profit: pack.profit };
+    }
     return {
       item: '刀仔鋸大樹',
       stake: pack.total,
@@ -3772,6 +3847,24 @@
     }
     if (!parts.length) return null;
     return { total: footballSumBooks(parts), parts: parts };
+  }
+
+  function footballDataCumulative(model, stableRows) {
+    const parts = [];
+    ((model && model.days) || []).forEach((day) => {
+      const book = footballComputedDayBook(
+        day.tips, model.unit, day.date, model.locks || [], stableRows || []
+      );
+      if (!book || !book.total || book.total.payout == null || book.total.profit == null) return;
+      parts.push({
+        item: footballDayLabel(day),
+        stake: book.total.stake,
+        payout: book.total.payout,
+        profit: book.total.profit,
+      });
+    });
+    if (!parts.length) return null;
+    return { total: footballSumBooks(parts), parts: parts.length > 1 ? parts : [] };
   }
 
   function footballCumulativeBook(rows, model, stableRows) {
@@ -4707,13 +4800,14 @@
       '</section>' +
       '<div id="football-summaries">' +
       footballDayBookHtml(
-        footballSheetDayBook(dayBook, selected.date) ||
-        footballComputedDayBook(selected.tips, model.unit, selected.date, model.locks || [], stableRows || []),
+        footballComputedDayBook(selected.tips, model.unit, selected.date, model.locks || [], stableRows || []) ||
+        footballSheetDayBook(dayBook, selected.date),
         updated,
         'football-day-summary',
         '當日總結'
       ) +
       footballDayBookHtml(
+        footballDataCumulative(model, stableRows || []) ||
         footballCumulativeBook(dayBook, model, stableRows || []),
         updated,
         'football-cumulative',
