@@ -1,6 +1,6 @@
 {
   "unit": 100,
-  "note": "1注=$100；只收有落注嘅場。試算表讀到時唔會用呢份檔。result/wl/profit 完場後更新（W=全贏, WH=贏半, P=走盤, LH=輸半, L=全輸）。market=買法，reason=推介原因。",
+  "note": "1注=$100；只收有落注嘅場。試算表讀到時，推介卡用試算表，唔用呢度嘅 tips。daozi_lock 同 stable_lock 就算試算表讀到都鎖定當日過關，唔再跟有注頭五或開波時間重排。result/wl/profit 完場後更新（W=全贏, WH=贏半, P=走盤, LH=輸半, L=全輸）。market=買法，reason=推介原因。",
   "days": [
     {
       "date": "2026-10-17",
@@ -16,7 +16,26 @@
         {"no":8,"ko":"22:30","league":"荷甲","match":"海牙 vs 燕豪芬","pick":"海牙","market":"受球半/兩","odds":"0.86","confidence":54,"stake":2,"status":"暫定","reason":"燕豪芬中週歐戰，受深有緩衝","result":"","wl":"","profit":null},
         {"no":9,"ko":"02:45","league":"法甲","match":"里爾 vs 比斯特","pick":"比斯特","market":"讓球主客和(+1)客","odds":"1.82","confidence":55,"stake":2,"status":"暫定","reason":"里爾歐冠受挫缺鋒，資金跟客","result":"","wl":"","profit":null},
         {"no":10,"ko":"03:00","league":"西甲","match":"華倫西亞 vs 畢爾包","pick":"華倫西亞","market":"受平/半","odds":"0.90","confidence":56,"stake":2,"status":"暫定","reason":"畢爾包缺雙核兼生疏，資金跟主","result":"","wl":"","profit":null}
-      ]
+      ],
+      "daozi_lock": {
+        "stake": 60,
+        "stake_label": "注碼$10×6（$60）",
+        "payout": 898.4,
+        "profit": 838.4,
+        "legs": [
+          {"ko":"21:30","match":"艾華斯堡 vs 奧格斯堡","pick":"艾華斯堡","line":"讓球 主勝 +0","odds":"0.83","wl":"W","result":"4-3"},
+          {"ko":"22:00","match":"布里斯托城 vs 錫菲聯","pick":"布里斯托城","line":"主客和 主勝","odds":"2.04","wl":"L","result":"0-1"},
+          {"ko":"22:00","match":"打比郡 vs 史篤城","pick":"史篤城","line":"主客和 客勝","odds":"2.27","wl":"W","result":"0-1"},
+          {"ko":"22:00","match":"域斯咸 vs 普雷斯頓","pick":"域斯咸","line":"主客和 主勝","odds":"1.50","wl":"W","result":"4-1"},
+          {"ko":"03:00","match":"華倫西亞 vs 畢爾包（10/18凌晨）","pick":"華倫西亞","line":"讓球 主勝 +0/0.5","odds":"0.93","wl":"W","result":"0-0"}
+        ]
+      },
+      "stable_lock": {
+        "legs": [
+          {"ko":"21:30","match":"艾華斯堡 vs 奧格斯堡","pick":"艾華斯堡","line":"讓球 主勝 +0","odds":"0.83","wl":"W","result":"4-3"},
+          {"ko":"03:00","match":"華倫西亞 vs 畢爾包（10/18凌晨）","pick":"華倫西亞","line":"讓球 主勝 +0/0.5","odds":"0.90","wl":"WH","result":"0-0"}
+        ]
+      }
     }
   ]
 }
