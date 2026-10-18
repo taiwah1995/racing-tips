@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football8';
+  const APP_DATA_VERSION = '20261018football10';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2778,6 +2778,109 @@
     }
   }
 
+  /**
+   * gviz returns the first sheet when 當日總結 is missing. That sheet has 注數
+   * and no 項目, so it is not this ledger.
+   */
+  function footballColumnName(map, label) {
+    if (!map) return '';
+    if (map[label] != null) return label;
+    if (map[label + '($)'] != null) return label + '($)';
+    const keys = Object.keys(map);
+    for (let i = 0; i < keys.length; i++) {
+      if (keys[i].indexOf(label) === 0) return keys[i];
+    }
+    return '';
+  }
+
+  function footballDayBookHeader(rows) {
+    for (let i = 0; i < (rows || []).length; i++) {
+      const map = footballHeaderMap(rows[i]);
+      if (map['注數'] != null && map['項目'] == null) return null;
+      const stakeCol = footballColumnName(map, '投注額');
+      const payoutCol = footballColumnName(map, '派彩');
+      const profitCol = footballColumnName(map, '盈虧');
+      if (map['日期'] != null && map['項目'] != null && stakeCol && payoutCol && profitCol) {
+        return { index: i, map: map, stakeCol: stakeCol, payoutCol: payoutCol, profitCol: profitCol };
+      }
+    }
+    return null;
+  }
+
+  function footballParseAmount(text, cell) {
+    const written = String(text || '').trim();
+    if (!written && cell && typeof cell.v === 'number' && Number.isFinite(cell.v)) return cell.v;
+    const raw = written || (cell ? cellText(cell) : '');
+    const t = String(raw).trim().replace(/[$,]/g, '').replace(/^[+＋]/, '');
+    if (!t || t === '—' || t === '-' || t === '–') return null;
+    const n = Number(t);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function footballDayBookFromRow(cols, map, header, jsonRow, jsonCols) {
+    const csv = (name) => footballCsvCell(cols, map, name);
+    const json = (name) => footballJsonCell(jsonRow, jsonCols, name);
+    const date = footballRowDate(csv('日期'), json('日期'));
+    const item = footballText(csv('項目'), json('項目'));
+    if (!date || !item) return null;
+    return {
+      date: date,
+      item: item,
+      stake: footballParseAmount(csv(header.stakeCol), json(header.stakeCol)),
+      payout: footballParseAmount(csv(header.payoutCol), json(header.payoutCol)),
+      profit: footballParseAmount(csv(header.profitCol), json(header.profitCol)),
+    };
+  }
+
+  function footballDayBookFromSheet(csvRows, table) {
+    const csvHeader = csvRows ? footballDayBookHeader(csvRows) : null;
+    const jsonCols = table ? footballJsonCols(table) : null;
+    const jsonHeader = jsonCols ? footballDayBookHeader([Object.keys(jsonCols)]) : null;
+    if (!csvHeader && !jsonHeader) return [];
+    const header = csvHeader || jsonHeader;
+    const map = csvHeader ? csvHeader.map : jsonHeader.map;
+    const rows = [];
+    if (csvHeader) {
+      for (let r = csvHeader.index + 1; r < csvRows.length; r++) {
+        const jsonRow = jsonHeader && csvHeader.index === 0 && table.rows ? table.rows[r - 1] : null;
+        const row = footballDayBookFromRow(csvRows[r] || [], map, header, jsonRow, jsonCols);
+        if (row) rows.push(row);
+      }
+    } else {
+      (table.rows || []).forEach((jsonRow) => {
+        const row = footballDayBookFromRow(null, map, header, jsonRow, jsonCols);
+        if (row) rows.push(row);
+      });
+    }
+    return rows;
+  }
+
+  /** Missing tab, or a ledger still labelled 全日分析, yields no rows for the panel. */
+  async function loadFootballDayBook() {
+    try {
+      const [csvText, jsonText] = await Promise.all([
+        footballFetchText(footballNamedGvizUrl('當日總結', 'csv')),
+        footballFetchText(footballNamedGvizUrl('當日總結', 'json')),
+      ]);
+      if (csvText == null && jsonText == null) return [];
+      let csvRows = null;
+      let table = null;
+      if (csvText != null) csvRows = parseSimpleCsv(csvText);
+      if (jsonText != null) {
+        try {
+          const data = parseFootballGviz(jsonText);
+          if (data && data.status !== 'error' && data.table) table = data.table;
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      return footballDayBookFromSheet(csvRows, table) || [];
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  }
+
   function footballDayLabel(day) {
     if (day && day.label) return day.label;
     const matched = day && String(day.date || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -3034,23 +3137,30 @@
     return sum;
   }
 
+  /** Stake times the factor already rounded to 2 decimals, so the footer matches the money. */
+  function footballPackageMoney(stake, settled) {
+    if (settled == null) return null;
+    const shown = footballRound2(settled);
+    const payout = footballRound2(stake * shown);
+    const profit = footballRound2(payout - stake);
+    return { shown: shown, stake: stake, payout: payout, profit: profit };
+  }
+
   /** Two footer lines. Stake labels are the published text, not derived from leg count. */
   function footballPassFooterHtml(fullText, stakeLabel, stake, settled) {
     const line1 = '全中過關賠率：' + fullText + '倍｜' + stakeLabel;
-    if (settled == null) {
+    const money = footballPackageMoney(stake, settled);
+    if (!money) {
       return '<div class="fb-pass-footers">' +
         '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
         '<p class="fb-parlay-odds">派彩 — · 盈虧 —</p></div>';
     }
-    const shown = footballRound2(settled);
-    const payout = footballRound2(stake * shown);
-    const net = footballRound2(payout - stake);
-    const netClass = net > 0 ? 'pl-pos' : (net < 0 ? 'pl-neg' : '');
-    const line2 = '派彩 ' + formatFbMoney(payout) + ' (' + shown.toFixed(2) + '倍) · 盈虧 ';
+    const netClass = money.profit > 0 ? 'pl-pos' : (money.profit < 0 ? 'pl-neg' : '');
+    const line2 = '派彩 ' + formatFbMoney(money.payout) + ' (' + money.shown.toFixed(2) + '倍) · 盈虧 ';
     return '<div class="fb-pass-footers">' +
       '<p class="fb-parlay-odds">' + escapeHtml(line1) + '</p>' +
       '<p class="fb-parlay-odds">' + escapeHtml(line2) +
-      '<span class="' + netClass + '">' + escapeHtml(formatFbSigned(net)) + '</span></p></div>';
+      '<span class="' + netClass + '">' + escapeHtml(formatFbSigned(money.profit)) + '</span></p></div>';
   }
 
   function footballParlayHtml(tips, updated) {
@@ -3129,6 +3239,145 @@
       '<ul class="fb-parlay-list">' + items + '</ul>' +
       footballPassFooterHtml(fullText, '注碼1注（$600）', 600, settled) +
       '<p class="fb-note">註：最少要中四場先有錢收。</p></section>';
+  }
+
+  function footballSinglesBook(tips, unit) {
+    const stats = summarizeFootball(tips || [], unit);
+    if (!stats.count) return null;
+    return {
+      item: '單場推介',
+      stake: stats.staked,
+      payout: stats.profitKnown ? stats.payout : null,
+      profit: stats.profitKnown ? stats.profit : null,
+    };
+  }
+
+  function footballParlayBook(tips) {
+    const legs = [];
+    (tips || []).forEach((tip) => {
+      const factor = footballParlayFactor(tip.odds);
+      if (!factor) return;
+      legs.push({ tip: tip, factor: factor });
+    });
+    if (legs.length < 2) return null;
+    const money = footballPackageMoney(200, footballSettledProduct(legs));
+    return {
+      item: '穩陣過關',
+      stake: 200,
+      payout: money ? money.payout : null,
+      profit: money ? money.profit : null,
+    };
+  }
+
+  function footballFiveBook(tips) {
+    const rows = [];
+    (tips || []).forEach((tip) => {
+      if (!(Number(tip.stake) > 0)) return;
+      const factor = footballParlayFactor(tip.odds);
+      if (!factor) return;
+      rows.push({ tip: tip, factor: factor });
+    });
+    if (rows.length < 5) return null;
+    const chosen = rows.slice(0, 5);
+    const settledSum = footballFiveSettledSum(chosen);
+    const settled = settledSum == null ? null : settledSum / 6;
+    const money = footballPackageMoney(600, settled);
+    return {
+      item: '刀仔鋸大樹',
+      stake: 600,
+      payout: money ? money.payout : null,
+      profit: money ? money.profit : null,
+    };
+  }
+
+  function footballSumBooks(parts) {
+    let stake = 0;
+    let payout = 0;
+    let profit = 0;
+    let known = true;
+    parts.forEach((part) => {
+      stake += Number(part.stake) || 0;
+      if (part.payout == null || part.profit == null) known = false;
+      else {
+        payout += part.payout;
+        profit += part.profit;
+      }
+    });
+    return {
+      stake: footballRound2(stake),
+      payout: known ? footballRound2(payout) : null,
+      profit: known ? footballRound2(profit) : null,
+    };
+  }
+
+  /**
+   * Public 當日總結 is 單場推介 + 穩陣過關 + 刀仔鋸大樹.
+   * A tab still labelled 全日分析 is a different ledger and is not used.
+   */
+  function footballSheetDayBook(rows, date) {
+    const day = (rows || []).filter((row) => row.date === date && row.item);
+    if (!day.length) return null;
+    if (day.some((row) => row.item.indexOf('全日分析') >= 0)) return null;
+    if (!day.some((row) => row.item.indexOf('單場') >= 0)) return null;
+    const total = day.find((row) => row.item.indexOf('三項加總') >= 0);
+    const parts = day.filter((row) => row !== total && row.stake != null);
+    if (total && total.stake != null && total.payout != null && total.profit != null) {
+      return { total: total, parts: parts };
+    }
+    if (!parts.length) return null;
+    return { total: footballSumBooks(parts), parts: parts };
+  }
+
+  function footballComputedDayBook(tips, unit, date, locks, stableRows) {
+    const parts = [];
+    const singles = footballSinglesBook(tips, unit);
+    if (singles) parts.push(singles);
+    const stable = footballStableLegs(tips, date, locks, stableRows)
+      .map((leg) => footballCopyTipResult(leg, tips));
+    const parlay = footballParlayBook(stable);
+    if (parlay) parts.push(parlay);
+    const five = footballFiveBook(tips);
+    if (five) parts.push(five);
+    if (!parts.length) return null;
+    return { total: footballSumBooks(parts), parts: parts };
+  }
+
+  function footballBookAmount(value) {
+    return value == null ? '—' : formatFbMoney(value);
+  }
+
+  function footballBookSigned(value) {
+    return value == null ? '—' : formatFbSigned(value);
+  }
+
+  function footballDayBookHtml(book, updated) {
+    if (!book || !book.total) {
+      return '<section class="panel" id="football-day-summary">' +
+        panelTitleHtml('當日總結', updated) +
+        '<p class="fb-pending">未有當日總結</p></section>';
+    }
+    const total = book.total;
+    const profitClass = total.profit > 0 ? 'pl-pos' : (total.profit < 0 ? 'pl-neg' : '');
+    const lines = (book.parts || []).map((part) => {
+      const cls = part.profit > 0 ? 'pl-pos' : (part.profit < 0 ? 'pl-neg' : '');
+      const signed = part.profit == null ? '—' : formatFbSigned(part.profit);
+      const signedHtml = part.profit == null
+        ? '—'
+        : '<span class="' + cls + '">' + escapeHtml(signed) + '</span>';
+      return '<li class="fb-day-line"><span class="fb-day-name">' + escapeHtml(part.item) + '</span>' +
+        '<span class="fb-day-amt">投注 ' + escapeHtml(footballBookAmount(part.stake)) +
+        ' · 派彩 ' + escapeHtml(footballBookAmount(part.payout)) +
+        ' · ' + signedHtml + '</span></li>';
+    }).join('');
+    return '<section class="panel" id="football-day-summary">' +
+      panelTitleHtml('當日總結', updated) +
+      '<div class="fb-stats">' +
+      footballStatHtml('投注額', footballBookAmount(total.stake)) +
+      footballStatHtml('派彩', footballBookAmount(total.payout)) +
+      footballStatHtml('盈虧', footballBookSigned(total.profit), profitClass, true) +
+      '</div>' +
+      (lines ? '<ul class="fb-day-lines">' + lines + '</ul>' : '') +
+      '</section>';
   }
 
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
@@ -3666,7 +3915,7 @@
     if (count) count.textContent = footballHitFraction(counted);
   }
 
-  function paintFootball(model, source, wanted, allday, stableRows) {
+  function paintFootball(model, source, wanted, allday, stableRows, dayBook) {
     const host = $('#football-body');
     if (!host) return;
     host.dataset.source = source;
@@ -3698,12 +3947,16 @@
       '<select id="football-date" aria-label="日期">' + options + '</select></label></div></section>' +
       footballPassHtml(selected.tips, updated, selected.date, model.locks || [], stableRows || []) +
       '<section class="panel" id="football-matches">' +
-      footballSectionTitle(escapeHtml(footballDayLabel(selected) + '推介'), updated, selected.tips) +
+      footballSectionTitle(escapeHtml(footballDayLabel(selected) + '單場推介'), updated, selected.tips) +
       footballByKickoff(selected.tips, selected.date).map((tip) => footballCardHtml(tip, model.unit)).join('') +
       '</section>' +
       footballAllDayHtml(allday, selected.date, updated, selected.tips) +
       '<div id="football-summaries">' +
-      footballSummaryHtml('football-day-summary', '當日總結', selected.tips, model.unit, updated) +
+      footballDayBookHtml(
+        footballSheetDayBook(dayBook, selected.date) ||
+        footballComputedDayBook(selected.tips, model.unit, selected.date, model.locks || [], stableRows || []),
+        updated
+      ) +
       footballSummaryHtml('football-cumulative', '累計總結', allTips, model.unit, updated) +
       '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
       '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>';
@@ -3749,13 +4002,15 @@
       const loadedPromise = loadFootball();
       const alldayPromise = loadFootballAllDay();
       const stablePromise = loadFootballStable();
+      const dayBookPromise = loadFootballDayBook();
       const loaded = await loadedPromise;
       const allday = await alldayPromise;
       const stableRows = await stablePromise;
+      const dayBook = await dayBookPromise;
       if (token !== footballLoad || viewFootball.hidden) return;
       if (status) status.hidden = true;
       if (host) host.dataset.alldaySource = allday.source || '';
-      paintFootball(loaded.model, loaded.source, wanted || '', allday, stableRows);
+      paintFootball(loaded.model, loaded.source, wanted || '', allday, stableRows, dayBook);
     } catch (err) {
       console.error(err);
       if (token !== footballLoad) return;
