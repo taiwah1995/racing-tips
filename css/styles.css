@@ -1255,11 +1255,19 @@ body {
   font-weight: 700;
   line-height: 1.25;
 }
+#view-football .fb-conf-line {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  white-space: nowrap;
+  max-width: 100%;
+}
 #view-football .fb-conf-sep,
 #view-football .fb-conf {
   color: var(--text-muted);
   font-weight: 500;
   font-size: 0.82rem;
+  white-space: nowrap;
 }
 #view-football .fb-fields {
   display: grid;

@@ -2445,6 +2445,7 @@
       wl: normalizeFootballWl(footballText(csv('W/L'), json('W/L'))),
       profit: footballProfit(csv('利潤'), json('利潤')),
       ko_note: footballText(csv('ko_note'), json('ko_note')),
+      stars: footballStoredStars(footballText(csv('stars'), json('stars'))),
     };
   }
 
@@ -2520,6 +2521,7 @@
           wl: normalizeFootballWl(tip.wl),
           profit: tip.profit == null || tip.profit === '' || !Number.isFinite(Number(tip.profit)) ? null : Number(tip.profit),
           ko_note: footballStr(tip.ko_note),
+          stars: footballStoredStars(tip.stars),
         });
         if (footballPassMarked(tip.pass != null ? tip.pass : tip['過關'])) {
           locks.push({
@@ -2590,6 +2592,7 @@
     try {
       const model = await loadFootballSheet();
       footballStampEuTeams(model, fileData);
+      footballStampStars(model, fileData);
       return { model: model, source: 'sheet' };
     } catch (err) {
       console.error(err);
@@ -4285,6 +4288,26 @@
     });
   }
 
+  /** File stars win over the sheet, the same way eu_teams does. */
+  function footballStampStars(model, data) {
+    const map = {};
+    (data && data.days ? data.days : []).forEach((day) => {
+      const date = parseFootballDate(day && day.date);
+      if (!date) return;
+      (day.tips || []).forEach((tip) => {
+        const stars = footballStoredStars(tip && tip.stars);
+        if (stars == null) return;
+        map[date + '|' + footballMatchKey(tip.match)] = stars;
+      });
+    });
+    (model && model.days ? model.days : []).forEach((day) => {
+      (day.tips || []).forEach((tip) => {
+        const stars = map[tip.date + '|' + footballMatchKey(tip.match)];
+        if (stars != null) tip.stars = stars;
+      });
+    });
+  }
+
   function footballListedSide(sideName, names) {
     let best = 0;
     (names || []).forEach((name) => {
@@ -4384,12 +4407,15 @@
         '</span>' + foot + '</span>';
     }
     if (!name && !conf) return '';
-    const stars = footballStarsHtml(tip.confidence, true);
-    return '<p class="fb-match">' + name +
-      (name && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
-      (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
-      stars +
-      '</p>';
+    const stars = footballStarsHtml(tip.confidence, true, footballCardStars(tip));
+    const confLine = (conf || stars)
+      ? '<span class="fb-conf-line">' +
+        (name && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
+        (conf ? '<span class="fb-conf">信心 ' + escapeHtml(conf) + '</span>' : '') +
+        stars +
+        '</span>'
+      : '';
+    return '<p class="fb-match">' + name + confLine + '</p>';
   }
 
   function footballCardHtml(tip, unit) {
@@ -4416,8 +4442,16 @@
       '</article>';
   }
 
+  /** 1–5 from a tip's stars field. Anything else is missing. */
+  function footballStoredStars(value) {
+    if (value == null || value === '') return null;
+    const n = Number(String(value).trim());
+    if (!Number.isInteger(n) || n < 1 || n > 5) return null;
+    return n;
+  }
+
   /**
-   * ≤52 → 1, 53–54 → 4, 55 → 2, 56 or ≥59 → 3, 57–58 → 5.
+   * 全日分析 only. Not monotonic: ≤52 → 1, 53–54 → 4, 55 → 2, 56 or ≥59 → 3, 57–58 → 5.
    */
   function footballStarCount(confidence) {
     const n = footballConfidenceNumber(confidence);
@@ -4429,8 +4463,26 @@
     return 5;
   }
 
-  function footballStarsHtml(confidence, plain) {
-    const n = footballStarCount(confidence);
+  /** Tip cards when stars is absent. ≤52 → 1, 53–54 → 2, 55–56 → 3, 57–58 → 4, ≥59 → 5. */
+  function footballCardStarCount(confidence) {
+    const n = footballConfidenceNumber(confidence);
+    if (n == null) return null;
+    if (n <= 52) return 1;
+    if (n <= 54) return 2;
+    if (n <= 56) return 3;
+    if (n <= 58) return 4;
+    return 5;
+  }
+
+  /** A stored 1–5 stars field wins. Otherwise the monotonic card scale. */
+  function footballCardStars(tip) {
+    const stored = footballStoredStars(tip && tip.stars);
+    if (stored != null) return stored;
+    return footballCardStarCount(tip && tip.confidence);
+  }
+
+  function footballStarsHtml(confidence, plain, forced) {
+    const n = plain ? forced : footballStarCount(confidence);
     if (plain && n == null) return '';
     const cls = (n == null ? 'fb-stars' : 'fb-stars fb-stars-' + n) + (plain ? ' fb-stars-card' : '');
     const label = n == null ? '未有星' : n + '星';
