@@ -1554,6 +1554,18 @@ body {
   margin-left: 4px;
   font-size: 0.82rem;
 }
+#view-football .fb-unrated {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+#view-football .fb-match .fb-unrated,
+#view-football .fb-leg-main .fb-unrated {
+  margin-left: 4px;
+}
 #view-football .fb-result-icon { margin-right: 4px; }
 #view-football .fb-all-icon {
   grid-column: 1;
