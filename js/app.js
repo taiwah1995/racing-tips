@@ -2729,6 +2729,7 @@
     const odds = footballOdds(csv('賠率'), json('賠率'));
     if (!match && !pick) return null;
     if (!odds) return null;
+    // 時間 is the column after 日期 on tab 穩陣過關. Do not fill it from 波盤推介.
     return {
       date: date,
       ko: footballText(csv('時間'), json('時間')),
@@ -3052,9 +3053,9 @@
 
   /**
    * 穩陣過關 legs, first match wins:
-   * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, odds from the tab.
+   * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, including 時間. Do not copy 時間 from 波盤推介.
    * 2. Tips column 過關 is Y/是/1 on any row that day → only those rows, sheet odds.
-   * 3. 2026-10-17 with no marks → 艾華斯堡 讓球 主勝 +0 at 0.83 and 華倫西亞 讓球 主勝 +0/0.5 at 0.90.
+   * 3. 2026-10-17 with no sheet rows → locked 艾華斯堡 21:30 讓球 主勝 +0 at 0.83 and 華倫西亞 03:00 讓球 主勝 +0/0.5 at 0.90.
    * 4. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
    * Fewer than two priced legs hides the panel.
    */
@@ -3068,7 +3069,7 @@
         const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
         return {
           date: date,
-          ko: spec.ko || (hit && hit.ko) || '',
+          ko: spec.ko,
           match: hit && hit.match ? hit.match : spec.match,
           pick: spec.pick,
           line: spec.line,
@@ -3082,43 +3083,6 @@
       if (!(Number(tip.stake) > 0)) return false;
       return FOOTBALL_AUTO_HANDICAP.test(String(tip.line || '').trim());
     });
-  }
-
-  /**
-   * Kickoff for a 穩陣 leg. The tab often has no 時間 column, so the time comes
-   * from the same date and 場次 on 波盤推介. The 2026-10-17 lock is the last resort.
-   */
-  function footballFindDayTip(tips, leg) {
-    const key = footballMatchKey(leg && leg.match);
-    if (!key) return null;
-    const sameDay = (tips || []).filter((tip) => !leg.date || !tip.date || tip.date === leg.date);
-    const exact = sameDay.find((tip) => footballMatchKey(tip.match) === key);
-    if (exact) return exact;
-    return sameDay.find((tip) => {
-      const other = footballMatchKey(tip.match);
-      if (!other) return false;
-      const shorter = key.length <= other.length ? key : other;
-      if (shorter.length < 3) return false;
-      return other.indexOf(key) >= 0 || key.indexOf(other) >= 0;
-    }) || null;
-  }
-
-  function footballLockedKickoff(leg) {
-    if (!leg || (leg.date && leg.date !== FOOTBALL_LOCKED_DAY)) return '';
-    const text = String(leg.match || '') + String(leg.pick || '');
-    const spec = FOOTBALL_LOCKED_LEGS.find((item) => text.indexOf(item.match) >= 0);
-    return spec && spec.ko ? spec.ko : '';
-  }
-
-  function footballAttachKickoff(leg, tips) {
-    if (!leg) return leg;
-    if (String(leg.ko || '').trim()) return leg;
-    const hit = footballFindDayTip(tips, leg);
-    const ko = hit && String(hit.ko || '').trim();
-    if (ko) return Object.assign({}, leg, { ko: ko });
-    const locked = footballLockedKickoff(leg);
-    if (!locked) return leg;
-    return Object.assign({}, leg, { ko: locked });
   }
 
   function footballLegKoHtml(tip) {
@@ -3494,7 +3458,7 @@
 
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
     const legs = footballStableLegs(tips, date, locks, sheetRows)
-      .map((leg) => footballAttachKickoff(footballCopyTipResult(leg, tips), tips));
+      .map((leg) => footballCopyTipResult(leg, tips));
     const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated);
     if (!parlay && !five) return '';
