@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football10';
+  const APP_DATA_VERSION = '20261018football11';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2822,7 +2822,8 @@
     const json = (name) => footballJsonCell(jsonRow, jsonCols, name);
     const date = footballRowDate(csv('日期'), json('日期'));
     const item = footballText(csv('項目'), json('項目'));
-    if (!date || !item) return null;
+    if (!item) return null;
+    if (!date && item.indexOf('累計') < 0) return null;
     return {
       date: date,
       item: item,
@@ -3328,6 +3329,44 @@
     return { total: footballSumBooks(parts), parts: parts };
   }
 
+  function footballCumulativeBook(rows, model, stableRows) {
+    const explicit = (rows || []).find((row) => {
+      return row.item && row.item.indexOf('累計') >= 0 &&
+        row.stake != null && row.payout != null && row.profit != null;
+    });
+    if (explicit) return { total: explicit, parts: [] };
+    const covered = {};
+    const parts = [];
+    (rows || []).forEach((row) => {
+      if (!row.date || !row.item || row.item.indexOf('三項加總') < 0) return;
+      if (row.stake == null || row.payout == null || row.profit == null) return;
+      const dayRows = rows.filter((item) => item.date === row.date);
+      if (dayRows.some((item) => item.item.indexOf('全日分析') >= 0)) return;
+      covered[row.date] = true;
+      parts.push({
+        item: footballDayLabel({ date: row.date }),
+        stake: row.stake,
+        payout: row.payout,
+        profit: row.profit,
+      });
+    });
+    ((model && model.days) || []).forEach((day) => {
+      if (covered[day.date]) return;
+      const computed = footballComputedDayBook(
+        day.tips, model.unit, day.date, model.locks || [], stableRows || []
+      );
+      if (!computed || !computed.total || computed.total.payout == null || computed.total.profit == null) return;
+      parts.push({
+        item: footballDayLabel(day),
+        stake: computed.total.stake,
+        payout: computed.total.payout,
+        profit: computed.total.profit,
+      });
+    });
+    if (!parts.length) return null;
+    return { total: footballSumBooks(parts), parts: parts.length > 1 ? parts : [] };
+  }
+
   function footballComputedDayBook(tips, unit, date, locks, stableRows) {
     const parts = [];
     const singles = footballSinglesBook(tips, unit);
@@ -3350,11 +3389,11 @@
     return value == null ? '—' : formatFbSigned(value);
   }
 
-  function footballDayBookHtml(book, updated) {
+  function footballDayBookHtml(book, updated, id, title) {
     if (!book || !book.total) {
-      return '<section class="panel" id="football-day-summary">' +
-        panelTitleHtml('當日總結', updated) +
-        '<p class="fb-pending">未有當日總結</p></section>';
+      return '<section class="panel" id="' + id + '">' +
+        panelTitleHtml(escapeHtml(title), updated) +
+        '<p class="fb-pending">未有' + escapeHtml(title) + '</p></section>';
     }
     const total = book.total;
     const profitClass = total.profit > 0 ? 'pl-pos' : (total.profit < 0 ? 'pl-neg' : '');
@@ -3369,8 +3408,8 @@
         ' · 派彩 ' + escapeHtml(footballBookAmount(part.payout)) +
         ' · ' + signedHtml + '</span></li>';
     }).join('');
-    return '<section class="panel" id="football-day-summary">' +
-      panelTitleHtml('當日總結', updated) +
+    return '<section class="panel" id="' + id + '">' +
+      panelTitleHtml(escapeHtml(title), updated) +
       '<div class="fb-stats">' +
       footballStatHtml('投注額', footballBookAmount(total.stake)) +
       footballStatHtml('派彩', footballBookAmount(total.payout)) +
@@ -3939,7 +3978,6 @@
         (day.date === selected.date ? ' selected' : '') + '>' +
         escapeHtml(footballDayLabel(day) + ' ' + day.date + latestMark) + '</option>';
     }).join('');
-    const allTips = days.reduce((list, day) => list.concat(day.tips), []);
     host.innerHTML =
       '<section class="panel" id="football-history">' +
       panelTitleHtml('過往日期', updated) +
@@ -3955,9 +3993,16 @@
       footballDayBookHtml(
         footballSheetDayBook(dayBook, selected.date) ||
         footballComputedDayBook(selected.tips, model.unit, selected.date, model.locks || [], stableRows || []),
-        updated
+        updated,
+        'football-day-summary',
+        '當日總結'
       ) +
-      footballSummaryHtml('football-cumulative', '累計總結', allTips, model.unit, updated) +
+      footballDayBookHtml(
+        footballCumulativeBook(dayBook, model, stableRows || []),
+        updated,
+        'football-cumulative',
+        '累計總結'
+      ) +
       '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
       '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>';
   }
