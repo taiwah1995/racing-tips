@@ -1390,7 +1390,7 @@ body {
   padding: 0;
   font-size: clamp(0.68rem, 3.15vw, 0.8rem);
   line-height: 1.5;
-  white-space: nowrap;
+  white-space: normal;
 }
 #view-football .fb-pass-footers .fb-parlay-odds + .fb-parlay-odds {
   margin-top: 2px;
@@ -1401,22 +1401,6 @@ body {
   color: var(--text-muted);
   font-size: 0.78rem;
   line-height: 1.45;
-}
-#view-football .fb-settle-pick {
-  margin: 0;
-  padding: 6px 12px 12px;
-  font-size: 0.78rem;
-  line-height: 1.45;
-}
-#view-football .fb-settle-pick p {
-  margin: 0 0 4px;
-}
-#view-football .fb-settle-label {
-  margin-top: 8px;
-  font-weight: 700;
-}
-#view-football .fb-settle-flag {
-  color: var(--text-muted);
 }
 #view-football .fb-five-leg .fb-leg-main {
   display: flex;
