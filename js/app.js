@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football18';
+  const APP_DATA_VERSION = '20261018football19';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3245,6 +3245,32 @@
       '<span class="' + netClass + '">' + escapeHtml(formatFbSigned(money.profit)) + '</span></p></div>';
   }
 
+  /**
+   * Betting-day kickoff. A time before 12:00 is the next morning, so 21:30
+   * comes before 03:00. Sheet order breaks ties. Confidence is not used.
+   */
+  function footballDayWindowRank(item) {
+    const timeText = String(item && (item.ko || item.time) || '');
+    const hm = timeText.match(/(\d{1,2})\s*:\s*(\d{2})/);
+    if (!hm) return 3 * 24 * 60;
+    const hour = Number(hm[1]);
+    const minute = Number(hm[2]);
+    if (hour > 23 || minute > 59) return 3 * 24 * 60;
+    const minutes = hour * 60 + minute;
+    return hour < 12 ? minutes + 24 * 60 : minutes;
+  }
+
+  function footballSortByKickoff(legs) {
+    return (legs || []).map((leg, index) => ({ leg: leg, index: index }))
+      .sort((a, b) => {
+        const left = a.leg && a.leg.tip ? a.leg.tip : a.leg;
+        const right = b.leg && b.leg.tip ? b.leg.tip : b.leg;
+        const delta = footballDayWindowRank(left) - footballDayWindowRank(right);
+        return delta || a.index - b.index;
+      })
+      .map((entry) => entry.leg);
+  }
+
   function footballParlayHtml(tips, updated) {
     const legs = [];
     (tips || []).forEach((tip) => {
@@ -3282,7 +3308,7 @@
   /**
    * 五串六: five 4-leg parlays plus one 5-leg parlay.
    * Shown only when the day has at least five staked rows. If there are more,
-   * the first five in sheet order are used — the same order as the tip cards.
+   * the first five in sheet order are used. Those five are then listed by kickoff.
    * Decimal d matches the 讓球 parlay. Footer stake text is the fixed $600 label.
    */
   function footballFiveHtml(tips, updated) {
@@ -3294,7 +3320,7 @@
       rows.push({ tip: tip, factor: factor });
     });
     if (rows.length < 5) return '';
-    const chosen = rows.slice(0, 5);
+    const chosen = footballSortByKickoff(rows.slice(0, 5));
     const values = chosen.map((leg) => leg.factor.value);
     let fourSum = 0;
     for (let skip = 0; skip < values.length; skip++) {
@@ -3502,8 +3528,8 @@
   }
 
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
-    const legs = footballStableLegs(tips, date, locks, sheetRows)
-      .map((leg) => footballCopyTipResult(leg, tips));
+    const legs = footballSortByKickoff(footballStableLegs(tips, date, locks, sheetRows)
+      .map((leg) => footballCopyTipResult(leg, tips)));
     const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated);
     if (!parlay && !five) return '';
