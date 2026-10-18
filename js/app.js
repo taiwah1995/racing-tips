@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football24';
+  const APP_DATA_VERSION = '20261018football26';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3097,9 +3097,11 @@
   ];
 
   /**
-   * Settled 刀仔 days. The list is the published set, in this order.
-   * Do not re-sort or replace a locked day from the sheet.
-   * 2026-10-17 second set: stake $10×6 = $60, payout $898.4, profit +$838.4.
+   * 穩陣過關 and 刀仔鋸大樹: candidates first, the user confirms, then LOCK.
+   * A locked day keeps this frozen list. Do not change its legs or their order
+   * unless the user gives a new explicit instruction. footballByKickoff and
+   * footballSortByKickoff apply only to an unlocked day.
+   * 2026-10-17 刀仔 is the frozen 第二組: stake $10×6 = $60, payout $898.4, profit +$838.4.
    */
   const FOOTBALL_FIVE_LOCKS = {
     '2026-10-17': {
@@ -3140,18 +3142,14 @@
   }
 
   /**
-   * 穩陣過關 legs, first match wins:
+   * 穩陣過關 legs. A locked day returns its frozen list and ignores the sheet.
+   * An unlocked day uses the first source that applies:
    * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, including 時間. Do not copy 時間 from 波盤推介.
    * 2. Tips column 過關 is Y/是/1 on any row that day → only those rows, sheet odds.
-   * 3. 2026-10-17 with no sheet rows → locked 艾華斯堡 21:30 讓球 主勝 +0 at 0.83 and 華倫西亞 03:00 讓球 主勝 +0/0.5 at 0.90.
-   * 4. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
+   * 3. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
    * Fewer than two priced legs hides the panel.
    */
   function footballStableLegs(tips, date, locks, sheetRows) {
-    const fromSheet = (sheetRows || []).filter((row) => row.date === date);
-    if (fromSheet.length >= 2) return fromSheet;
-    const marked = (locks || []).filter((row) => row.date === date);
-    if (marked.length) return marked;
     if (date === FOOTBALL_LOCKED_DAY) {
       return FOOTBALL_LOCKED_LEGS.map((spec) => {
         const hit = (tips || []).find((tip) => String(tip.match || '').indexOf(spec.match) >= 0);
@@ -3167,6 +3165,10 @@
         };
       });
     }
+    const fromSheet = (sheetRows || []).filter((row) => row.date === date);
+    if (fromSheet.length >= 2) return fromSheet;
+    const marked = (locks || []).filter((row) => row.date === date);
+    if (marked.length) return marked;
     return (tips || []).filter((tip) => {
       if (!(Number(tip.stake) > 0)) return false;
       return FOOTBALL_AUTO_HANDICAP.test(String(tip.line || '').trim());
