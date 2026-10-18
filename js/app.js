@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football45';
+  const APP_DATA_VERSION = '20261018football46';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2778,6 +2778,21 @@
     });
   }
 
+  /** Append a file 全日分析 row when that match is absent from the sheet. */
+  function footballStampMissingAllDay(rows, data) {
+    if (!rows || !data) return;
+    const have = new Set();
+    rows.forEach((row) => {
+      have.add((row.date || '') + '|' + footballMatchKey(row.match));
+    });
+    footballAllDayFromFile(data).forEach((row) => {
+      const key = (row.date || '') + '|' + footballMatchKey(row.match);
+      if (!key || key === '|' || have.has(key)) return;
+      have.add(key);
+      rows.push(row);
+    });
+  }
+
   async function loadFootballAllDayFile() {
     try {
       const res = await fetch(dataUrl('football-allday.json'));
@@ -2795,6 +2810,7 @@
       const rows = await loadFootballAllDaySheet();
       footballStampAllDayStars(rows, fileData);
       footballStampAllDayBlanks(rows, fileData);
+      footballStampMissingAllDay(rows, fileData);
       return { rows: rows, source: 'sheet' };
     } catch (err) {
       console.error(err);
