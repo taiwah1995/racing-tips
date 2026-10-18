@@ -2444,6 +2444,7 @@
       result: footballText(csv('賽果'), json('賽果')),
       wl: normalizeFootballWl(footballText(csv('W/L'), json('W/L'))),
       profit: footballProfit(csv('利潤'), json('利潤')),
+      ko_note: footballText(csv('ko_note'), json('ko_note')),
     };
   }
 
@@ -2518,6 +2519,7 @@
           result: footballStr(tip.result),
           wl: normalizeFootballWl(tip.wl),
           profit: tip.profit == null || tip.profit === '' || !Number.isFinite(Number(tip.profit)) ? null : Number(tip.profit),
+          ko_note: footballStr(tip.ko_note),
         });
         if (footballPassMarked(tip.pass != null ? tip.pass : tip['過關'])) {
           locks.push({
@@ -3101,7 +3103,8 @@
   function footballPickBits(tip, lineOverride) {
     const line = lineOverride == null ? tip.line : lineOverride;
     const bits = [];
-    if (tip.pick) bits.push('<span class="pl-pos">' + escapeHtml(tip.pick) + '</span>');
+    const pick = footballMatchLabel(tip.pick);
+    if (pick) bits.push('<span class="pl-pos">' + escapeHtml(pick) + '</span>');
     if (line) bits.push('<span class="pl-pos">(' + escapeHtml(line) + ')</span>');
     const odds = formatFbOdds(tip.odds);
     if (odds) bits.push(escapeHtml(odds + '倍'));
@@ -3173,6 +3176,7 @@
       odds: spec && spec.odds != null && spec.odds !== '' ? String(spec.odds) : '',
       wl: normalizeFootballWl(spec && spec.wl),
       result: footballStr(spec && spec.result),
+      ko_note: footballStr(spec && spec.ko_note),
     };
   }
 
@@ -3315,6 +3319,7 @@
           odds: spec.odds,
           wl: spec.wl,
           result: spec.result,
+          ko_note: spec.ko_note || (hit && hit.ko_note) || '',
         },
         factor: footballParlayFactor(spec.odds),
       };
@@ -3349,10 +3354,71 @@
     });
   }
 
+  /**
+   * Trailing （M/D凌晨） or (M/D凌晨), full- or half-width parentheses.
+   * The stored match string stays as written. Display drops the note.
+   */
+  function footballDawnLabel(month, day) {
+    return Number(month) + '/' + Number(day) + '凌晨';
+  }
+
+  function footballStripDawn(text) {
+    const raw = String(text || '');
+    const matched = raw.match(/[（(]\s*(\d{1,2})\s*[/／]\s*(\d{1,2})\s*凌晨\s*[）)]\s*$/);
+    if (!matched) return { text: raw.trim(), note: '' };
+    return {
+      text: raw.slice(0, matched.index).trim(),
+      note: footballDawnLabel(matched[1], matched[2]),
+    };
+  }
+
+  /** ko_note wins when set. A wrapped or bare M/D凌晨 is shown without parentheses. */
+  function footballDawnNote(tip) {
+    const explicit = String(tip && tip.ko_note || '').trim();
+    if (explicit) {
+      const wrapped = explicit.match(/^[（(]\s*(\d{1,2})\s*[/／]\s*(\d{1,2})\s*凌晨\s*[）)]$/);
+      const bare = explicit.match(/^(\d{1,2})\s*[/／]\s*(\d{1,2})\s*凌晨$/);
+      const hit = wrapped || bare;
+      return hit ? footballDawnLabel(hit[1], hit[2]) : explicit;
+    }
+    return footballStripDawn(tip && tip.match).note;
+  }
+
+  function footballMatchLabel(match) {
+    return footballStripDawn(match).text;
+  }
+
+  /** A dawn parenthesis is the meta note, not a team-name suffix. */
+  function footballSideSuffix(suffix) {
+    const parsed = footballStripDawn(suffix);
+    if (parsed.note && !parsed.text) return '';
+    return suffix || '';
+  }
+
+  /**
+   * A lock leg can omit the parenthesis that the tip still carries.
+   * Copy that note so 穩陣 and 刀仔 show the same kickoff line.
+   */
+  function footballAttachDawn(leg, tips) {
+    if (!leg || footballDawnNote(leg)) return leg;
+    const key = footballMatchKey(leg.match);
+    if (!key) return leg;
+    const hit = (tips || []).find((tip) => footballMatchKey(tip.match) === key);
+    const note = hit && footballDawnNote(hit);
+    if (!note) return leg;
+    return Object.assign({}, leg, { ko_note: note });
+  }
+
   function footballLegKoHtml(tip) {
+    const bits = [];
     const ko = String(tip && tip.ko || '').trim();
-    if (!ko) return '';
-    return '<span class="fb-leg-ko">' + escapeHtml(ko) + '</span>';
+    const league = String(tip && tip.league || '').trim();
+    const note = footballDawnNote(tip);
+    if (ko) bits.push(ko);
+    if (league) bits.push(league);
+    if (note) bits.push(note);
+    if (!bits.length) return '';
+    return '<span class="fb-leg-ko">' + escapeHtml(bits.join(' · ')) + '</span>';
   }
 
   /** Fill 賽果 and W/L from the tips sheet when a lock row does not carry them. */
@@ -3750,12 +3816,14 @@
       };
     }
     const items = chosen.map((leg) => {
-      const match = leg.tip.match
-        ? '<span class="fb-five-match">' + footballLegKoHtml(leg.tip) + escapeHtml(leg.tip.match) + '</span>'
-        : footballLegKoHtml(leg.tip);
+      const tip = footballAttachDawn(leg.tip, tips);
+      const label = footballMatchLabel(tip.match);
+      const match = label
+        ? '<span class="fb-five-match">' + footballLegKoHtml(tip) + escapeHtml(label) + '</span>'
+        : footballLegKoHtml(tip);
       return '<li class="fb-parlay-leg fb-five-leg"><span class="fb-leg-main">' + match +
-        '<span class="fb-five-pick">' + footballPickBits(leg.tip).join(' ') + '</span></span>' +
-        footballLegResultHtml(leg.tip) + '</li>';
+        '<span class="fb-five-pick">' + footballPickBits(tip).join(' ') + '</span></span>' +
+        footballLegResultHtml(tip) + '</li>';
     }).join('');
     return '<section class="panel" id="football-five">' +
       footballSectionTitle('刀仔鋸大樹', updated, chosen.map((leg) => leg.tip)) +
@@ -3960,7 +4028,8 @@
 
   function footballPassHtml(tips, updated, date, locks, sheetRows) {
     let legs = footballStableLegs(tips, date, locks, sheetRows)
-      .map((leg) => footballCopyTipResult(leg, tips));
+      .map((leg) => footballCopyTipResult(leg, tips))
+      .map((leg) => footballAttachDawn(leg, tips));
     if (!footballStableLockLegs(date, tips)) legs = footballSortByKickoff(legs);
     const parlay = footballParlayHtml(legs, updated);
     const five = footballFiveHtml(tips, updated, date);
@@ -4301,9 +4370,9 @@
     let name = '';
     if (mark.parts) {
       name = '<span class="fb-sides">' +
-        footballSideHtml(mark.parts.home, mark.home, '') +
+        footballSideHtml(footballMatchLabel(mark.parts.home), mark.home, '') +
         '<span class="fb-vs">vs</span>' +
-        footballSideHtml(mark.parts.away, mark.away, mark.parts.suffix) +
+        footballSideHtml(footballMatchLabel(mark.parts.away), mark.away, footballSideSuffix(mark.parts.suffix)) +
         '</span>';
     } else if (tip.match) {
       const phrase = mark.home || mark.away;
@@ -4311,7 +4380,7 @@
       const foot = phrase
         ? '<span class="fb-euro-foot">' + escapeHtml(phrase) + '</span>'
         : '';
-      name = '<span class="fb-side"><span class="fb-side-name">' + escapeHtml(tip.match) + star +
+      name = '<span class="fb-side"><span class="fb-side-name">' + escapeHtml(footballMatchLabel(tip.match)) + star +
         '</span>' + foot + '</span>';
     }
     if (!name && !conf) return '';
@@ -4327,6 +4396,8 @@
     const bits = [];
     if (tip.ko) bits.push(tip.ko);
     if (tip.league) bits.push(tip.league);
+    const dawn = footballDawnNote(tip);
+    if (dawn) bits.push(dawn);
     const head = bits.length
       ? '<span class="fb-ko">' + escapeHtml(bits.join(' · ')) + '</span>'
       : '<span class="fb-ko"></span>';
