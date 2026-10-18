@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football39';
+  const APP_DATA_VERSION = '20261018football41';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2514,6 +2514,7 @@
           stake: stake,
           status: footballStr(tip.status),
           reason: footballReason(footballStr(tip.reason != null ? tip.reason : tip['推介原因'])),
+          eu_teams: footballEuNames(tip),
           result: footballStr(tip.result),
           wl: normalizeFootballWl(tip.wl),
           profit: tip.profit == null || tip.profit === '' || !Number.isFinite(Number(tip.profit)) ? null : Number(tip.profit),
@@ -2586,6 +2587,7 @@
     footballSetFileLocks(fileData);
     try {
       const model = await loadFootballSheet();
+      footballStampEuTeams(model, fileData);
       return { model: model, source: 'sheet' };
     } catch (err) {
       console.error(err);
@@ -2903,30 +2905,70 @@
     return rows;
   }
 
-  /** Missing tab, or a ledger still labelled 全日分析, yields no rows for the panel. */
+  function footballDayBookFromFile(data) {
+    const rows = [];
+    (data && data.rows ? data.rows : []).forEach((item) => {
+      if (!item) return;
+      const itemText = footballStr(item.item);
+      const kind = footballLedgerKind(itemText);
+      if (!kind) return;
+      const date = kind === 'cumulative' ? '' : parseFootballDate(item.date);
+      if (!date && kind !== 'cumulative') return;
+      const num = (value) => {
+        if (value == null || value === '') return null;
+        const n = Number(value);
+        return Number.isFinite(n) ? n : null;
+      };
+      rows.push({
+        date: date,
+        item: itemText,
+        kind: kind,
+        stake: num(item.stake),
+        payout: num(item.payout),
+        profit: num(item.profit),
+        units: num(item.units),
+      });
+    });
+    return rows;
+  }
+
+  async function loadFootballDayBookFile() {
+    try {
+      const res = await fetch(dataUrl('football-daybook.json'));
+      if (!res.ok) return [];
+      return footballDayBookFromFile(await res.json());
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
+  }
+
+  /** Sheet tab first. A missing tab, or a ledger still labelled 全日分析, uses the JSON copy. */
   async function loadFootballDayBook() {
     try {
       const [csvText, jsonText] = await Promise.all([
         footballFetchText(footballNamedGvizUrl('當日總結', 'csv')),
         footballFetchText(footballNamedGvizUrl('當日總結', 'json')),
       ]);
-      if (csvText == null && jsonText == null) return [];
-      let csvRows = null;
-      let table = null;
-      if (csvText != null) csvRows = parseSimpleCsv(csvText);
-      if (jsonText != null) {
-        try {
-          const data = parseFootballGviz(jsonText);
-          if (data && data.status !== 'error' && data.table) table = data.table;
-        } catch (err) {
-          console.error(err);
+      if (csvText != null || jsonText != null) {
+        let csvRows = null;
+        let table = null;
+        if (csvText != null) csvRows = parseSimpleCsv(csvText);
+        if (jsonText != null) {
+          try {
+            const data = parseFootballGviz(jsonText);
+            if (data && data.status !== 'error' && data.table) table = data.table;
+          } catch (err) {
+            console.error(err);
+          }
         }
+        const rows = footballDayBookFromSheet(csvRows, table) || [];
+        if (rows.length) return rows;
       }
-      return footballDayBookFromSheet(csvRows, table) || [];
     } catch (err) {
       console.error(err);
-      return [];
     }
+    return loadFootballDayBookFile();
   }
 
   function footballDayLabel(day) {
@@ -4001,9 +4043,46 @@
     return '';
   }
 
+  /** Names from eu_teams. Empty when the tip does not carry that list. */
+  function footballEuNames(tip) {
+    const raw = tip && tip.eu_teams;
+    if (!Array.isArray(raw)) return null;
+    const names = raw.map((name) => String(name || '').trim()).filter(Boolean);
+    return names.length ? names : null;
+  }
+
+  /** File eu_teams win over the sheet. The same match key keeps the list. */
+  function footballStampEuTeams(model, data) {
+    const map = {};
+    (data && data.days ? data.days : []).forEach((day) => {
+      const date = parseFootballDate(day && day.date);
+      if (!date) return;
+      (day.tips || []).forEach((tip) => {
+        const names = footballEuNames(tip);
+        if (!names) return;
+        map[date + '|' + footballMatchKey(tip.match)] = names;
+      });
+    });
+    (model && model.days ? model.days : []).forEach((day) => {
+      (day.tips || []).forEach((tip) => {
+        const names = map[tip.date + '|' + footballMatchKey(tip.match)];
+        if (names) tip.eu_teams = names;
+      });
+    });
+  }
+
+  function footballListedSide(sideName, names) {
+    let best = 0;
+    (names || []).forEach((name) => {
+      best = Math.max(best, footballHintScore(sideName, name), footballHintScore(name, sideName));
+    });
+    return best;
+  }
+
   /**
    * Red * and the red footnote for each side. The footnote is the phrase as
    * written in that clause. One note can mark both teams with different phrases.
+   * eu_teams, when present, is the only list of sides that may be marked.
    * A clause that names nobody uses the pick's side.
    */
   function footballEuroMarks(tip) {
@@ -4011,6 +4090,30 @@
     const parts = footballMatchParts(tip && tip.match);
     const blank = { home: '', away: '', parts: parts };
     if (!hits.length) return blank;
+    const euNames = footballEuNames(tip);
+    if (euNames && parts) {
+      const homeListed = footballListedSide(parts.home, euNames) > 0;
+      const awayListed = footballListedSide(parts.away, euNames) > 0;
+      const home = [];
+      const away = [];
+      const push = (list, phrase) => { if (list.indexOf(phrase) < 0) list.push(phrase); };
+      hits.forEach((hit) => {
+        if (homeListed && !awayListed) push(home, hit.phrase);
+        else if (awayListed && !homeListed) push(away, hit.phrase);
+        else if (homeListed && awayListed) {
+          const hint = footballEuroHint(tip.reason, hit.index);
+          const homeScore = footballHintScore(parts.home, hint);
+          const awayScore = footballHintScore(parts.away, hint);
+          if (homeScore > awayScore) push(home, hit.phrase);
+          else if (awayScore > homeScore) push(away, hit.phrase);
+          else {
+            push(home, hit.phrase);
+            push(away, hit.phrase);
+          }
+        }
+      });
+      return { home: home.join('、'), away: away.join('、'), parts: parts };
+    }
     if (!parts) {
       const seen = [];
       hits.forEach((hit) => { if (seen.indexOf(hit.phrase) < 0) seen.push(hit.phrase); });
