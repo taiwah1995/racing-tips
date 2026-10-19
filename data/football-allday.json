@@ -1,6 +1,6 @@
 {
   "date": "2026-10-18",
-  "count": 232,
+  "count": 233,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -3263,6 +3263,20 @@
       "result": "",
       "wl": "",
       "league": "阿甲"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "09:00",
+      "match": "蒙特雷 vs 帕丘卡",
+      "confidence": 55,
+      "stars": 2,
+      "pick": "蒙特雷｜讓球 主勝 -0.5/-1",
+      "odds": 0.81,
+      "stake": 0,
+      "source": "問過補紙面（非API）",
+      "result": "",
+      "wl": "",
+      "league": "墨超"
     }
   ]
 }
