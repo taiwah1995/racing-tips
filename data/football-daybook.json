@@ -56,21 +56,30 @@
     },
     {
       "date": "2026-10-18",
+      "item": "③刀仔鋸大樹",
+      "kind": "part",
+      "stake": 240,
+      "payout": 0,
+      "profit": -240,
+      "units": 2.4
+    },
+    {
+      "date": "2026-10-18",
       "item": "當日總結（三項加總）",
       "kind": "day-total",
-      "stake": 1400,
+      "stake": 1640,
       "payout": 1220,
-      "profit": -180,
-      "units": 14
+      "profit": -420,
+      "units": 16.4
     },
     {
       "date": "",
       "item": "累計總結（三項每日累積）",
       "kind": "cumulative",
-      "stake": 4640,
+      "stake": 4880,
       "payout": 6612.85,
-      "profit": 1972.85,
-      "units": 46.4
+      "profit": 1732.85,
+      "units": 48.8
     }
   ]
 }
