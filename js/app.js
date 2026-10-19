@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261018football46';
+  const APP_DATA_VERSION = '20261019football47';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3771,7 +3771,14 @@
     const day = date || (rows[0] && rows[0].tip.date) || '';
     const ranked = footballByKickoff(rows.map((row) => row.tip), day);
     const byTip = new Map(rows.map((row) => [row.tip, row]));
-    return ranked.slice(0, 5).map((tip) => byTip.get(tip));
+    const chosen = ranked.slice(0, 5).map((tip) => byTip.get(tip));
+    // A settled day with no daozi_lock did not place 刀仔. 10/18 is that case.
+    const settled = chosen.length >= 5 && chosen.every((leg) => {
+      const code = normalizeFootballWl(leg && leg.tip && leg.tip.wl);
+      return code === 'W' || code === 'WH' || code === 'L' || code === 'LH' || code === 'P';
+    });
+    if (settled) return [];
+    return chosen;
   }
 
   /**
