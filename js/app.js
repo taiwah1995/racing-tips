@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261019football47';
+  const APP_DATA_VERSION = '20261019football48';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3316,7 +3316,8 @@
       const date = parseFootballDate(day && day.date);
       if (!date) return;
       const five = day.daozi_lock;
-      if (five && Array.isArray(five.legs) && five.legs.length >= 5) {
+      const daoziOn = five && (five.locked === true || five.user_confirmed === true);
+      if (daoziOn && Array.isArray(five.legs) && five.legs.length >= 5) {
         const legs = five.legs.slice(0, 5).map(footballLockLeg);
         if (legs.every((leg) => leg.match && leg.odds)) {
           daozi[date] = {
@@ -3772,7 +3773,7 @@
     const ranked = footballByKickoff(rows.map((row) => row.tip), day);
     const byTip = new Map(rows.map((row) => [row.tip, row]));
     const chosen = ranked.slice(0, 5).map((tip) => byTip.get(tip));
-    // A settled day with no daozi_lock did not place 刀仔. 10/18 is that case.
+    // Settled and neither locked nor user_confirmed: that day did not place 刀仔.
     const settled = chosen.length >= 5 && chosen.every((leg) => {
       const code = normalizeFootballWl(leg && leg.tip && leg.tip.wl);
       return code === 'W' || code === 'WH' || code === 'L' || code === 'LH' || code === 'P';
