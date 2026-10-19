@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261019football49';
+  const APP_DATA_VERSION = '20261019football50';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2489,6 +2489,25 @@
     return { unit: 100, days: footballGroupDays(tips), locks: locks };
   }
 
+  /** A published 穩陣 or 刀仔 keeps the day even when it has no single tips. */
+  function footballFileDayHasPackage(day) {
+    const pass = day && (day.stable_lock || day.stable);
+    const passLegs = pass && Array.isArray(pass.legs) ? pass.legs : [];
+    const five = day && day.daozi_lock;
+    const daoziOn = !!(five && (five.locked === true || five.user_confirmed === true));
+    const fiveLegs = daoziOn && Array.isArray(five.legs) ? five.legs.slice(0, 5) : [];
+    const usable = (leg) => {
+      if (!leg) return false;
+      if (typeof leg === 'string') {
+        const parts = leg.split('｜').map((part) => part.trim()).filter(Boolean);
+        return parts.length >= 4;
+      }
+      return !!(footballStr(leg.match) && leg.odds != null && String(leg.odds) !== '');
+    };
+    if (passLegs.length >= 2 && passLegs.every(usable)) return true;
+    return fiveLegs.length >= 5 && fiveLegs.every(usable);
+  }
+
   function footballModelFromFile(data) {
     const unitNum = Number(data && data.unit);
     const unit = Number.isFinite(unitNum) && unitNum > 0 ? unitNum : 100;
@@ -2534,7 +2553,9 @@
           });
         }
       });
-      if (tips.length) days.push({ date: date, label: footballStr(day.label), tips: tips });
+      if (tips.length || footballFileDayHasPackage(day)) {
+        days.push({ date: date, label: footballStr(day.label), tips: tips });
+      }
     });
     days.sort((a, b) => a.date.localeCompare(b.date));
     return { unit: unit, days: days, locks: locks };
@@ -2722,7 +2743,8 @@
 
   /**
    * A sheet row with a blank 注數 is dropped. If the file still has that match
-   * at stake > 0, add that tip. Existing sheet tips and the locks stay put.
+   * at stake > 0, add that tip. A file day with only a 穩陣 or 刀仔 is added
+   * even when it has no singles. Existing sheet tips and the locks stay put.
    */
   function footballStampMissingTips(model, data) {
     if (!model || !data) return;
@@ -2735,8 +2757,15 @@
     });
     (fileModel.days || []).forEach((day) => {
       const missing = (day.tips || []).filter((tip) => !have.has(tip.date + '|' + footballMatchKey(tip.match)));
-      if (!missing.length) return;
       let host = (model.days || []).find((item) => item.date === day.date);
+      if (!missing.length) {
+        if (host || (day.tips || []).length) return;
+        host = { date: day.date, label: day.label || '', tips: [] };
+        model.days = model.days || [];
+        model.days.push(host);
+        model.days.sort((a, b) => a.date.localeCompare(b.date));
+        return;
+      }
       if (!host) {
         host = { date: day.date, label: day.label || '', tips: [] };
         model.days = model.days || [];
@@ -5076,9 +5105,8 @@
     if (!host) return;
     host.dataset.source = source;
     host.dataset.starReport = JSON.stringify(footballStarCensus(model, allday));
-    const tipDays = model.days || [];
     const days = footballDaysForView(model, allday);
-    const latest = tipDays.reduce((best, day) => (!best || day.date > best.date ? day : best), null);
+    const latest = days.reduce((best, day) => (!best || day.date > best.date ? day : best), null);
     const selected = days.find((day) => day.date === wanted) || latest;
     const updated = latest ? latest.date : '';
     pageTitle.textContent = '波盤推介';
