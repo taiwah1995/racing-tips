@@ -1,6 +1,6 @@
 {
   "date": "2026-10-18",
-  "count": 239,
+  "count": 240,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -3291,6 +3291,20 @@
       "result": "",
       "wl": "",
       "league": "意甲"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "01:00",
+      "match": "迪加科斯 vs 卡爾馬",
+      "confidence": 55,
+      "stars": 2,
+      "pick": "迪加科斯｜讓球 主勝 受平/半",
+      "odds": 0.8,
+      "stake": 0,
+      "source": "問過補紙面（非API）",
+      "result": "",
+      "wl": "",
+      "league": "瑞典超"
     },
     {
       "date": "2026-10-19",
