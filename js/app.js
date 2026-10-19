@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261019football48';
+  const APP_DATA_VERSION = '20261019football49';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -5054,13 +5054,31 @@
     if (count) count.textContent = footballHitFraction(counted);
   }
 
+  /** Tip days, plus a later 全日分析 date that has no tip cards yet. */
+  function footballDaysForView(model, allday) {
+    const days = (model && model.days ? model.days : []).slice();
+    const seen = {};
+    let newest = '';
+    days.forEach((day) => {
+      seen[day.date] = true;
+      if (day.date > newest) newest = day.date;
+    });
+    ((allday && allday.rows) || []).forEach((row) => {
+      if (!row || !row.date || seen[row.date] || (newest && row.date <= newest)) return;
+      seen[row.date] = true;
+      days.push({ date: row.date, label: '', tips: [] });
+    });
+    return days;
+  }
+
   function paintFootball(model, source, wanted, allday, stableRows, dayBook) {
     const host = $('#football-body');
     if (!host) return;
     host.dataset.source = source;
     host.dataset.starReport = JSON.stringify(footballStarCensus(model, allday));
-    const days = model.days || [];
-    const latest = days.reduce((best, day) => (!best || day.date > best.date ? day : best), null);
+    const tipDays = model.days || [];
+    const days = footballDaysForView(model, allday);
+    const latest = tipDays.reduce((best, day) => (!best || day.date > best.date ? day : best), null);
     const selected = days.find((day) => day.date === wanted) || latest;
     const updated = latest ? latest.date : '';
     pageTitle.textContent = '波盤推介';

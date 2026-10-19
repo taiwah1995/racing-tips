@@ -1,6 +1,6 @@
 {
   "date": "2026-10-18",
-  "count": 232,
+  "count": 239,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -3263,6 +3263,104 @@
       "result": "",
       "wl": "",
       "league": "阿甲"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "09:00",
+      "match": "蒙特雷 vs 帕丘卡",
+      "confidence": 55,
+      "stars": 2,
+      "pick": "蒙特雷｜讓球 主勝 -0.5/-1",
+      "odds": 0.81,
+      "stake": 0,
+      "source": "問過補紙面（非API）",
+      "result": "",
+      "wl": "",
+      "league": "墨超"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "00:30",
+      "match": "蒙沙 vs 卡利亞里",
+      "confidence": 55,
+      "stars": 2,
+      "pick": "卡利亞里｜讓球 客勝 +0/+0.5",
+      "odds": 1.83,
+      "stake": 0,
+      "source": "API",
+      "result": "",
+      "wl": "",
+      "league": "意甲"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "02:45",
+      "match": "帕爾馬 vs 拖連奴",
+      "confidence": 48,
+      "stars": 1,
+      "pick": "拖連奴｜讓球 客勝 -0/-0.5",
+      "odds": 2.0,
+      "stake": 0,
+      "source": "API",
+      "result": "",
+      "wl": "",
+      "league": "意甲"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "03:00",
+      "match": "熱刺 vs 高雲地利",
+      "confidence": 60,
+      "stars": 3,
+      "pick": "熱刺｜主客和 主勝",
+      "odds": 1.42,
+      "stake": 0,
+      "source": "API",
+      "result": "",
+      "wl": "",
+      "league": "英超"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "03:00",
+      "match": "基達菲 vs 華歷簡奴",
+      "confidence": 44,
+      "stars": 1,
+      "pick": "華歷簡奴｜讓球 客勝 -0/-0.5",
+      "odds": 2.08,
+      "stake": 0,
+      "source": "API",
+      "result": "",
+      "wl": "",
+      "league": "西甲"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "03:15",
+      "match": "布拉加 vs 基維辛迪",
+      "confidence": 55,
+      "stars": 2,
+      "pick": "基維辛迪｜讓球 客勝 +1",
+      "odds": 1.77,
+      "stake": 0,
+      "source": "API",
+      "result": "",
+      "wl": "",
+      "league": "葡超"
+    },
+    {
+      "date": "2026-10-19",
+      "time": "07:00",
+      "match": "哥連泰斯 vs 維多利亞",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "哥連泰斯｜讓球 主勝 -0.5/-1",
+      "odds": 1.84,
+      "stake": 0,
+      "source": "API",
+      "result": "",
+      "wl": "",
+      "league": "巴甲"
     }
   ]
 }
