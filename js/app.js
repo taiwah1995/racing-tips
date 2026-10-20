@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261019football53';
+  const APP_DATA_VERSION = '20261020football54';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3246,14 +3246,26 @@
   }
 
   /**
-   * Net odds (under 1.2) convert as 1+odds; longer prices are already decimal.
+   * 主客和 / HAD prices are decimal, including a short 1.17.
+   * 讓球 and 入球 prices under 1.2 are HK water (1+odds). A longer price on
+   * those markets is already decimal, which is how 1.83 and 2.00 are stored.
+   * A line that names neither market keeps the old under-1.2 rule.
    */
-  function footballParlayFactor(oddsText) {
+  function footballOddsAreWater(line, odds) {
+    const text = String(line || '');
+    if (/主客和|HAD|獨贏/.test(text)) return false;
+    if (/讓球|入球|大細|大小/.test(text)) return odds < 1.2;
+    return odds < 1.2;
+  }
+
+  function footballParlayFactor(oddsText, line) {
     const shown = formatFbOdds(oddsText);
     const n = Number(shown);
     if (!shown || !Number.isFinite(n)) return null;
     const rounded = Number(n.toFixed(2));
-    if (rounded < 1.2) return { text: '(1+' + rounded.toFixed(2) + ')', value: 1 + rounded };
+    if (footballOddsAreWater(line, rounded)) {
+      return { text: '(1+' + rounded.toFixed(2) + ')', value: 1 + rounded };
+    }
     return { text: rounded.toFixed(2), value: rounded };
   }
 
@@ -3453,7 +3465,7 @@
           ko_note: spec.ko_note || (hit && hit.ko_note) || '',
           confidence: spec.confidence != null && spec.confidence !== '' ? spec.confidence : '',
         },
-        factor: footballParlayFactor(spec.odds),
+        factor: footballParlayFactor(spec.odds, spec.line),
       };
     });
   }
@@ -3748,7 +3760,7 @@
   function footballParlayHtml(tips, updated) {
     const legs = [];
     (tips || []).forEach((tip) => {
-      const factor = footballParlayFactor(tip.odds);
+      const factor = footballParlayFactor(tip.odds, tip.line);
       if (!factor) return;
       legs.push({ tip: tip, factor: factor });
     });
@@ -3794,7 +3806,7 @@
     const rows = [];
     (tips || []).forEach((tip) => {
       if (!(Number(tip.stake) > 0)) return;
-      const factor = footballParlayFactor(tip.odds);
+      const factor = footballParlayFactor(tip.odds, tip.line);
       if (!factor) return;
       rows.push({ tip: tip, factor: factor });
     });
@@ -3989,7 +4001,7 @@
   function footballParlayBook(tips) {
     const legs = [];
     (tips || []).forEach((tip) => {
-      const factor = footballParlayFactor(tip.odds);
+      const factor = footballParlayFactor(tip.odds, tip.line);
       if (!factor) return;
       legs.push({ tip: tip, factor: factor });
     });
