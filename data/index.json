@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-10-21-hv",
+      "date": "2026-10-21",
+      "venue": "快活谷",
+      "venueCode": "HV",
+      "raceCount": 9,
+      "label": null,
+      "file": "meetings/2026-10-21-hv.json",
+      "banker": {
+        "race": 7,
+        "no": 10,
+        "name": "飛躍成就",
+        "odds": 4.8
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-10-19-st",
       "date": "2026-10-19",
       "venue": "沙田",

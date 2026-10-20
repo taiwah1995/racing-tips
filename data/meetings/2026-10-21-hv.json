@@ -1,0 +1,324 @@
+{
+  "id": "2026-10-21-hv",
+  "date": "2026-10-21",
+  "venue": "快活谷",
+  "venueCode": "HV",
+  "raceCount": 9,
+  "label": null,
+  "tipsTable": [
+    {
+      "race": 1,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 6,
+        "name": "部族高手",
+        "style": "前",
+        "odds": 4.8
+      },
+      "second": {
+        "no": 2,
+        "name": "本領非凡",
+        "style": "前",
+        "odds": 4.0
+      },
+      "third": {
+        "no": 3,
+        "name": "爆笑",
+        "style": "中",
+        "odds": 6.2
+      },
+      "dark": {
+        "no": 8,
+        "name": "妙算強人",
+        "style": "前",
+        "odds": 16.0
+      }
+    },
+    {
+      "race": 2,
+      "class": "五班",
+      "distance": 1200,
+      "first": {
+        "no": 3,
+        "name": "金風萬里",
+        "style": "中",
+        "odds": 5.3
+      },
+      "second": {
+        "no": 9,
+        "name": "勝在當下",
+        "style": "放",
+        "odds": 8.8
+      },
+      "third": {
+        "no": 1,
+        "name": "友得盈",
+        "style": "前",
+        "odds": 4.7
+      },
+      "dark": {
+        "no": 11,
+        "name": "輕鬆大少",
+        "style": "後",
+        "odds": 16.0
+      }
+    },
+    {
+      "race": 3,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 8,
+        "name": "金駒永騰",
+        "style": "放",
+        "odds": 5.6
+      },
+      "second": {
+        "no": 1,
+        "name": "開心三寶",
+        "style": "前",
+        "odds": 6.4
+      },
+      "third": {
+        "no": 4,
+        "name": "越駿聯歡",
+        "style": "後",
+        "odds": 3.4
+      },
+      "dark": {
+        "no": 5,
+        "name": "先到先得",
+        "style": "後",
+        "odds": 11.0
+      }
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 4,
+        "name": "明德輝煌",
+        "style": "前",
+        "odds": 3.7
+      },
+      "second": {
+        "no": 11,
+        "name": "駿馬之光",
+        "style": "中",
+        "odds": 8.0
+      },
+      "third": {
+        "no": 3,
+        "name": "馬馳登",
+        "style": "中",
+        "odds": 9.2
+      },
+      "dark": {
+        "no": 10,
+        "name": "高明豐勝",
+        "style": "前",
+        "odds": 11.0
+      }
+    },
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1000,
+      "first": {
+        "no": 7,
+        "name": "鋼鐵安防",
+        "style": "中",
+        "odds": 5.7
+      },
+      "second": {
+        "no": 3,
+        "name": "佐治傳奇",
+        "style": "前",
+        "odds": 6.4
+      },
+      "third": {
+        "no": 2,
+        "name": "長勝金剛",
+        "style": "中",
+        "odds": 11.0
+      },
+      "dark": {
+        "no": 10,
+        "name": "超強六十",
+        "style": "中",
+        "odds": 8.1
+      }
+    },
+    {
+      "race": 6,
+      "class": "二班",
+      "distance": 1000,
+      "first": {
+        "no": 9,
+        "name": "好評如潮",
+        "style": "前",
+        "odds": 6.9
+      },
+      "second": {
+        "no": 3,
+        "name": "八駿巨昇",
+        "style": "前",
+        "odds": 9.6
+      },
+      "third": {
+        "no": 8,
+        "name": "好好戀愛",
+        "style": "中",
+        "odds": 3.6
+      },
+      "dark": {
+        "no": 4,
+        "name": "馬力",
+        "style": "中",
+        "odds": 5.3
+      }
+    },
+    {
+      "race": 7,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 10,
+        "name": "飛躍成就",
+        "style": "中",
+        "odds": 4.8
+      },
+      "second": {
+        "no": 11,
+        "name": "領袖勁力",
+        "style": "前",
+        "odds": 7.6
+      },
+      "third": {
+        "no": 5,
+        "name": "鋁主角",
+        "style": "中",
+        "odds": 6.9
+      },
+      "dark": {
+        "no": 12,
+        "name": "花果猴王",
+        "style": "中",
+        "odds": 10.0
+      }
+    },
+    {
+      "race": 8,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 8,
+        "name": "飛馬座",
+        "style": "前",
+        "odds": 4.5
+      },
+      "second": {
+        "no": 12,
+        "name": "驕陽雄心",
+        "style": "前",
+        "odds": 8.2
+      },
+      "third": {
+        "no": 7,
+        "name": "江江彩彩",
+        "style": "前",
+        "odds": 5.1
+      },
+      "dark": {
+        "no": 2,
+        "name": "精彩駿將",
+        "style": "放",
+        "odds": 11.0
+      }
+    },
+    {
+      "race": 9,
+      "class": "三班",
+      "distance": 1650,
+      "first": {
+        "no": 2,
+        "name": "幸運派彩",
+        "style": "後",
+        "odds": 3.9
+      },
+      "second": {
+        "no": 9,
+        "name": "納百川",
+        "style": "中",
+        "odds": 6.7
+      },
+      "third": {
+        "no": 10,
+        "name": "哥倫布",
+        "style": "前",
+        "odds": 8.2
+      },
+      "dark": {
+        "no": 4,
+        "name": "一定掂",
+        "style": "中",
+        "odds": 12.0
+      }
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 7,
+      "class": "四班",
+      "distance": 1200,
+      "no": 10,
+      "name": "飛躍成就",
+      "style": "中",
+      "odds": 4.8
+    },
+    {
+      "race": 2,
+      "class": "五班",
+      "distance": 1200,
+      "no": 3,
+      "name": "金風萬里",
+      "style": "中",
+      "odds": 5.3
+    },
+    {
+      "race": 1,
+      "class": "四班",
+      "distance": 1650,
+      "no": 6,
+      "name": "部族高手",
+      "style": "前",
+      "odds": 4.8
+    }
+  ],
+  "dailyPicksHint": "(賠率低於2.5只作次選推介)",
+  "attackHot": {
+    "title": "攻擊熱門 | 高危馬 0 隻 | 中危馬 1 隻",
+    "summary": "高危攻擊馬建議放棄投注 | 中危攻擊馬建議減注50%",
+    "high": [],
+    "watch": [
+      {
+        "race": 2,
+        "no": 3,
+        "name": "金風萬里",
+        "odds": 5.3,
+        "hits": 5,
+        "signals": [
+          "轉騎",
+          "首戴CP",
+          "增程",
+          "體重",
+          "初騎"
+        ]
+      }
+    ],
+    "note": "高危＝中 6 項或以上；中危＝剛好 5 項；4 項或以下不列出。",
+    "disclaimer": "僅供參考 · 非投注建議"
+  }
+}
