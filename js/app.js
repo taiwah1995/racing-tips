@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261020hv1021';
+  const APP_DATA_VERSION = '20261020football59';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2385,13 +2385,9 @@
    */
   const FOOTBALL_EURO_PHRASE = /回補[・·‧．.]?(?:上週|週中)?(?:歐聯|歐霸|歐協|歐戰)|上週(?:歐聯|歐霸|歐協)|週中有賽事|週中(?:歐聯|歐霸|歐協|歐戰)|歐戰/;
 
-  /** Sheet column is capped at 30 characters. Longer text is cut so the card stays one block. */
+  /** Full 推介原因. A blank cell stays blank so the JSON reason can fill it. */
   function footballReason(text) {
-    const t = String(text || '').trim();
-    if (!t) return '';
-    const chars = Array.from(t);
-    if (chars.length <= 30) return t;
-    return chars.slice(0, 30).join('') + '…';
+    return String(text || '').trim();
   }
 
   /** Optional 過關 cell. Y / 是 / 1 locks that row into 穩陣過關. */
@@ -2470,9 +2466,15 @@
     if (!hasCsv && !hasJson) return null;
     const tips = [];
     const locks = [];
+    const reasons = {};
+    const keepReason = (cols, jsonRow) => {
+      const entry = footballSheetReasonEntry(cols, csvHeader && csvHeader.map, jsonRow, jsonCols);
+      if (entry) reasons[entry.key] = entry.reason;
+    };
     if (hasCsv) {
       for (let r = csvHeader.index + 1; r < csvRows.length; r++) {
         const jsonRow = hasJson && csvHeader.index === 0 && table.rows ? table.rows[r - 1] : null;
+        keepReason(csvRows[r] || [], jsonRow);
         const lock = footballLockFromRow(csvRows[r] || [], csvHeader.map, jsonRow, jsonCols);
         if (lock) locks.push(lock);
         const tip = footballTipFromRow(csvRows[r] || [], csvHeader.map, jsonRow, jsonCols);
@@ -2480,13 +2482,29 @@
       }
     } else {
       (table.rows || []).forEach((row) => {
+        keepReason(null, row);
         const lock = footballLockFromRow(null, null, row, jsonCols);
         if (lock) locks.push(lock);
         const tip = footballTipFromRow(null, null, row, jsonCols);
         if (tip) tips.push(tip);
       });
     }
-    return { unit: 100, days: footballGroupDays(tips), locks: locks };
+    return { unit: 100, days: footballGroupDays(tips), locks: locks, reasons: reasons };
+  }
+
+  /**
+   * 推介原因 from a sheet row, including a row whose 注數 is still blank.
+   * Those rows are not tips, but column K is the public reason.
+   */
+  function footballSheetReasonEntry(cols, map, jsonRow, jsonCols) {
+    const csv = (name) => footballCsvCell(cols, map, name);
+    const json = (name) => footballJsonCell(jsonRow, jsonCols, name);
+    const date = footballRowDate(csv('日期'), json('日期'));
+    const match = footballText(csv('場次'), json('場次'));
+    const reason = footballReason(footballText(csv('推介原因'), json('推介原因')));
+    const key = date + '|' + footballMatchKey(match);
+    if (!date || key === date + '|' || !reason) return null;
+    return { key: key, reason: reason };
   }
 
   /** A published 穩陣 or 刀仔 keeps the day even when it has no single tips. */
@@ -2615,6 +2633,7 @@
       footballStampEuTeams(model, fileData);
       footballStampStars(model, fileData);
       footballStampMissingTips(model, fileData);
+      footballStampSheetReasons(model, fileData);
       return { model: model, source: 'sheet' };
     } catch (err) {
       console.error(err);
@@ -2773,6 +2792,29 @@
         model.days.sort((a, b) => a.date.localeCompare(b.date));
       }
       missing.forEach((tip) => host.tips.push(tip));
+    });
+  }
+
+  /** Sheet 推介原因 wins. A blank sheet cell keeps the JSON reason. */
+  function footballStampSheetReasons(model, data) {
+    if (!model) return;
+    const sheet = model.reasons || {};
+    const file = {};
+    (data && data.days ? data.days : []).forEach((day) => {
+      const date = parseFootballDate(day && day.date);
+      if (!date) return;
+      (day.tips || []).forEach((tip) => {
+        const reason = footballReason(footballStr(tip && (tip.reason != null ? tip.reason : tip['推介原因'])));
+        const key = date + '|' + footballMatchKey(tip && tip.match);
+        if (reason && key !== date + '|') file[key] = reason;
+      });
+    });
+    (model.days || []).forEach((day) => {
+      (day.tips || []).forEach((tip) => {
+        const key = tip.date + '|' + footballMatchKey(tip.match);
+        if (sheet[key]) tip.reason = sheet[key];
+        else if (!String(tip.reason || '').trim() && file[key]) tip.reason = file[key];
+      });
     });
   }
 
@@ -4568,6 +4610,12 @@
     return '<p class="fb-match">' + name + confLine + '</p>';
   }
 
+  function footballReasonHtml(tip) {
+    const text = String(tip && tip.reason || '').trim();
+    if (!text) return '';
+    return '<p class="fb-reason">' + escapeHtml(text) + '</p>';
+  }
+
   function footballCardHtml(tip, unit) {
     const bits = [];
     if (tip.ko) bits.push(tip.ko);
@@ -4578,7 +4626,7 @@
       ? '<span class="fb-ko">' + escapeHtml(bits.join(' · ')) + '</span>'
       : '<span class="fb-ko"></span>';
     const status = tip.status
-      ? '<span class="fb-status ' + (tip.status === '確認' ? 'fb-status-ok' : 'fb-status-wait') + '">' +
+      ? '<span class="fb-status ' + (tip.status === '確認' || tip.status === '確定' ? 'fb-status-ok' : 'fb-status-wait') + '">' +
         escapeHtml(tip.status) + '</span>'
       : '';
     return '<article class="fb-card">' +
@@ -4588,6 +4636,7 @@
       footballPickHtml(tip) +
       footballFieldHtml('注碼', formatFbStake(tip.stake, unit), true) +
       '</div>' +
+      footballReasonHtml(tip) +
       footballResultHtml(tip) +
       '</article>';
   }
