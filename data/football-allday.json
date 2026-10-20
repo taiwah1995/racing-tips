@@ -1,6 +1,6 @@
 {
   "date": "2026-10-18",
-  "count": 240,
+  "count": 241,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -3381,6 +3381,20 @@
       "result": "",
       "wl": "",
       "league": "巴甲"
+    },
+    {
+      "date": "2026-10-20",
+      "time": "08:15",
+      "match": "萊斯查 vs 聖達菲聯",
+      "confidence": 55,
+      "stars": 2,
+      "pick": "萊斯查｜讓球 主勝 平/半",
+      "odds": 0.82,
+      "stake": 0,
+      "source": "問過補紙面（非API）",
+      "result": "",
+      "wl": "",
+      "league": "阿甲"
     }
   ]
 }
