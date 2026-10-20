@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261020football59';
+  const APP_DATA_VERSION = '20261020football60';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2317,6 +2317,23 @@
     return map;
   }
 
+  /** Trailing empty cells are omitted, so a row can be shorter than the header. */
+  function footballPadRow(row, width) {
+    const cols = Array.isArray(row) ? row.slice() : [];
+    const size = Number(width) || 0;
+    while (cols.length < size) cols.push('');
+    return cols;
+  }
+
+  function footballPadJsonRow(row, width) {
+    const size = Number(width) || 0;
+    if (!row || !size) return row;
+    const cells = Array.isArray(row.c) ? row.c.slice() : [];
+    if (cells.length >= size) return row;
+    while (cells.length < size) cells.push(null);
+    return Object.assign({}, row, { c: cells });
+  }
+
   function footballCsvCell(cols, map, name) {
     if (!cols || !map || map[name] == null) return '';
     return String(cols[map[name]] == null ? '' : cols[map[name]]).trim();
@@ -2471,21 +2488,26 @@
       const entry = footballSheetReasonEntry(cols, csvHeader && csvHeader.map, jsonRow, jsonCols);
       if (entry) reasons[entry.key] = entry.reason;
     };
+    const headerWidth = csvHeader ? (csvRows[csvHeader.index] || []).length : 0;
+    const jsonWidth = table && table.cols ? table.cols.length : 0;
     if (hasCsv) {
       for (let r = csvHeader.index + 1; r < csvRows.length; r++) {
-        const jsonRow = hasJson && csvHeader.index === 0 && table.rows ? table.rows[r - 1] : null;
-        keepReason(csvRows[r] || [], jsonRow);
-        const lock = footballLockFromRow(csvRows[r] || [], csvHeader.map, jsonRow, jsonCols);
+        const rawJson = hasJson && csvHeader.index === 0 && table.rows ? table.rows[r - 1] : null;
+        const jsonRow = footballPadJsonRow(rawJson, jsonWidth);
+        const cols = footballPadRow(csvRows[r] || [], headerWidth);
+        keepReason(cols, jsonRow);
+        const lock = footballLockFromRow(cols, csvHeader.map, jsonRow, jsonCols);
         if (lock) locks.push(lock);
-        const tip = footballTipFromRow(csvRows[r] || [], csvHeader.map, jsonRow, jsonCols);
+        const tip = footballTipFromRow(cols, csvHeader.map, jsonRow, jsonCols);
         if (tip) tips.push(tip);
       }
     } else {
       (table.rows || []).forEach((row) => {
-        keepReason(null, row);
-        const lock = footballLockFromRow(null, null, row, jsonCols);
+        const padded = footballPadJsonRow(row, jsonWidth);
+        keepReason(null, padded);
+        const lock = footballLockFromRow(null, null, padded, jsonCols);
         if (lock) locks.push(lock);
-        const tip = footballTipFromRow(null, null, row, jsonCols);
+        const tip = footballTipFromRow(null, null, padded, jsonCols);
         if (tip) tips.push(tip);
       });
     }
@@ -3361,6 +3383,7 @@
       ko_note: footballStr(spec && spec.ko_note),
       confidence: spec && spec.confidence != null && spec.confidence !== '' ? spec.confidence : '',
       stars: footballStoredStars(spec && spec.stars),
+      reason: footballReason(spec && spec.reason),
     };
   }
 
@@ -3812,10 +3835,16 @@
     const settled = footballSettledProduct(legs);
     const pack = footballStablePackage(legs[0] && legs[0].tip && legs[0].tip.date);
     const items = legs.map((leg) => {
-      return '<li class="fb-parlay-leg"><span class="fb-leg-main">' +
-        footballLegKoHtml(leg.tip) + footballPickBits(leg.tip).join(' ') +
-        footballRatingHtml(leg.tip) + '</span>' +
-        footballLegResultHtml(leg.tip) + '</li>';
+      const main = footballLegKoHtml(leg.tip) + footballPickBits(leg.tip).join(' ') +
+        footballRatingHtml(leg.tip);
+      const result = footballLegResultHtml(leg.tip);
+      const detail = footballLegDetailHtml(leg.tip);
+      if (!detail) {
+        return '<li class="fb-parlay-leg"><span class="fb-leg-main">' + main + '</span>' + result + '</li>';
+      }
+      return '<li class="fb-parlay-leg fb-parlay-detail">' +
+        '<div class="fb-leg-top"><span class="fb-leg-main">' + main + '</span>' + result + '</div>' +
+        detail + '</li>';
     }).join('');
     return '<section class="panel" id="football-parlay">' +
       footballSectionTitle('穩陣過關', updated, legs.map((leg) => leg.tip)) +
@@ -4579,7 +4608,7 @@
       '</span>' + foot + '</span>';
   }
 
-  function footballMatchTitleHtml(tip) {
+  function footballMatchTitleHtml(tip, opts) {
     const conf = formatFbConfidence(tip.confidence);
     const mark = footballEuroMarks(tip);
     let name = '';
@@ -4599,7 +4628,7 @@
         '</span>' + foot + '</span>';
     }
     if (!name && !conf) return '';
-    const stars = footballRatingHtml(tip);
+    const stars = opts && opts.stars === false ? '' : footballRatingHtml(tip);
     const confLine = (conf || stars)
       ? '<span class="fb-conf-line">' +
         (name && conf ? '<span class="fb-conf-sep">｜</span>' : '') +
@@ -4608,6 +4637,13 @@
         '</span>'
       : '';
     return '<p class="fb-match">' + name + confLine + '</p>';
+  }
+
+  /** 對陣 and 信心 under a 穩陣 leg. Omitted when that leg has no 推介原因. */
+  function footballLegDetailHtml(tip) {
+    const reason = footballReasonHtml(tip);
+    if (!reason) return '';
+    return footballMatchTitleHtml(tip, { stars: false }) + reason;
   }
 
   function footballReasonHtml(tip) {
