@@ -73,13 +73,40 @@
       "units": 16.4
     },
     {
+      "date": "2026-10-19",
+      "item": "①單場推介",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-10-19",
+      "item": "②穩陣過關",
+      "kind": "part",
+      "stake": 200,
+      "payout": 0.0,
+      "profit": -200.0,
+      "units": 2
+    },
+    {
+      "date": "2026-10-19",
+      "item": "當日總結（三項加總）",
+      "kind": "day-total",
+      "stake": 200,
+      "payout": 0.0,
+      "profit": -200.0,
+      "units": 2
+    },
+    {
       "date": "",
       "item": "累計總結（三項每日累積）",
       "kind": "cumulative",
-      "stake": 4880,
+      "stake": 5080,
       "payout": 6612.85,
-      "profit": 1732.85,
-      "units": 48.8
+      "profit": 1532.85,
+      "units": 50.8
     }
   ]
 }
