@@ -1286,6 +1286,14 @@ body {
 #view-football .fb-field-wide { grid-column: 1 / -1; }
 #view-football .fb-field .fb-k { color: var(--text-muted); margin-right: 4px; }
 #view-football .fb-field .fb-v { font-weight: 600; overflow-wrap: anywhere; }
+#view-football .fb-reason {
+  margin: 6px 0 0;
+  color: var(--text);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
 #view-football .fb-pending {
   margin: 8px 0 0;
   color: var(--text-muted);
