@@ -1,6 +1,6 @@
 {
   "date": "2026-10-18",
-  "count": 240,
+  "count": 241,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -3288,9 +3288,10 @@
       "odds": 1.83,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
-      "league": "意甲"
+      "result": "4-0",
+      "wl": "L",
+      "league": "意甲",
+      "profit": 0
     },
     {
       "date": "2026-10-19",
@@ -3302,9 +3303,10 @@
       "odds": 0.8,
       "stake": 0,
       "source": "問過補紙面（非API）",
-      "result": "",
-      "wl": "",
-      "league": "瑞典超"
+      "result": "1-2",
+      "wl": "L",
+      "league": "瑞典超",
+      "profit": 0
     },
     {
       "date": "2026-10-19",
@@ -3316,9 +3318,10 @@
       "odds": 2.0,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
-      "league": "意甲"
+      "result": "0-3",
+      "wl": "W",
+      "league": "意甲",
+      "profit": 0
     },
     {
       "date": "2026-10-19",
@@ -3330,9 +3333,10 @@
       "odds": 1.42,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
-      "league": "英超"
+      "result": "3-1",
+      "wl": "W",
+      "league": "英超",
+      "profit": 0
     },
     {
       "date": "2026-10-19",
@@ -3344,9 +3348,10 @@
       "odds": 2.08,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
-      "league": "西甲"
+      "result": "1-1",
+      "wl": "LH",
+      "league": "西甲",
+      "profit": 0
     },
     {
       "date": "2026-10-19",
@@ -3358,9 +3363,10 @@
       "odds": 1.77,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
-      "league": "葡超"
+      "result": "1-2",
+      "wl": "W",
+      "league": "葡超",
+      "profit": 0
     },
     {
       "date": "2026-10-19",
@@ -3375,6 +3381,20 @@
       "result": "",
       "wl": "",
       "league": "巴甲"
+    },
+    {
+      "date": "2026-10-20",
+      "time": "08:15",
+      "match": "萊斯查 vs 聖達菲聯",
+      "confidence": 55,
+      "stars": 2,
+      "pick": "萊斯查｜讓球 主勝 平/半",
+      "odds": 0.82,
+      "stake": 0,
+      "source": "問過補紙面（非API）",
+      "result": "",
+      "wl": "",
+      "league": "阿甲"
     }
   ]
 }
