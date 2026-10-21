@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261020football60';
+  const APP_DATA_VERSION = '20261020football62';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -4661,8 +4661,9 @@
     const head = bits.length
       ? '<span class="fb-ko">' + escapeHtml(bits.join(' · ')) + '</span>'
       : '<span class="fb-ko"></span>';
+    const statusOk = tip.status === '確認' || tip.status === '確定' || tip.status === '已結算';
     const status = tip.status
-      ? '<span class="fb-status ' + (tip.status === '確認' || tip.status === '確定' ? 'fb-status-ok' : 'fb-status-wait') + '">' +
+      ? '<span class="fb-status ' + (statusOk ? 'fb-status-ok' : 'fb-status-wait') + '">' +
         escapeHtml(tip.status) + '</span>'
       : '';
     return '<article class="fb-card">' +
