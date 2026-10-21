@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-19",
+  "updated": "2026-10-21",
   "pairs": {
     "丁|何澤堯": {
       "seq": "X",
@@ -47,9 +47,9 @@
       "winOddsMax": null
     },
     "丁|楊明綸": {
-      "seq": "XPXXXXPXX",
-      "gap": 1,
-      "starts": 9,
+      "seq": "XXPXXXXPXX",
+      "gap": 2,
+      "starts": 10,
       "wins": 0,
       "places": 2,
       "winOddsMin": null,
@@ -65,9 +65,9 @@
       "winOddsMax": null
     },
     "丁|潘頓": {
-      "seq": "XXXP",
-      "gap": 3,
-      "starts": 4,
+      "seq": "XXXXP",
+      "gap": 4,
+      "starts": 5,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -101,11 +101,11 @@
       "winOddsMax": null
     },
     "伍|何澤堯": {
-      "seq": "XWWXXXXWXP",
-      "gap": 1,
-      "starts": 16,
+      "seq": "XXPXWWXXXX",
+      "gap": 2,
+      "starts": 19,
       "wins": 5,
-      "places": 8,
+      "places": 9,
       "winOddsMin": 3.0,
       "winOddsMax": 8.9
     },
@@ -119,27 +119,27 @@
       "winOddsMax": null
     },
     "伍|奧爾民": {
-      "seq": "XWPX",
-      "gap": 1,
-      "starts": 4,
+      "seq": "XXWPX",
+      "gap": 2,
+      "starts": 5,
       "wins": 1,
       "places": 2,
       "winOddsMin": 14.0,
       "winOddsMax": 14.0
     },
     "伍|梁家俊": {
-      "seq": "XPXXXX",
-      "gap": 1,
-      "starts": 6,
+      "seq": "XXPXXXX",
+      "gap": 2,
+      "starts": 7,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
     "伍|楊明綸": {
-      "seq": "PXX",
-      "gap": 0,
-      "starts": 3,
+      "seq": "XPXX",
+      "gap": 1,
+      "starts": 4,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -173,18 +173,18 @@
       "winOddsMax": null
     },
     "伍|艾兆禮": {
-      "seq": "XXXXXPX",
-      "gap": 5,
-      "starts": 7,
+      "seq": "XXXXXXPX",
+      "gap": 6,
+      "starts": 8,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
     "伍|袁幸堯": {
-      "seq": "XPXXPWPXXX",
-      "gap": 1,
-      "starts": 17,
+      "seq": "XXPXXPWPXX",
+      "gap": 2,
+      "starts": 18,
       "wins": 5,
       "places": 8,
       "winOddsMin": 5.6,
@@ -245,9 +245,9 @@
       "winOddsMax": 3.1
     },
     "呂|周俊樂": {
-      "seq": "XXXXXPPXXP",
-      "gap": 5,
-      "starts": 10,
+      "seq": "XXXXXXPPXX",
+      "gap": 6,
+      "starts": 11,
       "wins": 0,
       "places": 3,
       "winOddsMin": null,
@@ -262,6 +262,15 @@
       "winOddsMin": null,
       "winOddsMax": null
     },
+    "呂|巫顯東": {
+      "seq": "X",
+      "gap": 1,
+      "starts": 1,
+      "wins": 0,
+      "places": 0,
+      "winOddsMin": null,
+      "winOddsMax": null
+    },
     "呂|布文": {
       "seq": "X",
       "gap": 1,
@@ -272,9 +281,9 @@
       "winOddsMax": null
     },
     "呂|希威森": {
-      "seq": "XPXXXX",
-      "gap": 1,
-      "starts": 6,
+      "seq": "XXPXXXX",
+      "gap": 2,
+      "starts": 7,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -344,11 +353,20 @@
       "winOddsMax": null
     },
     "呂|蔡明紹": {
-      "seq": "PXP",
-      "gap": 0,
-      "starts": 3,
+      "seq": "XPXP",
+      "gap": 1,
+      "starts": 4,
       "wins": 0,
       "places": 2,
+      "winOddsMin": null,
+      "winOddsMax": null
+    },
+    "呂|袁幸堯": {
+      "seq": "X",
+      "gap": 1,
+      "starts": 1,
+      "wins": 0,
+      "places": 0,
       "winOddsMin": null,
       "winOddsMax": null
     },
@@ -398,13 +416,13 @@
       "winOddsMax": null
     },
     "姚|奧爾民": {
-      "seq": "XPXXXX",
-      "gap": 1,
-      "starts": 6,
-      "wins": 0,
-      "places": 1,
-      "winOddsMin": null,
-      "winOddsMax": null
+      "seq": "WXPXXXX",
+      "gap": 0,
+      "starts": 7,
+      "wins": 1,
+      "places": 2,
+      "winOddsMin": 6.4,
+      "winOddsMax": 6.4
     },
     "姚|巫顯東": {
       "seq": "X",
@@ -479,12 +497,12 @@
       "winOddsMax": null
     },
     "姚|袁幸堯": {
-      "seq": "XWWXPXXXXX",
-      "gap": 1,
-      "starts": 24,
-      "wins": 4,
-      "places": 7,
-      "winOddsMin": 5.4,
+      "seq": "XXWXWWXPXX",
+      "gap": 2,
+      "starts": 27,
+      "wins": 5,
+      "places": 8,
+      "winOddsMin": 2.1,
       "winOddsMax": 11.0
     },
     "姚|金誠剛": {
@@ -506,9 +524,9 @@
       "winOddsMax": 11.0
     },
     "巫|周俊樂": {
-      "seq": "XPXWPX",
-      "gap": 1,
-      "starts": 6,
+      "seq": "XXPXWPX",
+      "gap": 2,
+      "starts": 7,
       "wins": 1,
       "places": 3,
       "winOddsMin": 4.5,
@@ -533,9 +551,9 @@
       "winOddsMax": 26.0
     },
     "巫|潘明輝": {
-      "seq": "XP",
-      "gap": 1,
-      "starts": 2,
+      "seq": "XXXP",
+      "gap": 3,
+      "starts": 4,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -659,18 +677,18 @@
       "winOddsMax": 11.0
     },
     "希|潘頓": {
-      "seq": "PXWXWPXPXW",
-      "gap": 0,
-      "starts": 10,
-      "wins": 3,
-      "places": 6,
+      "seq": "XWPXWXWPXP",
+      "gap": 1,
+      "starts": 12,
+      "wins": 4,
+      "places": 7,
       "winOddsMin": 1.0,
-      "winOddsMax": 3.4
+      "winOddsMax": 10.0
     },
     "希|班德禮": {
-      "seq": "PXXXPWXXXP",
-      "gap": 0,
-      "starts": 21,
+      "seq": "XPXXXPWXXX",
+      "gap": 1,
+      "starts": 22,
       "wins": 1,
       "places": 6,
       "winOddsMin": 11.0,
@@ -686,11 +704,11 @@
       "winOddsMax": 2.9
     },
     "希|艾兆禮": {
-      "seq": "XX",
-      "gap": 2,
-      "starts": 2,
+      "seq": "PXX",
+      "gap": 0,
+      "starts": 3,
       "wins": 0,
-      "places": 0,
+      "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
@@ -785,9 +803,9 @@
       "winOddsMax": 3.4
     },
     "廖|希威森": {
-      "seq": "XXXXPXXXX",
-      "gap": 4,
-      "starts": 9,
+      "seq": "XXXXXPXXXX",
+      "gap": 5,
+      "starts": 10,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -803,20 +821,20 @@
       "winOddsMax": 8.9
     },
     "廖|潘頓": {
-      "seq": "PXPXXPPXW",
+      "seq": "WPXPXXPPXW",
       "gap": 0,
-      "starts": 9,
-      "wins": 1,
-      "places": 5,
+      "starts": 10,
+      "wins": 2,
+      "places": 6,
       "winOddsMin": 2.0,
-      "winOddsMax": 2.0
+      "winOddsMax": 2.9
     },
     "廖|艾兆禮": {
-      "seq": "XXXXXXXXXX",
-      "gap": 11,
-      "starts": 16,
+      "seq": "PXXXXXXXXX",
+      "gap": 0,
+      "starts": 17,
       "wins": 0,
-      "places": 2,
+      "places": 3,
       "winOddsMin": null,
       "winOddsMax": null
     },
@@ -848,9 +866,9 @@
       "winOddsMax": null
     },
     "廖|霍宏聲": {
-      "seq": "XXXXXPWXXX",
-      "gap": 5,
-      "starts": 12,
+      "seq": "XXXXXXPWXX",
+      "gap": 6,
+      "starts": 13,
       "wins": 1,
       "places": 2,
       "winOddsMin": 8.8,
@@ -866,9 +884,9 @@
       "winOddsMax": null
     },
     "徐|周俊樂": {
-      "seq": "XX",
-      "gap": 2,
-      "starts": 2,
+      "seq": "XXX",
+      "gap": 3,
+      "starts": 3,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -893,11 +911,11 @@
       "winOddsMax": null
     },
     "徐|巴度": {
-      "seq": "XXXXXXWXX",
-      "gap": 6,
-      "starts": 9,
+      "seq": "PPXXXXXXWX",
+      "gap": 0,
+      "starts": 11,
       "wins": 1,
-      "places": 1,
+      "places": 3,
       "winOddsMin": 4.2,
       "winOddsMax": 4.2
     },
@@ -948,8 +966,8 @@
     },
     "徐|蔡明紹": {
       "seq": "XXXXXXXXXX",
-      "gap": 11,
-      "starts": 11,
+      "gap": 13,
+      "starts": 13,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -974,11 +992,11 @@
       "winOddsMax": null
     },
     "徐|黃寶妮": {
-      "seq": "XPPPXXX",
+      "seq": "XPXPPPXXX",
       "gap": 1,
-      "starts": 7,
+      "starts": 9,
       "wins": 0,
-      "places": 3,
+      "places": 4,
       "winOddsMin": null,
       "winOddsMax": null
     },
@@ -992,9 +1010,9 @@
       "winOddsMax": null
     },
     "文|何澤堯": {
-      "seq": "XPPXPXXXXX",
-      "gap": 1,
-      "starts": 10,
+      "seq": "XXPPXPXXXX",
+      "gap": 2,
+      "starts": 11,
       "wins": 0,
       "places": 3,
       "winOddsMin": null,
@@ -1109,9 +1127,9 @@
       "winOddsMax": 4.7
     },
     "文|蔡明紹": {
-      "seq": "XX",
-      "gap": 2,
-      "starts": 2,
+      "seq": "XXX",
+      "gap": 3,
+      "starts": 3,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -1154,27 +1172,27 @@
       "winOddsMax": null
     },
     "方|何澤堯": {
-      "seq": "XXXXXXWXXX",
-      "gap": 6,
-      "starts": 21,
+      "seq": "XXXXXXXWXX",
+      "gap": 7,
+      "starts": 22,
       "wins": 3,
       "places": 5,
       "winOddsMin": 2.0,
       "winOddsMax": 5.4
     },
     "方|奧爾民": {
-      "seq": "XXXPXW",
-      "gap": 3,
-      "starts": 6,
-      "wins": 1,
-      "places": 2,
+      "seq": "WXXXPXW",
+      "gap": 0,
+      "starts": 7,
+      "wins": 2,
+      "places": 3,
       "winOddsMin": 49.0,
       "winOddsMax": 49.0
     },
     "方|巴度": {
-      "seq": "XPXPXX",
-      "gap": 1,
-      "starts": 6,
+      "seq": "XXPXPXX",
+      "gap": 2,
+      "starts": 7,
       "wins": 0,
       "places": 2,
       "winOddsMin": null,
@@ -1226,9 +1244,9 @@
       "winOddsMax": null
     },
     "方|艾道拿": {
-      "seq": "X",
-      "gap": 1,
-      "starts": 1,
+      "seq": "XX",
+      "gap": 2,
+      "starts": 2,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -1253,12 +1271,12 @@
       "winOddsMax": 5.0
     },
     "方|黃智弘": {
-      "seq": "XXXXWXWPXX",
-      "gap": 4,
-      "starts": 25,
-      "wins": 4,
-      "places": 5,
-      "winOddsMin": 10.0,
+      "seq": "XWXXXXXWXW",
+      "gap": 1,
+      "starts": 28,
+      "wins": 5,
+      "places": 6,
+      "winOddsMin": 9.6,
       "winOddsMax": 11.0
     },
     "昇|何澤堯": {
@@ -1280,9 +1298,9 @@
       "winOddsMax": null
     },
     "昇|奧爾民": {
-      "seq": "XXX",
-      "gap": 3,
-      "starts": 3,
+      "seq": "XXXX",
+      "gap": 4,
+      "starts": 4,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -1298,29 +1316,29 @@
       "winOddsMax": 12.0
     },
     "昇|希威森": {
-      "seq": "XXXXPX",
-      "gap": 4,
-      "starts": 6,
+      "seq": "XXXXXPX",
+      "gap": 5,
+      "starts": 7,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
     "昇|梁家俊": {
-      "seq": "XW",
-      "gap": 1,
-      "starts": 2,
+      "seq": "XXW",
+      "gap": 2,
+      "starts": 3,
       "wins": 1,
       "places": 1,
       "winOddsMin": 8.7,
       "winOddsMax": 8.7
     },
     "昇|楊明綸": {
-      "seq": "XXXXX",
-      "gap": 5,
-      "starts": 5,
+      "seq": "PXXXXX",
+      "gap": 0,
+      "starts": 6,
       "wins": 0,
-      "places": 0,
+      "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
@@ -1343,11 +1361,11 @@
       "winOddsMax": 4.9
     },
     "昇|班德禮": {
-      "seq": "X",
+      "seq": "XPX",
       "gap": 1,
-      "starts": 1,
+      "starts": 3,
       "wins": 0,
-      "places": 0,
+      "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
@@ -1460,9 +1478,9 @@
       "winOddsMax": null
     },
     "東|艾兆禮": {
-      "seq": "XXPXPP",
-      "gap": 2,
-      "starts": 6,
+      "seq": "XXXPXPP",
+      "gap": 3,
+      "starts": 7,
       "wins": 0,
       "places": 3,
       "winOddsMin": null,
@@ -1496,11 +1514,11 @@
       "winOddsMax": null
     },
     "東|鍾易禮": {
-      "seq": "WXXXPXXXXW",
-      "gap": 0,
-      "starts": 33,
+      "seq": "XXPXWXXXPX",
+      "gap": 2,
+      "starts": 37,
       "wins": 2,
-      "places": 8,
+      "places": 9,
       "winOddsMin": 3.1,
       "winOddsMax": 9.3
     },
@@ -1514,9 +1532,9 @@
       "winOddsMax": null
     },
     "東|黃寶妮": {
-      "seq": "XXXXXPX",
-      "gap": 5,
-      "starts": 7,
+      "seq": "XXXXXXPX",
+      "gap": 6,
+      "starts": 8,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -1541,9 +1559,9 @@
       "winOddsMax": null
     },
     "桂|巴度": {
-      "seq": "XXWXPX",
-      "gap": 2,
-      "starts": 6,
+      "seq": "XXXWXPX",
+      "gap": 3,
+      "starts": 7,
       "wins": 1,
       "places": 2,
       "winOddsMin": 4.6,
@@ -1622,9 +1640,9 @@
       "winOddsMax": null
     },
     "桂|霍宏聲": {
-      "seq": "XP",
-      "gap": 1,
-      "starts": 2,
+      "seq": "XXP",
+      "gap": 2,
+      "starts": 3,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -1676,18 +1694,18 @@
       "winOddsMax": 11.0
     },
     "沈|梁家俊": {
-      "seq": "XXPXX",
-      "gap": 2,
-      "starts": 5,
+      "seq": "XXXPXX",
+      "gap": 3,
+      "starts": 6,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
     "沈|潘明輝": {
-      "seq": "XXXXXX",
-      "gap": 6,
-      "starts": 6,
+      "seq": "XXXXXXX",
+      "gap": 7,
+      "starts": 7,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -1739,9 +1757,9 @@
       "winOddsMax": null
     },
     "沈|金誠剛": {
-      "seq": "XXXXXXXX",
-      "gap": 8,
-      "starts": 8,
+      "seq": "XXXXXXXXX",
+      "gap": 9,
+      "starts": 9,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -1766,18 +1784,18 @@
       "winOddsMax": null
     },
     "沈|黃智弘": {
-      "seq": "XPXXXXXPXX",
-      "gap": 1,
-      "starts": 15,
-      "wins": 0,
-      "places": 3,
-      "winOddsMin": null,
-      "winOddsMax": null
+      "seq": "WXPXXXXXPX",
+      "gap": 0,
+      "starts": 16,
+      "wins": 1,
+      "places": 4,
+      "winOddsMin": 4.7,
+      "winOddsMax": 4.7
     },
     "游|周俊樂": {
-      "seq": "XWWXXWXXXX",
-      "gap": 1,
-      "starts": 12,
+      "seq": "XXXWWXXWXX",
+      "gap": 3,
+      "starts": 14,
       "wins": 5,
       "places": 5,
       "winOddsMin": 2.3,
@@ -1796,6 +1814,15 @@
       "seq": "XX",
       "gap": 2,
       "starts": 2,
+      "wins": 0,
+      "places": 0,
+      "winOddsMin": null,
+      "winOddsMax": null
+    },
+    "游|希威森": {
+      "seq": "X",
+      "gap": 1,
+      "starts": 1,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -1855,30 +1882,39 @@
       "winOddsMin": null,
       "winOddsMax": null
     },
-    "游|金誠剛": {
-      "seq": "PXXXXXX",
+    "游|袁幸堯": {
+      "seq": "P",
       "gap": 0,
-      "starts": 7,
+      "starts": 1,
+      "wins": 0,
+      "places": 1,
+      "winOddsMin": null,
+      "winOddsMax": null
+    },
+    "游|金誠剛": {
+      "seq": "XPXXXXXX",
+      "gap": 1,
+      "starts": 8,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
     "游|霍宏聲": {
-      "seq": "XXXXXXWX",
-      "gap": 6,
-      "starts": 8,
+      "seq": "PXPXXXXXXW",
+      "gap": 0,
+      "starts": 11,
       "wins": 1,
-      "places": 1,
+      "places": 3,
       "winOddsMin": 2.7,
       "winOddsMax": 2.7
     },
     "甘|周俊樂": {
-      "seq": "W",
+      "seq": "PW",
       "gap": 0,
-      "starts": 1,
+      "starts": 2,
       "wins": 1,
-      "places": 1,
+      "places": 2,
       "winOddsMin": 9.3,
       "winOddsMax": 9.3
     },
@@ -1936,6 +1972,15 @@
       "winOddsMin": null,
       "winOddsMax": null
     },
+    "甘|艾道拿": {
+      "seq": "X",
+      "gap": 1,
+      "starts": 1,
+      "wins": 0,
+      "places": 0,
+      "winOddsMin": null,
+      "winOddsMax": null
+    },
     "甘|袁幸堯": {
       "seq": "X",
       "gap": 1,
@@ -1946,9 +1991,9 @@
       "winOddsMax": null
     },
     "羅|何澤堯": {
-      "seq": "XP",
-      "gap": 1,
-      "starts": 2,
+      "seq": "XXP",
+      "gap": 2,
+      "starts": 3,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -1974,8 +2019,8 @@
     },
     "羅|梁家俊": {
       "seq": "XXXXXXXXXX",
-      "gap": 10,
-      "starts": 10,
+      "gap": 11,
+      "starts": 11,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -1991,18 +2036,18 @@
       "winOddsMax": null
     },
     "羅|潘頓": {
-      "seq": "WXPX",
+      "seq": "WWXPX",
       "gap": 0,
-      "starts": 4,
-      "wins": 1,
-      "places": 2,
+      "starts": 5,
+      "wins": 2,
+      "places": 3,
       "winOddsMin": 3.6,
-      "winOddsMax": 3.6
+      "winOddsMax": 6.9
     },
     "羅|班德禮": {
-      "seq": "XXXW",
-      "gap": 3,
-      "starts": 4,
+      "seq": "XXXXW",
+      "gap": 4,
+      "starts": 5,
       "wins": 1,
       "places": 1,
       "winOddsMin": 20.0,
@@ -2018,11 +2063,11 @@
       "winOddsMax": 3.5
     },
     "羅|艾兆禮": {
-      "seq": "XXXXWXXXX",
-      "gap": 4,
-      "starts": 9,
+      "seq": "PXXXXWXXXX",
+      "gap": 0,
+      "starts": 10,
       "wins": 1,
-      "places": 1,
+      "places": 2,
       "winOddsMin": 18.0,
       "winOddsMax": 18.0
     },
@@ -2045,9 +2090,9 @@
       "winOddsMax": null
     },
     "羅|袁幸堯": {
-      "seq": "XXXX",
-      "gap": 4,
-      "starts": 4,
+      "seq": "XXXXX",
+      "gap": 5,
+      "starts": 5,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -2117,9 +2162,9 @@
       "winOddsMax": null
     },
     "航|梁家俊": {
-      "seq": "XX",
-      "gap": 2,
-      "starts": 2,
+      "seq": "XXXX",
+      "gap": 4,
+      "starts": 4,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -2153,9 +2198,9 @@
       "winOddsMax": null
     },
     "航|班德禮": {
-      "seq": "WXXXXXPXPX",
-      "gap": 0,
-      "starts": 10,
+      "seq": "XWXXXXXPXP",
+      "gap": 1,
+      "starts": 11,
       "wins": 1,
       "places": 3,
       "winOddsMin": 9.5,
@@ -2189,9 +2234,9 @@
       "winOddsMax": null
     },
     "航|金誠剛": {
-      "seq": "X",
-      "gap": 1,
-      "starts": 1,
+      "seq": "XX",
+      "gap": 2,
+      "starts": 2,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -2297,9 +2342,9 @@
       "winOddsMax": null
     },
     "蔡|班德禮": {
-      "seq": "X",
-      "gap": 1,
-      "starts": 1,
+      "seq": "XX",
+      "gap": 2,
+      "starts": 2,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -2315,18 +2360,18 @@
       "winOddsMax": null
     },
     "蔡|艾兆禮": {
-      "seq": "XXXPXXXXXX",
-      "gap": 3,
-      "starts": 27,
+      "seq": "XXXXPXXXXX",
+      "gap": 4,
+      "starts": 28,
       "wins": 1,
       "places": 5,
       "winOddsMin": 6.2,
       "winOddsMax": 6.2
     },
     "蔡|艾道拿": {
-      "seq": "XXXPX",
-      "gap": 3,
-      "starts": 5,
+      "seq": "XXXXXPX",
+      "gap": 5,
+      "starts": 7,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -2369,20 +2414,20 @@
       "winOddsMax": null
     },
     "賀|奧爾民": {
-      "seq": "XPXXPXXWXP",
-      "gap": 1,
-      "starts": 14,
+      "seq": "XXPXXPXXWX",
+      "gap": 2,
+      "starts": 15,
       "wins": 2,
       "places": 6,
       "winOddsMin": 1.9,
       "winOddsMax": 6.2
     },
     "賀|潘明輝": {
-      "seq": "PXWXXPPXWX",
+      "seq": "PPXPXWXXPP",
       "gap": 0,
-      "starts": 13,
+      "starts": 16,
       "wins": 2,
-      "places": 5,
+      "places": 7,
       "winOddsMin": 5.0,
       "winOddsMax": 12.0
     },
@@ -2423,9 +2468,9 @@
       "winOddsMax": 10.0
     },
     "賀|黃寶妮": {
-      "seq": "XXPPXX",
-      "gap": 2,
-      "starts": 6,
+      "seq": "XXXPPXX",
+      "gap": 3,
+      "starts": 7,
       "wins": 0,
       "places": 2,
       "winOddsMin": null,
@@ -2450,13 +2495,13 @@
       "winOddsMax": 4.3
     },
     "賢|奧爾民": {
-      "seq": "WXXXXX",
+      "seq": "WWXXXXX",
       "gap": 0,
-      "starts": 6,
-      "wins": 1,
-      "places": 1,
+      "starts": 7,
+      "wins": 2,
+      "places": 2,
       "winOddsMin": 5.2,
-      "winOddsMax": 5.2
+      "winOddsMax": 6.5
     },
     "賢|巫顯東": {
       "seq": "XXXXXX",
@@ -2468,18 +2513,18 @@
       "winOddsMax": null
     },
     "賢|巴度": {
-      "seq": "P",
-      "gap": 0,
-      "starts": 1,
+      "seq": "XP",
+      "gap": 1,
+      "starts": 2,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
     "賢|梁家俊": {
-      "seq": "XXX",
-      "gap": 3,
-      "starts": 3,
+      "seq": "XXXXX",
+      "gap": 5,
+      "starts": 5,
       "wins": 0,
       "places": 0,
       "winOddsMin": null,
@@ -2522,9 +2567,9 @@
       "winOddsMax": null
     },
     "賢|艾兆禮": {
-      "seq": "PX",
-      "gap": 0,
-      "starts": 2,
+      "seq": "XPX",
+      "gap": 1,
+      "starts": 3,
       "wins": 0,
       "places": 1,
       "winOddsMin": null,
@@ -2612,9 +2657,9 @@
       "winOddsMax": null
     },
     "鄭|楊明綸": {
-      "seq": "XWWXXPXX",
-      "gap": 1,
-      "starts": 8,
+      "seq": "XXWWXXPXX",
+      "gap": 2,
+      "starts": 9,
       "wins": 2,
       "places": 3,
       "winOddsMin": 3.1,
@@ -2647,6 +2692,15 @@
       "winOddsMin": 8.2,
       "winOddsMax": 8.2
     },
+    "鄭|艾道拿": {
+      "seq": "P",
+      "gap": 0,
+      "starts": 1,
+      "wins": 0,
+      "places": 1,
+      "winOddsMin": null,
+      "winOddsMax": null
+    },
     "鄭|金誠剛": {
       "seq": "XPXXXXW",
       "gap": 1,
@@ -2666,11 +2720,11 @@
       "winOddsMax": null
     },
     "鄭|黃寶妮": {
-      "seq": "X",
-      "gap": 1,
-      "starts": 1,
+      "seq": "PX",
+      "gap": 0,
+      "starts": 2,
       "wins": 0,
-      "places": 0,
+      "places": 1,
       "winOddsMin": null,
       "winOddsMax": null
     },
@@ -2702,9 +2756,9 @@
       "winOddsMax": null
     },
     "韋|希威森": {
-      "seq": "XPPXXXXX",
-      "gap": 1,
-      "starts": 8,
+      "seq": "XXPPXXXXX",
+      "gap": 2,
+      "starts": 9,
       "wins": 0,
       "places": 2,
       "winOddsMin": null,
@@ -2729,18 +2783,18 @@
       "winOddsMax": null
     },
     "韋|潘頓": {
-      "seq": "XWWXWW",
-      "gap": 1,
-      "starts": 6,
+      "seq": "XXWWXWW",
+      "gap": 2,
+      "starts": 7,
       "wins": 4,
       "places": 4,
       "winOddsMin": 3.1,
       "winOddsMax": 7.2
     },
     "韋|班德禮": {
-      "seq": "XPP",
-      "gap": 1,
-      "starts": 3,
+      "seq": "XXPP",
+      "gap": 2,
+      "starts": 4,
       "wins": 0,
       "places": 2,
       "winOddsMin": null,
