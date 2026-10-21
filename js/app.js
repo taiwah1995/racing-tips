@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261020football63';
+  const APP_DATA_VERSION = '20261020football64';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -3368,6 +3368,9 @@
   /** Locks read from data/football-tips.json. Empty until that file is fetched. */
   let footballDaoziByDate = {};
   let footballStableByDate = {};
+  /** Days that explicitly opt out of an auto-built 穩陣 or 刀仔. */
+  let footballStableNoneDates = {};
+  let footballDaoziNoneDates = {};
   /** Null when data/football-stars-map.json did not load. Stars stay off. */
   let footballStarsMap = null;
 
@@ -3418,9 +3421,13 @@
   function footballLocksFromFile(data) {
     const daozi = {};
     const stable = {};
+    const stableNone = {};
+    const daoziNone = {};
     (data && data.days ? data.days : []).forEach((day) => {
       const date = parseFootballDate(day && day.date);
       if (!date) return;
+      if (day.stable_none === true) stableNone[date] = true;
+      if (day.daozi_none === true) daoziNone[date] = true;
       const five = day.daozi_lock;
       const daoziOn = five && (five.locked === true || five.user_confirmed === true);
       if (daoziOn && Array.isArray(five.legs) && five.legs.length >= 5) {
@@ -3444,13 +3451,23 @@
         }
       }
     });
-    return { daozi: daozi, stable: stable };
+    return { daozi: daozi, stable: stable, stableNone: stableNone, daoziNone: daoziNone };
   }
 
   function footballSetFileLocks(data) {
     const parsed = footballLocksFromFile(data);
     footballDaoziByDate = parsed.daozi;
     footballStableByDate = parsed.stable;
+    footballStableNoneDates = parsed.stableNone || {};
+    footballDaoziNoneDates = parsed.daoziNone || {};
+  }
+
+  function footballStableOptOut(date) {
+    return !!(date && footballStableNoneDates[date]);
+  }
+
+  function footballDaoziOptOut(date) {
+    return !!(date && footballDaoziNoneDates[date]);
   }
 
   function footballFiveLock(date) {
@@ -3541,6 +3558,7 @@
    * 1. Tab 穩陣過關 has ≥2 rows for the day → those rows, including 時間. Do not copy 時間 from 波盤推介.
    * 2. Tips column 過關 is Y/是/1 on any row that day → only those rows, sheet odds.
    * 3. Otherwise stake>0 rows whose 買法 matches /^讓球\s*(主勝|客勝)/.
+   * stable_none skips every auto source. A published lock still shows.
    * Fewer than two priced legs hides the panel.
    */
   /** Historical backfill days are tip cards only. 穩陣 and 刀仔 stay off unless locked. */
@@ -3552,6 +3570,7 @@
   function footballStableLegs(tips, date, locks, sheetRows) {
     const frozen = footballStableLockLegs(date, tips);
     if (frozen) return frozen;
+    if (footballStableOptOut(date)) return [];
     if (footballBackfillOnly(tips)) return [];
     const fromSheet = (sheetRows || []).filter((row) => row.date === date);
     if (fromSheet.length >= 2) return fromSheet;
@@ -3873,6 +3892,7 @@
     const hinted = date || ((tips || [])[0] && tips[0].date) || '';
     const lock = footballFiveLock(hinted);
     if (lock) return footballLockedFiveRows(lock, tips);
+    if (footballDaoziOptOut(hinted)) return [];
     if (footballBackfillOnly(tips)) return [];
     const rows = [];
     (tips || []).forEach((tip) => {
