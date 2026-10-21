@@ -3403,11 +3403,11 @@
       "confidence": 60,
       "stars": 3,
       "pick": "費倫巴治｜主客和 主勝",
-      "odds": 1.5,
+      "odds": 1.29,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "2-2",
+      "wl": "L",
       "league": "歐聯"
     },
     {
@@ -3420,8 +3420,8 @@
       "odds": 1.17,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "1-2",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3434,8 +3434,8 @@
       "odds": 1.45,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "1-1",
+      "wl": "L",
       "league": "英冠"
     },
     {
@@ -3448,8 +3448,8 @@
       "odds": 1.86,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "4-3",
+      "wl": "P",
       "league": "歐聯"
     },
     {
@@ -3462,8 +3462,8 @@
       "odds": 1.81,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "1-1",
+      "wl": "LH",
       "league": "歐聯"
     },
     {
@@ -3476,8 +3476,8 @@
       "odds": 1.86,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "4-0",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3490,8 +3490,8 @@
       "odds": 1.89,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "0-1",
+      "wl": "L",
       "league": "歐聯"
     },
     {
@@ -3504,8 +3504,8 @@
       "odds": 1.83,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "5-1",
+      "wl": "L",
       "league": "歐聯"
     },
     {
@@ -3518,8 +3518,8 @@
       "odds": 1.87,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "4-2",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3532,8 +3532,8 @@
       "odds": 1.83,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "4-3",
+      "wl": "WH",
       "league": "歐聯"
     }
   ]
