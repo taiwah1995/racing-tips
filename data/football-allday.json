@@ -3546,8 +3546,8 @@
       "odds": 1.95,
       "stake": 0,
       "source": "非API",
-      "result": "",
-      "wl": "",
+      "result": "1-3",
+      "wl": "W",
       "league": "南美球會盃"
     },
     {
@@ -3560,8 +3560,8 @@
       "odds": 1.88,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "4-1",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3574,8 +3574,8 @@
       "odds": 1.87,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "2-4",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3588,8 +3588,8 @@
       "odds": 1.87,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "3-1",
+      "wl": "L",
       "league": "西甲"
     },
     {
@@ -3602,8 +3602,8 @@
       "odds": 1.88,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "1-0",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3616,8 +3616,8 @@
       "odds": 1.43,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "1-0",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3630,8 +3630,8 @@
       "odds": 1.84,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "3-1",
+      "wl": "P",
       "league": "歐聯"
     },
     {
@@ -3644,8 +3644,8 @@
       "odds": 1.84,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "4-1",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3658,8 +3658,8 @@
       "odds": 1.87,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "2-2",
+      "wl": "LH",
       "league": "歐聯"
     },
     {
@@ -3672,8 +3672,8 @@
       "odds": 1.83,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "3-0",
+      "wl": "W",
       "league": "歐聯"
     },
     {
@@ -3686,8 +3686,8 @@
       "odds": 1.77,
       "stake": 0,
       "source": "API",
-      "result": "",
-      "wl": "",
+      "result": "2-3",
+      "wl": "W",
       "league": "歐聯"
     }
   ]
