@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "count": 329,
+  "count": 331,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -4535,6 +4535,30 @@
       "stake": 0,
       "source": "無API",
       "league": "墨超"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "16:30",
+      "match": "南墨爾本 vs 悉尼聯",
+      "league": "澳錦標",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "南墨爾本｜主客和 主勝",
+      "odds": 1.59,
+      "stake": 0,
+      "source": "回填紙面｜用戶點名"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "17:00",
+      "match": "布里斯本獅吼 vs 珀斯光輝",
+      "league": "澳超",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "珀斯光輝｜讓球 客勝 +0.25",
+      "odds": 1.79,
+      "stake": 0,
+      "source": "回填紙面｜用戶點名"
     }
   ]
 }
