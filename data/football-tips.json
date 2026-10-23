@@ -798,52 +798,6 @@
       "tips": [
         {
           "no": 1,
-          "ko": "22:30",
-          "league": "卡塔爾超級聯賽",
-          "match": "艾沙瑪 vs 卡塔爾SC",
-          "pick": "艾沙瑪",
-          "market": "讓球主客和 艾沙瑪 -1",
-          "odds": "2.82",
-          "confidence": 53,
-          "stake": 1,
-          "status": "暫定",
-          "reason": "艾沙瑪聯賽第5積9分，卡塔爾SC第11僅3分；雙方上輪皆和，主隊戰意上分更急。馬會HAD主約1.70不達門檻，改跟HHAD主-1約2.82。",
-          "stars": 4,
-          "count_in_single_sample": false
-        },
-        {
-          "no": 2,
-          "ko": "23:30",
-          "league": "沙特職業聯賽",
-          "match": "伊蒂哈德 vs 迪里耶會",
-          "pick": "伊蒂哈德",
-          "market": "讓球主客和 伊蒂哈德 -1",
-          "odds": "2.77",
-          "confidence": 53,
-          "stake": 1,
-          "status": "暫定",
-          "reason": "伊蒂哈德約第4積20分主場質素高過第7迪里耶；歐／馬會皆偏主。HAD水位不足改買HHAD主-1約2.77–2.85，跟核心主勝方向。",
-          "stars": 4,
-          "count_in_single_sample": false
-        },
-        {
-          "no": 3,
-          "ko": "01:00",
-          "league": "瑞典超級聯賽",
-          "match": "華斯特拉斯 vs 咸史達斯",
-          "pick": "華斯特拉斯",
-          "market": "讓球主客和 華斯特拉斯 -1",
-          "odds": "2.66",
-          "confidence": 54,
-          "stake": 1,
-          "status": "暫定",
-          "reason": "華斯特拉斯中游主場，咸史達斯榜尾近況極差。HAD主過低，改買HHAD主-1約2.66跟核心主勝方向。",
-          "stars": 4,
-          "ko_note": "（10/24凌晨）",
-          "count_in_single_sample": false
-        },
-        {
-          "no": 4,
           "ko": "02:45",
           "league": "意甲",
           "match": "拖連奴 vs 蒙沙",
@@ -860,7 +814,7 @@
           "parlay_leg": true
         },
         {
-          "no": 5,
+          "no": 2,
           "ko": "02:45",
           "league": "法甲",
           "match": "比斯特 vs 尼斯",
@@ -877,7 +831,7 @@
           "parlay_leg": true
         },
         {
-          "no": 6,
+          "no": 3,
           "ko": "03:00",
           "league": "英超",
           "match": "葉士域治 vs 諾定咸森林",
@@ -894,7 +848,7 @@
           "count_in_single_sample": true
         },
         {
-          "no": 7,
+          "no": 4,
           "ko": "03:00",
           "league": "英冠",
           "match": "保頓 vs 米杜士堡",
@@ -910,7 +864,7 @@
           "count_in_single_sample": false
         },
         {
-          "no": 8,
+          "no": 5,
           "ko": "03:00",
           "league": "西甲",
           "match": "艾拉維斯 vs 馬拉加",
@@ -927,7 +881,7 @@
           "count_in_single_sample": true
         }
       ],
-      "note": "單場暫定8張（原6有讓球鎖死＋拖連奴／比斯特刀仔HAD過關腳補卡×1注暫定；無讓球唔計單場樣本）；穩陣二串一3.52 locked 原文唔改；刀仔五串六已鎖（用戶19:16確認鎖版出街）。注碼跟出稿規則 HAD/HHAD=1、HDC=2。",
+      "note": "單場暫定8張（原6有讓球鎖死＋拖連奴／比斯特刀仔HAD過關腳補卡×1注暫定；無讓球唔計單場樣本）；穩陣二串一3.52 locked 原文唔改；刀仔五串六已鎖（用戶19:16確認鎖版出街）。注碼跟出稿規則 HAD/HHAD=1、HDC=2。｜用戶 2026-10-23 19:32 確認刪3張非過關 HHAD（艾沙瑪／伊蒂哈德／華斯特拉斯）；單場卡 8→5；穩陣3.52／刀仔鎖版未改。｜清非過關HHAD×3（用戶t616s2758／上t617u）",
       "stable": {
         "type": "二串一",
         "stake": 2,
