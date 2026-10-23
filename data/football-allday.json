@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "count": 308,
+  "count": 311,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -4283,6 +4283,42 @@
       "stake": 1,
       "source": "無API",
       "league": "比甲"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "04:58",
+      "match": "甘拿斯亞 vs 沙米恩圖",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "甘拿斯亞｜主客和 甘拿斯亞（紙面）",
+      "odds": 1.61,
+      "stake": 0,
+      "source": "無API",
+      "league": "阿甲"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "05:28",
+      "match": "甘拿斯亞文度沙 vs CA普拉坦斯",
+      "confidence": 51,
+      "stars": 1,
+      "pick": "甘拿斯亞文度沙｜主客和 甘拿斯亞文度沙（紙面）",
+      "odds": 2.16,
+      "stake": 0,
+      "source": "無API",
+      "league": "阿甲"
+    },
+    {
+      "date": "2026-10-24",
+      "time": "08:13",
+      "match": "堤格雷 vs 圖庫曼體育會",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "堤格雷｜主客和 堤格雷（紙面）",
+      "odds": 1.72,
+      "stake": 0,
+      "source": "無API",
+      "league": "阿甲"
     }
   ]
 }
