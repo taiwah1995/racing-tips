@@ -1294,6 +1294,16 @@ body {
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
+#view-football .fb-addendum {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 500;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  border-left: 2px solid color-mix(in srgb, var(--gold) 55%, transparent);
+  padding-left: 8px;
+}
 #view-football .fb-pending {
   margin: 8px 0 0;
   color: var(--text-muted);

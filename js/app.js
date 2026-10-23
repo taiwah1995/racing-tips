@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'football70';
+  const APP_DATA_VERSION = 'football71';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2575,6 +2575,7 @@
           stake: stake,
           status: footballStr(tip.status),
           reason: footballReason(footballStr(tip.reason != null ? tip.reason : tip['推介原因'])),
+          addendum: footballStr(tip.addendum),
           eu_teams: footballEuNames(tip),
           result: footballStr(tip.result),
           wl: normalizeFootballWl(tip.wl),
@@ -2656,6 +2657,7 @@
       footballStampStars(model, fileData);
       footballStampMissingTips(model, fileData);
       footballStampSheetReasons(model, fileData);
+      footballStampAddendums(model, fileData);
       return { model: model, source: 'sheet' };
     } catch (err) {
       console.error(err);
@@ -2836,6 +2838,27 @@
         const key = tip.date + '|' + footballMatchKey(tip.match);
         if (sheet[key]) tip.reason = sheet[key];
         else if (!String(tip.reason || '').trim() && file[key]) tip.reason = file[key];
+      });
+    });
+  }
+
+  /** File tip.addendum only. Never merges into reason; sheet has no addendum column. */
+  function footballStampAddendums(model, data) {
+    if (!model || !data) return;
+    const file = {};
+    (data.days || []).forEach((day) => {
+      const date = parseFootballDate(day && day.date);
+      if (!date) return;
+      (day.tips || []).forEach((tip) => {
+        const addendum = footballStr(tip && tip.addendum);
+        const key = date + '|' + footballMatchKey(tip && tip.match);
+        if (addendum && key !== date + '|') file[key] = addendum;
+      });
+    });
+    (model.days || []).forEach((day) => {
+      (day.tips || []).forEach((tip) => {
+        const key = tip.date + '|' + footballMatchKey(tip.match);
+        if (file[key]) tip.addendum = file[key];
       });
     });
   }
@@ -4672,6 +4695,13 @@
     return '<p class="fb-reason">' + escapeHtml(text) + '</p>';
   }
 
+  /** Live note under reason. Never replaces or alters tip.reason. */
+  function footballAddendumHtml(tip) {
+    const text = String(tip && tip.addendum || '').trim();
+    if (!text) return '';
+    return '<p class="fb-addendum">' + escapeHtml(text) + '</p>';
+  }
+
   function footballCardHtml(tip, unit) {
     const bits = [];
     if (tip.ko) bits.push(tip.ko);
@@ -4694,6 +4724,7 @@
       footballFieldHtml('注碼', formatFbStake(tip.stake, unit), true) +
       '</div>' +
       footballReasonHtml(tip) +
+      footballAddendumHtml(tip) +
       footballResultHtml(tip) +
       '</article>';
   }
