@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "count": 293,
+  "count": 307,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -4103,6 +4103,174 @@
       "stake": 0,
       "source": "API",
       "league": "巴甲"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "20:55",
+      "match": "富吉拉FC vs 阿爾華達",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "阿爾華達｜讓球主客和 客勝 -1",
+      "odds": 1.93,
+      "stake": 0,
+      "source": "無API",
+      "league": "阿聯酋總統盃"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "21:30",
+      "match": "費薩里FC vs 艾納斯",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "艾納斯｜讓球主客和 客勝 -2",
+      "odds": 2.53,
+      "stake": 0,
+      "source": "無API",
+      "league": "沙特職業聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "22:30",
+      "match": "艾沙瑪 vs 卡塔爾SC",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "艾沙瑪｜讓球主客和 主勝 -1",
+      "odds": 2.82,
+      "stake": 1,
+      "source": "無API",
+      "league": "卡塔爾超級聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "23:30",
+      "match": "伊蒂哈德 vs 迪里耶會",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "伊蒂哈德｜讓球主客和 主勝 -1",
+      "odds": 2.77,
+      "stake": 1,
+      "source": "無API",
+      "league": "沙特職業聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "00:00",
+      "match": "波杜基林特女足 vs 侯格辛特女足",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "侯格辛特女足｜讓球主客和 客勝 -2",
+      "odds": 2.66,
+      "stake": 0,
+      "source": "無API",
+      "league": "女子挪威超級聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "00:00",
+      "match": "阿爾納沙 vs 賓尼耶斯",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "阿爾納沙｜讓球主客和 主勝 -1",
+      "odds": 2.66,
+      "stake": 0,
+      "source": "無API",
+      "league": "阿聯酋總統盃"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "00:30",
+      "match": "波琴 vs 禾夫斯堡",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "禾夫斯堡｜主客和 客勝",
+      "odds": 1.81,
+      "stake": 1,
+      "source": "無API",
+      "league": "德國乙組聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "00:30",
+      "match": "達斯泰特 vs 聖保利",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "聖保利｜主客和 客勝",
+      "odds": 2.06,
+      "stake": 0,
+      "source": "無API",
+      "league": "德國乙組聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "00:30",
+      "match": "艾卡馬特 vs FC奧倫堡",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "艾卡馬特｜主客和 主勝",
+      "odds": 1.86,
+      "stake": 0,
+      "source": "無API",
+      "league": "俄羅斯超級聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "00:45",
+      "match": "艾塞利亞 vs 艾雷恩",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "艾雷恩｜讓球主客和 客勝 -2",
+      "odds": 2.66,
+      "stake": 0,
+      "source": "無API",
+      "league": "卡塔爾超級聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "01:00",
+      "match": "艾夫斯堡 vs 馬模",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "艾夫斯堡｜主客和 主勝",
+      "odds": 1.91,
+      "stake": 1,
+      "source": "無API",
+      "league": "瑞典超級聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "01:00",
+      "match": "華斯特拉斯 vs 咸史達斯",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "華斯特拉斯｜讓球主客和 主勝 -1",
+      "odds": 2.66,
+      "stake": 1,
+      "source": "無API",
+      "league": "瑞典超級聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "01:00",
+      "match": "蘭達斯 vs 邦比",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "邦比｜主客和 客勝",
+      "odds": 1.86,
+      "stake": 1,
+      "source": "無API",
+      "league": "丹麥超級聯賽"
+    },
+    {
+      "date": "2026-10-23",
+      "time": "01:30",
+      "match": "艾達治 vs 奧地利維也納",
+      "confidence": 51,
+      "stars": 1,
+      "pick": "艾達治｜主客和 主勝",
+      "odds": 2.2,
+      "stake": 0,
+      "source": "無API",
+      "league": "奧地利甲組聯賽"
     }
   ]
 }
