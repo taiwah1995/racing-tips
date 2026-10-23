@@ -2,20 +2,108 @@
 <html lang="zh-HK">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d1117" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
   <title>TW賽馬貼士</title>
-  <meta name="description" content="香港賽馬貼士、收風統計與賽日有飛馬。" />
   <link rel="stylesheet" href="css/styles.css?v=football71" />
 </head>
 <body>
   <div id="app">
-    <header class="topbar">
-      <a class="brand" href="#/">TW賽馬貼士</a>
-      <nav class="nav" id="main-nav"></nav>
+    <header class="site-header">
+      <div class="header-inner">
+        <button id="btn-back" class="btn-back" type="button" aria-label="返回" hidden>←</button>
+        <div class="header-titles">
+          <h1 id="page-title">🏇 TW賽馬貼士</h1>
+          <p id="page-sub" class="subtitle subtitle-profit">0 賽馬日 💰 累計盈利 $0 💰 (回報 +0.0%)</p>
+        </div>
+      </div>
     </header>
-    <main id="view-root"></main>
+
+    <main id="main">
+      <!-- HOME VIEW -->
+      <section id="view-home" class="view">
+        <a class="wind-entry" href="#/wind">收風統計</a>
+        <a class="wind-entry" href="#/flying">賽日有飛馬</a>
+        <a class="wind-entry" href="#/combo">練騎合作</a>
+        <a class="wind-entry" href="#/football">波盤推介</a>
+        <div class="filters">
+          <div class="venue-tabs" role="tablist">
+            <button class="tab active" data-venue="all" type="button">全部</button>
+            <button class="tab" data-venue="ST" type="button">沙田</button>
+            <button class="tab" data-venue="HV" type="button">快活谷</button>
+          </div>
+          <label class="month-wrap">
+            <span class="sr-only">賽事月份</span>
+            <select id="month-filter" aria-label="賽事月份"></select>
+          </label>
+        </div>
+
+        <div class="panel banker-wp-book" id="banker-wp-book">
+          <h2 class="panel-title banker-wp-heading">馬膽WP投注簿 <span class="banker-wp-note">*馬膽投注 獨贏$100 位置$300</span></h2>
+          <div id="banker-wp-ledger" class="banker-wp-ledger" aria-live="polite"></div>
+        </div>
+        <p class="banker-wp-foot">* 以最終賠率派彩金額計算</p>
+
+        <ul id="meeting-list" class="meeting-list" aria-live="polite"></ul>
+        <p id="home-empty" class="empty" hidden>今個月暫未有賽日貼士</p>
+      </section>
+
+      <!-- DETAIL VIEW -->
+      <section id="view-detail" class="view" hidden>
+        <div id="detail-meta" class="detail-meta" hidden></div>
+
+        <div class="panel">
+          <h2 class="panel-title">🏆 各場馬匹心水貼士</h2>
+          <div class="table-scroll">
+            <table class="tips-table" id="tips-table">
+              <thead>
+                <tr>
+                  <th>場次</th>
+                  <th>首選</th>
+                  <th>次選</th>
+                  <th>三選</th>
+                  <th>冷腳</th>
+                </tr>
+              </thead>
+              <tbody id="tips-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2 class="panel-title">🏆 全日重心馬推介 <span class="daily-picks-hint panel-hint-inline">(賠率低於2.5只作次選推介)</span></h2>
+          <div id="daily-picks" class="daily-picks"></div>
+        </div>
+      </section>
+
+      <!-- WIND DASHBOARD -->
+      <section id="view-wind" class="view" hidden>
+        <p id="wind-status" class="empty" hidden></p>
+        <div id="wind-tables"></div>
+      </section>
+
+      <!-- FLYING HORSES -->
+      <section id="view-flying" class="view" hidden>
+        <p id="flying-status" class="empty" hidden></p>
+        <div id="flying-body"></div>
+      </section>
+
+      <!-- JOCKEY / TRAINER COMBO -->
+      <section id="view-combo" class="view" hidden>
+        <p id="combo-status" class="empty" hidden></p>
+        <div id="combo-body"></div>
+      </section>
+
+      <!-- FOOTBALL TIPS -->
+      <section id="view-football" class="view" hidden>
+        <p id="football-status" class="empty" hidden></p>
+        <div id="football-body"></div>
+      </section>
+    </main>
+
     <footer class="site-footer">
-      <p>資料僅供參考，不構成投注建議。</p>
+      僅供參考 · 非投注建議
     </footer>
   </div>
   <script src="js/app.js?v=football71"></script>
