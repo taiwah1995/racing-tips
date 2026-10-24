@@ -163,15 +163,6 @@
       "units": 4
     },
     {
-      "date": "",
-      "item": "累計總結（三項每日累積）",
-      "kind": "cumulative",
-      "stake": 7820,
-      "payout": 8951.85,
-      "profit": 1131.85,
-      "units": 78.2
-    },
-    {
       "date": "2026-10-23",
       "item": "①單場推介",
       "kind": "part",
@@ -206,6 +197,15 @@
       "payout": 710,
       "profit": -430,
       "units": 11.4
+    },
+    {
+      "date": "",
+      "item": "累計總結（三項每日累積）",
+      "kind": "cumulative",
+      "stake": 7820,
+      "payout": 8951.85,
+      "profit": 1131.85,
+      "units": 78.2
     }
   ]
 }
