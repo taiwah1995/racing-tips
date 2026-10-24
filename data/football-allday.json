@@ -1,6 +1,6 @@
 {
   "date": "2026-10-24",
-  "count": 356,
+  "count": 360,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -4954,6 +4954,54 @@
       "stake": 2,
       "source": "API",
       "league": "葡超"
+    },
+    {
+      "date": "2026-10-24",
+      "time": "16:40",
+      "match": "墨爾本勝利 vs 墨爾本城",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "墨爾本勝利｜讓球 主勝 -0/-0.5（紙面）",
+      "odds": 1.77,
+      "stake": 0,
+      "source": "用戶點名｜無API",
+      "league": "澳超"
+    },
+    {
+      "date": "2026-10-24",
+      "time": "19:30",
+      "match": "錫菲聯 vs 打比郡",
+      "confidence": 57,
+      "stars": 5,
+      "pick": "錫菲聯｜讓球 主勝 -0.5/-1",
+      "odds": 2.0,
+      "stake": 2,
+      "source": "t657u｜有API",
+      "league": "英冠"
+    },
+    {
+      "date": "2026-10-24",
+      "time": "19:30",
+      "match": "查爾頓 vs 諾域治",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "查爾頓｜讓球 主勝 +0/+0.5",
+      "odds": 2.02,
+      "stake": 2,
+      "source": "t657u｜有API",
+      "league": "英冠"
+    },
+    {
+      "date": "2026-10-24",
+      "time": "19:30",
+      "match": "樸茨茅夫 vs 米禾爾",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "樸茨茅夫｜讓球 主勝 0（紙面）",
+      "odds": 1.78,
+      "stake": 0,
+      "source": "t657u｜有API｜紙面",
+      "league": "英冠"
     }
   ]
 }
