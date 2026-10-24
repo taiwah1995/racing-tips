@@ -5026,10 +5026,10 @@
       "match": "卡迪夫城 vs 伯明翰",
       "confidence": 57,
       "stars": 5,
-      "pick": "伯明翰｜讓球 客勝 0",
+      "pick": "伯明翰｜讓球 客勝 0（紙面）",
       "odds": 1.84,
-      "stake": 2,
-      "source": "波波｜有API｜截圖盤",
+      "stake": 0,
+      "source": "t676u／t678u／t679u｜有API｜紙面0注",
       "league": "英冠"
     },
     {
@@ -5038,10 +5038,10 @@
       "match": "普雷斯頓 vs 西布朗",
       "confidence": 58,
       "stars": 5,
-      "pick": "西布朗｜讓球 客勝 -0.5/-1",
+      "pick": "西布朗｜讓球 客勝 -0.5/-1（紙面）",
       "odds": 2.21,
-      "stake": 2,
-      "source": "波波｜有API｜截圖盤",
+      "stake": 0,
+      "source": "t676u／t678u／t679u｜有API｜紙面0注",
       "league": "英冠"
     },
     {
@@ -5074,10 +5074,10 @@
       "match": "韋斯咸 vs 修咸頓",
       "confidence": 57,
       "stars": 5,
-      "pick": "韋斯咸｜讓球 主勝 -0.5/-1",
+      "pick": "韋斯咸｜讓球 主勝 -0.5/-1（紙面）",
       "odds": 1.8,
-      "stake": 2,
-      "source": "波波｜有API｜截圖盤",
+      "stake": 0,
+      "source": "t676u／t678u／t679u｜有API｜紙面0注",
       "league": "英冠"
     }
   ]
