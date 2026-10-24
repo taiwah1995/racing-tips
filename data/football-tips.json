@@ -974,10 +974,8 @@
     },
     {
       "date": "2026-10-24",
-      "label": "10/24（暫定）",
-      "note": "單場暫定 Top10；stable_none／daozi_none（穩陣／刀仔候選未鎖，前端勿自動砌）。名單未叫 check。剔除：多蒙特vs法蘭克福。合併自 draft-1024-day；base live tips sha 2bb69598b5880a92（tips5／−430／無聖保利卡）。",
-      "stable_none": true,
-      "daozi_none": true,
+      "label": "10/24（暫定・穩陣刀仔已鎖・live）",
+      "note": "單場暫定 Top10；穩陣二串一3.49＋刀仔五串六已鎖（用戶 t652u）並寫 live。名單未叫 check→卡維持暫定。剔除：多蒙特vs法蘭克福。拉素−1.25過關例外上卡但 count_in_single_sample=false。live 自草稿 sha 2180c46e95ba9345｜寫入 2026-10-24 11:09:26 HKT；待 IT CDN。",
       "tips": [
         {
           "no": 1,
@@ -1007,7 +1005,12 @@
           "status": "暫定",
           "reason": "緬恩斯主場對傷兵成軍嘅雲達不來梅；客隊約8人缺陣；馬會主讓半／一約1.81；戰意狀態盤口三維同向，信心58%重注單場。",
           "stars": 5,
-          "count_in_single_sample": true
+          "count_in_single_sample": true,
+          "parlay_leg": true,
+          "parlay_types": [
+            "穩陣",
+            "刀仔"
+          ]
         },
         {
           "no": 3,
@@ -1022,7 +1025,11 @@
           "status": "暫定",
           "reason": "奧格斯堡主場對失球嚴重嘅柏林聯；馬會主讓半／一約1.96；客隊積分墊底區防守崩，信心54%上單場。",
           "stars": 4,
-          "count_in_single_sample": true
+          "count_in_single_sample": true,
+          "parlay_leg": true,
+          "parlay_types": [
+            "刀仔"
+          ]
         },
         {
           "no": 4,
@@ -1037,7 +1044,11 @@
           "status": "暫定",
           "reason": "艾馬多拉主場對入球極少嘅卡薩比亞；馬會主讓半／一約1.97；客隊戰力明顯落後，信心57%上單場兼刀仔候選。",
           "stars": 5,
-          "count_in_single_sample": true
+          "count_in_single_sample": true,
+          "parlay_leg": true,
+          "parlay_types": [
+            "刀仔"
+          ]
         },
         {
           "no": 5,
@@ -1084,7 +1095,12 @@
           "reason": "車路士主場對傷停停賽纏身嘅熱刺；馬會主讓半／一約1.93；熱刺聯賽近乎墊底區，信心58%重注單場兼穩陣／刀仔。",
           "stars": 5,
           "count_in_single_sample": true,
-          "ko_note": "（10/25凌晨）"
+          "ko_note": "（10/25凌晨）",
+          "parlay_leg": true,
+          "parlay_types": [
+            "穩陣",
+            "刀仔"
+          ]
         },
         {
           "no": 8,
@@ -1099,8 +1115,13 @@
           "status": "暫定",
           "reason": "拉素聯賽不敗第2主場讓一／球半約1.85對墊底區帕爾馬；實力差距足夠覆蓋深盤，信心57%上單場刀仔。",
           "stars": 5,
-          "count_in_single_sample": true,
-          "ko_note": "（10/25凌晨）"
+          "count_in_single_sample": false,
+          "ko_note": "（10/25凌晨）",
+          "parlay_leg": true,
+          "parlay_types": [
+            "刀仔"
+          ],
+          "parlay_leg_note": "t652u：>1球僅作過關腳，唔計今日單場樣本"
         },
         {
           "no": 9,
@@ -1134,7 +1155,110 @@
           "count_in_single_sample": true,
           "ko_note": "（10/25凌晨）"
         }
-      ]
+      ],
+      "stable": {
+        "type": "二串一",
+        "stake": 2,
+        "stake_label": "注碼2注（$200）",
+        "combined_odds": 3.49,
+        "footer_line1": "全中過關賠率：3.49倍｜注碼2注（$200）",
+        "footer_line2": "預計派彩約$698.00（1.81×1.93×$200）；待賽果",
+        "status": "locked",
+        "locked": true,
+        "user_confirmed": true,
+        "note": "用戶 t652u 親口批鎖版出街；鎖後禁止自動重排／重揀；顯示腳序＝開波升序 HKT",
+        "legs": [
+          {
+            "ko": "21:30",
+            "match": "緬恩斯 vs 雲達不來梅",
+            "pick": "緬恩斯",
+            "market": "讓球 緬恩斯 -0.5/-1",
+            "odds": "1.81",
+            "confidence": 58,
+            "stake": 2,
+            "stars": 5
+          },
+          {
+            "ko": "00:30",
+            "match": "車路士 vs 熱刺",
+            "pick": "車路士",
+            "market": "讓球 車路士 -0.5/-1",
+            "odds": "1.93",
+            "confidence": 58,
+            "stake": 2,
+            "stars": 5,
+            "ko_note": "（10/25凌晨）"
+          }
+        ]
+      },
+      "daozi_lock": {
+        "group": "刀仔五串六",
+        "locked": true,
+        "user_confirmed": true,
+        "legs": [
+          "緬恩斯 vs 雲達不來梅｜緬恩斯｜讓球主-0.5/-1｜1.81",
+          "奧格斯堡 vs 柏林聯｜奧格斯堡｜讓球主-0.5/-1｜1.96",
+          "艾馬多拉 vs AC卡薩比亞｜艾馬多拉｜讓球主-0.5/-1｜1.97",
+          "車路士 vs 熱刺｜車路士｜讓球主-0.5/-1｜1.93",
+          "拉素 vs 帕爾馬｜拉素｜讓球主-1/-1.5｜1.85"
+        ],
+        "legs_detail": [
+          {
+            "ko": "21:30",
+            "match": "緬恩斯 vs 雲達不來梅",
+            "pick": "緬恩斯",
+            "market": "讓球 緬恩斯 -0.5/-1",
+            "odds": "1.81",
+            "confidence": 58,
+            "stars": 5,
+            "count_in_single_sample": true
+          },
+          {
+            "ko": "21:30",
+            "match": "奧格斯堡 vs 柏林聯",
+            "pick": "奧格斯堡",
+            "market": "讓球 奧格斯堡 -0.5/-1",
+            "odds": "1.96",
+            "confidence": 54,
+            "stars": 4,
+            "count_in_single_sample": true
+          },
+          {
+            "ko": "22:30",
+            "match": "艾馬多拉 vs AC卡薩比亞",
+            "pick": "艾馬多拉",
+            "market": "讓球 艾馬多拉 -0.5/-1",
+            "odds": "1.97",
+            "confidence": 57,
+            "stars": 5,
+            "count_in_single_sample": true
+          },
+          {
+            "ko": "00:30",
+            "match": "車路士 vs 熱刺",
+            "pick": "車路士",
+            "market": "讓球 車路士 -0.5/-1",
+            "odds": "1.93",
+            "confidence": 58,
+            "stars": 5,
+            "count_in_single_sample": true,
+            "ko_note": "（10/25凌晨）"
+          },
+          {
+            "ko": "02:45",
+            "match": "拉素 vs 帕爾馬",
+            "pick": "拉素",
+            "market": "讓球 拉素 -1/-1.5",
+            "odds": "1.85",
+            "confidence": 57,
+            "stars": 5,
+            "count_in_single_sample": false,
+            "ko_note": "（10/25凌晨）"
+          }
+        ],
+        "page_footer": "每注$40×6＝投注$240｜五串一參考約24.95倍｜待賽果",
+        "note": "用戶 t652u 確認鎖版出街；鎖後禁止自動重排／重揀；拉素−1.25過關例外（count_in_single_sample=false）；「有讓球」＝僅HDC"
+      }
     }
   ]
 }
