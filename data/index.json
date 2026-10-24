@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-10-25-st",
+      "date": "2026-10-25",
+      "venue": "沙田",
+      "venueCode": "ST",
+      "raceCount": 11,
+      "label": null,
+      "file": "meetings/2026-10-25-st.json",
+      "banker": {
+        "race": 5,
+        "no": 13,
+        "name": "閃電奇駿",
+        "odds": 2.7
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-10-21-hv",
       "date": "2026-10-21",
       "venue": "快活谷",
