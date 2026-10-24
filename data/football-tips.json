@@ -974,8 +974,8 @@
     },
     {
       "date": "2026-10-24",
-      "label": "10/24（暫定・穩陣刀仔已鎖・live）",
-      "note": "單場暫定 Top10；穩陣二串一3.49＋刀仔五串六已鎖（用戶 t652u）並寫 live。名單未叫 check→卡維持暫定。剔除：多蒙特vs法蘭克福。拉素−1.25過關例外上卡但 count_in_single_sample=false。live 自草稿 sha 2180c46e95ba9345｜寫入 2026-10-24 11:09:26 HKT；待 IT CDN。",
+      "label": "10/24（暫定・穩陣刀仔已鎖・t655u刪2卡草稿）",
+      "note": "單場暫定 8 卡（t655u 用戶親口刪 |HDC線|>1 兩張：拉素vs帕爾馬、基維辛迪vs波圖）；穩陣二串一3.49＋刀仔五串六仍 locked 一字不改（刀仔保留拉素腳；拉素刪卡後無對應單場＝t655u 例外）。名單未叫 check→卡維持暫定。剔除：多蒙特vs法蘭克福。草稿自 live sha e2844d5118c64d6a｜寫草稿 2026-10-24 11:17:11 HKT；未 live／未 CDN。",
       "tips": [
         {
           "no": 1,
@@ -1105,27 +1105,6 @@
         {
           "no": 8,
           "ko": "02:45",
-          "league": "意甲",
-          "match": "拉素 vs 帕爾馬",
-          "pick": "拉素",
-          "market": "讓球 拉素 -1/-1.5",
-          "odds": "1.85",
-          "confidence": 57,
-          "stake": 2,
-          "status": "暫定",
-          "reason": "拉素聯賽不敗第2主場讓一／球半約1.85對墊底區帕爾馬；實力差距足夠覆蓋深盤，信心57%上單場刀仔。",
-          "stars": 5,
-          "count_in_single_sample": false,
-          "ko_note": "（10/25凌晨）",
-          "parlay_leg": true,
-          "parlay_types": [
-            "刀仔"
-          ],
-          "parlay_leg_note": "t652u：>1球僅作過關腳，唔計今日單場樣本"
-        },
-        {
-          "no": 9,
-          "ko": "02:45",
           "league": "法甲",
           "match": "朗斯 vs 巴黎FC",
           "pick": "巴黎FC",
@@ -1135,22 +1114,6 @@
           "stake": 2,
           "status": "暫定",
           "reason": "巴黎FC聯賽第3受平／半對陣週中歐聯大敗兼傷停嘅朗斯；水位約1.80達標，受讓有積分狀態獨立理由，信心54%。",
-          "stars": 4,
-          "count_in_single_sample": true,
-          "ko_note": "（10/25凌晨）"
-        },
-        {
-          "no": 10,
-          "ko": "03:30",
-          "league": "葡超",
-          "match": "基維辛迪 vs 波圖",
-          "pick": "波圖",
-          "market": "讓球 波圖 -1/-1.5",
-          "odds": "2.00",
-          "confidence": 54,
-          "stake": 2,
-          "status": "暫定",
-          "reason": "波圖作客讓一／球半約2.00對基維辛迪；質素差距大但週中歐聯輸波兼停賽，信心54%上單場。",
           "stars": 4,
           "count_in_single_sample": true,
           "ko_note": "（10/25凌晨）"
