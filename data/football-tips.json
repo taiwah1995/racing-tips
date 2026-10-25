@@ -974,8 +974,8 @@
     },
     {
       "date": "2026-10-24",
-      "label": "10/24（暫定・t676u／t678u／t679u 刪英冠22:00三卡・穩陣刀仔已鎖）",
-      "note": "單場暫定 7 卡｜t676u＋t678u「英」＋t679u「只出全日分析」：刪公開波盤推介 卡迪夫城vs伯明翰／普雷斯頓vs西布朗／韋斯咸vs修咸頓（英冠22:00），全日改紙面0注；其餘單場保留（含錫菲聯）；唔自動回補；拉素／波圖／查爾頓／烏德勒支／巴黎FC 唔在 tips。穩陣二串一＋刀仔五串六 locked 一字不改。｜draft 2026-10-25 00:55:03 HKT｜未 live／未 CDN",
+      "label": "10/24（已結算・單場−1200／穩陣−200／刀仔−240）",
+      "note": "單場 7 卡已結算｜①−$1200＋②穩陣−$200＋③刀仔−$240＝當日−$1640｜pending：拿根亞 vs 普馬斯｜方向／盤口／注碼鎖死未改｜football92 results-only（exclude unpublished 紐倫堡 tip）｜autoresult 2026-10-25",
       "tips": [
         {
           "no": 1,
@@ -987,10 +987,13 @@
           "odds": "2.00",
           "confidence": 57,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "錫菲聯中游對榜尾打比；客隊傷停爆倉（Travis等多名後衛缺陣），馬會主讓半／一約2.00過門檻，信心57%上單場暫定卡。",
           "stars": 5,
-          "count_in_single_sample": true
+          "count_in_single_sample": true,
+          "result": "1-1",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 2,
@@ -1002,10 +1005,13 @@
           "odds": "1.90",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "華歷簡奴主場對聯賽尾段艾爾切，積分與盤口同向；馬會主讓半／一約1.90過門檻；主隊有停賽傷停但客隊更弱，信心54%上單場。",
           "stars": 4,
-          "count_in_single_sample": true
+          "count_in_single_sample": true,
+          "result": "0-3",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 3,
@@ -1017,7 +1023,7 @@
           "odds": "1.81",
           "confidence": 58,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "緬恩斯主場對傷兵成軍嘅雲達不來梅；客隊約8人缺陣；馬會主讓半／一約1.81；戰意狀態盤口三維同向，信心58%重注單場。",
           "stars": 5,
           "count_in_single_sample": true,
@@ -1026,7 +1032,10 @@
             "穩陣",
             "刀仔"
           ],
-          "addendum": "【加註 2026-10-24 21:17 HKT】用戶點名覆核同向維持：線／方向／2注原文唔改；馬會主水現約1.84–1.88（卡上原文 odds 1.81）。建議對馬會確認現水位。"
+          "addendum": "【加註 2026-10-24 21:17 HKT】用戶點名覆核同向維持：線／方向／2注原文唔改；馬會主水現約1.84–1.88（卡上原文 odds 1.81）。建議對馬會確認現水位。",
+          "result": "2-3",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 4,
@@ -1038,14 +1047,17 @@
           "odds": "1.96",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "奧格斯堡主場對失球嚴重嘅柏林聯；馬會主讓半／一約1.96；客隊積分墊底區防守崩，信心54%上單場。",
           "stars": 4,
           "count_in_single_sample": true,
           "parlay_leg": true,
           "parlay_types": [
             "刀仔"
-          ]
+          ],
+          "result": "1-1",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 5,
@@ -1057,14 +1069,17 @@
           "odds": "1.97",
           "confidence": 57,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "艾馬多拉主場對入球極少嘅卡薩比亞；馬會主讓半／一約1.97；客隊戰力明顯落後，信心57%上單場兼刀仔候選。",
           "stars": 5,
           "count_in_single_sample": true,
           "parlay_leg": true,
           "parlay_types": [
             "刀仔"
-          ]
+          ],
+          "result": "0-2",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 6,
@@ -1076,11 +1091,14 @@
           "odds": "1.82",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "羅馬聯賽不敗防守極佳，對陣中游拿玻里；馬會平手客約1.82；雖兩隊週中歐聯但核心仍偏客，信心54%上單場。",
           "stars": 4,
           "count_in_single_sample": true,
-          "ko_note": "（10/25凌晨）"
+          "ko_note": "（10/25凌晨）",
+          "result": "3-3",
+          "wl": "P",
+          "profit": 0
         },
         {
           "no": 7,
@@ -1092,7 +1110,7 @@
           "odds": "1.93",
           "confidence": 58,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "車路士主場對傷停停賽纏身嘅熱刺；馬會主讓半／一約1.93；熱刺聯賽近乎墊底區，信心58%重注單場兼穩陣／刀仔。",
           "stars": 5,
           "count_in_single_sample": true,
@@ -1101,7 +1119,10 @@
           "parlay_types": [
             "穩陣",
             "刀仔"
-          ]
+          ],
+          "result": "0-2",
+          "wl": "L",
+          "profit": -200
         }
       ],
       "stable": {
@@ -1110,11 +1131,11 @@
         "stake_label": "注碼2注（$200）",
         "combined_odds": 3.49,
         "footer_line1": "全中過關賠率：3.49倍｜注碼2注（$200）",
-        "footer_line2": "預計派彩約$698.00（1.81×1.93×$200）；待賽果",
-        "status": "locked",
+        "footer_line2": "派彩$0 · 盈虧−$200（兩腳皆輸；1.81×1.93×$200）",
+        "status": "settled",
         "locked": true,
         "user_confirmed": true,
-        "note": "用戶 t652u 親口批鎖版出街；鎖後禁止自動重排／重揀；顯示腳序＝開波升序 HKT",
+        "note": "用戶 t652u 親口批鎖版出街；鎖後禁止自動重排／重揀；顯示腳序＝開波升序 HKT｜settled L −$200",
         "legs": [
           {
             "ko": "21:30",
@@ -1124,7 +1145,9 @@
             "odds": "1.81",
             "confidence": 58,
             "stake": 2,
-            "stars": 5
+            "stars": 5,
+            "result": "2-3",
+            "wl": "L"
           },
           {
             "ko": "00:30",
@@ -1135,20 +1158,24 @@
             "confidence": 58,
             "stake": 2,
             "stars": 5,
-            "ko_note": "（10/25凌晨）"
+            "ko_note": "（10/25凌晨）",
+            "result": "0-2",
+            "wl": "L"
           }
-        ]
+        ],
+        "wl": "L",
+        "profit": -200
       },
       "daozi_lock": {
         "group": "刀仔五串六",
         "locked": true,
         "user_confirmed": true,
         "legs": [
-          "緬恩斯 vs 雲達不來梅｜緬恩斯｜讓球主-0.5/-1｜1.81",
-          "奧格斯堡 vs 柏林聯｜奧格斯堡｜讓球主-0.5/-1｜1.96",
-          "艾馬多拉 vs AC卡薩比亞｜艾馬多拉｜讓球主-0.5/-1｜1.97",
-          "車路士 vs 熱刺｜車路士｜讓球主-0.5/-1｜1.93",
-          "拉素 vs 帕爾馬｜拉素｜讓球主-1/-1.5｜1.85"
+          "緬恩斯 vs 雲達不來梅｜緬恩斯｜讓球主-0.5/-1｜1.81｜L 2-3",
+          "奧格斯堡 vs 柏林聯｜奧格斯堡｜讓球主-0.5/-1｜1.96｜L 1-1",
+          "艾馬多拉 vs AC卡薩比亞｜艾馬多拉｜讓球主-0.5/-1｜1.97｜L 0-2",
+          "車路士 vs 熱刺｜車路士｜讓球主-0.5/-1｜1.93｜L 0-2",
+          "拉素 vs 帕爾馬｜拉素｜讓球主-1/-1.5｜1.85｜LH 2-1"
         ],
         "legs_detail": [
           {
@@ -1159,7 +1186,9 @@
             "odds": "1.81",
             "confidence": 58,
             "stars": 5,
-            "count_in_single_sample": true
+            "count_in_single_sample": true,
+            "result": "2-3",
+            "wl": "L"
           },
           {
             "ko": "21:30",
@@ -1169,7 +1198,9 @@
             "odds": "1.96",
             "confidence": 54,
             "stars": 4,
-            "count_in_single_sample": true
+            "count_in_single_sample": true,
+            "result": "1-1",
+            "wl": "L"
           },
           {
             "ko": "22:30",
@@ -1179,7 +1210,9 @@
             "odds": "1.97",
             "confidence": 57,
             "stars": 5,
-            "count_in_single_sample": true
+            "count_in_single_sample": true,
+            "result": "0-2",
+            "wl": "L"
           },
           {
             "ko": "00:30",
@@ -1190,7 +1223,9 @@
             "confidence": 58,
             "stars": 5,
             "count_in_single_sample": true,
-            "ko_note": "（10/25凌晨）"
+            "ko_note": "（10/25凌晨）",
+            "result": "0-2",
+            "wl": "L"
           },
           {
             "ko": "02:45",
@@ -1201,11 +1236,17 @@
             "confidence": 57,
             "stars": 5,
             "count_in_single_sample": false,
-            "ko_note": "（10/25凌晨）"
+            "ko_note": "（10/25凌晨）",
+            "result": "2-1",
+            "wl": "LH"
           }
         ],
-        "page_footer": "每注$40×6＝投注$240｜五串一參考約24.95倍｜待賽果",
-        "note": "用戶 t652u 確認鎖版出街；鎖後禁止自動重排／重揀；拉素−1.25過關例外（count_in_single_sample=false）；「有讓球」＝僅HDC"
+        "page_footer": "每注$40×6＝投注$240｜派彩$0｜盈−$240（0/6；四腳全輸＋拉素輸半）",
+        "note": "用戶 t652u 確認鎖版出街；鎖後禁止自動重排／重揀；拉素−1.25過關例外（count_in_single_sample=false）；「有讓球」＝僅HDC｜settled L −$240",
+        "status": "settled",
+        "wl": "L",
+        "profit": -240,
+        "combos_paid": "0/6"
       }
     }
   ]
