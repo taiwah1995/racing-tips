@@ -1248,6 +1248,147 @@
         "profit": -240,
         "combos_paid": "0/6"
       }
+    },
+    {
+      "date": "2026-10-25",
+      "label": "10/25（暫定・t692u live・單場6平半＋穩陣已鎖・無刀仔）",
+      "tips": [
+        {
+          "no": 1,
+          "ko": "19:15",
+          "league": "荷甲",
+          "match": "幸運薛達 vs 精英隊",
+          "pick": "幸運薛達",
+          "market": "讓球 幸運薛達 -0/-0.5",
+          "odds": "2.03",
+          "confidence": 53,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "幸運薛達主場對精英隊，積分與盤口同向；馬會主讓平／半約2.03過1.8門檻；客隊中游偏軟，信心53%上單場暫定。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "parlay_types": [
+            "穩陣"
+          ]
+        },
+        {
+          "no": 2,
+          "ko": "22:00",
+          "league": "英超",
+          "match": "利物浦 vs 白禮頓",
+          "pick": "白禮頓",
+          "market": "讓球 白禮頓 +0/+0.5",
+          "odds": "1.98",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "白禮頓聯賽狀態明顯優於利物浦，客受平／半馬會約1.98過門檻；主隊週中歐聯後安菲爾德未必穩讓，信心54%上單場暫定。",
+          "stars": 4,
+          "count_in_single_sample": true
+        },
+        {
+          "no": 3,
+          "ko": "22:00",
+          "league": "英超",
+          "match": "曼聯 vs 般尼茅夫",
+          "pick": "般尼茅夫",
+          "market": "讓球 般尼茅夫 +0/+0.5",
+          "odds": "1.92",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "般尼茅夫歐聯大勝米蘭勢頭明顯，曼聯歐戰惨敗後主場讓平／半偏淺；馬會客受平／半約1.92，信心54%上單場暫定。",
+          "stars": 4,
+          "count_in_single_sample": true
+        },
+        {
+          "no": 4,
+          "ko": "22:30",
+          "league": "德甲",
+          "match": "賀芬咸 vs 利華古遜",
+          "pick": "利華古遜",
+          "market": "讓球 利華古遜 -0/-0.5",
+          "odds": "1.96",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "利華古遜積分質素明顯優於賀芬咸，馬會客讓平／半約1.96過門檻；雖週中歐聯但主力層級差距在，信心54%上單場暫定。",
+          "stars": 4,
+          "count_in_single_sample": true
+        },
+        {
+          "no": 5,
+          "ko": "23:15",
+          "league": "西甲",
+          "match": "切爾達 vs 貝迪斯",
+          "pick": "貝迪斯",
+          "market": "讓球 貝迪斯 -0/-0.5",
+          "odds": "1.99",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "貝迪斯聯賽排名明顯高於切爾達，馬會客讓平／半約1.99過門檻；雙方週中歐戰後客隊層級仍優，信心54%上單場暫定。",
+          "stars": 4,
+          "count_in_single_sample": true
+        },
+        {
+          "no": 6,
+          "ko": "00:15",
+          "league": "法甲",
+          "match": "昂熱 vs 羅連安特",
+          "pick": "羅連安特",
+          "market": "讓球 羅連安特 -0/-0.5",
+          "odds": "2.00",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "羅連安特積分明顯優於昂熱，馬會客讓平／半約2.00過門檻；主隊防守偏軟，信心54%上單場暫定。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "parlay_types": [
+            "穩陣"
+          ]
+        }
+      ],
+      "note": "t692u live：單場／穩陣只准|HDC線|≤0.25。單場暫定 Top6；穩陣鎖版 幸運薛達−0.25@2.03×羅連安特−0.25@2.00＝4.06／$200；daozi_none（用戶批上唔出刀仔）。晨早三場紙面留全日、唔 tip（t688u）。授權 widget t693s3228「上」＋t72u；覆核 PASS_WITH_NOTES。published_at 2026-10-25 10:20:38 HKT。",
+      "stable": {
+        "type": "二串一",
+        "stake": 2,
+        "stake_label": "注碼2注（$200）",
+        "combined_odds": 4.06,
+        "footer_line1": "全中過關賠率：4.06倍｜注碼2注（$200）",
+        "footer_line2": "預計派彩約$812.00（2.03×2.00×$200）；已鎖版",
+        "status": "locked",
+        "locked": true,
+        "note": "用戶 t693s／t72u 親口「上：單場6平半＋穩陣薛達／羅連安特」鎖版出街；t692u 只准平手／平半；撤阿積士；腳序＝開波升序（19:15薛達→00:15羅連安特）；鎖後禁止自動重排／重揀；今日無刀仔（daozi_none）",
+        "legs": [
+          {
+            "ko": "19:15",
+            "match": "幸運薛達 vs 精英隊",
+            "pick": "幸運薛達",
+            "market": "讓球 幸運薛達 -0/-0.5",
+            "odds": "2.03",
+            "confidence": 53,
+            "stake": 2,
+            "stars": 4
+          },
+          {
+            "ko": "00:15",
+            "match": "昂熱 vs 羅連安特",
+            "pick": "羅連安特",
+            "market": "讓球 羅連安特 -0/-0.5",
+            "odds": "2.00",
+            "confidence": 54,
+            "stake": 2,
+            "stars": 4
+          }
+        ],
+        "user_confirmed": true
+      },
+      "daozi_none": true,
+      "rule": "t692u",
+      "published_at_hkt": "2026-10-25 10:20:38 HKT"
     }
-  ]
+  ],
+  "updated_at_hkt": "2026-10-25 10:20:38 HKT"
 }
