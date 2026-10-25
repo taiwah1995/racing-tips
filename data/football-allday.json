@@ -5172,7 +5172,9 @@
       "odds": 1.99,
       "stake": 0,
       "source": "t682u｜無API｜紙面",
-      "league": "墨超"
+      "league": "墨超",
+      "result": "0-1",
+      "wl": "L"
     },
     {
       "date": "2026-10-25",
@@ -5184,7 +5186,9 @@
       "odds": 1.89,
       "stake": 2,
       "source": "t684u｜無API｜紙面",
-      "league": "美職"
+      "league": "美職",
+      "result": "1-0",
+      "wl": "W"
     },
     {
       "date": "2026-10-25",
@@ -5196,7 +5200,9 @@
       "odds": 1.72,
       "stake": 0,
       "source": "t685u｜t686u｜無API｜紙面",
-      "league": "美職"
+      "league": "美職",
+      "result": "3-0",
+      "wl": "W"
     },
     {
       "date": "2026-10-25",
@@ -5559,6 +5565,6 @@
       "league": "葡超"
     }
   ],
-  "updated_at_hkt": "2026-10-25 10:20:38 HKT",
+  "updated_at_hkt": "2026-10-25 18:06:59 HKT",
   "source_note": "t692u live rebase from live e3d59660f161f53d／367 + handoff 33 → 400；published 2026-10-25 10:20:38 HKT；draft sha f6e0eccff33a0722"
 }
