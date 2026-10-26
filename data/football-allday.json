@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-25",
-  "count": 400,
+  "date": "2026-10-26",
+  "count": 405,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -5623,8 +5623,68 @@
       "league": "葡超",
       "result": "1-2",
       "wl": "L"
+    },
+    {
+      "date": "2026-10-26",
+      "time": "02:45",
+      "match": "辛達卡拉 vs 賓菲加",
+      "confidence": 58,
+      "stars": 5,
+      "pick": "賓菲加｜主客和 客勝（紙面）",
+      "odds": 1.24,
+      "stake": 0,
+      "source": "API",
+      "league": "葡超"
+    },
+    {
+      "date": "2026-10-26",
+      "time": "03:30",
+      "match": "巴黎聖日耳門 vs 里昂",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "巴黎聖日耳門｜主客和 主勝（紙面）",
+      "odds": 1.3,
+      "stake": 0,
+      "source": "API",
+      "league": "法甲"
+    },
+    {
+      "date": "2026-10-26",
+      "time": "04:00",
+      "match": "西維爾 vs 奧沙辛拿",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "西維爾｜主客和 主勝（紙面）",
+      "odds": 1.72,
+      "stake": 0,
+      "source": "API",
+      "league": "西甲"
+    },
+    {
+      "date": "2026-10-26",
+      "time": "06:30",
+      "match": "哥列迪巴 vs 甘美奧",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "哥列迪巴｜主客和 主勝",
+      "odds": 1.95,
+      "stake": 2,
+      "source": "API",
+      "league": "巴甲"
+    },
+    {
+      "date": "2026-10-26",
+      "time": "07:00",
+      "match": "法林明高 vs 明尼路",
+      "confidence": 58,
+      "stars": 5,
+      "pick": "法林明高｜主客和 主勝（紙面）",
+      "odds": 1.22,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-10-26 08:14:26 HKT",
-  "source_note": "t713u autoresult 2026-10-25；晨早三場保留；其餘 API 全場90分鐘＋handoff 六卡"
+  "updated_at_hkt": "2026-10-26 10:20:51 HKT",
+  "source_note": "t732u live 2026-10-26；handoff 5場（1單場HAD＋4紙面）；base football95 count=400→405；2026-10-26 10:20:51 HKT"
 }
