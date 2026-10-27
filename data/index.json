@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-10-28-st",
+      "date": "2026-10-28",
+      "venue": "沙田",
+      "venueCode": "ST",
+      "raceCount": 9,
+      "label": null,
+      "file": "meetings/2026-10-28-st.json",
+      "banker": {
+        "race": 3,
+        "no": 7,
+        "name": "勇者無敵",
+        "odds": 4.9
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-10-25-st",
       "date": "2026-10-25",
       "venue": "沙田",
