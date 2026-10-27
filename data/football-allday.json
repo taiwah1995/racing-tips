@@ -1,6 +1,6 @@
 {
   "date": "2026-10-26",
-  "count": 405,
+  "count": 408,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -5689,8 +5689,44 @@
       "stake": 0,
       "source": "API",
       "league": "巴甲"
+    },
+    {
+      "date": "2026-10-27",
+      "time": "01:30",
+      "match": "薩斯索羅 vs 拉素",
+      "confidence": 57,
+      "stars": 5,
+      "pick": "拉素｜讓球 客勝 -0/-0.5",
+      "odds": 1.87,
+      "stake": 2,
+      "source": "API",
+      "league": "意甲"
+    },
+    {
+      "date": "2026-10-27",
+      "time": "03:45",
+      "match": "拖連奴 vs 科木",
+      "confidence": 57,
+      "stars": 5,
+      "pick": "科木｜主客和 客勝（紙面）",
+      "odds": 1.54,
+      "stake": 0,
+      "source": "API",
+      "league": "意甲"
+    },
+    {
+      "date": "2026-10-27",
+      "time": "03:45",
+      "match": "羅馬 vs 卡利亞里",
+      "confidence": 58,
+      "stars": 5,
+      "pick": "羅馬｜主客和 主勝（紙面）",
+      "odds": 1.2,
+      "stake": 0,
+      "source": "API",
+      "league": "意甲"
     }
   ],
-  "updated_at_hkt": "2026-10-27 08:15:54 HKT",
-  "source_note": "t732u live 2026-10-26；handoff 5場（1單場HAD＋4紙面）；base football95 count=400→405；2026-10-26 10:20:51 HKT"
+  "updated_at_hkt": "2026-10-27 11:28:36 HKT",
+  "source_note": "t28u live 2026-10-27；handoff 3場意甲（1單場HDC＋2紙面HAD）；base football98 count=405→408；2026-10-27 11:28:36 HKT"
 }
