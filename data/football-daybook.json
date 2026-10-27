@@ -271,13 +271,49 @@
       "units": 14
     },
     {
+      "date": "2026-10-26",
+      "item": "①單場推介",
+      "kind": "part",
+      "stake": 200,
+      "payout": 0,
+      "profit": -200,
+      "units": 2
+    },
+    {
+      "date": "2026-10-26",
+      "item": "②穩陣過關",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-10-26",
+      "item": "③刀仔鋸大樹",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-10-26",
+      "item": "當日總結（三項加總）",
+      "kind": "day-total",
+      "stake": 200,
+      "payout": 0,
+      "profit": -200,
+      "units": 2
+    },
+    {
       "date": "",
       "item": "累計總結（三項每日累積）",
       "kind": "cumulative",
-      "stake": 11060,
+      "stake": 11260,
       "payout": 10344.85,
-      "profit": -715.15,
-      "units": 110.6
+      "profit": -915.15,
+      "units": 112.6
     }
   ]
 }

@@ -5676,7 +5676,9 @@
       "odds": 1.95,
       "stake": 2,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "0-1",
+      "wl": "L"
     },
     {
       "date": "2026-10-26",
@@ -5688,7 +5690,9 @@
       "odds": 1.22,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "3-2",
+      "wl": "W"
     },
     {
       "date": "2026-10-27",
@@ -5727,6 +5731,6 @@
       "league": "意甲"
     }
   ],
-  "updated_at_hkt": "2026-10-27 11:28:36 HKT",
+  "updated_at_hkt": "2026-10-27 18:10 HKT",
   "source_note": "t28u live 2026-10-27；handoff 3場意甲（1單場HDC＋2紙面HAD）；base football98 count=405→408；2026-10-27 11:28:36 HKT"
 }
