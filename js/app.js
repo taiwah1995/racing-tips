@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'football97';
+  const APP_DATA_VERSION = 'football98';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2745,6 +2745,7 @@
         result: footballStr(item.result),
         wl: normalizeFootballWl(item.wl),
         stars: footballStoredStars(item.stars),
+        addendum: footballStr(item.addendum),
       });
     });
     return rows;
@@ -2894,6 +2895,21 @@
     });
   }
 
+  /** File row.addendum only. The 全日分析 sheet has no addendum column. */
+  function footballStampAllDayAddendums(rows, data) {
+    const map = {};
+    footballAllDayFromFile(data).forEach((row) => {
+      const text = String(row.addendum || '').trim();
+      if (!text) return;
+      map[footballAllDayStarKey(row)] = text;
+    });
+    (rows || []).forEach((row) => {
+      if (String(row.addendum || '').trim()) return;
+      const text = map[footballAllDayStarKey(row)];
+      if (text) row.addendum = text;
+    });
+  }
+
   /** Append a file 全日分析 row when that match is absent from the sheet. */
   function footballStampMissingAllDay(rows, data) {
     if (!rows || !data) return;
@@ -2927,6 +2943,7 @@
       footballStampAllDayStars(rows, fileData);
       footballStampAllDayBlanks(rows, fileData);
       footballStampMissingAllDay(rows, fileData);
+      footballStampAllDayAddendums(rows, fileData);
       return { rows: rows, source: 'sheet' };
     } catch (err) {
       console.error(err);
@@ -5051,6 +5068,7 @@
       scoreHtml +
       footballRatingHtml(row) +
       '</div>' +
+      footballAddendumHtml(row) +
       '</li>';
   }
 

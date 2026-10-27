@@ -1296,12 +1296,12 @@ body {
 }
 #view-football .fb-addendum {
   margin: 4px 0 0;
-  color: var(--text-muted);
+  color: var(--danger);
   font-size: 0.74rem;
   font-weight: 500;
   line-height: 1.45;
   overflow-wrap: anywhere;
-  border-left: 2px solid color-mix(in srgb, var(--gold) 55%, transparent);
+  border-left: 2px solid var(--danger);
   padding-left: 8px;
 }
 #view-football .fb-pending {
@@ -1564,6 +1564,9 @@ body {
   align-items: baseline;
   gap: 2px 6px;
   min-width: 0;
+}
+#view-football .fb-all-row > .fb-addendum {
+  grid-column: 1 / -1;
 }
 #view-football .fb-all-team {
   color: #39ff14;
