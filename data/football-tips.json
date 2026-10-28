@@ -1451,7 +1451,7 @@
     },
     {
       "date": "2026-10-27",
-      "label": "10/27（暫定・單場1 HDC・無穩陣／刀仔）",
+      "label": "10/27（已結算・單場+174／穩陣無／刀仔無）",
       "tips": [
         {
           "no": 1,
@@ -1463,7 +1463,7 @@
           "odds": "1.87",
           "confidence": 57,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "拉素聯賽未敗高踞第2，薩斯近4輪聯賽不勝；外盤亞盤由平手移向薩斯受平/半、拉素1X2明顯縮水；馬會让球拉素−0.25約1.87過1.8，信心57%★5上單場暫定。",
           "stars": 5,
           "count_in_single_sample": true,
@@ -1471,7 +1471,10 @@
           "parlay_types": [],
           "market_code": "HDC",
           "note_gate": "HDC淺線合t692u；暫定／provisional｜t28u live｜名單未check",
-          "ko_note": "（10/28凌晨）"
+          "ko_note": "（10/28凌晨）",
+          "result": "2-6",
+          "wl": "W",
+          "profit": 174
         }
       ],
       "note": "t28u live：單場1卡（薩斯索羅 vs 拉素｜讓球 拉素 -0/-0.5 @1.87・2注・57%★5｜status=暫定／card_status=provisional）；stable_none（wenchen_none）／daozi_none（★4↑=3≤10）；紙面2（拖連奴 vs 科木 HAD・羅馬 vs 卡利亞里 HAD；週中歐冠排除過關）；user_publish_approved=true｜原文鎖死。",
@@ -1481,5 +1484,5 @@
       "published_at_hkt": "2026-10-27 11:28:36 HKT"
     }
   ],
-  "updated_at_hkt": "2026-10-27 18:10 HKT"
+  "updated_at_hkt": "2026-10-28 08:20:29 HKT"
 }
