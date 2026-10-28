@@ -1482,7 +1482,37 @@
       "daozi_none": true,
       "rule": "t692u+t727u",
       "published_at_hkt": "2026-10-27 11:28:36 HKT"
+    },
+    {
+      "date": "2026-10-28",
+      "label": "10/28（暫定）",
+      "tips": [
+        {
+          "no": 1,
+          "ko": "06:30",
+          "league": "巴甲",
+          "match": "山度士 vs 彭美拉斯",
+          "pick": "彭美拉斯",
+          "market": "讓球 彭美拉斯 -0/-0.5",
+          "odds": "1.85",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "彭美拉斯聯賽第2近5場4勝1和；外盤移向山度士受平/半；馬會−0.25@1.85；54%★4。t765u無替代照出。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t765u live｜巴甲照出｜名單未check",
+          "ko_note": "（10/29凌晨）"
+        }
+      ],
+      "note": "日更 t765u live：單場1卡（山度士 vs 彭美拉斯｜讓球 彭美拉斯 -0/-0.5 @1.85・2注・54%★4｜provisional）；stable_none（wenchen_none）／daozi_none（★4↑=3≤10）；紙面6（意甲5＋巴甲富明尼斯）；user_publish_approved=true。",
+      "stable_none": true,
+      "daozi_none": true,
+      "rule": "t692u+t727u+t765u"
     }
   ],
-  "updated_at_hkt": "2026-10-28 08:20:29 HKT"
+  "updated_at_hkt": "2026-10-28 11:21:01 HKT（live-1028-t765u）"
 }
