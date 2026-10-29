@@ -5816,7 +5816,9 @@
       "odds": 1.85,
       "stake": 2,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "0-0",
+      "wl": "LH"
     },
     {
       "date": "2026-10-28",
@@ -5828,7 +5830,9 @@
       "odds": 1.72,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "2-1",
+      "wl": "W"
     },
     {
       "date": "2026-10-29",
@@ -5879,6 +5883,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-10-29 10:18:57 HKT（live-1029-t292s1069）",
+  "updated_at_hkt": "2026-10-29 11:58 HKT",
   "source_note": "LIVE 2026-10-29 t292s1069｜用戶 t292s1069 答『上』｜handoff 紙面4／0卡；base football103 count=415→419；stable_none／daozi_none"
 }
