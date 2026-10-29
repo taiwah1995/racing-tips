@@ -5746,7 +5746,9 @@
       "odds": 1.5,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "2-4",
+      "wl": "L"
     },
     {
       "date": "2026-10-28",
@@ -5758,7 +5760,9 @@
       "odds": 1.72,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "0-0",
+      "wl": "WH"
     },
     {
       "date": "2026-10-28",
@@ -5770,7 +5774,9 @@
       "odds": 1.21,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "0-2",
+      "wl": "W"
     },
     {
       "date": "2026-10-28",
@@ -5782,7 +5788,9 @@
       "odds": 1.52,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "2-0",
+      "wl": "L"
     },
     {
       "date": "2026-10-28",
@@ -5794,7 +5802,9 @@
       "odds": 1.6,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "1-4",
+      "wl": "W"
     },
     {
       "date": "2026-10-28",
@@ -5821,6 +5831,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-10-28 11:21:01 HKT（live-1028-t765u）",
+  "updated_at_hkt": "2026-10-29 08:22:01 HKT（autoresult-am paper-only 意甲5場）",
   "source_note": "LIVE 2026-10-28 t765u｜handoff 單場1＋紙面6；base football101 count=408→415"
 }
