@@ -1512,7 +1512,16 @@
       "stable_none": true,
       "daozi_none": true,
       "rule": "t692u+t727u+t765u"
+    },
+    {
+      "date": "2026-10-29",
+      "label": "10/29（全日紙面）",
+      "tips": [],
+      "note": "日更 LIVE：A3精做4場全部紙面0注；single_card_candidates=[]；t281u 巴甲唔上單場頭位；stable_none（wenchen_none）／daozi_none（★4↑=2≤10）；全日紙面4場（意甲2＋巴甲2）；用戶 t292s1069 答『上』批准出街（handoff 仍 user_publish_approved=false，唔改 handoff）。",
+      "stable_none": true,
+      "daozi_none": true,
+      "rule": "t692u+t727u+t281u"
     }
   ],
-  "updated_at_hkt": "2026-10-28 11:21:01 HKT（live-1028-t765u）"
+  "updated_at_hkt": "2026-10-29 10:18:57 HKT（live-1029-t292s1069）"
 }
