@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-28",
-  "count": 415,
+  "date": "2026-10-29",
+  "count": 419,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -5829,8 +5829,56 @@
       "stake": 0,
       "source": "API",
       "league": "巴甲"
+    },
+    {
+      "date": "2026-10-29",
+      "time": "01:30",
+      "match": "費辛隆尼 vs 萊切",
+      "confidence": 56,
+      "stars": 3,
+      "pick": "費辛隆尼｜主客和 主勝（紙面）",
+      "odds": 1.59,
+      "stake": 0,
+      "source": "API",
+      "league": "意甲"
+    },
+    {
+      "date": "2026-10-29",
+      "time": "03:45",
+      "match": "費倫天拿 vs 阿特蘭大",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "費倫天拿｜讓球 主勝 -0/-0.5（紙面）",
+      "odds": 1.85,
+      "stake": 0,
+      "source": "API",
+      "league": "意甲"
+    },
+    {
+      "date": "2026-10-29",
+      "time": "06:30",
+      "match": "明尼路 vs 高士路",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "明尼路｜讓球 主勝 0（紙面）",
+      "odds": 1.84,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
+    },
+    {
+      "date": "2026-10-29",
+      "time": "07:00",
+      "match": "華斯高 vs 法林明高",
+      "confidence": 57,
+      "stars": 5,
+      "pick": "法林明高｜主客和 客勝（紙面）",
+      "odds": 1.62,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-10-29 08:22:01 HKT（autoresult-am paper-only 意甲5場）",
-  "source_note": "LIVE 2026-10-28 t765u｜handoff 單場1＋紙面6；base football101 count=408→415"
+  "updated_at_hkt": "2026-10-29 10:18:57 HKT（live-1029-t292s1069）",
+  "source_note": "LIVE 2026-10-29 t292s1069｜用戶 t292s1069 答『上』｜handoff 紙面4／0卡；base football103 count=415→419；stable_none／daozi_none"
 }
