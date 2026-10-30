@@ -5844,7 +5844,9 @@
       "odds": 1.59,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "5-1",
+      "wl": "W"
     },
     {
       "date": "2026-10-29",
@@ -5856,7 +5858,9 @@
       "odds": 1.85,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "2-2",
+      "wl": "LH"
     },
     {
       "date": "2026-10-29",
@@ -5868,7 +5872,9 @@
       "odds": 1.84,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "0-1",
+      "wl": "L"
     },
     {
       "date": "2026-10-29",
@@ -5880,7 +5886,9 @@
       "odds": 1.62,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "1-4",
+      "wl": "W"
     },
     {
       "date": "2026-10-30",
@@ -5979,6 +5987,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-10-30 17:50:21 HKT（live-1030-t781u）",
+  "updated_at_hkt": "2026-10-30 18:03:48 HKT（autoresult-pm-1029-paper）",
   "source_note": "LIVE 2026-10-30 t781u｜用戶 t781u 親口「上」（穩陣：雷恩 平手@1.87 ＋ 緬恩斯 −0.25@1.86）｜單場4暫定HDC＋穩陣鎖版3.48／2注＋daozi_none＋紙面4；base football105 count=419→427"
 }
