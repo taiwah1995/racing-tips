@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-29",
-  "count": 419,
+  "date": "2026-10-30",
+  "count": 427,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -5881,8 +5881,104 @@
       "stake": 0,
       "source": "API",
       "league": "巴甲"
+    },
+    {
+      "date": "2026-10-30",
+      "time": "02:00",
+      "match": "尼斯 vs 雷恩",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "雷恩｜讓球 客勝 0",
+      "odds": 1.87,
+      "stake": 2,
+      "source": "API",
+      "league": "法甲"
+    },
+    {
+      "date": "2026-10-30",
+      "time": "02:00",
+      "match": "勒哈弗爾 vs 巴黎聖日耳門",
+      "confidence": 58,
+      "stars": 5,
+      "pick": "巴黎聖日耳門｜主客和 客勝（紙面）",
+      "odds": 1.23,
+      "stake": 0,
+      "source": "API",
+      "league": "法甲"
+    },
+    {
+      "date": "2026-10-30",
+      "time": "03:30",
+      "match": "艾華斯堡 vs 緬恩斯",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "緬恩斯｜讓球 客勝 -0/-0.5",
+      "odds": 1.86,
+      "stake": 2,
+      "source": "API",
+      "league": "德甲"
+    },
+    {
+      "date": "2026-10-30",
+      "time": "04:00",
+      "match": "錫菲聯 vs 域斯咸",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "錫菲聯｜讓球 主勝 -0/-0.5",
+      "odds": 2.06,
+      "stake": 2,
+      "source": "API",
+      "league": "英冠"
+    },
+    {
+      "date": "2026-10-30",
+      "time": "04:00",
+      "match": "維拉利爾 vs 愛斯賓奴",
+      "confidence": 56,
+      "stars": 3,
+      "pick": "維拉利爾｜主客和 主勝（紙面）",
+      "odds": 1.29,
+      "stake": 0,
+      "source": "API",
+      "league": "西甲"
+    },
+    {
+      "date": "2026-10-30",
+      "time": "04:05",
+      "match": "里爾 vs 朗斯",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "里爾｜讓球 主勝 0",
+      "odds": 1.93,
+      "stake": 2,
+      "source": "API",
+      "league": "法甲"
+    },
+    {
+      "date": "2026-10-30",
+      "time": "04:15",
+      "match": "AC卡薩比亞 vs 士砵亭",
+      "confidence": 57,
+      "stars": 5,
+      "pick": "士砵亭｜主客和 客勝（紙面）",
+      "odds": 1.18,
+      "stake": 0,
+      "source": "API",
+      "league": "葡超"
+    },
+    {
+      "date": "2026-10-30",
+      "time": "07:00",
+      "match": "哥連泰斯 vs 米拉索",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "哥連泰斯｜讓球 主勝 -0.5/-1（紙面）",
+      "odds": 2.12,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-10-29 11:58 HKT",
-  "source_note": "LIVE 2026-10-29 t292s1069｜用戶 t292s1069 答『上』｜handoff 紙面4／0卡；base football103 count=415→419；stable_none／daozi_none"
+  "updated_at_hkt": "2026-10-30 17:50:21 HKT（live-1030-t781u）",
+  "source_note": "LIVE 2026-10-30 t781u｜用戶 t781u 親口「上」（穩陣：雷恩 平手@1.87 ＋ 緬恩斯 −0.25@1.86）｜單場4暫定HDC＋穩陣鎖版3.48／2注＋daozi_none＋紙面4；base football105 count=419→427"
 }
