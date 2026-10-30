@@ -1525,7 +1525,136 @@
       "stable_none": true,
       "daozi_none": true,
       "rule": "t692u+t727u+t281u"
+    },
+    {
+      "date": "2026-10-30",
+      "label": "10/30（暫定）",
+      "tips": [
+        {
+          "no": 1,
+          "ko": "02:00",
+          "league": "法甲",
+          "match": "尼斯 vs 雷恩",
+          "pick": "雷恩",
+          "market": "讓球 雷恩 0",
+          "odds": "1.87",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "雷恩聯賽第2對尼斯第10，質素同積分差距明顯；马會平手客水約1.87仍過獨立單場門檻；初盤平手未變未燒過一球；主推客隊平手兩注暫定。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [
+            "穩陣"
+          ],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t781u live｜計單場樣本｜名單未check",
+          "ko_note": "（10/31凌晨）"
+        },
+        {
+          "no": 2,
+          "ko": "03:30",
+          "league": "德甲",
+          "match": "艾華斯堡 vs 緬恩斯",
+          "pick": "緬恩斯",
+          "market": "讓球 緬恩斯 -0/-0.5",
+          "odds": "1.86",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "兩隊同積10分戰意接近；马會／歐指水位明顯偏緬恩斯；客讓平半約1.86過門檻；初盤受平半未變未燒過一球；主推客讓平半兩注暫定。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [
+            "穩陣"
+          ],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t781u live｜計單場樣本｜名單未check",
+          "ko_note": "（10/31凌晨）"
+        },
+        {
+          "no": 3,
+          "ko": "04:00",
+          "league": "英冠",
+          "match": "錫菲聯 vs 域斯咸",
+          "pick": "錫菲聯",
+          "market": "讓球 錫菲聯 -0/-0.5",
+          "odds": "2.06",
+          "confidence": 53,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "主隊積分高過客隊兩分；马會由平手轉平半顯示向主；主水約2.06緩衝足夠；未燒過一球；主推主讓平半兩注暫定。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t781u live｜計單場樣本｜名單未check",
+          "ko_note": "（10/31凌晨）"
+        },
+        {
+          "no": 4,
+          "ko": "04:05",
+          "league": "法甲",
+          "match": "里爾 vs 朗斯",
+          "pick": "里爾",
+          "market": "讓球 里爾 0",
+          "odds": "1.93",
+          "confidence": 53,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "里爾積分同防守優於朗斯；主場打吡戰意足；虽歐指降溫但仍處平手可博；主水約1.93；未燒過一球；主推主隊平手兩注暫定。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t781u live｜計單場樣本｜名單未check",
+          "ko_note": "（10/31凌晨）"
+        }
+      ],
+      "note": "日更 LIVE：單場4卡 HDC provisional（尼斯vs雷恩｜雷恩0@1.87・2注・54%★4；艾華斯堡vs緬恩斯｜緬恩斯−0/-0.5@1.86・2注・54%★4；錫菲聯vs域斯咸｜錫菲聯−0/-0.5@2.06・2注・53%★4；里爾vs朗斯｜里爾0@1.93・2注・53%★4）；穩陣二串一鎖版 雷恩0@1.87×緬恩斯−0.25@1.86＝3.48／2注（$200）｜用戶 t781u 親口「上」（穩陣：雷恩 平手@1.87 ＋ 緬恩斯 −0.25@1.86）；daozi_none（★4↑有注卡=4≤10）；紙面4（勒哈弗爾／維拉利爾／卡薩比亞／哥連泰斯 t281u）。",
+      "stable": {
+        "type": "二串一",
+        "stake": 2,
+        "stake_label": "注碼2注（$200）",
+        "combined_odds": 3.48,
+        "footer_line1": "全中過關賠率：3.48倍｜注碼2注（$200）",
+        "footer_line2": "未結算｜鎖版出街｜腳序開波升序（02:00雷恩→03:30緬恩斯）",
+        "status": "pending",
+        "locked": true,
+        "user_confirmed": true,
+        "note": "用戶 t781u 親口「上」（穩陣：雷恩 平手@1.87 ＋ 緬恩斯 −0.25@1.86）鎖版出街；覆蓋草稿 stable_none（兩腳54%<57%用戶門檻——親口確認例外）；腳序＝開波升序（02:00尼斯vs雷恩→03:30艾華斯堡vs緬恩斯）；鎖後禁止自動重排／重揀；今日無刀仔（daozi_none｜★4↑有注卡=4≤10）；handoff sha16 2e7bff77239a3cbe／user_publish_approved=true／stable_parlay_locked=true",
+        "legs": [
+          {
+            "ko": "02:00",
+            "ko_note": "（10/31凌晨）",
+            "match": "尼斯 vs 雷恩",
+            "pick": "雷恩",
+            "market": "讓球 雷恩 0",
+            "odds": "1.87",
+            "confidence": 54,
+            "stake": 2,
+            "stars": 4
+          },
+          {
+            "ko": "03:30",
+            "ko_note": "（10/31凌晨）",
+            "match": "艾華斯堡 vs 緬恩斯",
+            "pick": "緬恩斯",
+            "market": "讓球 緬恩斯 -0/-0.5",
+            "odds": "1.86",
+            "confidence": 54,
+            "stake": 2,
+            "stars": 4
+          }
+        ]
+      },
+      "daozi_none": true,
+      "rule": "t692u+t727u+t281u+t781u-stable-override"
     }
   ],
-  "updated_at_hkt": "2026-10-29 11:58 HKT"
+  "updated_at_hkt": "2026-10-30 17:50:21 HKT（live-1030-t781u）"
 }
