@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-11-01-hv",
+      "date": "2026-11-01",
+      "venue": "快活谷",
+      "venueCode": "HV",
+      "raceCount": 10,
+      "label": null,
+      "file": "meetings/2026-11-01-hv.json",
+      "banker": {
+        "race": 2,
+        "no": 9,
+        "name": "金駒永騰",
+        "odds": 6.2
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-10-28-st",
       "date": "2026-10-28",
       "venue": "沙田",

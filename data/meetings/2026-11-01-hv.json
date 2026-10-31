@@ -1,0 +1,337 @@
+{
+  "id": "2026-11-01-hv",
+  "date": "2026-11-01",
+  "venue": "快活谷",
+  "venueCode": "HV",
+  "raceCount": 10,
+  "label": null,
+  "tipsTable": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1200,
+      "first": {
+        "no": 1,
+        "name": "靖哥哥",
+        "style": "前",
+        "odds": 1.9
+      },
+      "second": {
+        "no": 12,
+        "name": "建測精英",
+        "style": "後",
+        "odds": 7.4
+      },
+      "third": {
+        "no": 8,
+        "name": "果然僥倖",
+        "style": "前",
+        "odds": 19.0
+      },
+      "dark": {
+        "no": 5,
+        "name": "雙子美麗",
+        "style": "前",
+        "odds": 14.0
+      }
+    },
+    {
+      "race": 2,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 9,
+        "name": "金駒永騰",
+        "style": "放",
+        "odds": 6.2
+      },
+      "second": {
+        "no": 3,
+        "name": "龍虎精神",
+        "style": "中",
+        "odds": 8.8
+      },
+      "third": {
+        "no": 5,
+        "name": "勤德天下",
+        "style": "後",
+        "odds": 5.3
+      },
+      "dark": {
+        "no": 4,
+        "name": "紅海勁",
+        "style": "中",
+        "odds": 9.7
+      }
+    },
+    {
+      "race": 3,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 4,
+        "name": "非凡時刻",
+        "style": "前",
+        "odds": 3.4
+      },
+      "second": {
+        "no": 11,
+        "name": "勝多多",
+        "style": "前",
+        "odds": 10.0
+      },
+      "third": {
+        "no": 3,
+        "name": "新力",
+        "style": "中",
+        "odds": 13.0
+      },
+      "dark": {
+        "no": 6,
+        "name": "銳目",
+        "style": "中",
+        "odds": 16.0
+      }
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1000,
+      "first": {
+        "no": 2,
+        "name": "佐治傳奇",
+        "style": "前",
+        "odds": 3.9
+      },
+      "second": {
+        "no": 5,
+        "name": "巴閉王",
+        "style": "前",
+        "odds": 7.2
+      },
+      "third": {
+        "no": 4,
+        "name": "超強六十",
+        "style": "中",
+        "odds": 7.7
+      },
+      "dark": {
+        "no": 1,
+        "name": "鴻圖新星",
+        "style": "後",
+        "odds": 17.0
+      }
+    },
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 3,
+        "name": "電玩精英",
+        "style": "中",
+        "odds": 11.0
+      },
+      "second": {
+        "no": 2,
+        "name": "環球英雄",
+        "style": "前",
+        "odds": 7.0
+      },
+      "third": {
+        "no": 12,
+        "name": "有你有我",
+        "style": "中",
+        "odds": 9.2
+      },
+      "dark": {
+        "no": 1,
+        "name": "騰龍四海",
+        "style": "中",
+        "odds": 10.0
+      }
+    },
+    {
+      "race": 6,
+      "class": "四班",
+      "distance": 1800,
+      "first": {
+        "no": 1,
+        "name": "超開心",
+        "style": "前",
+        "odds": 8.4
+      },
+      "second": {
+        "no": 11,
+        "name": "揀馬之皇",
+        "style": "後",
+        "odds": 6.1
+      },
+      "third": {
+        "no": 3,
+        "name": "家樂寶駒",
+        "style": "前",
+        "odds": 7.7
+      },
+      "dark": {
+        "no": 7,
+        "name": "浪漫老撾",
+        "style": "後",
+        "odds": 5.1
+      }
+    },
+    {
+      "race": 7,
+      "class": "二班",
+      "distance": 1200,
+      "first": {
+        "no": 3,
+        "name": "扶搖勢勁",
+        "style": "前",
+        "odds": 4.5
+      },
+      "second": {
+        "no": 4,
+        "name": "興馳千里",
+        "style": "前",
+        "odds": 3.9
+      },
+      "third": {
+        "no": 2,
+        "name": "維港智能",
+        "style": "放",
+        "odds": 17.0
+      },
+      "dark": {
+        "no": 5,
+        "name": "競駿輝煌",
+        "style": "後",
+        "odds": 13.0
+      }
+    },
+    {
+      "race": 8,
+      "class": "三班",
+      "distance": 1000,
+      "first": {
+        "no": 8,
+        "name": "福進",
+        "style": "後",
+        "odds": 2.3
+      },
+      "second": {
+        "no": 7,
+        "name": "連連幸運",
+        "style": "前",
+        "odds": 11.0
+      },
+      "third": {
+        "no": 1,
+        "name": "好評如潮",
+        "style": "前",
+        "odds": 6.1
+      },
+      "dark": {
+        "no": 3,
+        "name": "燭光晚餐",
+        "style": "前",
+        "odds": 10.0
+      }
+    },
+    {
+      "race": 9,
+      "class": "三班",
+      "distance": 1650,
+      "first": {
+        "no": 2,
+        "name": "盈好威楓",
+        "style": "中",
+        "odds": 6.3
+      },
+      "second": {
+        "no": 1,
+        "name": "一定超",
+        "style": "後",
+        "odds": 4.7
+      },
+      "third": {
+        "no": 4,
+        "name": "非凡豪傑",
+        "style": "中",
+        "odds": 11.0
+      },
+      "dark": {
+        "no": 6,
+        "name": "膨才",
+        "style": "後",
+        "odds": 4.4
+      }
+    },
+    {
+      "race": 10,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 2,
+        "name": "東來欣賞",
+        "style": "前",
+        "odds": 5.7
+      },
+      "second": {
+        "no": 8,
+        "name": "喵喵怪",
+        "style": "前",
+        "odds": 11.0
+      },
+      "third": {
+        "no": 1,
+        "name": "星運少爵",
+        "style": "中",
+        "odds": 11.0
+      },
+      "dark": {
+        "no": 11,
+        "name": "包裝天王",
+        "style": "放",
+        "odds": 11.0
+      }
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 2,
+      "class": "四班",
+      "distance": 1650,
+      "no": 9,
+      "name": "金駒永騰",
+      "style": "放",
+      "odds": 6.2
+    },
+    {
+      "race": 3,
+      "class": "四班",
+      "distance": 1200,
+      "no": 4,
+      "name": "非凡時刻",
+      "style": "前",
+      "odds": 3.4
+    },
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1200,
+      "no": 1,
+      "name": "靖哥哥",
+      "style": "前",
+      "odds": 1.9
+    }
+  ],
+  "dailyPicksHint": "(賠率低於2.5只作次選推介)",
+  "attackHot": {
+    "title": "攻擊熱門 | 高危馬 0 隻 | 中危馬 0 隻",
+    "summary": "高危攻擊馬建議放棄投注 | 中危攻擊馬建議減注50%",
+    "high": [],
+    "watch": [],
+    "disclaimer": "僅供參考 · 非投注建議"
+  }
+}
