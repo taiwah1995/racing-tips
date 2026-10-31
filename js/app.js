@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'wind-row-hl1';
+  const APP_DATA_VERSION = 'wind-row-hl2';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -901,15 +901,6 @@
     return shown;
   }
 
-  /** Any of the five group 三甲% cells (Win/Place/Lose/三甲% repeating) would be green. */
-  function windGroupPlaceHot(groups) {
-    const cells = groups || [];
-    for (let i = 3; i < cells.length; i += 4) {
-      if (windRateTone(cells[i]) === 'pos') return true;
-    }
-    return false;
-  }
-
   function windGroupCells(row) {
     const out = [];
     for (let i = 0; i < 20; i++) out.push(cellText(gvizCell(row, 5 + i)));
@@ -1054,16 +1045,18 @@
   }
 
   function windTableHtml(title, nameHeader, rows, updated, options) {
-    const markHotRows = !!(options && options.markHotRows);
+    const markHotGroups = !!(options && options.markHotGroups);
     const groupHeads = WIND_GROUPS.map((name) => '<th class="wind-group" colspan="4">' + name + '</th>').join('');
     const subHeads = WIND_GROUPS.map(() => '<th>Win</th><th>Place</th><th>Lose</th><th>三甲%</th>').join('');
     const body = rows.map((row) => {
-      const groups = row.groups.map((value, index) => {
+      const cells = row.groups || [];
+      const groups = cells.map((value, index) => {
         const html = index % 4 === 3 ? rateCellHtml(value) : escapeHtml(value);
-        return '<td>' + html + '</td>';
+        const rate = cells[index - (index % 4) + 3];
+        const hot = markHotGroups && windRateTone(rate) === 'pos';
+        return '<td' + (hot ? ' class="wind-group-hot"' : '') + '>' + html + '</td>';
       }).join('');
-      const hot = markHotRows && windGroupPlaceHot(row.groups);
-      return '<tr' + (hot ? ' class="wind-row-hot"' : '') + '>' +
+      return '<tr>' +
         '<td class="wind-name">' + escapeHtml(row.label) + '</td>' +
         '<td>' + escapeHtml(row.count) + '</td>' +
         '<td>' + escapeHtml(row.hit) + '</td>' +
@@ -1178,7 +1171,7 @@
         const updated = maxWindMeetingDate(days);
         host.innerHTML =
           windPickHtml(windPickRows(trainers), updated) +
-          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers), updated, { markHotRows: true }) +
+          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers), updated, { markHotGroups: true }) +
           windTableHtml('賽日累計收風統計', '賽日', meetingRows(days), updated);
       }
       if (status) status.hidden = true;
