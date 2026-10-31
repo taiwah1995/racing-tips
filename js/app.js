@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'football110';
+  const APP_DATA_VERSION = 'wind-row-hl3';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -878,27 +878,37 @@
 
   /**
    * Band for 命中% and 三甲%. Blank stays empty; it is not 0%.
-   * Green text is `.pl-pos` at ≥65. Mid is 45–64. Below 45 is red.
-   * Non-numeric text is unbanded (rendered plain, not green).
+   * `high` is ≥80 (blue cells). `pos` is 65–79 (green cells).
+   * Both paint `.pl-pos`. Mid is 45–64. Below 45 is red.
+   * Non-numeric text is unbanded.
    */
   function windRateTone(text) {
     if (text == null || String(text).trim() === '') return '';
     const n = Number(String(text).trim().replace('%', ''));
     if (!Number.isFinite(n)) return '';
+    if (n >= 80) return 'high';
     if (n >= 65) return 'pos';
     if (n >= 45) return 'mid';
     return 'neg';
   }
 
-  /** 命中% and 三甲% only. */
+  /** 命中% and 三甲% only. ≥80 and 65–79 share the green text. */
   function rateCellHtml(text) {
     if (text == null || String(text).trim() === '') return '';
     const shown = escapeHtml(String(text));
     const tone = windRateTone(text);
-    if (tone === 'pos') return '<span class="pl-pos">' + shown + '</span>';
+    if (tone === 'high' || tone === 'pos') return '<span class="pl-pos">' + shown + '</span>';
     if (tone === 'mid') return '<span class="wind-rate-mid">' + shown + '</span>';
     if (tone === 'neg') return '<span class="pl-neg">' + shown + '</span>';
     return shown;
+  }
+
+  /** Class for one group's four cells. Empty unless that group's 三甲% is at least 65. */
+  function windGroupHotClass(rate) {
+    const tone = windRateTone(rate);
+    if (tone === 'high') return 'wind-group-hot-high';
+    if (tone === 'pos') return 'wind-group-hot';
+    return '';
   }
 
   function windGroupCells(row) {
@@ -1053,8 +1063,8 @@
       const groups = cells.map((value, index) => {
         const html = index % 4 === 3 ? rateCellHtml(value) : escapeHtml(value);
         const rate = cells[index - (index % 4) + 3];
-        const hot = markHotGroups && windRateTone(rate) === 'pos';
-        return '<td' + (hot ? ' class="wind-group-hot"' : '') + '>' + html + '</td>';
+        const hotClass = markHotGroups ? windGroupHotClass(rate) : '';
+        return '<td' + (hotClass ? ' class="' + hotClass + '"' : '') + '>' + html + '</td>';
       }).join('');
       return '<tr>' +
         '<td class="wind-name">' + escapeHtml(row.label) + '</td>' +
