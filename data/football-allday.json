@@ -5900,7 +5900,9 @@
       "odds": 1.87,
       "stake": 2,
       "source": "API",
-      "league": "法甲"
+      "league": "法甲",
+      "result": "5-2",
+      "wl": "L"
     },
     {
       "date": "2026-10-30",
@@ -5912,7 +5914,9 @@
       "odds": 1.23,
       "stake": 0,
       "source": "API",
-      "league": "法甲"
+      "league": "法甲",
+      "result": "1-5",
+      "wl": "W"
     },
     {
       "date": "2026-10-30",
@@ -5924,7 +5928,9 @@
       "odds": 1.86,
       "stake": 2,
       "source": "API",
-      "league": "德甲"
+      "league": "德甲",
+      "result": "4-1",
+      "wl": "L"
     },
     {
       "date": "2026-10-30",
@@ -5936,7 +5942,9 @@
       "odds": 2.06,
       "stake": 2,
       "source": "API",
-      "league": "英冠"
+      "league": "英冠",
+      "result": "1-0",
+      "wl": "W"
     },
     {
       "date": "2026-10-30",
@@ -5948,7 +5956,9 @@
       "odds": 1.29,
       "stake": 0,
       "source": "API",
-      "league": "西甲"
+      "league": "西甲",
+      "result": "0-1",
+      "wl": "L"
     },
     {
       "date": "2026-10-30",
@@ -5960,7 +5970,9 @@
       "odds": 1.93,
       "stake": 2,
       "source": "API",
-      "league": "法甲"
+      "league": "法甲",
+      "result": "1-0",
+      "wl": "W"
     },
     {
       "date": "2026-10-30",
@@ -5972,7 +5984,9 @@
       "odds": 1.18,
       "stake": 0,
       "source": "API",
-      "league": "葡超"
+      "league": "葡超",
+      "result": "0-2",
+      "wl": "W"
     },
     {
       "date": "2026-10-30",
@@ -5987,6 +6001,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-10-30 18:03:48 HKT（autoresult-pm-1029-paper）",
+  "updated_at_hkt": "2026-10-31 08:15:26 HKT（autoresult-1030-am-t781u-result）",
   "source_note": "LIVE 2026-10-30 t781u｜用戶 t781u 親口「上」（穩陣：雷恩 平手@1.87 ＋ 緬恩斯 −0.25@1.86）｜單場4暫定HDC＋穩陣鎖版3.48／2注＋daozi_none＋紙面4；base football105 count=419→427"
 }
