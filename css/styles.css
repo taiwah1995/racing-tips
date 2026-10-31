@@ -642,17 +642,17 @@ body {
 }
 .wind-table tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
 .wind-table tbody tr:nth-child(even) td.wind-name { background: #1e2633; }
-/* 馬房累計 only. One group's 三甲%: 100 → blue, 65–99 → green. Four cells, not the row. */
+/* 馬房累計 only. One group's 三甲%: ≥80 → blue, 65–79 → green. Four cells, not the row. */
 .wind-table tbody tr td.wind-group-hot {
   background: #22c55e;
   color: #06210a;
 }
 .wind-table tbody tr td.wind-group-hot .pl-pos { color: #06210a; }
-.wind-table tbody tr td.wind-group-hot-100 {
+.wind-table tbody tr td.wind-group-hot-high {
   background: #3b82f6;
   color: #0b1220;
 }
-.wind-table tbody tr td.wind-group-hot-100 .pl-pos { color: #0b1220; }
+.wind-table tbody tr td.wind-group-hot-high .pl-pos { color: #0b1220; }
 
 /* ===== 賽日有飛馬 ===== */
 .fly-meet + .fly-meet { border-top: 1px solid var(--border); }

@@ -878,7 +878,7 @@
 
   /**
    * Band for 命中% and 三甲%. Blank stays empty; it is not 0%.
-   * `perfect` is 100 (blue cells). `pos` is 65–99 (green cells).
+   * `high` is ≥80 (blue cells). `pos` is 65–79 (green cells).
    * Both paint `.pl-pos`. Mid is 45–64. Below 45 is red.
    * Non-numeric text is unbanded.
    */
@@ -886,27 +886,27 @@
     if (text == null || String(text).trim() === '') return '';
     const n = Number(String(text).trim().replace('%', ''));
     if (!Number.isFinite(n)) return '';
-    if (n >= 100) return 'perfect';
+    if (n >= 80) return 'high';
     if (n >= 65) return 'pos';
     if (n >= 45) return 'mid';
     return 'neg';
   }
 
-  /** 命中% and 三甲% only. 100 and ≥65 share the green text. */
+  /** 命中% and 三甲% only. ≥80 and 65–79 share the green text. */
   function rateCellHtml(text) {
     if (text == null || String(text).trim() === '') return '';
     const shown = escapeHtml(String(text));
     const tone = windRateTone(text);
-    if (tone === 'perfect' || tone === 'pos') return '<span class="pl-pos">' + shown + '</span>';
+    if (tone === 'high' || tone === 'pos') return '<span class="pl-pos">' + shown + '</span>';
     if (tone === 'mid') return '<span class="wind-rate-mid">' + shown + '</span>';
     if (tone === 'neg') return '<span class="pl-neg">' + shown + '</span>';
     return shown;
   }
 
-  /** Class for one group's four cells. Empty unless that group's 三甲% is green. */
+  /** Class for one group's four cells. Empty unless that group's 三甲% is at least 65. */
   function windGroupHotClass(rate) {
     const tone = windRateTone(rate);
-    if (tone === 'perfect') return 'wind-group-hot-100';
+    if (tone === 'high') return 'wind-group-hot-high';
     if (tone === 'pos') return 'wind-group-hot';
     return '';
   }
