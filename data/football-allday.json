@@ -5998,7 +5998,9 @@
       "odds": 2.12,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "2-0",
+      "wl": "W"
     },
     {
       "date": "2026-10-31",
@@ -6325,6 +6327,6 @@
       "league": "葡超"
     }
   ],
-  "updated_at_hkt": "2026-10-31 10:15:30 HKT（live-1031-t798u）",
+  "updated_at_hkt": "2026-10-31 18:11 HKT",
   "source_note": "LIVE 2026-10-31 t798u｜用戶 t798u 親口「上」（穩陣：弗賴堡 −0.25@1.88 ＋ 雲達不來梅 +0.25@1.80）｜單場8暫定HDC＋穩陣鎖版3.38／2注＋daozi_none＋紙面19；base football108 count=427→454"
 }
