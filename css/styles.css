@@ -642,6 +642,9 @@ body {
 }
 .wind-table tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
 .wind-table tbody tr:nth-child(even) td.wind-name { background: #1e2633; }
+/* 馬房累計 only: any group 三甲% is already .pl-pos (≥65). Opaque name cell so the sticky column stays solid. */
+.wind-table tbody tr.wind-row-hot td { background: rgba(57, 255, 20, 0.16); }
+.wind-table tbody tr.wind-row-hot td.wind-name { background: #21462c; }
 
 /* ===== 賽日有飛馬 ===== */
 .fly-meet + .fly-meet { border-top: 1px solid var(--border); }

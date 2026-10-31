@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'football109';
+  const APP_DATA_VERSION = 'wind-row-hl1';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -876,15 +876,38 @@
     return t === '馬房' || t === '賽日' || t === '練馬師';
   }
 
-  /** 命中% and 三甲% only. Blank stays empty; it is not 0%. */
-  function rateCellHtml(text) {
+  /**
+   * Band for 命中% and 三甲%. Blank stays empty; it is not 0%.
+   * Green text is `.pl-pos` at ≥65. Mid is 45–64. Below 45 is red.
+   * Non-numeric text is unbanded (rendered plain, not green).
+   */
+  function windRateTone(text) {
     if (text == null || String(text).trim() === '') return '';
     const n = Number(String(text).trim().replace('%', ''));
+    if (!Number.isFinite(n)) return '';
+    if (n >= 65) return 'pos';
+    if (n >= 45) return 'mid';
+    return 'neg';
+  }
+
+  /** 命中% and 三甲% only. */
+  function rateCellHtml(text) {
+    if (text == null || String(text).trim() === '') return '';
     const shown = escapeHtml(String(text));
-    if (!Number.isFinite(n)) return shown;
-    if (n >= 65) return '<span class="pl-pos">' + shown + '</span>';
-    if (n >= 45) return '<span class="wind-rate-mid">' + shown + '</span>';
-    return '<span class="pl-neg">' + shown + '</span>';
+    const tone = windRateTone(text);
+    if (tone === 'pos') return '<span class="pl-pos">' + shown + '</span>';
+    if (tone === 'mid') return '<span class="wind-rate-mid">' + shown + '</span>';
+    if (tone === 'neg') return '<span class="pl-neg">' + shown + '</span>';
+    return shown;
+  }
+
+  /** Any of the five group 三甲% cells (Win/Place/Lose/三甲% repeating) would be green. */
+  function windGroupPlaceHot(groups) {
+    const cells = groups || [];
+    for (let i = 3; i < cells.length; i += 4) {
+      if (windRateTone(cells[i]) === 'pos') return true;
+    }
+    return false;
   }
 
   function windGroupCells(row) {
@@ -1030,7 +1053,8 @@
       '<tbody>' + body + '</tbody></table></div></section>';
   }
 
-  function windTableHtml(title, nameHeader, rows, updated) {
+  function windTableHtml(title, nameHeader, rows, updated, options) {
+    const markHotRows = !!(options && options.markHotRows);
     const groupHeads = WIND_GROUPS.map((name) => '<th class="wind-group" colspan="4">' + name + '</th>').join('');
     const subHeads = WIND_GROUPS.map(() => '<th>Win</th><th>Place</th><th>Lose</th><th>三甲%</th>').join('');
     const body = rows.map((row) => {
@@ -1038,7 +1062,8 @@
         const html = index % 4 === 3 ? rateCellHtml(value) : escapeHtml(value);
         return '<td>' + html + '</td>';
       }).join('');
-      return '<tr>' +
+      const hot = markHotRows && windGroupPlaceHot(row.groups);
+      return '<tr' + (hot ? ' class="wind-row-hot"' : '') + '>' +
         '<td class="wind-name">' + escapeHtml(row.label) + '</td>' +
         '<td>' + escapeHtml(row.count) + '</td>' +
         '<td>' + escapeHtml(row.hit) + '</td>' +
@@ -1153,7 +1178,7 @@
         const updated = maxWindMeetingDate(days);
         host.innerHTML =
           windPickHtml(windPickRows(trainers), updated) +
-          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers), updated) +
+          windTableHtml('馬房累計收風統計', '馬房', trainerRows(trainers), updated, { markHotRows: true }) +
           windTableHtml('賽日累計收風統計', '賽日', meetingRows(days), updated);
       }
       if (status) status.hidden = true;
