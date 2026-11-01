@@ -1678,7 +1678,7 @@
     },
     {
       "date": "2026-10-31",
-      "label": "10/31（暫定）",
+      "label": "10/31（已結算・單場+13／穩陣+476／刀仔無）",
       "tips": [
         {
           "no": 1,
@@ -1690,14 +1690,17 @@
           "odds": "1.88",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "主隊近況三連勝勢頭優於客隊；马會受平半兩邊平開緩衝夠；初盤＝現盤未燒過一球；主推林肯城受平半兩注暫定。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check",
+          "result": "1-3",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 2,
@@ -1709,16 +1712,19 @@
           "odds": "1.88",
           "confidence": 57,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "客隊近況四勝一和明顯強過主隊；马會受平半標示客略優；客水1.88過門檻；未燒過一球；主推弗賴堡讓平半兩注暫定。",
           "stars": 5,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [
             "穩陣"
           ],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check",
+          "result": "1-2",
+          "wl": "W",
+          "profit": 176
         },
         {
           "no": 3,
@@ -1730,16 +1736,19 @@
           "odds": "1.80",
           "confidence": 57,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "主隊近況明顯好過客隊四連敗勢；受讓方水位反短顯示市場偏向主；主水剛好1.80過門檻；未燒過一球；主推不來梅受平半兩注暫定。",
           "stars": 5,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [
             "穩陣"
           ],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check",
+          "result": "2-0",
+          "wl": "W",
+          "profit": 160
         },
         {
           "no": 4,
@@ -1751,14 +1760,17 @@
           "odds": "1.93",
           "confidence": 53,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "主熱門近況五場無勝偏弱；客隊近輪不敗略穩；客水1.93緩衝夠；未燒過一球；主推樸茨茅夫受平半兩注暫定。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check",
+          "result": "0-0",
+          "wl": "WH",
+          "profit": 93
         },
         {
           "no": 5,
@@ -1770,14 +1782,17 @@
           "odds": "1.95",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "客隊近況優於主隊連續不勝；客水約1.95緩衝充足；初盤平半未變未燒；主推列斯聯受平半兩注暫定。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check",
+          "result": "2-0",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 6,
@@ -1789,14 +1804,17 @@
           "odds": "1.86",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "主隊近況穩過客隊起伏；平手盤主水1.86過門檻；初盤平手未變未燒；主推侯城平手兩注暫定。",
           "stars": 4,
-          "count_in_single_sample": true,
-          "card_status": "provisional",
+          "count_in_single_sample": false,
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜走盤P唔計單場樣本｜名單未check",
+          "result": "2-2",
+          "wl": "P",
+          "profit": 0
         },
         {
           "no": 7,
@@ -1808,14 +1826,17 @@
           "odds": "1.92",
           "confidence": 53,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "主隊近況明顯偏弱；盘口標示客略優；客水1.92過門檻；未燒過一球；主推布里斯托城讓平半兩注暫定。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check",
+          "result": "2-3",
+          "wl": "W",
+          "profit": 184
         },
         {
           "no": 8,
@@ -1827,28 +1848,31 @@
           "odds": "2.06",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "客隊近況明顯好過主隊；盘口主受平半且主水偏短；客水2.06緩衝足；未燒過一球；主推艾馬多拉讓平半兩注暫定。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t798u live｜計單場樣本｜名單未check",
+          "result": "2-1",
+          "wl": "L",
+          "profit": -200
         }
       ],
-      "note": "日更 LIVE：單場8卡 HDC provisional（林肯城+0.25@1.88・2注・54%★4；弗賴堡−0.25@1.88・2注・57%★5／穩陣；雲達不來梅+0.25@1.80・2注・57%★5／穩陣；樸茨茅夫+0.25@1.93・2注・53%★4；列斯聯+0.25@1.95・2注・54%★4；侯城0@1.86・2注・54%★4；布里斯托城−0.25@1.92・2注・53%★4；艾馬多拉−0.25@2.06・2注・54%★4）；穩陣二串一鎖版 弗賴堡−0.25@1.88×雲達不來梅+0.25@1.80＝3.38／2注（$200）｜用戶 t798u 親口「上」（穩陣：弗賴堡 −0.25@1.88 ＋ 雲達不來梅 +0.25@1.80）；daozi_none（★4↑有注卡=8≤10）；紙面19；巴甲今日無（t281u）。",
+      "note": "日更 LIVE：單場8卡 HDC provisional（林肯城+0.25@1.88・2注・54%★4；弗賴堡−0.25@1.88・2注・57%★5／穩陣；雲達不來梅+0.25@1.80・2注・57%★5／穩陣；樸茨茅夫+0.25@1.93・2注・53%★4；列斯聯+0.25@1.95・2注・54%★4；侯城0@1.86・2注・54%★4；布里斯托城−0.25@1.92・2注・53%★4；艾馬多拉−0.25@2.06・2注・54%★4）；穩陣二串一鎖版 弗賴堡−0.25@1.88×雲達不來梅+0.25@1.80＝3.38／2注（$200）｜用戶 t798u 親口「上」（穩陣：弗賴堡 −0.25@1.88 ＋ 雲達不來梅 +0.25@1.80）；daozi_none（★4↑有注卡=8≤10）；紙面19；巴甲今日無（t281u）。｜【賽果】單場8：林肯城L−200／弗賴堡W+176／雲達不來梅W+160／樸茨茅夫WH+93／列斯聯L−200／侯城P0／布里斯托城W+184／艾馬多拉L−200＝單場+$13；穩陣W+476；刀仔無；當日+$489｜樣本＋4／7→33/54（侯城P唔計）",
       "stable": {
         "type": "二串一",
         "stake": 2,
         "stake_label": "注碼2注（$200）",
         "combined_odds": 3.38,
         "footer_line1": "全中過關賠率：3.38倍｜注碼2注（$200）",
-        "footer_line2": "未結算｜鎖版出街｜腳序開波升序（22:30弗賴堡→22:30雲達不來梅）",
-        "status": "pending",
+        "footer_line2": "派彩$676.00 · 盈虧+$476.00（公開頁口徑；鎖版兩腳；弗賴堡W 1-2 × 雲達不來梅W 2-0）｜已結算",
+        "status": "settled",
         "locked": true,
         "user_confirmed": true,
-        "note": "用戶 t798u 親口「上」（穩陣：弗賴堡 −0.25@1.88 ＋ 雲達不來梅 +0.25@1.80）鎖版出街；草稿候選兩腳均57%≥57%→正式鎖；腳序＝開波升序（22:30奧格斯堡vs弗賴堡→22:30雲達不來梅vs賀芬咸）；鎖後禁止自動重排／重揀；今日無刀仔（daozi_none｜★4↑有注卡=8≤10）；handoff sha16 6f517bc568de1261／user_publish_approved=true（t798u）／stable_parlay_locked=true",
+        "note": "用戶 t798u 親口「上」（穩陣：弗賴堡 −0.25@1.88 ＋ 雲達不來梅 +0.25@1.80）鎖版出街；草稿候選兩腳均57%≥57%→正式鎖；腳序＝開波升序（22:30奧格斯堡vs弗賴堡→22:30雲達不來梅vs賀芬咸）；鎖後禁止自動重排／重揀；今日無刀仔（daozi_none｜★4↑有注卡=8≤10）；handoff sha16 6f517bc568de1261／user_publish_approved=true（t798u）／stable_parlay_locked=true｜settled W +$476（兩腳皆全贏）｜settled W +$476（兩腳皆全贏）",
         "legs": [
           {
             "ko": "22:30",
@@ -1859,7 +1883,9 @@
             "confidence": 57,
             "stake": 2,
             "stars": 5,
-            "league": "德甲"
+            "league": "德甲",
+            "result": "1-2",
+            "wl": "W"
           },
           {
             "ko": "22:30",
@@ -1870,13 +1896,20 @@
             "confidence": 57,
             "stake": 2,
             "stars": 5,
-            "league": "德甲"
+            "league": "德甲",
+            "result": "2-0",
+            "wl": "W"
           }
-        ]
+        ],
+        "wl": "W",
+        "result": "W",
+        "profit": 476,
+        "payout": 676.0
       },
       "daozi_none": true,
-      "rule": "t692u+t727u+t281u+t798u-stable-lock"
+      "rule": "t692u+t727u+t281u+t798u-stable-lock",
+      "settled_at_hkt": "2026-11-01 08:20 HKT"
     }
   ],
-  "updated_at_hkt": "2026-10-31 10:15:30 HKT（live-1031-t798u）"
+  "updated_at_hkt": "2026-11-01 08:25:50 HKT（autoresult-1031-am-football111｜cisP fix）"
 }
