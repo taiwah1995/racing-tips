@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'football112';
+  const APP_DATA_VERSION = '20261101betstrategy';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -525,6 +525,87 @@
     });
   }
 
+  /* ---------- 投注策略 (only when meeting.betStrategy is present) ---------- */
+  function betStrategyMoney(amount) {
+    const n = Number(amount);
+    if (!Number.isFinite(n)) return '';
+    return '$' + (Number.isInteger(n) ? String(n) : String(n));
+  }
+
+  /** Race block from top-level betStrategy. Empty or missing bets stay hidden. */
+  function betStrategyBlock(meeting, raceNo) {
+    const strategy = meeting && meeting.betStrategy;
+    const races = strategy && strategy.races;
+    if (!races || typeof races !== 'object') return null;
+    const block = races[String(raceNo)];
+    if (!block || typeof block !== 'object' || !Array.isArray(block.bets)) return null;
+    const bets = block.bets.filter((bet) => bet && (bet.method || bet.detail));
+    if (!bets.length) return null;
+    return block;
+  }
+
+  function betStrategyRowHtml(meeting, row, altClass) {
+    const block = betStrategyBlock(meeting, row.race);
+    if (!block) return '';
+    const lines = block.bets.filter((bet) => bet && (bet.method || bet.detail)).map((bet) => {
+      const parts = [];
+      if (bet.method) parts.push(String(bet.method));
+      if (bet.detail) parts.push(String(bet.detail));
+      const stake = betStrategyMoney(bet.stake);
+      if (stake) parts.push(stake);
+      const note = bet.note != null && String(bet.note).trim() !== ''
+        ? '<span class="bet-strategy-note"> · ' + escapeHtml(String(bet.note).trim()) + '</span>'
+        : '';
+      return '<li class="bet-strategy-line"><span class="bet-strategy-bet">' +
+        escapeHtml(parts.join(' · ')) + '</span>' + note + '</li>';
+    }).join('');
+    const total = block.raceTotal != null && block.raceTotal !== ''
+      ? '<p class="bet-strategy-race-total">本場合計 ' + escapeHtml(betStrategyMoney(block.raceTotal)) + '</p>'
+      : '';
+    return '<tr class="bet-strategy-row' + altClass + '"><td class="bet-strategy-cell" colspan="5">' +
+      '<section class="bet-strategy">' +
+      '<h3 class="bet-strategy-title">投注策略</h3>' +
+      '<ul class="bet-strategy-list">' + lines + '</ul>' +
+      total +
+      '</section></td></tr>';
+  }
+
+  /** One day total under the tips table. Removed when the meeting has no bets. */
+  function renderBetStrategyDay(meeting) {
+    const existing = document.getElementById('bet-strategy-day');
+    const strategy = meeting && meeting.betStrategy;
+    const races = strategy && strategy.races;
+    let shown = 0;
+    if (races && typeof races === 'object') {
+      Object.keys(races).forEach((key) => {
+        const block = races[key];
+        if (block && Array.isArray(block.bets) && block.bets.some((bet) => bet && (bet.method || bet.detail))) {
+          shown += 1;
+        }
+      });
+    }
+    if (!strategy || !shown || strategy.dayTotal == null || strategy.dayTotal === '') {
+      if (existing) existing.remove();
+      return;
+    }
+    const unit = strategy.unit != null && strategy.unit !== '' ? betStrategyMoney(strategy.unit) : '';
+    const text = '全日合計 ' + betStrategyMoney(strategy.dayTotal) + (unit ? '（每注 ' + unit + '）' : '');
+    let el = existing;
+    if (!el) {
+      el = document.createElement('p');
+      el.id = 'bet-strategy-day';
+      el.className = 'bet-strategy-day';
+      const note = document.getElementById('tips-result-note');
+      if (note) note.insertAdjacentElement('beforebegin', el);
+      else {
+        const table = document.getElementById('tips-table');
+        const scroll = table && (table.closest('.table-scroll') || table);
+        if (scroll) scroll.insertAdjacentElement('afterend', el);
+      }
+    }
+    el.textContent = text;
+  }
+
   /* ---------- render detail ---------- */
   function renderDetail(meeting) {
     viewHome.hidden = true;
@@ -585,6 +666,8 @@
         noteTr.innerHTML = '<td></td><td class="pattern-note-cell" colspan="4">' + noteHtml + '</td>';
         tbody.appendChild(noteTr);
       }
+      const strategyHtml = betStrategyRowHtml(meeting, row, alt);
+      if (strategyHtml) tbody.insertAdjacentHTML('beforeend', strategyHtml);
     });
 
     // Post-race hit note
@@ -608,6 +691,8 @@
       noteEl.hidden = true;
       noteEl.textContent = '';
     }
+
+    renderBetStrategyDay(meeting);
 
     // 全日重心馬推介 — exactly 3 horses for the day
     const picks = (meeting.dailyPicks || []).slice(0, 3);
