@@ -1912,7 +1912,7 @@
     },
     {
       "date": "2026-11-01",
-      "label": "11/01（已結算・單場+0／穩陣無／刀仔無）",
+      "label": "11/01（已結算・單場$0／穩陣無／刀仔無）",
       "tips": [
         {
           "no": 1,
@@ -2154,5 +2154,5 @@
       "status": "已結算"
     }
   ],
-  "updated_at_hkt": "2026-11-02 08:25 HKT（results-1101-football114；handoff校正蘇斯達LH−100）"
+  "updated_at_hkt": "2026-11-02 08:27:30 HKT（sost-label-fix）"
 }
