@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-01",
-  "count": 475,
+  "date": "2026-11-02",
+  "count": 482,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -6673,8 +6673,92 @@
       "league": "葡超",
       "result": "3-0",
       "wl": "W"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "01:30",
+      "match": "薩斯索羅 vs 費倫天拿",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "薩斯索羅｜讓球 主勝 +0/+0.5（紙面）",
+      "odds": 1.81,
+      "stake": 0,
+      "source": "API",
+      "league": "意甲"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "03:45",
+      "match": "阿特蘭大 vs 帕爾馬",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "阿特蘭大｜讓球 主勝 -1/-1.5（紙面）",
+      "odds": 1.95,
+      "stake": 0,
+      "source": "API",
+      "league": "意甲"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "03:45",
+      "match": "羅連安特 vs 比斯特",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "比斯特｜讓球 客勝 +0/+0.5（紙面）",
+      "odds": 1.77,
+      "stake": 0,
+      "source": "API",
+      "league": "法甲"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "04:00",
+      "match": "拉科魯尼亞 vs 奧沙辛拿",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "拉科魯尼亞｜讓球 主勝 -0/-0.5",
+      "odds": 1.91,
+      "stake": 2,
+      "source": "API",
+      "league": "西甲"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "04:00",
+      "match": "紐卡素 vs 愛華頓",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "愛華頓｜讓球 客勝 +0/+0.5",
+      "odds": 1.83,
+      "stake": 1,
+      "source": "API",
+      "league": "英超"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "04:15",
+      "match": "賓菲加 vs 艾華卡",
+      "confidence": 58,
+      "stars": 5,
+      "pick": "賓菲加｜讓球 主勝 -2/-2.5（紙面）",
+      "odds": 1.91,
+      "stake": 0,
+      "source": "API",
+      "league": "葡超"
+    },
+    {
+      "date": "2026-11-02",
+      "time": "07:00",
+      "match": "巴拉干天奴紅牛 vs 山度士",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "巴拉干天奴紅牛｜讓球 主勝 -0/-0.5（紙面）",
+      "odds": 1.76,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-02 08:24 HKT",
-  "source_note": "LIVE 2026-11-01 INC t840u｜用戶 t840u 親口「上」（t838u 增量5暫定HDC；2鎖死卡原文唔改；刀仔唔鎖）｜鎖死2＋新5暫定HDC＋stable_none＋daozi_none＋紙面14；base football112 count=464→475"
+  "updated_at_hkt": "2026-11-02 10:24:32 HKT（live-1102-t852u）",
+  "source_note": "LIVE 2026-11-02 t852u｜用戶 t852u 親口「上」（11-02 2暫定HDC：拉科魯尼亞讓平半@1.91・2注＋愛華頓受平半@1.83・1注）｜單場2暫定HDC＋stable_none＋daozi_none＋紙面5；base football114b count=475→482｜臨上對水位～2026-11-02 10:24 HKT 仍≥1.8"
 }
