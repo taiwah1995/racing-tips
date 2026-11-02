@@ -2152,7 +2152,57 @@
       ],
       "settled_at_hkt": "2026-11-02 08:24 HKT",
       "status": "已結算"
+    },
+    {
+      "date": "2026-11-02",
+      "label": "11/02（暫定）",
+      "tips": [
+        {
+          "no": 1,
+          "ko": "04:00",
+          "league": "西甲",
+          "match": "拉科魯尼亞 vs 奧沙辛拿",
+          "pick": "拉科魯尼亞",
+          "market": "讓球 拉科魯尼亞 -0/-0.5",
+          "odds": "1.91",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "拉科同奧沙辛拿積分同11分但客淨勝球差／客場近況明顯差；马會主讓平半@約1.91過門檻，三维輕偏主淺讓，暫定兩注單場卡。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional；t852u live｜臨上對水位～2026-11-02 10:24 HKT 仍≥1.8｜名單未check｜stable_none",
+          "ko_note": "（11/03凌晨）"
+        },
+        {
+          "no": 2,
+          "ko": "04:00",
+          "league": "英超",
+          "match": "紐卡素 vs 愛華頓",
+          "pick": "愛華頓",
+          "market": "讓球 愛華頓 +0/+0.5",
+          "odds": "1.83",
+          "confidence": 54,
+          "stake": 1,
+          "status": "暫定",
+          "reason": "紐卡素主場唔差但水位向客漂移；近段主場對賽偏愛華頓；马會客受平半@約1.83過門檻；t831u英超客受平半封頂1注，暫定一注單場卡，唔組穩陣。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional；t852u live｜臨上對水位～2026-11-02 10:24 HKT 仍≥1.8｜名單未check｜stable_none｜t831u英超客受平半封頂1注",
+          "ko_note": "（11/03凌晨）"
+        }
+      ],
+      "note": "日更 LIVE：單場2卡 HDC provisional（拉科魯尼亞讓平半@1.91・2注・54%★4；愛華頓受平半@1.83・1注・54%★4｜t831u封頂）；stable_none（t789u：淺線合資格腳信心皆＜57%；賓菲加58%但−2.25深線不合t692u）｜daozi_none（精做僅7場＜★4↑>10）｜用戶 t852u 親口「上」（11-02 2暫定HDC：拉科魯尼亞讓平半@1.91・2注＋愛華頓受平半@1.83・1注）；紙面5（含巴甲紙面唔上頭位 t281u）；晚間補基維辛迪 HDC 空 pending；臨上對水位～2026-11-02 10:24 HKT 兩場平半／受平半仍≥1.8。",
+      "stable_none": true,
+      "daozi_none": true,
+      "rule": "t692u+t727u+t281u+t789u+t831u+t838u+stable≥57%+t852u-live"
     }
   ],
-  "updated_at_hkt": "2026-11-02 08:27:30 HKT（sost-label-fix）"
+  "updated_at_hkt": "2026-11-02 10:24:32 HKT（live-1102-t852u）"
 }
