@@ -6684,7 +6684,9 @@
       "odds": 1.81,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "2-4",
+      "wl": "L"
     },
     {
       "date": "2026-11-02",
@@ -6696,7 +6698,9 @@
       "odds": 1.95,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "0-3",
+      "wl": "L"
     },
     {
       "date": "2026-11-02",
@@ -6708,7 +6712,9 @@
       "odds": 1.77,
       "stake": 0,
       "source": "API",
-      "league": "法甲"
+      "league": "法甲",
+      "result": "0-2",
+      "wl": "W"
     },
     {
       "date": "2026-11-02",
@@ -6720,7 +6726,9 @@
       "odds": 1.91,
       "stake": 2,
       "source": "API",
-      "league": "西甲"
+      "league": "西甲",
+      "result": "2-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-02",
@@ -6732,7 +6740,9 @@
       "odds": 1.83,
       "stake": 1,
       "source": "API",
-      "league": "英超"
+      "league": "英超",
+      "result": "0-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-02",
@@ -6744,7 +6754,9 @@
       "odds": 1.91,
       "stake": 0,
       "source": "API",
-      "league": "葡超"
+      "league": "葡超",
+      "result": "1-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-02",
@@ -6759,6 +6771,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-02 10:24:32 HKT（live-1102-t852u）",
+  "updated_at_hkt": "2026-11-03 08:14 HKT",
   "source_note": "LIVE 2026-11-02 t852u｜用戶 t852u 親口「上」（11-02 2暫定HDC：拉科魯尼亞讓平半@1.91・2注＋愛華頓受平半@1.83・1注）｜單場2暫定HDC＋stable_none＋daozi_none＋紙面5；base football114b count=475→482｜臨上對水位～2026-11-02 10:24 HKT 仍≥1.8"
 }
