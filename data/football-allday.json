@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-02",
-  "count": 482,
+  "date": "2026-11-03",
+  "count": 494,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -6769,8 +6769,152 @@
       "stake": 0,
       "source": "API",
       "league": "巴甲"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "01:45",
+      "match": "加拉塔沙雷 vs 史特加",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "史特加｜讓球 客勝 +0/+0.5",
+      "odds": 1.98,
+      "stake": 2,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "01:45",
+      "match": "薩克達 vs 士砵亭",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "士砵亭｜主客和 客勝",
+      "odds": 1.81,
+      "stake": 2,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "03:45",
+      "match": "布力般流浪 vs 史篤城",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "史篤城｜讓球 客勝 0",
+      "odds": 1.88,
+      "stake": 2,
+      "source": "API",
+      "league": "英冠"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "04:00",
+      "match": "馬德里體育會 vs 拜仁慕尼黑",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "拜仁慕尼黑｜主客和 客勝",
+      "odds": 2.18,
+      "stake": 2,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "04:00",
+      "match": "飛燕諾 vs 國際米蘭",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "國際米蘭｜讓球 客勝 -0.5/-1（紙面）",
+      "odds": 1.96,
+      "stake": 0,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "04:00",
+      "match": "巴塞隆拿 vs 阿士東維拉",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "巴塞隆拿｜讓球 主勝 -1.5/-2（紙面）",
+      "odds": 1.72,
+      "stake": 0,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "04:00",
+      "match": "維拉利爾 vs 巴黎聖日耳門",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "巴黎聖日耳門｜讓球 客勝 -0.5/-1（紙面）",
+      "odds": 1.69,
+      "stake": 0,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "04:00",
+      "match": "曼聯 vs 羅馬",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "羅馬｜讓球 客勝 +0/+0.5（紙面）",
+      "odds": 1.75,
+      "stake": 0,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "04:00",
+      "match": "波杜基林特 vs 里爾",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "波杜基林特｜讓球 主勝 -0.5/-1（紙面）",
+      "odds": 1.99,
+      "stake": 0,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "04:00",
+      "match": "寧斯 vs 施洛雲",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "寧斯｜讓球 主勝 -1/-1.5（紙面）",
+      "odds": 1.78,
+      "stake": 0,
+      "source": "API",
+      "league": "歐聯"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "06:30",
+      "match": "查比高恩斯 vs 米拉索",
+      "confidence": 54,
+      "stars": 4,
+      "pick": "米拉索｜讓球 客勝 -0/-0.5（紙面）",
+      "odds": 1.67,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
+    },
+    {
+      "date": "2026-11-03",
+      "time": "08:30",
+      "match": "國際體育會 vs 哥列迪巴",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "國際體育會｜讓球 主勝 -1（紙面）",
+      "odds": 1.98,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-03 08:14 HKT",
-  "source_note": "LIVE 2026-11-02 t852u｜用戶 t852u 親口「上」（11-02 2暫定HDC：拉科魯尼亞讓平半@1.91・2注＋愛華頓受平半@1.83・1注）｜單場2暫定HDC＋stable_none＋daozi_none＋紙面5；base football114b count=475→482｜臨上對水位～2026-11-02 10:24 HKT 仍≥1.8"
+  "updated_at_hkt": "2026-11-03 10:47:37 HKT（live-1103-bobo-up-1103）",
+  "source_note": "LIVE 2026-11-03 bobo-up-1103｜波波轉述用戶親口「上」｜投注日 2026-11-03｜4暫定卡｜單場4暫定（2HDC＋2HAD t727u）＋stable_none＋daozi_none＋紙面8；base football116 count=482→494｜臨上對水位～2026-11-03 10:47 HKT 仍≥1.8"
 }
