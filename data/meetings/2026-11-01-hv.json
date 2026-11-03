@@ -411,36 +411,48 @@
             "method": "獨贏 (W)",
             "detail": "#1",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 13.5,
+            "pnl": 3.5
           },
           {
             "method": "位置 (P)",
             "detail": "#1",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 11.5,
+            "pnl": 1.5
           },
           {
             "method": "連贏 (Q)",
             "detail": "1 膽拖 12,8,6",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 90,
+            "pnl": 60
           },
           {
             "method": "位置Q (QP)",
             "detail": "1 膽拖 12,8,6",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 69.5,
+            "pnl": 39.5
           },
           {
             "method": "四連環/四重彩",
             "detail": "1 > 12,8,6,5,11",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝C(5,3)=10注"
+            "note": "單膽拖5＝C(5,3)=10注",
+            "return": 495,
+            "pnl": 395
           }
         ],
         "raceTotal": 180,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 679.5,
+        "racePnl": 499.5
       },
       "2": {
         "bets": [
@@ -448,36 +460,48 @@
             "method": "獨贏 (W)",
             "detail": "#9",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "位置 (P)",
             "detail": "#9",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 13.5,
+            "pnl": 3.5
           },
           {
             "method": "連贏 (Q)",
             "detail": "9 膽拖 3,5,4",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 373,
+            "pnl": 343
           },
           {
             "method": "位置Q (QP)",
             "detail": "9 膽拖 3,5,4",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 130,
+            "pnl": 100
           },
           {
             "method": "四連環/四重彩",
             "detail": "9 > 3,5,4,1,2",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝10注"
+            "note": "單膽拖5＝10注",
+            "return": 0,
+            "pnl": -100
           }
         ],
         "raceTotal": 180,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 516.5,
+        "racePnl": 336.5
       },
       "3": {
         "bets": [
@@ -486,30 +510,40 @@
             "detail": "#11 勝多多",
             "units": 1,
             "stake": 10,
-            "note": "以位置為主"
+            "note": "以位置為主",
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "連贏 (Q)",
             "detail": "4 膽拖 11,3,6",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "位置Q (QP)",
             "detail": "4 膽拖 11,3,6",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 38,
+            "pnl": 8
           },
           {
             "method": "四連環/四重彩",
             "detail": "4 > 11,3,6,2,8",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝10注"
+            "note": "單膽拖5＝10注",
+            "return": 0,
+            "pnl": -100
           }
         ],
         "raceTotal": 170,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 38,
+        "racePnl": -132
       },
       "4": {
         "bets": [
@@ -517,36 +551,48 @@
             "method": "獨贏 (W)",
             "detail": "#2",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "位置 (P)",
             "detail": "#2",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 15.5,
+            "pnl": 5.5
           },
           {
             "method": "連贏 (Q)",
             "detail": "2 膽拖 5,4,1",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "位置Q (QP)",
             "detail": "2 膽拖 5,4,1",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 50.5,
+            "pnl": 20.5
           },
           {
             "method": "四連環/四重彩",
             "detail": "2 > 5,4,1,3,9",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝10注"
+            "note": "單膽拖5＝10注",
+            "return": 0,
+            "pnl": -100
           }
         ],
         "raceTotal": 180,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 66,
+        "racePnl": -114
       },
       "5": {
         "bets": [
@@ -554,36 +600,48 @@
             "method": "獨贏 (W)",
             "detail": "#3",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "位置 (P)",
             "detail": "#3",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "連贏 (Q)",
             "detail": "3 膽拖 2,12,1",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "位置Q (QP)",
             "detail": "3 膽拖 2,12,1",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "四連環/四重彩",
             "detail": "3 > 2,12,1,6,4",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝10注"
+            "note": "單膽拖5＝10注",
+            "return": 0,
+            "pnl": -100
           }
         ],
         "raceTotal": 180,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 0,
+        "racePnl": -180
       },
       "6": {
         "bets": [
@@ -591,36 +649,48 @@
             "method": "獨贏 (W)",
             "detail": "#1",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "位置 (P)",
             "detail": "#1",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "連贏 (Q)",
             "detail": "1 膽拖 11,3,7",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "位置Q (QP)",
             "detail": "1 膽拖 11,3,7",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "四連環/四重彩",
             "detail": "1 > 11,3,7,6,5",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝10注"
+            "note": "單膽拖5＝10注",
+            "return": 0,
+            "pnl": -100
           }
         ],
         "raceTotal": 180,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 0,
+        "racePnl": -180
       },
       "7": {
         "bets": [
@@ -628,36 +698,48 @@
             "method": "獨贏 (W)",
             "detail": "#3",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "位置 (P)",
             "detail": "#3",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "連贏 (Q)",
             "detail": "3 膽拖 4,2,5",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "位置Q (QP)",
             "detail": "3 膽拖 4,2,5",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "四連環/四重彩",
             "detail": "3,4 > 2,5,9,1（雙膽）",
             "units": 6,
             "stake": 60,
-            "note": "雙膽拖4＝C(4,2)=6注"
+            "note": "雙膽拖4＝C(4,2)=6注",
+            "return": 0,
+            "pnl": -60
           }
         ],
         "raceTotal": 140,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 0,
+        "racePnl": -140
       },
       "8": {
         "bets": [
@@ -666,42 +748,56 @@
             "detail": "#8 福進",
             "units": 1,
             "stake": 10,
-            "note": "以位置為主"
+            "note": "以位置為主",
+            "return": 13.5,
+            "pnl": 3.5
           },
           {
             "method": "獨贏 (W)",
             "detail": "#7 連連幸運",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 103,
+            "pnl": 93
           },
           {
             "method": "位置 (P)",
             "detail": "#7 連連幸運",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 23.5,
+            "pnl": 13.5
           },
           {
             "method": "連贏 (Q)",
             "detail": "8 膽拖 7,1,3",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "位置Q (QP)",
             "detail": "8 膽拖 7,1,3",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 41.5,
+            "pnl": 11.5
           },
           {
             "method": "四連環/四重彩",
             "detail": "8 > 7,1,3,2,6",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝10注"
+            "note": "單膽拖5＝10注",
+            "return": 0,
+            "pnl": -100
           }
         ],
         "raceTotal": 190,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 181.5,
+        "racePnl": -8.5
       },
       "9": {
         "bets": [
@@ -709,36 +805,48 @@
             "method": "獨贏 (W)",
             "detail": "#2",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "位置 (P)",
             "detail": "#2",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "連贏 (Q)",
             "detail": "2 膽拖 1,4,6,9",
             "units": 4,
-            "stake": 40
+            "stake": 40,
+            "return": 0,
+            "pnl": -40
           },
           {
             "method": "位置Q (QP)",
             "detail": "2 膽拖 1,4,6,9",
             "units": 4,
-            "stake": 40
+            "stake": 40,
+            "return": 0,
+            "pnl": -40
           },
           {
             "method": "四連環/四重彩",
             "detail": "2 > 1,4,6,9,10",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝10注"
+            "note": "單膽拖5＝10注",
+            "return": 0,
+            "pnl": -100
           }
         ],
         "raceTotal": 200,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 0,
+        "racePnl": -200
       },
       "10": {
         "bets": [
@@ -746,37 +854,53 @@
             "method": "獨贏 (W)",
             "detail": "#2",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "位置 (P)",
             "detail": "#2",
             "units": 1,
-            "stake": 10
+            "stake": 10,
+            "return": 0,
+            "pnl": -10
           },
           {
             "method": "連贏 (Q)",
             "detail": "2 膽拖 8,1,11",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "位置Q (QP)",
             "detail": "2 膽拖 8,1,11",
             "units": 3,
-            "stake": 30
+            "stake": 30,
+            "return": 0,
+            "pnl": -30
           },
           {
             "method": "四連環/四重彩",
             "detail": "2 > 8,1,11,4,9",
             "units": 10,
             "stake": 100,
-            "note": "單膽拖5＝10注"
+            "note": "單膽拖5＝10注",
+            "return": 0,
+            "pnl": -100
           }
         ],
         "raceTotal": 180,
-        "unit": 10
+        "unit": 10,
+        "raceReturn": 0,
+        "racePnl": -180
       }
-    }
+    },
+    "settled": true,
+    "settledAt": "2026-11-01",
+    "dayReturn": 1481.5,
+    "dayPnl": -298.5
   }
 }

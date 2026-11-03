@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261103hv1104c';
+  const APP_DATA_VERSION = '20261103hv1101settle';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -532,6 +532,48 @@
     return '$' + (Number.isInteger(n) ? String(n) : String(n));
   }
 
+  /** +$395 / −$298.5 / $0. Keeps decimals; minus is U+2212. */
+  function betStrategySignedMoney(amount) {
+    const n = Number(amount);
+    if (!Number.isFinite(n)) return '';
+    const body = betStrategyMoney(Math.abs(n));
+    if (n > 0) return '+' + body;
+    if (n < 0) return '\u2212' + body;
+    return body;
+  }
+
+  function betStrategyHasAmount(value) {
+    return value != null && value !== '' && Number.isFinite(Number(value));
+  }
+
+  function betStrategyPnlClass(amount) {
+    const n = Number(amount);
+    if (!(n > 0) && !(n < 0)) return '';
+    return n > 0 ? 'pl-pos' : 'pl-neg';
+  }
+
+  /**
+   * Append only when this bet has return and/or pnl.
+   * Whole fragment takes pl-pos / pl-neg from pnl.
+   */
+  function betStrategySettleHtml(bet) {
+    if (!bet) return '';
+    const hasRet = betStrategyHasAmount(bet.return);
+    const hasPnl = betStrategyHasAmount(bet.pnl);
+    if (!hasRet && !hasPnl) return '';
+    const bits = [];
+    if (hasRet) bits.push('回 ' + betStrategyMoney(bet.return));
+    if (hasPnl) bits.push('盈虧 ' + betStrategySignedMoney(bet.pnl));
+    const cls = ['bet-strategy-settle', hasPnl ? betStrategyPnlClass(bet.pnl) : ''].filter(Boolean).join(' ');
+    return ' <span class="' + cls + '">' + escapeHtml(bits.join(' · ')) + '</span>';
+  }
+
+  function betStrategyPnlFragment(label, amount, extraClass) {
+    if (!betStrategyHasAmount(amount)) return '';
+    const cls = [extraClass, betStrategyPnlClass(amount)].filter(Boolean).join(' ');
+    return ' · <span class="' + cls + '">' + escapeHtml(label + ' ' + betStrategySignedMoney(amount)) + '</span>';
+  }
+
   /** Race block from top-level betStrategy. Empty or missing bets stay hidden. */
   function betStrategyBlock(meeting, raceNo) {
     const strategy = meeting && meeting.betStrategy;
@@ -555,7 +597,7 @@
         ? '<span class="bet-strategy-note"> · ' + escapeHtml(String(bet.note).trim()) + '</span>'
         : '';
       return '<li class="bet-strategy-line"><span class="bet-strategy-bet">' +
-        escapeHtml(parts.join(' · ')) + '</span>' + note + '</li>';
+        escapeHtml(parts.join(' · ')) + '</span>' + note + betStrategySettleHtml(bet) + '</li>';
     }).join('');
   }
 
@@ -596,9 +638,12 @@
     }
     const strategy = meeting.betStrategy;
     const raceHtml = races.map(({ race, block }) => {
-      const total = block.raceTotal != null && block.raceTotal !== ''
-        ? '<p class="bet-strategy-race-total">本場合計 ' + escapeHtml(betStrategyMoney(block.raceTotal)) + '</p>'
-        : '';
+      let total = '';
+      if (block.raceTotal != null && block.raceTotal !== '') {
+        const line = '本場合計 ' + escapeHtml(betStrategyMoney(block.raceTotal)) +
+          betStrategyPnlFragment('本場盈虧', block.racePnl, 'bet-strategy-race-pnl');
+        total = '<p class="bet-strategy-race-total">' + line + '</p>';
+      }
       return '<div class="bet-strategy-race">' +
         '<h3 class="bet-strategy-race-title">第' + escapeHtml(String(race)) + '場</h3>' +
         '<ul class="bet-strategy-list">' + betStrategyLinesHtml(block) + '</ul>' +
@@ -608,8 +653,13 @@
     let day = '';
     if (strategy.dayTotal != null && strategy.dayTotal !== '') {
       const unit = strategy.unit != null && strategy.unit !== '' ? betStrategyMoney(strategy.unit) : '';
-      day = '<p class="bet-strategy-day-total">全日合計 ' + escapeHtml(betStrategyMoney(strategy.dayTotal)) +
-        (unit ? '（每注 ' + escapeHtml(unit) + '）' : '') + '</p>';
+      let line = '全日合計 ' + escapeHtml(betStrategyMoney(strategy.dayTotal)) +
+        (unit ? '（每注 ' + escapeHtml(unit) + '）' : '');
+      if (betStrategyHasAmount(strategy.dayReturn)) {
+        line += ' · 回 ' + escapeHtml(betStrategyMoney(strategy.dayReturn));
+      }
+      line += betStrategyPnlFragment('全日盈虧', strategy.dayPnl, 'bet-strategy-day-pnl');
+      day = '<p class="bet-strategy-day-total">' + line + '</p>';
     }
     const el = existing || document.createElement('section');
     el.id = 'bet-strategy-panel';
