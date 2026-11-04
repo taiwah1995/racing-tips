@@ -2314,7 +2314,78 @@
       "rule": "t692u+t727u+t281u+t789u+t838u+stable≥57%+bobo-up-1103-live",
       "status": "已結算",
       "settled_at_hkt": "2026-11-04 08:15 HKT"
+    },
+    {
+      "date": "2026-11-04",
+      "label": "11/04（暫定）",
+      "tips": [
+        {
+          "no": 1,
+          "ko": "03:45",
+          "league": "英冠",
+          "match": "卡迪夫城 vs 韋斯咸",
+          "pick": "卡迪夫城",
+          "market": "讓球 卡迪夫城 +0/+0.5",
+          "odds": "2.12",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "卡迪夫城今季主場未敗且近三主場全勝，韋斯咸連敗後換帥震盪；马會主受平半@約2.12過門檻，三维偏主淺受，暫定兩注單場卡。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1104 live｜臨上對水位～2026-11-04 11:06 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none",
+          "ko_note": "（11/05凌晨）"
+        },
+        {
+          "no": 2,
+          "ko": "04:00",
+          "league": "歐聯",
+          "match": "朗斯 vs 科木",
+          "pick": "科木",
+          "market": "讓球 科木 -0/-0.5",
+          "odds": "1.92",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "科木歐聯積分同攻擊火力優於朗斯，马會客让平半@約1.92過門檻；三维偏客淺让，暫定兩注單場卡（歐戰唔入穩陣）。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1104 live｜臨上對水位～2026-11-04 11:06 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜midweek_ucl",
+          "ko_note": "（11/05凌晨）"
+        },
+        {
+          "no": 3,
+          "ko": "04:00",
+          "league": "歐聯",
+          "match": "燕豪芬 vs 布魯日",
+          "pick": "布魯日",
+          "market": "讓球 布魯日 +0/+0.5",
+          "odds": "2.02",
+          "confidence": 54,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "布魯日歐聯積分同近況優於燕豪芬，马會主让水位不足改客受平半@約2.02；三维偏客淺受，暫定兩注單場卡（歐戰唔入穩陣）。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1104 live｜臨上對水位～2026-11-04 11:06 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜midweek_ucl",
+          "ko_note": "（11/05凌晨）"
+        }
+      ],
+      "note": "日更 LIVE：單場3卡 provisional（卡迪夫城 HDC +0/+0.5@2.12・2注・54%★4｜計樣本｜頭位；科木 HDC −0/−0.5@1.92・2注・54%★4｜計樣本｜midweek_ucl；布魯日 HDC +0/+0.5@2.02・2注・54%★4｜計樣本｜midweek_ucl）；stable_none（t789u：有注腳皆54%＜57%＋歐戰 midweek 排除；英冠卡迪夫獨腳唔夠2）｜daozi_none（★4↑非歐戰精做遠少於>10；歐戰腳唔入刀仔）｜波波轉述用戶親口「上」｜t866u｜投注日 2026-11-04｜3暫定HDC卡；紙面10（含巴甲紙面唔上頭位 t281u）；晚間補 pending：域斯咸／布里斯托城／帕拉尼恩斯 3場 HDC 空 note only；臨上對水位～2026-11-04 11:06 HKT 三場 tip-side 仍≥1.8（科木臨上客@1.86仍≥1.8，卡面保留 draft 1.92）；NOTE 維京紙面 conf50 稿★3應★1——0注紙面唔改方向。",
+      "stable_none": true,
+      "daozi_none": true,
+      "status": "live",
+      "rule": "t692u+t281u+t789u+t838u+stable≥57%+bobo-up-1104-live"
     }
   ],
-  "updated_at_hkt": "2026-11-04 08:22 HKT（autoresult-am-1104）"
+  "updated_at_hkt": "2026-11-04 11:06:53 HKT（live-1104-bobo-up-1104）"
 }
