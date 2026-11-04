@@ -2213,7 +2213,7 @@
     },
     {
       "date": "2026-11-03",
-      "label": "11/03（暫定）",
+      "label": "11/03（已結算・單場+$374／穩陣無／刀仔無）",
       "tips": [
         {
           "no": 1,
@@ -2225,15 +2225,18 @@
           "odds": "1.88",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "史篤城積分高布力般5分、近段客場亦有勝績；马會平手客@約1.88過門檻，三维偏客平手，暫定兩注單場卡。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
           "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1103 live｜臨上對水位～2026-11-03 10:47 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none",
-          "ko_note": "（11/04凌晨）"
+          "ko_note": "（11/04凌晨）",
+          "result": "1-2",
+          "wl": "W",
+          "profit": 176
         },
         {
           "no": 2,
@@ -2245,15 +2248,18 @@
           "odds": "1.98",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "史特加歐聯高位未敗、加拉塔沙雷積分明顯落後；马會客受平半@約1.98過門檻，三维偏客淺受，暫定兩注單場卡。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
           "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1103 live｜臨上對水位～2026-11-03 10:47 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜midweek_ucl",
-          "ko_note": "（11/04凌晨）"
+          "ko_note": "（11/04凌晨）",
+          "result": "2-0",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 3,
@@ -2265,15 +2271,18 @@
           "odds": "1.81",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "士砵亭歐聯積分同實力均優於薩克達；HDC客讓平半水位不足1.8，改马會主客和客勝@約1.81（t727u），暫定兩注單場卡（非HDC樣本）。",
           "stars": 4,
           "count_in_single_sample": false,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HAD",
           "note_gate": "暫定／provisional；bobo-up-1103 live｜臨上對水位～2026-11-03 10:47 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜t727u HAD獨立單場｜非HDC樣本｜midweek_ucl",
-          "ko_note": "（11/04凌晨）"
+          "ko_note": "（11/04凌晨）",
+          "result": "0-1",
+          "wl": "W",
+          "profit": 162
         },
         {
           "no": 4,
@@ -2285,22 +2294,27 @@
           "odds": "2.18",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "拜仁質素同歐聯近況優於馬體會；HDC客平手水位不足，改马會主客和客勝@約2.18（t727u），暫定兩注單場卡（非HDC樣本）。",
           "stars": 4,
           "count_in_single_sample": false,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HAD",
           "note_gate": "暫定／provisional；bobo-up-1103 live｜臨上對水位～2026-11-03 10:47 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜t727u HAD獨立單場｜非HDC樣本｜midweek_ucl",
-          "ko_note": "（11/04凌晨）"
+          "ko_note": "（11/04凌晨）",
+          "result": "0-2",
+          "wl": "W",
+          "profit": 236
         }
       ],
-      "note": "日更 LIVE：單場4卡 provisional（史篤城 HDC 0@1.88・2注・54%★4｜計樣本；史特加 HDC +0/+0.5@1.98・2注・54%★4｜計樣本｜midweek_ucl；士砵亭 HAD客@1.81・2注・54%★4｜t727u非樣本｜midweek_ucl；拜仁 HAD客@2.18・2注・54%★4｜t727u非樣本｜midweek_ucl）；stable_none（t789u：有注腳皆54%＜57%；英冠史篤城獨腳唔夠2）｜daozi_none（★4↑精做約8場＜>10；歐戰排除刀仔）｜波波轉述用戶親口「上」｜投注日 2026-11-03｜4暫定卡；紙面8（含巴甲紙面唔上頭位 t281u）；晚間補英冠8場 HDC 空 pending；臨上對水位～2026-11-03 10:47 HKT 四場 tip-side 仍≥1.8。",
+      "note": "賽果結算 football119｜史篤城W 1-2 +176／史特加L 2-0 −200／士砵亭W 0-1 +162／拜仁W 0-2 +236｜當日+$374（3/4；HDC樣本1/2）｜累計+$84.85｜39/64｜stable_none｜daozi_none｜紙面歐聯5結（國米W 0-3／巴塞W 3-0／PSG W 0-6／羅馬LH 3-2／波杜L 0-0；寧斯留空無可靠源）／巴甲2場 pending（查比高恩斯 IN_PLAY；國際體育會未滿2.5h）｜2026-11-04 08:15 HKT",
       "stable_none": true,
       "daozi_none": true,
-      "rule": "t692u+t727u+t281u+t789u+t838u+stable≥57%+bobo-up-1103-live"
+      "rule": "t692u+t727u+t281u+t789u+t838u+stable≥57%+bobo-up-1103-live",
+      "status": "已結算",
+      "settled_at_hkt": "2026-11-04 08:15 HKT"
     }
   ],
-  "updated_at_hkt": "2026-11-03 10:47:37 HKT（live-1103-bobo-up-1103）"
+  "updated_at_hkt": "2026-11-04 08:22 HKT（autoresult-am-1104）"
 }

@@ -6782,7 +6782,9 @@
       "odds": 1.98,
       "stake": 2,
       "source": "API",
-      "league": "歐聯"
+      "league": "歐聯",
+      "result": "2-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-03",
@@ -6794,7 +6796,9 @@
       "odds": 1.81,
       "stake": 2,
       "source": "API",
-      "league": "歐聯"
+      "league": "歐聯",
+      "result": "0-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-03",
@@ -6806,7 +6810,9 @@
       "odds": 1.88,
       "stake": 2,
       "source": "API",
-      "league": "英冠"
+      "league": "英冠",
+      "result": "1-2",
+      "wl": "W"
     },
     {
       "date": "2026-11-03",
@@ -6818,7 +6824,9 @@
       "odds": 2.18,
       "stake": 2,
       "source": "API",
-      "league": "歐聯"
+      "league": "歐聯",
+      "result": "0-2",
+      "wl": "W"
     },
     {
       "date": "2026-11-03",
@@ -6830,7 +6838,9 @@
       "odds": 1.96,
       "stake": 0,
       "source": "API",
-      "league": "歐聯"
+      "league": "歐聯",
+      "result": "0-3",
+      "wl": "W"
     },
     {
       "date": "2026-11-03",
@@ -6842,7 +6852,9 @@
       "odds": 1.72,
       "stake": 0,
       "source": "API",
-      "league": "歐聯"
+      "league": "歐聯",
+      "result": "3-0",
+      "wl": "W"
     },
     {
       "date": "2026-11-03",
@@ -6854,7 +6866,9 @@
       "odds": 1.69,
       "stake": 0,
       "source": "API",
-      "league": "歐聯"
+      "league": "歐聯",
+      "result": "0-6",
+      "wl": "W"
     },
     {
       "date": "2026-11-03",
@@ -6866,7 +6880,9 @@
       "odds": 1.75,
       "stake": 0,
       "source": "API",
-      "league": "歐聯"
+      "league": "歐聯",
+      "result": "3-2",
+      "wl": "L"
     },
     {
       "date": "2026-11-03",
@@ -6878,7 +6894,9 @@
       "odds": 1.99,
       "stake": 0,
       "source": "API",
-      "league": "歐聯"
+      "league": "歐聯",
+      "result": "0-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-03",
@@ -6917,6 +6935,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-03 18:13:16 HKT（autoresult-pm-1103-santos）",
+  "updated_at_hkt": "2026-11-04 08:22 HKT（autoresult-am-1104）",
   "source_note": "LIVE 2026-11-03 bobo-up-1103｜波波轉述用戶親口「上」｜投注日 2026-11-03｜4暫定卡｜單場4暫定（2HDC＋2HAD t727u）＋stable_none＋daozi_none＋紙面8；base football116 count=482→494｜臨上對水位～2026-11-03 10:47 HKT 仍≥1.8"
 }
