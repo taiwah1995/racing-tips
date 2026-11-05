@@ -559,13 +559,51 @@
       "units": 8.0
     },
     {
+      "date": "2026-11-04",
+      "item": "①單場推介",
+      "kind": "part",
+      "stake": 600,
+      "payout": 1100,
+      "profit": 500,
+      "units": 6.0
+    },
+    {
+      "date": "2026-11-04",
+      "item": "②穩陣過關",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-11-04",
+      "item": "③刀仔鋸大樹",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-11-04",
+      "item": "當日總結（三項加總）",
+      "kind": "day-total",
+      "stake": 600,
+      "payout": 1100,
+      "profit": 500,
+      "units": 6.0
+    },
+    {
       "date": "",
       "item": "累計總結（三項每日累積）",
       "kind": "cumulative",
-      "stake": 16960.0,
-      "payout": 17044.85,
-      "profit": 84.85,
-      "units": 169.6
+      "stake": 17560.0,
+      "payout": 18144.85,
+      "profit": 584.85,
+      "units": 175.6,
+      "sample": "42/67",
+      "note": "至11/04 football122"
     }
   ]
 }
