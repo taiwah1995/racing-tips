@@ -2395,7 +2395,19 @@
       "status": "已結算",
       "rule": "t692u+t281u+t789u+t838u+stable≥57%+bobo-up-1104-live",
       "settled_at_hkt": "2026-11-05 08:30 HKT"
+    },
+    {
+      "date": "2026-11-05",
+      "label": "11/05（全日紙面）",
+      "tips": [],
+      "stable_none": true,
+      "daozi_none": true,
+      "status": "暫定／已上線（紙面）",
+      "rule": "t692u+t281u+t789u+t838u+bobo-up-1105-live",
+      "note": "日更 LIVE：A3精做2場皆巴甲紙面0注；彭美拉斯 HDC −1.75@1.85・58%★5；高士路 HDC −0.75@1.91・53%★4；t281u唔上頭位；stable_none（有注腳=0）｜daozi_none（★4↑有注=0）；用戶親口『上』｜t870u｜bobo-up-1105 live；handoff d1c2b58f71f8c894",
+      "updated_at_hkt": "2026-11-05 10:08:40 HKT"
     }
   ],
-  "updated_at_hkt": "2026-11-05 08:30 HKT（am-autoresult-1105）"
+  "updated_at_hkt": "2026-11-05 10:08:40 HKT",
+  "publish_note": "LIVE 2026-11-05｜用戶親口『上』｜t870u｜bobo-up-1105｜單場0／stable_none／daozi_none｜紙面2巴甲｜football123"
 }
