@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-04",
-  "count": 507,
+  "date": "2026-11-05",
+  "count": 509,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -7113,8 +7113,32 @@
       "stake": 0,
       "source": "API",
       "league": "巴甲"
+    },
+    {
+      "date": "2026-11-05",
+      "time": "06:30",
+      "match": "彭美拉斯 vs 雷莫",
+      "confidence": 58,
+      "stars": 5,
+      "pick": "彭美拉斯｜讓球 主勝 -1.5/-2（紙面）",
+      "odds": 1.85,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
+    },
+    {
+      "date": "2026-11-05",
+      "time": "08:30",
+      "match": "高士路 vs 巴希亞",
+      "confidence": 53,
+      "stars": 4,
+      "pick": "高士路｜讓球 主勝 -0.5/-1（紙面）",
+      "odds": 1.91,
+      "stake": 0,
+      "source": "API",
+      "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-05 08:30 HKT（am-autoresult-ucl-elc）",
-  "source_note": "LIVE 2026-11-04 bobo-up-1104｜波波轉述用戶親口「上」｜t866u｜投注日 2026-11-04｜3暫定HDC卡｜單場3暫定HDC＋stable_none＋daozi_none＋紙面10；base football119 count=494→507｜臨上對水位～2026-11-04 11:06 HKT 仍≥1.8"
+  "updated_at_hkt": "2026-11-05 10:08:40 HKT（LIVE-1105｜t870u）",
+  "source_note": "LIVE 2026-11-05｜handoff 2紙面巴甲＋stable_none＋daozi_none＋單場0卡；base football122 count=507→509；用戶親口『上』｜t870u｜bobo-up-1105 live"
 }
