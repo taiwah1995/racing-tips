@@ -7088,7 +7088,9 @@
       "odds": 1.88,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "3-1",
+      "wl": "P"
     },
     {
       "date": "2026-11-04",
@@ -7100,7 +7102,9 @@
       "odds": 1.93,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "0-0",
+      "wl": "LH"
     },
     {
       "date": "2026-11-04",
@@ -7112,7 +7116,9 @@
       "odds": 1.96,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "1-0",
+      "wl": "LH"
     },
     {
       "date": "2026-11-05",
@@ -7139,6 +7145,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-05 10:08:40 HKT（LIVE-1105｜t870u）",
+  "updated_at_hkt": "2026-11-05 18:29:32 HKT（autoresult-PM-1105｜紙面巴甲3場）",
   "source_note": "LIVE 2026-11-05｜handoff 2紙面巴甲＋stable_none＋daozi_none＋單場0卡；base football122 count=507→509；用戶親口『上』｜t870u｜bobo-up-1105 live"
 }
