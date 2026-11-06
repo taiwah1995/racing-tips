@@ -2406,8 +2406,79 @@
       "rule": "t692u+t281u+t789u+t838u+bobo-up-1105-live",
       "note": "日更 LIVE：A3精做2場皆巴甲紙面0注；彭美拉斯 HDC −1.75@1.85・58%★5；高士路 HDC −0.75@1.91・53%★4；t281u唔上頭位；stable_none（有注腳=0）｜daozi_none（★4↑有注=0）；用戶親口『上』｜t870u｜bobo-up-1105 live；handoff d1c2b58f71f8c894",
       "updated_at_hkt": "2026-11-05 10:08:40 HKT"
+    },
+    {
+      "date": "2026-11-06",
+      "label": "暫定｜單場3｜穩陣none｜刀仔none",
+      "tips": [
+        {
+          "no": 1,
+          "ko": "03:00",
+          "league": "荷甲",
+          "match": "威廉二世 vs 施禾利",
+          "pick": "施禾利",
+          "market": "讓球 施禾利 +0/+0.5",
+          "odds": "1.96",
+          "confidence": 58,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "威廉二世聯賽0勝失39球墊底，施禾利積分同近況明顯佔優；外盤Crow由平手轉主受平/半確認客向，马會客让平半水位過門檻，單場2注。",
+          "stars": 5,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1106 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-06 10:18 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none",
+          "ko_note": "（11/07凌晨）"
+        },
+        {
+          "no": 2,
+          "ko": "03:30",
+          "league": "德甲",
+          "match": "漢堡 vs 慕遜加柏",
+          "pick": "漢堡",
+          "market": "讓球 漢堡 0",
+          "odds": "1.81",
+          "confidence": 53,
+          "stake": 2,
+          "status": "暫定",
+          "reason": "漢堡積分同主場略優於墊底慕遜加柏，马會平手主@1.81過門檻；雙方防守差有平局風險，故只53%★4配2注。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1106 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-06 10:18 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none",
+          "ko_note": "（11/07凌晨）"
+        },
+        {
+          "no": 3,
+          "ko": "04:45",
+          "league": "葡超",
+          "match": "法馬利卡奧 vs 阿洛卡",
+          "pick": "阿洛卡",
+          "market": "讓球 阿洛卡 +0/+0.5",
+          "odds": "2.02",
+          "confidence": 54,
+          "stake": 1,
+          "status": "暫定",
+          "reason": "阿洛卡積分同近況明顯優於法馬利卡奧，外盤削主让线撑客；主場唔差觸t831u故只1注客受平半，唔組穩陣。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "provisional",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1106 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-06 10:18 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜t831u封頂1注",
+          "ko_note": "（11/07凌晨）"
+        }
+      ],
+      "note": "日更 LIVE：單場3卡 provisional（威廉二世vs施禾利 HDC客+0/+0.5@1.96・2注・58%★5｜計樣本｜頭位；漢堡vs慕遜加柏 HDC主0@1.81・2注・53%★4｜計樣本；法馬利卡奧vs阿洛卡 HDC客+0/+0.5@2.02・1注・54%★4｜計樣本｜t831u）；stable_none（t789u：合資格僅施禾利1腳58%唔夠2）｜daozi_none（★4↑有注=3≤10）｜波波轉述用戶親口「上」｜ticket bobo-up-1106｜投注日 2026-11-06｜3暫定HDC卡｜transcript pos4104 user cu:448266729；紙面5（圖盧茲／威尼斯／愛華頓t692u／西維爾＜1.8／富明尼斯t281u）；evening_backfill pending：打比郡 vs 保頓（马會HDC空）；臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-06 10:18 HKT 三場 tip-side 仍≥1.8。",
+      "stable_none": true,
+      "daozi_none": true,
+      "status": "暫定／已上線",
+      "rule": "t692u+t281u+t789u+t831u+t838u+stable≥57%+bobo-up-1106-live"
     }
   ],
-  "updated_at_hkt": "2026-11-05 10:08:40 HKT",
-  "publish_note": "LIVE 2026-11-05｜用戶親口『上』｜t870u｜bobo-up-1105｜單場0／stable_none／daozi_none｜紙面2巴甲｜football123"
+  "updated_at_hkt": "2026-11-06 10:19:21 HKT（live-1106-bobo-up-1106）",
+  "publish_note": "LIVE 2026-11-06｜用戶親口「上」｜bobo-up-1106｜單場3暫定HDC／stable_none／daozi_none｜紙面5｜football125"
 }
