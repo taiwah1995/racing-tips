@@ -7130,7 +7130,9 @@
       "odds": 1.85,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "6-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-05",
@@ -7142,7 +7144,9 @@
       "odds": 1.91,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "3-2",
+      "wl": "WH"
     },
     {
       "date": "2026-11-06",
@@ -7241,6 +7245,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-06 10:19:21 HKT（live-1106-bobo-up-1106）",
+  "updated_at_hkt": "2026-11-06 18:14:32 HKT（autoresult-1106-pm paper BA）",
   "source_note": "LIVE 2026-11-06 bobo-up-1106｜波波轉述用戶親口「上」｜ticket bobo-up-1106｜投注日 2026-11-06｜3暫定HDC卡｜transcript pos4104 user cu:448266729｜單場3暫定HDC＋stable_none＋daozi_none＋紙面5；base football124 count=509→517｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-06 10:18 HKT 仍≥1.8｜CDN football125"
 }
