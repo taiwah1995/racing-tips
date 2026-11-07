@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'football131';
+  const APP_DATA_VERSION = 'football132';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -4417,6 +4417,14 @@
     return date.getUTCFullYear() + '-' + String(date.getUTCMonth() + 1).padStart(2, '0');
   }
 
+  /** Range profit label. 累計盈虧 is a separate, unfiltered figure. */
+  function footballRangeProfitLabel(range) {
+    if (range === 'this') return '本月盈虧';
+    if (range === 'prev') return '上月盈虧';
+    if (!range || range === 'all') return '盈虧';
+    return '區間盈虧';
+  }
+
   /** Resolved YYYY-MM for the 累計總結 filter. Empty means every day. */
   function footballCumMonthKey() {
     if (footballCumRange === 'all') return '';
@@ -4552,13 +4560,24 @@
     return value == null ? '—' : formatFbSigned(value);
   }
 
-  function footballDayBookHtml(book, updated, id, title, toolbarHtml) {
+  function footballCumAllStat(book) {
+    if (!book || !book.total || book.total.profit == null) return '';
+    const profit = Number(book.total.profit);
+    const profitClass = profit > 0 ? 'pl-pos' : (profit < 0 ? 'pl-neg' : '');
+    return footballStatHtml('累計盈虧', footballBookSigned(book.total.profit), profitClass, false, 'fb-stat-all');
+  }
+
+  function footballDayBookHtml(book, updated, id, title, toolbarHtml, extras) {
     const toolbar = toolbarHtml || '';
+    const profitLabel = extras && extras.profitLabel ? extras.profitLabel : '盈虧';
+    const allHtml = extras && extras.allProfitHtml ? extras.allProfitHtml : '';
     if (!book || !book.total) {
+      const pending = allHtml ? '未有這個範圍的日子' : ('未有' + title);
       return '<section class="panel" id="' + id + '">' +
         panelTitleHtml(escapeHtml(title), updated) +
         toolbar +
-        '<p class="fb-pending">未有' + escapeHtml(title) + '</p></section>';
+        (allHtml ? '<div class="fb-stats">' + allHtml + '</div>' : '') +
+        '<p class="fb-pending">' + escapeHtml(pending) + '</p></section>';
     }
     const total = book.total;
     const profitClass = total.profit > 0 ? 'pl-pos' : (total.profit < 0 ? 'pl-neg' : '');
@@ -4579,7 +4598,14 @@
       '<div class="fb-stats">' +
       footballStatHtml('投注額', footballBookAmount(total.stake)) +
       footballStatHtml('派彩', footballBookAmount(total.payout)) +
-      footballStatHtml('盈虧', footballBookSigned(total.profit), profitClass, true) +
+      footballStatHtml(
+        profitLabel,
+        footballBookSigned(total.profit),
+        profitClass,
+        !allHtml,
+        allHtml ? 'fb-stat-range' : ''
+      ) +
+      allHtml +
       (total.units != null ? footballStatHtml('總注數', formatFbUnits(total.units)) : '') +
       '</div>' +
       (lines ? '<ul class="fb-day-lines">' + lines + '</ul>' : '') +
@@ -4645,8 +4671,8 @@
     return out;
   }
 
-  function footballStatHtml(label, value, valueClass, wide) {
-    return '<div class="fb-stat' + (wide ? ' fb-stat-wide' : '') + '">' +
+  function footballStatHtml(label, value, valueClass, wide, boxClass) {
+    return '<div class="fb-stat' + (wide ? ' fb-stat-wide' : '') + (boxClass ? ' ' + boxClass : '') + '">' +
       '<span class="fb-k">' + label + '</span>' +
       '<span class="fb-n' + (valueClass ? ' ' + valueClass : '') + '">' + escapeHtml(value) + '</span></div>';
   }
@@ -5543,16 +5569,27 @@
     return days;
   }
 
+  function footballVisibleCumulative(model, stableRows, dayBook, monthKey) {
+    return footballDataCumulative(model, stableRows || [], monthKey) ||
+      footballCumulativeBook(dayBook, model, stableRows || [], monthKey);
+  }
+
   function footballCumulativePanelHtml(model, stableRows, dayBook, updated) {
     const monthKey = footballCumMonthKey();
-    const book = footballDataCumulative(model, stableRows || [], monthKey) ||
-      footballCumulativeBook(dayBook, model, stableRows || [], monthKey);
+    const book = footballVisibleCumulative(model, stableRows, dayBook, monthKey);
+    const allBook = monthKey
+      ? footballVisibleCumulative(model, stableRows, dayBook, '')
+      : book;
     return footballDayBookHtml(
       book,
       updated,
       'football-cumulative',
       '累計總結',
-      footballCumFilterHtml(model, dayBook)
+      footballCumFilterHtml(model, dayBook),
+      {
+        profitLabel: footballRangeProfitLabel(footballCumRange),
+        allProfitHtml: footballCumAllStat(allBook),
+      }
     );
   }
 
