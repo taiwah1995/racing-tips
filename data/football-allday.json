@@ -7256,7 +7256,9 @@
       "odds": 1.77,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "0-3",
+      "wl": "W"
     },
     {
       "date": "2026-11-07",
@@ -7547,6 +7549,6 @@
       "league": "葡超"
     }
   ],
-  "updated_at_hkt": "2026-11-07 10:14:28 HKT（live-1107-bobo-up-1107）",
+  "updated_at_hkt": "2026-11-07 18:13:55 HKT（autoresult-1107-pm paper 維多利亞）",
   "source_note": "LIVE 2026-11-07 bobo-up-1107｜用戶親口「上」｜ticket bobo-up-1107｜投注日 2026-11-07｜4暫定HDC卡｜波波 chat pos4154｜cu:448266729｜覆核 DRAFT B1 PASS_WITH_NOTES｜單場4暫定HDC＋stable_none＋daozi_none＋紙面20；base football130 count=517→541｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜CDN football132"
 }
