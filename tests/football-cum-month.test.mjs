@@ -74,7 +74,7 @@ test('累計總結 filter is separate from the racing month select', () => {
   assert.match(src, /label: '上月'/);
   assert.equal(src.includes('上半月'), false);
   assert.equal(src.includes('下半月'), false);
-  assert.match(src, /const APP_DATA_VERSION = 'football134'/);
+  assert.match(src, /const APP_DATA_VERSION = '20261107st1108attack'/);
   assert.match(src, /累計盈虧/);
   assert.equal(footballRangeProfitLabel('this'), '本月盈虧');
   assert.equal(footballRangeProfitLabel('prev'), '上月盈虧');
