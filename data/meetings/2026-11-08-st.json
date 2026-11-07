@@ -4,6 +4,13 @@
   "venue": "沙田",
   "title": "2026-11-08 沙田 11場賽事",
   "dailyPicksHint": "(賠率低於2.5只作次選推介)",
+  "attackHot": {
+    "title": "攻擊熱門 | 高危馬 0 隻 | 中危馬 0 隻",
+    "summary": "高危攻擊馬建議放棄投注 | 中危攻擊馬建議減注50%",
+    "high": [],
+    "watch": [],
+    "disclaimer": "僅供參考 · 非投注建議"
+  },
   "tipsTable": [
     {
       "race": 1,
