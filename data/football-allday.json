@@ -7158,7 +7158,9 @@
       "odds": 1.96,
       "stake": 2,
       "source": "API",
-      "league": "荷甲"
+      "league": "荷甲",
+      "result": "1-1",
+      "wl": "WH"
     },
     {
       "date": "2026-11-06",
@@ -7170,7 +7172,9 @@
       "odds": 1.81,
       "stake": 2,
       "source": "API",
-      "league": "德甲"
+      "league": "德甲",
+      "result": "3-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-06",
@@ -7182,7 +7186,9 @@
       "odds": 1.84,
       "stake": 0,
       "source": "API",
-      "league": "法甲"
+      "league": "法甲",
+      "result": "3-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-06",
@@ -7194,7 +7200,9 @@
       "odds": 1.99,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "2-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-06",
@@ -7206,7 +7214,9 @@
       "odds": 1.83,
       "stake": 0,
       "source": "API",
-      "league": "英超"
+      "league": "英超",
+      "result": "3-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-06",
@@ -7218,7 +7228,9 @@
       "odds": 1.7,
       "stake": 0,
       "source": "API",
-      "league": "西甲"
+      "league": "西甲",
+      "result": "0-0",
+      "wl": "LH"
     },
     {
       "date": "2026-11-06",
@@ -7230,7 +7242,9 @@
       "odds": 2.02,
       "stake": 1,
       "source": "API",
-      "league": "葡超"
+      "league": "葡超",
+      "result": "1-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-06",
@@ -7245,6 +7259,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-06 18:14:32 HKT（autoresult-1106-pm paper BA）",
-  "source_note": "LIVE 2026-11-06 bobo-up-1106｜波波轉述用戶親口「上」｜ticket bobo-up-1106｜投注日 2026-11-06｜3暫定HDC卡｜transcript pos4104 user cu:448266729｜單場3暫定HDC＋stable_none＋daozi_none＋紙面5；base football124 count=509→517｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-06 10:18 HKT 仍≥1.8｜CDN football125"
+  "updated_at_hkt": "2026-11-07 08:22:00 HKT",
+  "source_note": "football129 AM autoresult｜相對 football126 只補 11-06 賽果／wl（紙面4＋tip2；施禾利／維多利亞留空）｜2026-11-07 08:16:00 HKT"
 }
