@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'football130';
+  const APP_DATA_VERSION = 'football131';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -2408,6 +2408,9 @@
   const FOOTBALL_ALLDAY_SHEET = '全日分析';
   const FOOTBALL_WL = { W: '全贏', WH: '贏半', P: '走盤', LH: '輸半', L: '全輸' };
   let footballLoad = 0;
+  /** 累計總結 range: 'this' | 'prev' | 'all' | YYYY-MM. Kept across date changes. */
+  let footballCumRange = 'this';
+  let footballPaintArgs = null;
 
   function footballGvizUrl(outKind) {
     const q = new URLSearchParams({
@@ -4375,9 +4378,101 @@
     return { total: footballSumBooks(parts), parts: parts };
   }
 
-  function footballDataCumulative(model, stableRows) {
+  /** Ledger day `YYYY-MM-DD` → `YYYY-MM`. Empty when the day is not a calendar date. */
+  function footballDateMonth(date) {
+    const matched = String(date || '').match(/^(\d{4}-\d{2})-\d{2}$/);
+    return matched ? matched[1] : '';
+  }
+
+  /** Calendar month in Asia/Hong_Kong, `YYYY-MM`. */
+  function footballHktMonthKey(now) {
+    try {
+      const fmt = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Hong_Kong',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      const parts = fmt.formatToParts(now || new Date());
+      let year = '';
+      let month = '';
+      parts.forEach((part) => {
+        if (part.type === 'year') year = part.value;
+        if (part.type === 'month') month = part.value;
+      });
+      if (/^\d{4}$/.test(year) && /^\d{1,2}$/.test(month)) {
+        return year + '-' + String(month).padStart(2, '0');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+    return getCurrentMonthKey();
+  }
+
+  function footballShiftMonthKey(key, delta) {
+    const matched = String(key || '').match(/^(\d{4})-(\d{2})$/);
+    if (!matched) return '';
+    const date = new Date(Date.UTC(Number(matched[1]), Number(matched[2]) - 1 + delta, 1));
+    if (Number.isNaN(date.getTime())) return '';
+    return date.getUTCFullYear() + '-' + String(date.getUTCMonth() + 1).padStart(2, '0');
+  }
+
+  /** Resolved YYYY-MM for the 累計總結 filter. Empty means every day. */
+  function footballCumMonthKey() {
+    if (footballCumRange === 'all') return '';
+    if (footballCumRange === 'prev') return footballShiftMonthKey(footballHktMonthKey(), -1);
+    if (/^\d{4}-\d{2}$/.test(footballCumRange)) return footballCumRange;
+    return footballHktMonthKey();
+  }
+
+  /** A filtered month lists every day in range. 全部 still hides a lone day line. */
+  function footballCumLineParts(parts, monthKey) {
+    if (monthKey) return parts;
+    return parts.length > 1 ? parts : [];
+  }
+
+  function footballCumMonths(model, dayBook) {
+    const months = new Set();
+    ((model && model.days) || []).forEach((day) => {
+      const key = footballDateMonth(day && day.date);
+      if (key) months.add(key);
+    });
+    (dayBook || []).forEach((row) => {
+      if (!row || row.kind !== 'day-total') return;
+      const key = footballDateMonth(row.date);
+      if (key) months.add(key);
+    });
+    return [...months].sort((a, b) => b.localeCompare(a));
+  }
+
+  function footballCumFilterHtml(model, dayBook) {
+    const current = footballHktMonthKey();
+    const previous = footballShiftMonthKey(current, -1);
+    const options = [
+      { value: 'all', label: '全部' },
+      { value: 'this', label: '本月' },
+      { value: 'prev', label: '上月' },
+    ];
+    footballCumMonths(model, dayBook).forEach((month) => {
+      if (month === current || month === previous) return;
+      options.push({ value: month, label: formatMonthLabel(month) });
+    });
+    if (!options.some((opt) => opt.value === footballCumRange)) footballCumRange = 'this';
+    const html = options.map((opt) => {
+      return '<option value="' + escapeAttr(opt.value) + '"' +
+        (opt.value === footballCumRange ? ' selected' : '') + '>' +
+        escapeHtml(opt.label) + '</option>';
+    }).join('');
+    return '<div class="fb-pad fb-cum-filter"><label class="fb-date">' +
+      '<span class="sr-only">累計月份</span>' +
+      '<select id="fb-month-filter" aria-label="累計月份">' + html +
+      '</select></label></div>';
+  }
+
+  function footballDataCumulative(model, stableRows, monthKey) {
     const parts = [];
     ((model && model.days) || []).forEach((day) => {
+      if (monthKey && footballDateMonth(day && day.date) !== monthKey) return;
       const book = footballComputedDayBook(
         day.tips, model.unit, day.date, model.locks || [], stableRows || []
       );
@@ -4390,19 +4485,22 @@
       });
     });
     if (!parts.length) return null;
-    return { total: footballSumBooks(parts), parts: parts.length > 1 ? parts : [] };
+    return { total: footballSumBooks(parts), parts: footballCumLineParts(parts, monthKey) };
   }
 
-  function footballCumulativeBook(rows, model, stableRows) {
-    const explicit = (rows || []).find((row) => {
-      return row.kind === 'cumulative' &&
-        row.stake != null && row.payout != null && row.profit != null;
-    });
-    if (explicit) return { total: explicit, parts: [] };
+  function footballCumulativeBook(rows, model, stableRows, monthKey) {
+    if (!monthKey) {
+      const explicit = (rows || []).find((row) => {
+        return row.kind === 'cumulative' &&
+          row.stake != null && row.payout != null && row.profit != null;
+      });
+      if (explicit) return { total: explicit, parts: [] };
+    }
     const covered = {};
     const parts = [];
     (rows || []).forEach((row) => {
       if (!row.date || row.kind !== 'day-total') return;
+      if (monthKey && footballDateMonth(row.date) !== monthKey) return;
       if (row.stake == null || row.payout == null || row.profit == null) return;
       const dayRows = rows.filter((item) => item.date === row.date);
       if (dayRows.some((item) => item.item.indexOf('全日分析') >= 0)) return;
@@ -4416,6 +4514,7 @@
     });
     ((model && model.days) || []).forEach((day) => {
       if (covered[day.date]) return;
+      if (monthKey && footballDateMonth(day.date) !== monthKey) return;
       const computed = footballComputedDayBook(
         day.tips, model.unit, day.date, model.locks || [], stableRows || []
       );
@@ -4428,7 +4527,7 @@
       });
     });
     if (!parts.length) return null;
-    return { total: footballSumBooks(parts), parts: parts.length > 1 ? parts : [] };
+    return { total: footballSumBooks(parts), parts: footballCumLineParts(parts, monthKey) };
   }
 
   function footballComputedDayBook(tips, unit, date, locks, stableRows) {
@@ -4453,10 +4552,12 @@
     return value == null ? '—' : formatFbSigned(value);
   }
 
-  function footballDayBookHtml(book, updated, id, title) {
+  function footballDayBookHtml(book, updated, id, title, toolbarHtml) {
+    const toolbar = toolbarHtml || '';
     if (!book || !book.total) {
       return '<section class="panel" id="' + id + '">' +
         panelTitleHtml(escapeHtml(title), updated) +
+        toolbar +
         '<p class="fb-pending">未有' + escapeHtml(title) + '</p></section>';
     }
     const total = book.total;
@@ -4474,6 +4575,7 @@
     }).join('');
     return '<section class="panel" id="' + id + '">' +
       panelTitleHtml(escapeHtml(title), updated) +
+      toolbar +
       '<div class="fb-stats">' +
       footballStatHtml('投注額', footballBookAmount(total.stake)) +
       footballStatHtml('派彩', footballBookAmount(total.payout)) +
@@ -5441,6 +5543,28 @@
     return days;
   }
 
+  function footballCumulativePanelHtml(model, stableRows, dayBook, updated) {
+    const monthKey = footballCumMonthKey();
+    const book = footballDataCumulative(model, stableRows || [], monthKey) ||
+      footballCumulativeBook(dayBook, model, stableRows || [], monthKey);
+    return footballDayBookHtml(
+      book,
+      updated,
+      'football-cumulative',
+      '累計總結',
+      footballCumFilterHtml(model, dayBook)
+    );
+  }
+
+  function repaintFootballCumulative() {
+    const args = footballPaintArgs;
+    const node = document.getElementById('football-cumulative');
+    if (!args || !node) return;
+    node.outerHTML = footballCumulativePanelHtml(
+      args.model, args.stableRows, args.dayBook, args.updated
+    );
+  }
+
   function paintFootball(model, source, wanted, allday, stableRows, dayBook) {
     const host = $('#football-body');
     if (!host) return;
@@ -5454,11 +5578,18 @@
     pageSub.classList.remove('subtitle-profit');
     pageSub.hidden = false;
     if (!selected) {
+      footballPaintArgs = null;
       pageSub.textContent = '暫未有推介';
       host.innerHTML = '<p class="empty">暫未有注數大於 0 的推介</p>';
       return;
     }
     pageSub.textContent = footballDayLabel(selected) + ' · ' + selected.tips.length + '場';
+    footballPaintArgs = {
+      model: model,
+      stableRows: stableRows || [],
+      dayBook: dayBook,
+      updated: updated,
+    };
     const ordered = days.slice().sort((a, b) => b.date.localeCompare(a.date));
     const options = ordered.map((day) => {
       const latestMark = latest && day.date === latest.date ? '（最新）' : '';
@@ -5484,13 +5615,7 @@
         'football-day-summary',
         '當日總結'
       ) +
-      footballDayBookHtml(
-        footballDataCumulative(model, stableRows || []) ||
-        footballCumulativeBook(dayBook, model, stableRows || []),
-        updated,
-        'football-cumulative',
-        '累計總結'
-      ) +
+      footballCumulativePanelHtml(model, stableRows || [], dayBook, updated) +
       '<p class="fb-note fb-rule">1注=$' + escapeHtml(String(model.unit)) +
       '。命中率計全贏同贏半，走盤唔計。未結場唔計入派彩、盈虧、命中率。</p></div>' +
       footballAllDayHtml(allday, selected.date, updated, selected.tips);
@@ -5505,6 +5630,11 @@
       if (!target) return;
       if (target.matches && target.matches('input[data-fb-star]')) {
         applyFootballStarFilter();
+        return;
+      }
+      if (target.id === 'fb-month-filter') {
+        footballCumRange = target.value || 'this';
+        repaintFootballCumulative();
         return;
       }
       if (target.id !== 'football-date') return;
