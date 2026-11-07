@@ -595,17 +595,53 @@
       "units": 6.0
     },
     {
+      "date": "2026-11-06",
+      "item": "①單場推介",
+      "kind": "part",
+      "stake": 500,
+      "payout": 658,
+      "profit": 158,
+      "units": 5.0
+    },
+    {
+      "date": "2026-11-06",
+      "item": "②穩陣過關",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-11-06",
+      "item": "③刀仔鋸大樹",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-11-06",
+      "item": "當日總結（三項加總）",
+      "kind": "day-total",
+      "stake": 500,
+      "payout": 658,
+      "profit": 158,
+      "units": 5.0
+    },
+    {
       "date": "",
       "item": "累計總結（三項每日累積）",
       "kind": "cumulative",
-      "stake": 17560.0,
-      "payout": 18144.85,
-      "profit": 584.85,
-      "units": 175.6,
-      "sample": "42/67",
-      "note": "至11/04 football122"
+      "stake": 18060.0,
+      "payout": 18802.85,
+      "profit": 742.85,
+      "units": 180.6,
+      "sample": "43.0/70",
+      "note": "至11/06 football130（波波手寫樣本43.0/70；若WH計0.5則算術43.5/70）"
     }
   ],
-  "updated_at_hkt": "2026-11-05 10:08:40 HKT",
-  "publish_note": "LIVE 2026-11-05｜無有注→唔加結算行；cumulative 至 11/04｜+$584.85／42/67｜t870u｜football123"
+  "updated_at_hkt": "2026-11-07 08:22:00 HKT",
+  "publish_note": "LIVE 2026-11-07 AM autoresult football130｜11-06 三卡結算 +$158｜cumulative +$742.85／43.0/70｜stake 18060｜施禾利＝Zwolle WH+96"
 }
