@@ -1242,6 +1242,16 @@ body {
   outline: none;
 }
 #view-football .fb-date select:focus { border-color: var(--gold-dim); }
+#view-football #football-cumulative .fb-cum-filter {
+  padding: 10px 12px 0;
+}
+#view-football #football-cumulative .fb-cum-filter select {
+  cursor: pointer;
+}
+#view-football #football-cumulative > .fb-pending {
+  margin: 0;
+  padding: 8px 12px 12px;
+}
 #view-football .fb-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
