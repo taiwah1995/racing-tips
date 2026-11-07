@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = 'football133';
+  const APP_DATA_VERSION = '20261107st1108';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -526,7 +526,9 @@
   }
 
   /* ---------- 投注策略 (only when meeting.betStrategy is present) ---------- */
+  /** null and blank are unset, not $0. A real 0 still formats as $0. */
   function betStrategyMoney(amount) {
+    if (amount == null || amount === '') return '';
     const n = Number(amount);
     if (!Number.isFinite(n)) return '';
     return '$' + (Number.isInteger(n) ? String(n) : String(n));
