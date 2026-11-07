@@ -26,13 +26,15 @@ const loaded = new Function(
   extract('footballHktMonthKey') + '\n' +
   extract('footballShiftMonthKey') + '\n' +
   extract('footballCumLineParts') + '\n' +
-  'return { footballDateMonth, footballHktMonthKey, footballShiftMonthKey, footballCumLineParts };'
+  extract('footballRangeProfitLabel') + '\n' +
+  'return { footballDateMonth, footballHktMonthKey, footballShiftMonthKey, footballCumLineParts, footballRangeProfitLabel };'
 );
 const {
   footballDateMonth,
   footballHktMonthKey,
   footballShiftMonthKey,
   footballCumLineParts,
+  footballRangeProfitLabel,
 } = loaded();
 
 test('ledger day month is the YYYY-MM prefix', () => {
@@ -72,7 +74,12 @@ test('累計總結 filter is separate from the racing month select', () => {
   assert.match(src, /label: '上月'/);
   assert.equal(src.includes('上半月'), false);
   assert.equal(src.includes('下半月'), false);
-  assert.match(src, /const APP_DATA_VERSION = 'football131'/);
+  assert.match(src, /const APP_DATA_VERSION = 'football132'/);
+  assert.match(src, /累計盈虧/);
+  assert.equal(footballRangeProfitLabel('this'), '本月盈虧');
+  assert.equal(footballRangeProfitLabel('prev'), '上月盈虧');
+  assert.equal(footballRangeProfitLabel('all'), '盈虧');
+  assert.equal(footballRangeProfitLabel('2026-09'), '區間盈虧');
   const paint = src.slice(src.indexOf('function paintFootball'), src.indexOf('function bindFootballOnce'));
   assert.match(paint, /'當日總結'/);
   assert.equal(paint.includes('fb-month-filter'), false);

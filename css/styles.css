@@ -1252,6 +1252,17 @@ body {
   margin: 0;
   padding: 8px 12px 12px;
 }
+#view-football #football-cumulative .fb-stat-range .fb-k,
+#view-football #football-cumulative .fb-stat-all .fb-k {
+  font-weight: 700;
+}
+#view-football #football-cumulative .fb-stat-all {
+  border-color: color-mix(in srgb, var(--gold) 70%, var(--border));
+  background: color-mix(in srgb, var(--gold) 16%, var(--bg-elev));
+}
+#view-football #football-cumulative .fb-stat-all .fb-k {
+  color: var(--gold);
+}
 #view-football .fb-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
