@@ -2481,7 +2481,7 @@
           "profit": -100
         }
       ],
-      "note": "賽果結算 football130（補施禾利＝PEC Zwolle）｜施禾利WH 1-1 +96／漢堡W 3-1 +162／阿洛卡L 1-0 −100；當日+$158（1.5/3；HDC樣本1.5/3）｜累計+$742.85｜43.0/70｜stable_none｜daozi_none｜紙面4結（圖盧茲W／威尼斯W／愛華頓W／西維爾LH）／維多利亞仍pending｜2026-11-07 08:22:00 HKT",
+      "note": "賽果結算 football130（補施禾利＝PEC Zwolle）｜施禾利WH 1-1 +96／漢堡W 3-1 +162／阿洛卡L 1-0 −100；當日+$158（1.5/3；HDC樣本1.5/3）｜累計+$742.85｜43.0/70｜stable_none｜daozi_none｜紙面5結（圖盧茲W／威尼斯W／愛華頓W／西維爾LH／維多利亞0-3 W）｜晚更補紙面 2026-11-07 18:13:55 HKT",
       "stable_none": true,
       "daozi_none": true,
       "status": "已結算",
@@ -2577,6 +2577,6 @@
       "rule": "t692u+t789u+t838u+stable≥57%+t725u+bobo-up-1107-live"
     }
   ],
-  "updated_at_hkt": "2026-11-07 10:14:28 HKT（live-1107-bobo-up-1107）",
+  "updated_at_hkt": "2026-11-07 18:13:55 HKT（autoresult-1107-pm paper 維多利亞）",
   "publish_note": "LIVE 2026-11-07｜用戶親口「上」｜bobo-up-1107｜單場4暫定HDC／stable_none／daozi_none｜紙面20｜football132"
 }
