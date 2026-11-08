@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261108stresults';
+  const APP_DATA_VERSION = '20261108stresults2';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -775,14 +775,19 @@
       // 「最終賠率」只賽後顯示；唔用隔夜 odds 充當最終
       let finalOddsHtml = '';
       if (hasResult) {
-        const wOdds = dp.oddsWin != null ? dp.oddsWin : dp.odds;
+        const wOdds = dp.oddsWin;
         const pOdds = dp.oddsPlace;
-        if (wOdds != null && wOdds !== '' && pOdds != null && pOdds !== '') {
+        const hasW = wOdds != null && wOdds !== '';
+        const hasP = pOdds != null && pOdds !== '';
+        if (hasW && hasP) {
           finalOddsHtml =
             ` <span class="pc-final-odds">(最終賠率 W：${escapeHtml(String(wOdds))} ｜P：${escapeHtml(String(pOdds))})</span>`;
-        } else if (wOdds != null && wOdds !== '') {
+        } else if (hasW) {
           finalOddsHtml =
             ` <span class="pc-final-odds">(最終賠率 W：${escapeHtml(String(wOdds))})</span>`;
+        } else if (hasP) {
+          finalOddsHtml =
+            ` <span class="pc-final-odds">(最終賠率 P：${escapeHtml(String(pOdds))})</span>`;
         }
       }
       card.innerHTML = `
