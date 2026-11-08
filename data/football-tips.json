@@ -2490,7 +2490,7 @@
     },
     {
       "date": "2026-11-07",
-      "label": "暫定｜單場4｜穩陣none｜刀仔none",
+      "label": "11/07（已結算・單場−$320／穩陣無／刀仔無）",
       "tips": [
         {
           "no": 1,
@@ -2502,14 +2502,17 @@
           "odds": "1.82",
           "confidence": 58,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "幸運薛達積分同近況（DWD）明顯優於垫底區泰斯達；马會主讓平／半@約1.82達單場水位，战意與盤口同向，單場2注。",
           "stars": 5,
           "count_in_single_sample": true,
           "card_status": "provisional",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1107 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜effective_user_publish_approved=true（檔內仍false）"
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1107 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜effective_user_publish_approved=true（檔內仍false）",
+          "result": "2-2",
+          "wl": "LH",
+          "profit": -100
         },
         {
           "no": 2,
@@ -2521,14 +2524,17 @@
           "odds": "1.82",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "柏達邦主場有戰意但法蘭克福質素與近況佔優；马會客让平半@約1.82過門檻，雙方積分接近保留平局風險，★4配2注。",
           "stars": 4,
           "count_in_single_sample": true,
           "card_status": "provisional",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1107 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜effective_user_publish_approved=true（檔內仍false）｜覆核B1：客让符號改 -0/-0.5"
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1107 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜effective_user_publish_approved=true（檔內仍false）｜覆核B1：客让符號改 -0/-0.5",
+          "result": "2-2",
+          "wl": "LH",
+          "profit": -100
         },
         {
           "no": 3,
@@ -2540,7 +2546,7 @@
           "odds": "1.99",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "海牙聯賽僅6分近況不穩，斯巴達積分與攻力較優；马會平手客@約1.99水位充裕，市場主水偏低需防主場波，★4配2注。",
           "stars": 4,
           "count_in_single_sample": true,
@@ -2548,7 +2554,10 @@
           "parlay_types": [],
           "market_code": "HDC",
           "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1107 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜effective_user_publish_approved=true（檔內仍false）",
-          "ko_note": "（11/08凌晨）"
+          "ko_note": "（11/08凌晨）",
+          "result": "3-1",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 4,
@@ -2560,23 +2569,27 @@
           "odds": "1.80",
           "confidence": 53,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "拉科聯賽排名與和局韌性優於愛斯賓奴；马會主讓平半與積分落差不一致，取客受平半@約1.80剛過水位，信心保守★4配2注。",
           "stars": 4,
           "count_in_single_sample": true,
           "card_status": "provisional",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1107 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜effective_user_publish_approved=true（檔內仍false）"
+          "note_gate": "HDC淺線合t692u；暫定／provisional；bobo-up-1107 live｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜名單未check｜stable_none｜daozi_none｜effective_user_publish_approved=true（檔內仍false）",
+          "result": "0-0",
+          "wl": "WH",
+          "profit": 80
         }
       ],
-      "note": "日更 LIVE：單場4卡 provisional（頭位幸運薛達vs泰斯達 HDC主-0/-0.5@1.82・2注・58%★5｜計樣本；柏達邦vs法蘭克福 HDC客让−0/-0.5@1.82・2注・54%★4｜計樣本；海牙vs鹿特丹斯巴達 HDC客0@1.99・2注・54%★4｜計樣本｜（11/08凌晨）；愛斯賓奴vs拉科魯尼亞 HDC客+0/+0.5@1.80・2注・53%★4｜計樣本）；stable_none（t789u：合資格僅幸運薛達1腳58%唔夠2）｜daozi_none（★4↑有注=4≤10）｜用戶親口「上」｜ticket bobo-up-1107｜投注日 2026-11-07｜4暫定HDC卡｜波波 chat pos4154｜cu:448266729｜覆核 DRAFT B1 PASS_WITH_NOTES；紙面20；evening_backfill pending：精英隊 vs 伊高斯（马會HDC空｜唔入場）；臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 四場 tip-side 仍≥1.8。",
+      "note": "賽果結算 football138｜幸運薛達LH 2-2 −100／法蘭克福LH 2-2 −100／鹿特丹斯巴達L 3-1 −200／拉科魯尼亞WH 0-0 +80；當日−$320（0.5/4；HDC樣本0.5/4＝四場全計）｜累計+$422.85｜43.5/74｜stable_none｜daozi_none｜紙面19結（列斯聯L／馬拉加W／拖連奴L／卡利亞里L／緬恩斯W／萊比錫W／多蒙特L／富咸LH／阿仙奴L／帕爾馬W／史特加L／森林L／奧沙辛拿LH／歐塞爾W／艾華卡L／羅馬W／華倫西亞W／PSG L／士砵亭L）／國民隊vs維塞烏延期（馬德拉濃霧，Liga Portugal改期11-08 15:30 WET）｜晨更 2026-11-08 08:16:56 HKT｜sample_fix_bobo_2026-11-08：0.5/4→43.5/74",
       "stable_none": true,
       "daozi_none": true,
-      "status": "暫定／已上線",
-      "rule": "t692u+t789u+t838u+stable≥57%+t725u+bobo-up-1107-live"
+      "status": "已結算",
+      "rule": "t692u+t789u+t838u+stable≥57%+t725u+bobo-up-1107-live",
+      "settled_at_hkt": "2026-11-08 08:16:56 HKT"
     }
   ],
-  "updated_at_hkt": "2026-11-07 18:13:55 HKT（autoresult-1107-pm paper 維多利亞）",
+  "updated_at_hkt": "2026-11-08 10:07:21 HKT",
   "publish_note": "LIVE 2026-11-07｜用戶親口「上」｜bobo-up-1107｜單場4暫定HDC／stable_none／daozi_none｜紙面20｜football132"
 }

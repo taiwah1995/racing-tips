@@ -7270,7 +7270,9 @@
       "odds": 1.79,
       "stake": 0,
       "source": "API",
-      "league": "英超"
+      "league": "英超",
+      "result": "1-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7282,7 +7284,9 @@
       "odds": 1.79,
       "stake": 0,
       "source": "API",
-      "league": "西甲"
+      "league": "西甲",
+      "result": "1-2",
+      "wl": "W"
     },
     {
       "date": "2026-11-07",
@@ -7294,7 +7298,9 @@
       "odds": 1.88,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "1-1",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7306,7 +7312,9 @@
       "odds": 1.79,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "1-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7318,7 +7326,9 @@
       "odds": 1.88,
       "stake": 0,
       "source": "API",
-      "league": "德甲"
+      "league": "德甲",
+      "result": "1-2",
+      "wl": "W"
     },
     {
       "date": "2026-11-07",
@@ -7330,7 +7340,9 @@
       "odds": 1.82,
       "stake": 2,
       "source": "API",
-      "league": "德甲"
+      "league": "德甲",
+      "result": "2-2",
+      "wl": "LH"
     },
     {
       "date": "2026-11-07",
@@ -7342,7 +7354,9 @@
       "odds": 1.83,
       "stake": 0,
       "source": "API",
-      "league": "德甲"
+      "league": "德甲",
+      "result": "5-2",
+      "wl": "W"
     },
     {
       "date": "2026-11-07",
@@ -7354,7 +7368,9 @@
       "odds": 1.95,
       "stake": 0,
       "source": "API",
-      "league": "德甲"
+      "league": "德甲",
+      "result": "2-1",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7366,7 +7382,9 @@
       "odds": 1.76,
       "stake": 0,
       "source": "API",
-      "league": "英超"
+      "league": "英超",
+      "result": "1-1",
+      "wl": "LH"
     },
     {
       "date": "2026-11-07",
@@ -7378,7 +7396,9 @@
       "odds": 1.96,
       "stake": 0,
       "source": "API",
-      "league": "英超"
+      "league": "英超",
+      "result": "1-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7390,7 +7410,9 @@
       "odds": 1.8,
       "stake": 2,
       "source": "API",
-      "league": "西甲"
+      "league": "西甲",
+      "result": "0-0",
+      "wl": "WH"
     },
     {
       "date": "2026-11-07",
@@ -7402,7 +7424,9 @@
       "odds": 1.73,
       "stake": 0,
       "source": "API",
-      "league": "葡超"
+      "league": "葡超",
+      "result": "延期",
+      "wl": ""
     },
     {
       "date": "2026-11-07",
@@ -7414,7 +7438,9 @@
       "odds": 1.82,
       "stake": 2,
       "source": "API",
-      "league": "荷甲"
+      "league": "荷甲",
+      "result": "2-2",
+      "wl": "LH"
     },
     {
       "date": "2026-11-07",
@@ -7426,7 +7452,9 @@
       "odds": 1.92,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "1-2",
+      "wl": "W"
     },
     {
       "date": "2026-11-07",
@@ -7438,7 +7466,9 @@
       "odds": 1.8,
       "stake": 0,
       "source": "API",
-      "league": "德甲"
+      "league": "德甲",
+      "result": "1-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7450,7 +7480,9 @@
       "odds": 1.83,
       "stake": 0,
       "source": "API",
-      "league": "英超"
+      "league": "英超",
+      "result": "3-1",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7462,7 +7494,9 @@
       "odds": 1.73,
       "stake": 0,
       "source": "API",
-      "league": "西甲"
+      "league": "西甲",
+      "result": "1-1",
+      "wl": "LH"
     },
     {
       "date": "2026-11-07",
@@ -7474,7 +7508,9 @@
       "odds": 1.99,
       "stake": 2,
       "source": "API",
-      "league": "荷甲"
+      "league": "荷甲",
+      "result": "3-1",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7486,7 +7522,9 @@
       "odds": 2.07,
       "stake": 0,
       "source": "API",
-      "league": "法甲"
+      "league": "法甲",
+      "result": "0-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-07",
@@ -7498,7 +7536,9 @@
       "odds": 1.96,
       "stake": 0,
       "source": "API",
-      "league": "葡超"
+      "league": "葡超",
+      "result": "1-1",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7510,7 +7550,9 @@
       "odds": 1.99,
       "stake": 0,
       "source": "API",
-      "league": "意甲"
+      "league": "意甲",
+      "result": "3-0",
+      "wl": "W"
     },
     {
       "date": "2026-11-07",
@@ -7522,7 +7564,9 @@
       "odds": 1.84,
       "stake": 0,
       "source": "API",
-      "league": "西甲"
+      "league": "西甲",
+      "result": "0-3",
+      "wl": "W"
     },
     {
       "date": "2026-11-07",
@@ -7534,7 +7578,9 @@
       "odds": 1.72,
       "stake": 0,
       "source": "API",
-      "league": "法甲"
+      "league": "法甲",
+      "result": "1-0",
+      "wl": "L"
     },
     {
       "date": "2026-11-07",
@@ -7546,9 +7592,11 @@
       "odds": 1.81,
       "stake": 0,
       "source": "API",
-      "league": "葡超"
+      "league": "葡超",
+      "result": "1-0",
+      "wl": "L"
     }
   ],
-  "updated_at_hkt": "2026-11-07 18:13:55 HKT（autoresult-1107-pm paper 維多利亞）",
+  "updated_at_hkt": "2026-11-08 08:16:56 HKT（autoresult-1108-am 11-07 23結＋國民隊延期）",
   "source_note": "LIVE 2026-11-07 bobo-up-1107｜用戶親口「上」｜ticket bobo-up-1107｜投注日 2026-11-07｜4暫定HDC卡｜波波 chat pos4154｜cu:448266729｜覆核 DRAFT B1 PASS_WITH_NOTES｜單場4暫定HDC＋stable_none＋daozi_none＋紙面20；base football130 count=517→541｜臨上水位=handoff odds_ref only（未再拉 tipsme／外網）～2026-11-07 10:13 HKT 仍≥1.8｜CDN football132"
 }
