@@ -667,17 +667,53 @@
       "units": 8.0
     },
     {
+      "date": "2026-11-08",
+      "item": "①單場推介",
+      "kind": "part",
+      "stake": 400,
+      "payout": 678,
+      "profit": 278,
+      "units": 4.0
+    },
+    {
+      "date": "2026-11-08",
+      "item": "②穩陣過關",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-11-08",
+      "item": "③刀仔鋸大樹",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-11-08",
+      "item": "當日總結（三項加總）",
+      "kind": "day-total",
+      "stake": 400,
+      "payout": 678,
+      "profit": 278,
+      "units": 4.0
+    },
+    {
       "date": "",
       "item": "累計總結（三項每日累積）",
       "kind": "cumulative",
-      "stake": 18860.0,
-      "payout": 19282.85,
-      "profit": 422.85,
-      "units": 188.6,
-      "sample": "43.5/74",
-      "note": "至11/07 football138（基線沿用43.0/70；今輪＋0.5/4＝四場HDC全計 WH0.5＋LH0＋LH0＋L0。11-06施禾利WH若計0.5則舊基線算術43.5/70，本輪不回溯改）｜sample_fix_bobo_2026-11-08：0.5/4→43.5/74"
+      "stake": 19260.0,
+      "payout": 19560.85,
+      "profit": 700.85,
+      "units": 192.6,
+      "sample": "45.0/76",
+      "note": "至11/08 football142（基線 football141 +$422.85／43.5/74；今輪＋1.5/2＝WH0.5＋W1；卡面水位結算拉素@$1.82 WH+$82／里爾@$1.98 W+$196＝+$278；stable_none｜daozi_none；唔合併英冠紙面5／f128／f135–137／$931）"
     }
   ],
-  "updated_at_hkt": "2026-11-09 08:14:10 HKT",
-  "publish_note": "LIVE 2026-11-09 AM autoresult football141｜11-07 紙面 國民隊vs維塞烏 延期→1-0 L（注0不入數簿）｜cumulative 維持 +$422.85／43.5/74｜stake 18860｜payout 19282.85｜不合併 f139／f140／f135–137／f128｜基線 football138"
+  "updated_at_hkt": "2026-11-09 09:10:13 HKT（live-1108-t890u-bobo-up-1108）",
+  "publish_note": "LIVE 2026-11-08 t890u-bobo-up-1108 football142｜遲出街連賽果｜當日單場 +$278／1.5/2｜cumulative +$700.85／45.0/76｜stake 19260｜payout 19560.85｜stable_none｜daozi_none｜紙面30"
 }

@@ -2588,8 +2588,63 @@
       "status": "已結算",
       "rule": "t692u+t789u+t838u+stable≥57%+t725u+bobo-up-1107-live",
       "settled_at_hkt": "2026-11-08 08:16:56 HKT"
+    },
+    {
+      "date": "2026-11-08",
+      "label": "11/08（已結算・單場+$278／穩陣無／刀仔無）",
+      "tips": [
+        {
+          "no": 1,
+          "ko": "19:30",
+          "league": "意甲",
+          "match": "拿玻里 vs 拉素",
+          "pick": "拉素",
+          "market": "讓球 拉素 +0/+0.5",
+          "odds": "1.82",
+          "confidence": 57,
+          "stake": 2,
+          "status": "已結算",
+          "reason": "拉素聯賽28分（9-1-0）大幅領先第10的拿玻里（14分），近四輪聯賽全勝更包括作客3-0祖雲達斯；对賽近年作客拿玻里多次取勝。马會仍開主让平半、客水約1.82過單場門檻，戰意同狀態都撐客，盤口對客有值，★5配2注。中週拿玻里歐聯1-4負波圖只作加分、唔當主理由。公開預報拿玻里多人缺陣、拉素缺Zaccagni，名單未按指示深查。",
+          "stars": 5,
+          "count_in_single_sample": true,
+          "card_status": "settled",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；名單未check｜stable_none｜daozi_none｜t890u-bobo-up-1108 live｜遲出街連賽果｜卡面結算",
+          "result": "1-1",
+          "wl": "WH",
+          "profit": 82
+        },
+        {
+          "no": 2,
+          "ko": "22:00",
+          "league": "法甲",
+          "match": "雷恩 vs 里爾",
+          "pick": "里爾",
+          "market": "讓球 里爾 +0/+0.5",
+          "odds": "1.98",
+          "confidence": 54,
+          "stake": 2,
+          "status": "已結算",
+          "reason": "里爾聯賽第3（18分、只失6球）優於第5雷恩（16分、已失19球），雷恩近況作客2-5尼斯、3-4巴黎FC防守不穩；对賽里爾近兩次作客雷恩均取勝。马會開主让平半而主水約1.79，客受平半約1.98過門檻，戰意同狀態偏客、盤口有值，★4配2注。雙方中週都有歐戰，唔用歐戰疲做推受讓主理由。公開預報雷恩缺Lepaul、里爾缺Ueda等，名單未按指示深查。",
+          "stars": 4,
+          "count_in_single_sample": true,
+          "card_status": "settled",
+          "parlay_types": [],
+          "market_code": "HDC",
+          "note_gate": "HDC淺線合t692u；名單未check｜stable_none｜daozi_none｜t890u-bobo-up-1108 live｜遲出街連賽果｜卡面結算",
+          "result": "1-2",
+          "wl": "W",
+          "profit": 196
+        }
+      ],
+      "note": "日更 LIVE（遲出街連賽果）：單場2卡已結算（頭位拿玻里vs拉素 HDC客+0/+0.5@1.82・2注・57%★5｜1-1 WH +$82｜計樣本；雷恩vs里爾 HDC客+0/+0.5@1.98・2注・54%★4｜1-2 W +$196｜計樣本）；當日 hit 1.5/2／profit +$278；stable_none｜daozi_none｜紙面30（晨13+晚17；含11-08國民隊紙面行）；用戶親口「上」｜ticket t890u｜投注日 2026-11-08｜波波 session pos4213 user「上?」自核｜覆核 football140 PASS_WITH_NOTES｜遲出街連賽果一併處理（卡面水位結算）；基線 football140 DRAFT＋football141 CDN；卡面水位結算（唔用漂水）；唔合併英冠紙面5／f128／f135–137／$931。",
+      "stable_none": true,
+      "daozi_none": true,
+      "status": "已結算",
+      "rule": "t692u+t789u+t838u+t890u-late-live-with-results"
     }
   ],
-  "updated_at_hkt": "2026-11-08 10:07:21 HKT",
-  "publish_note": "LIVE 2026-11-07｜用戶親口「上」｜bobo-up-1107｜單場4暫定HDC／stable_none／daozi_none｜紙面20｜football132"
+  "updated_at_hkt": "2026-11-09 09:10:13 HKT（live-1108-t890u-bobo-up-1108）",
+  "publish_note": "LIVE 2026-11-08｜t890u-bobo-up-1108｜遲出街連賽果｜單場2已結算 HDC／stable_none／daozi_none｜當日+$278｜累計 45.0/76 +$700.85｜紙面30｜football142"
 }
