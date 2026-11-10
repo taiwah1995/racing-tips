@@ -1,0 +1,705 @@
+{
+  "id": "2026-11-11-hv",
+  "date": "2026-11-11",
+  "venue": "快活谷",
+  "title": "2026-11-11 快活谷 9場賽事",
+  "venueCode": "HV",
+  "raceCount": 9,
+  "label": null,
+  "tipsTable": [
+    {
+      "race": 1,
+      "class": "五班",
+      "distance": 1650,
+      "first": {
+        "no": 12,
+        "name": "威威父子",
+        "style": "前",
+        "odds": 9.0
+      },
+      "second": {
+        "no": 6,
+        "name": "發財金戈",
+        "style": "後",
+        "odds": 5.1
+      },
+      "third": {
+        "no": 1,
+        "name": "電路一百",
+        "style": "前",
+        "odds": 6.7
+      },
+      "dark": {
+        "no": 5,
+        "name": "愛心萬里",
+        "style": "中",
+        "odds": 11
+      }
+    },
+    {
+      "race": 2,
+      "class": "五班",
+      "distance": 1200,
+      "first": {
+        "no": 10,
+        "name": "果然僥倖",
+        "style": "前",
+        "odds": 10
+      },
+      "second": {
+        "no": 8,
+        "name": "雙子美麗",
+        "style": "放",
+        "odds": 8.7
+      },
+      "third": {
+        "no": 12,
+        "name": "輕鬆大少",
+        "style": "後",
+        "odds": 5.1
+      },
+      "dark": {
+        "no": 4,
+        "name": "翠湖烈風",
+        "style": "後",
+        "odds": 8.3
+      }
+    },
+    {
+      "race": 3,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 11,
+        "name": "馬鳳凰",
+        "style": "後",
+        "odds": 3.4
+      },
+      "second": {
+        "no": 12,
+        "name": "有盈勇士",
+        "style": "中",
+        "odds": 10
+      },
+      "third": {
+        "no": 7,
+        "name": "加州勇勝",
+        "style": "中",
+        "odds": 7.8
+      },
+      "dark": {
+        "no": 6,
+        "name": "各絲各法",
+        "style": "中",
+        "odds": 14
+      }
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 11,
+        "name": "開心旺財",
+        "style": "放",
+        "odds": 1.6
+      },
+      "second": {
+        "no": 3,
+        "name": "喜馬",
+        "style": "中",
+        "odds": 8.8
+      },
+      "third": {
+        "no": 6,
+        "name": "凝妙星",
+        "style": "前",
+        "odds": 10
+      },
+      "dark": {
+        "no": 1,
+        "name": "部族高手",
+        "style": "前",
+        "odds": 21
+      }
+    },
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1650,
+      "first": {
+        "no": 11,
+        "name": "得意佳作",
+        "style": "放",
+        "odds": 4.6
+      },
+      "second": {
+        "no": 12,
+        "name": "幸福約定",
+        "style": "中",
+        "odds": 9.1
+      },
+      "third": {
+        "no": 10,
+        "name": "康昌之星",
+        "style": "後",
+        "odds": 6.8
+      },
+      "dark": {
+        "no": 5,
+        "name": "龍文正道",
+        "style": "後",
+        "odds": 11
+      }
+    },
+    {
+      "race": 6,
+      "class": "四班",
+      "distance": 1200,
+      "first": {
+        "no": 1,
+        "name": "博愛先鋒",
+        "style": "中",
+        "odds": 12
+      },
+      "second": {
+        "no": 4,
+        "name": "快樂神駒",
+        "style": "前",
+        "odds": 4.4
+      },
+      "third": {
+        "no": 5,
+        "name": "順勢而行",
+        "style": "後",
+        "odds": 6.3
+      },
+      "dark": {
+        "no": 11,
+        "name": "順善寶",
+        "style": "前",
+        "odds": 10
+      }
+    },
+    {
+      "race": 7,
+      "class": "三班",
+      "distance": 1200,
+      "first": {
+        "no": 5,
+        "name": "驕陽雄心",
+        "style": "前",
+        "odds": 5.7
+      },
+      "second": {
+        "no": 7,
+        "name": "利高八斗",
+        "style": "中",
+        "odds": 8.3
+      },
+      "third": {
+        "no": 2,
+        "name": "錶之極光",
+        "style": "前",
+        "odds": 5.2
+      },
+      "dark": {
+        "no": 12,
+        "name": "伶俐驫駒",
+        "style": "前",
+        "odds": 13
+      }
+    },
+    {
+      "race": 8,
+      "class": "三班",
+      "distance": 1800,
+      "first": {
+        "no": 2,
+        "name": "好實力",
+        "style": "中",
+        "odds": 3.9
+      },
+      "second": {
+        "no": 3,
+        "name": "中國心",
+        "style": "中",
+        "odds": 5.4
+      },
+      "third": {
+        "no": 1,
+        "name": "幸運派彩",
+        "style": "中",
+        "odds": 9.4
+      },
+      "dark": {
+        "no": 10,
+        "name": "財富非凡",
+        "style": "前",
+        "odds": 18
+      }
+    },
+    {
+      "race": 9,
+      "class": "二班",
+      "distance": 1650,
+      "first": {
+        "no": 3,
+        "name": "包裝福星",
+        "style": "中",
+        "odds": 9.5
+      },
+      "second": {
+        "no": 1,
+        "name": "喜蓮勇感",
+        "style": "放",
+        "odds": 13
+      },
+      "third": {
+        "no": 12,
+        "name": "將義",
+        "style": "後",
+        "odds": 12
+      },
+      "dark": {
+        "no": 9,
+        "name": "穿甲金鷹",
+        "style": "前",
+        "odds": 23
+      }
+    }
+  ],
+  "dailyPicks": [
+    {
+      "race": 5,
+      "class": "四班",
+      "distance": 1650,
+      "no": 11,
+      "name": "得意佳作",
+      "style": "放",
+      "odds": 4.6,
+      "badge": "⭐ 全日心水"
+    },
+    {
+      "race": 4,
+      "class": "四班",
+      "distance": 1650,
+      "no": 11,
+      "name": "開心旺財",
+      "style": "放",
+      "odds": 1.6,
+      "badge": "第二推介"
+    },
+    {
+      "race": 7,
+      "class": "三班",
+      "distance": 1200,
+      "no": 5,
+      "name": "驕陽雄心",
+      "style": "前",
+      "odds": 5.7,
+      "badge": "第三推介"
+    }
+  ],
+  "dailyPicksHint": "(賠率低於2.5只作次選推介)",
+  "betStrategy": {
+    "unit": null,
+    "dayTotal": null,
+    "pendingAmounts": true,
+    "amountNote": "金額全部未批，維持 null/pending；不發明注碼、比例或四重彩定位。",
+    "races": {
+      "1": {
+        "bets": [
+          {
+            "method": "獨贏 (W)",
+            "detail": "12",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "12",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "12 膽拖 6, 1, 5",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "12 膽拖 6, 1, 5",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "12 > 6, 1, 5, 8, 7（信心未夠做雙膽，用單膽多腳，避免一隻失手全盤皆輸）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四重彩",
+            "detail": "12 > 6, 1, 5, 8, 7（原文單膽多腳僅作記錄，定位待確認，不自行展開）",
+            "units": null,
+            "stake": null,
+            "note": "待確認定位"
+          }
+        ],
+        "raceTotal": null,
+        "unit": null
+      },
+      "2": {
+        "bets": [
+          {
+            "method": "獨贏 (W)",
+            "detail": "10",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "10",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "10 膽拖 8, 12, 4",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "10 膽拖 8, 12, 4",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "10 > 8, 12, 4, 7, 11（單膽，唔用雙膽；呢場前列太擠，雙膽容易一隻失手全盤皆輸）",
+            "units": null,
+            "stake": null
+          }
+        ],
+        "raceTotal": null,
+        "unit": null,
+        "note": "原文只有四連環，不加四重彩。"
+      },
+      "3": {
+        "bets": [
+          {
+            "method": "獨贏 (W)",
+            "detail": "12（以位置為主，獨贏少注）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "12（以位置為主，獨贏少注）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "11 膽拖 12, 7, 6",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "11 膽拖 12, 7, 6",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "11 > 12, 7, 6, 2, 10（單膽，馬鳳凰穩但位置賠率冇肉，所以唔用雙膽）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四重彩",
+            "detail": "11 > 12, 7, 6, 2, 10（原文單膽多腳僅作記錄，定位待確認，不自行展開）",
+            "units": null,
+            "stake": null,
+            "note": "待確認定位"
+          }
+        ],
+        "raceTotal": null,
+        "unit": null
+      },
+      "4": {
+        "bets": [
+          {
+            "method": "位置 (P)",
+            "detail": "3（位置為主，4.7倍有值）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "1（小注輔助）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "11 膽拖 3, 6, 1",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "11 膽拖 3, 6, 1",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "11 > 3, 6, 1, 12, 8（用單膽多腳。11號雖然係大熱，但升班兼換騎師，唔夠穩陣用雙膽。）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四重彩",
+            "detail": "11 > 3, 6, 1, 12, 8（原文單膽多腳僅作記錄，定位待確認，不自行展開）",
+            "units": null,
+            "stake": null,
+            "note": "待確認定位"
+          }
+        ],
+        "raceTotal": null,
+        "unit": null,
+        "note": "原文：『3 位置為主（4.7倍有值）；可以小注 1 位置做輔助。11 號 1.6 倍獨贏冇肉，唔建議買。』未另發明獨贏3；11號獨贏不買。『位置為主』若是否另加細注獨贏3，待確認。"
+      },
+      "5": {
+        "bets": [
+          {
+            "method": "獨贏 (W)",
+            "detail": "12（全場值博率最高）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "12（全場值博率最高）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "11 膽拖 12, 10, 1",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "11 膽拖 12, 10, 1",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "11 > 12, 10, 1, 5, 4（得意佳作入位把握大，但贏面只係略有肉；幸福約定同康昌之星都係入位型，未夠信心孖膽，所以用單膽多腳。）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四重彩",
+            "detail": "11 > 12, 10, 1, 5, 4（原文單膽多腳僅作記錄，定位待確認，不自行展開）",
+            "units": null,
+            "stake": null,
+            "note": "待確認定位"
+          }
+        ],
+        "raceTotal": null,
+        "unit": null
+      },
+      "6": {
+        "bets": [
+          {
+            "method": "獨贏 (W)",
+            "detail": "1",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "1",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "1 膽拖 4, 7, 5",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "1 膽拖 4, 7, 5",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "1 > 4, 5, 7, 11, 8（單膽多腳。冇足夠信心用雙膽，避免一隻失手全盤皆輸）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四重彩",
+            "detail": "1 > 4, 5, 7, 11, 8（原文單膽多腳僅作記錄，定位待確認，不自行展開）",
+            "units": null,
+            "stake": null,
+            "note": "待確認定位"
+          }
+        ],
+        "raceTotal": null,
+        "unit": null,
+        "note": "原文：唔建議買5號位置，1.4倍冇值博。5號只留在Q/QP/四連環腳，不單買位置。"
+      },
+      "7": {
+        "bets": [
+          {
+            "method": "獨贏 (W)",
+            "detail": "7（全場最抵，負磅、檔位同晨操三樣都有利）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "7（全場最抵，負磅、檔位同晨操三樣都有利）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "5 膽拖 7, 2, 12",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "5 膽拖 7, 2, 12",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "5 > 7, 2, 12, 11, 1（單膽多腳）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四重彩",
+            "detail": "5 > 7, 2, 12, 11, 1（原文單膽多腳僅作記錄，定位待確認，不自行展開）",
+            "units": null,
+            "stake": null,
+            "note": "待確認定位"
+          }
+        ],
+        "raceTotal": null,
+        "unit": null,
+        "note": "原文註：首選5號係最大機會入位嘅馬，但佢位置只有1.5倍，已經冇咩肉食。所以5號留喺組合做膽，真正值得落獨贏同位置嘅係7號。"
+      },
+      "8": {
+        "bets": [
+          {
+            "method": "獨贏 (W)",
+            "detail": "2（細注）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "1（3.2倍，四隻重心馬之中最有值博）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "2 膽拖 3, 1, 10（原文：連贏 2-10 約42倍係博冷嘅一腳）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "2 膽拖 3, 1, 10（原文：位置Q重點買 2-3，約3.2倍）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "2 > 3, 1, 10, 7, 12（單膽五腳。中國心加分後同好實力嘅負磅形勢逆轉，所以唔夠信心用雙膽）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四重彩",
+            "detail": "2 > 3, 1, 10, 7, 12（原文單膽多腳僅作記錄，定位待確認，不自行展開）",
+            "units": null,
+            "stake": null,
+            "note": "待確認定位"
+          }
+        ],
+        "raceTotal": null,
+        "unit": null,
+        "note": "原文：2 獨贏（細注）＋ 1 位置；分析指2號位置1.3倍冇肉，不單買P2。Q/QP保持原文膽拖 3,1,10，重點只作原文記錄，不另拆注。"
+      },
+      "9": {
+        "bets": [
+          {
+            "method": "獨贏 (W)",
+            "detail": "3（獨贏有值，位置作保險）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "3（獨贏有值，位置作保險）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置 (P)",
+            "detail": "9（細注位置）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "連贏 (Q)",
+            "detail": "3 膽拖 1, 12, 9（隔夜 1-3 連贏21倍）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "位置Q (QP)",
+            "detail": "3 膽拖 1, 12, 9（隔夜 1-3 連贏21倍）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四連環",
+            "detail": "3 > 1, 12, 9, 5, 4（單膽多腳，唔用雙膽；刻意唔包大熱10號）",
+            "units": null,
+            "stake": null
+          },
+          {
+            "method": "四重彩",
+            "detail": "3 > 1, 12, 9, 5, 4（原文單膽多腳僅作記錄，定位待確認，不自行展開）",
+            "units": null,
+            "stake": null,
+            "note": "待確認定位"
+          }
+        ],
+        "raceTotal": null,
+        "unit": null,
+        "note": "四連環/四重彩腳刻意不包10號。"
+      }
+    }
+  }
+}
