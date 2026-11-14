@@ -956,9 +956,9 @@
       "winOddsMax": 2.9
     },
     "廖|艾兆禮": {
-      "seq": "XXPPXPPPPP",
-      "gap": 2,
-      "starts": 26,
+      "seq": "XPPXPPPPPX",
+      "gap": 1,
+      "starts": 25,
       "wins": 0,
       "places": 9,
       "winOddsMin": null,

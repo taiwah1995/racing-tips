@@ -13,7 +13,8 @@ starts only; both stay null when that pair has no priced win.
 
 A page that officially announces cancellation (此場賽事宣佈取消) and has no
 performance table is skipped: zero starts, no invented places. Any other
-missing performance table still aborts the run.
+missing performance table still aborts the run. A performance-table row with
+an empty 馬號 is not a start. A blank 名次 on a numbered runner stays X.
 """
 from __future__ import annotations
 
@@ -137,15 +138,21 @@ def results_rows(html: str) -> list[dict] | None:
                     return i
             return None
         place_i = find("名次")
+        horse_i = find("馬號")
         jockey_i = find("騎師")
         trainer_i = find("練馬師")
         odds_i = find("獨贏賠率")
         if None in (place_i, jockey_i, trainer_i, odds_i):
             continue
         need = max(place_i, jockey_i, trainer_i, odds_i)
+        if horse_i is not None:
+            need = max(need, horse_i)
         out = []
         for row in table[header_i + 1 :]:
             if len(row) <= need:
+                continue
+            # No saddlecloth number: not a start (R3 喜行 had an empty 馬號).
+            if horse_i is not None and not re.sub(r"\s+", "", row[horse_i]):
                 continue
             jockey = clean_jockey(row[jockey_i])
             trainer = re.sub(r"\s+", "", row[trainer_i])
@@ -374,6 +381,19 @@ def self_check_helpers() -> None:
     rows, status = page_rows("<html><body>no performance table</body></html>")
     if rows is not None or status != "missing":
         raise SystemExit("missing non-cancelled table was not a failure")
+    numbered_blank = (
+        "<table><tr><td>名次</td><td>馬號</td><td>馬名</td><td>騎師</td><td>練馬師</td><td>獨贏賠率</td></tr>"
+        "<tr><td></td><td>3</td><td>觀萬象</td><td>袁幸堯</td><td>葉楚航</td><td>---</td></tr>"
+        "<tr><td></td><td></td><td>喜行</td><td>艾兆禮</td><td>廖康銘</td><td>---</td></tr>"
+        "<tr><td>3 平頭馬</td><td>6</td><td>小霸王</td><td>黃寶妮</td><td>告東尼</td><td>43</td></tr>"
+        "<tr><td></td><td>3</td><td>幸運有您</td><td>潘明輝</td><td>羅富全</td><td>---</td></tr>"
+        "</table>"
+    )
+    rows, status = page_rows(numbered_blank)
+    got = [(row["trainer"], row["jockey"], wpx(row["place"])) for row in rows or []]
+    wanted = [("葉楚航", "袁幸堯", "X"), ("告東尼", "黃寶妮", "P"), ("羅富全", "潘明輝", "X")]
+    if status != "ok" or got != wanted:
+        raise SystemExit(f"empty horse number was counted: {status} {got}")
     if clean_jockey("希威森 (-2)") != "希威森" or clean_jockey("楊明綸(-10)") != "楊明綸":
         raise SystemExit("jockey allowance strip failed")
     if clean_jockey("潘頓") != "潘頓":
