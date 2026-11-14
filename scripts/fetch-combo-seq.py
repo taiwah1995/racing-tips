@@ -10,6 +10,11 @@ text such as ``2 平頭馬``) → X. ``seq`` is the latest 10 starts, newest fir
 ``gap`` is the consecutive X count since the most recent W or P across the
 whole season, not only those 10. Win-odds min/max use the 獨贏賠率 of W
 starts only; both stay null when that pair has no priced win.
+
+A page that officially announces cancellation (此場賽事宣佈取消) and has no
+performance table is skipped: zero starts, no invented places. Any other
+missing performance table still aborts the run. A performance-table row with
+an empty 馬號 is not a start. A blank 名次 on a numbered runner stays X.
 """
 from __future__ import annotations
 
@@ -50,6 +55,8 @@ NON_FINISH = {
     "WV", "PU", "UR", "FE", "DNF", "DISQ", "WX", "WX-A", "TNP", "RR", "BD", "RO",
     "VOID", "NR", "WV-A", "---", "—", "-", "",
 }
+# HKJC LocalResults notice when the race is abandoned. That page has no 名次 table.
+CANCELLED_NOTICE = "此場賽事宣佈取消"
 
 
 class TableParser(HTMLParser):
@@ -131,15 +138,21 @@ def results_rows(html: str) -> list[dict] | None:
                     return i
             return None
         place_i = find("名次")
+        horse_i = find("馬號")
         jockey_i = find("騎師")
         trainer_i = find("練馬師")
         odds_i = find("獨贏賠率")
         if None in (place_i, jockey_i, trainer_i, odds_i):
             continue
         need = max(place_i, jockey_i, trainer_i, odds_i)
+        if horse_i is not None:
+            need = max(need, horse_i)
         out = []
         for row in table[header_i + 1 :]:
             if len(row) <= need:
+                continue
+            # No saddlecloth number: not a start (R3 喜行 had an empty 馬號).
+            if horse_i is not None and not re.sub(r"\s+", "", row[horse_i]):
                 continue
             jockey = clean_jockey(row[jockey_i])
             trainer = re.sub(r"\s+", "", row[trainer_i])
@@ -153,6 +166,26 @@ def results_rows(html: str) -> list[dict] | None:
             })
         return out
     return None
+
+
+def race_cancelled(html: str) -> bool:
+    """Official abandonment notice. Such a page has no performance table."""
+    return CANCELLED_NOTICE in html
+
+
+def page_rows(html: str) -> tuple[list[dict] | None, str]:
+    """Return (rows, status) with status ok, cancelled, or missing.
+
+    ok: performance table present (parse those rows).
+    cancelled: official notice and no table — skip, zero starts.
+    missing: no table and no cancellation notice — the run must fail.
+    """
+    rows = results_rows(html)
+    if rows:
+        return rows, "ok"
+    if race_cancelled(html):
+        return None, "cancelled"
+    return None, "missing"
 
 
 def clean_jockey(name: str) -> str:
@@ -335,10 +368,32 @@ def check_samples(pairs: dict[str, dict], updated: str) -> None:
 
 
 def self_check_helpers() -> None:
-    if wpx("1") != "W" or wpx("2 平頭馬") != "P" or wpx("3") != "P":
+    if wpx("1") != "W" or wpx("2 平頭馬") != "P" or wpx("3") != "P" or wpx("3 平頭馬") != "P":
         raise SystemExit("place mapping failed")
     if wpx("4") != "X" or wpx("WV") != "X" or wpx("10") != "X":
         raise SystemExit("place mapping failed")
+    cancelled_page = (
+        "<div>此場賽事宣佈取消。根據賽馬博彩規例，若此賽事設有單場彩池，有關注項將予以退款。</div>"
+    )
+    rows, status = page_rows(cancelled_page)
+    if rows is not None or status != "cancelled":
+        raise SystemExit("cancelled race was not skipped")
+    rows, status = page_rows("<html><body>no performance table</body></html>")
+    if rows is not None or status != "missing":
+        raise SystemExit("missing non-cancelled table was not a failure")
+    numbered_blank = (
+        "<table><tr><td>名次</td><td>馬號</td><td>馬名</td><td>騎師</td><td>練馬師</td><td>獨贏賠率</td></tr>"
+        "<tr><td></td><td>3</td><td>觀萬象</td><td>袁幸堯</td><td>葉楚航</td><td>---</td></tr>"
+        "<tr><td></td><td></td><td>喜行</td><td>艾兆禮</td><td>廖康銘</td><td>---</td></tr>"
+        "<tr><td>3 平頭馬</td><td>6</td><td>小霸王</td><td>黃寶妮</td><td>告東尼</td><td>43</td></tr>"
+        "<tr><td></td><td>3</td><td>幸運有您</td><td>潘明輝</td><td>羅富全</td><td>---</td></tr>"
+        "</table>"
+    )
+    rows, status = page_rows(numbered_blank)
+    got = [(row["trainer"], row["jockey"], wpx(row["place"])) for row in rows or []]
+    wanted = [("葉楚航", "袁幸堯", "X"), ("告東尼", "黃寶妮", "P"), ("羅富全", "潘明輝", "X")]
+    if status != "ok" or got != wanted:
+        raise SystemExit(f"empty horse number was counted: {status} {got}")
     if clean_jockey("希威森 (-2)") != "希威森" or clean_jockey("楊明綸(-10)") != "楊明綸":
         raise SystemExit("jockey allowance strip failed")
     if clean_jockey("潘頓") != "潘頓":
@@ -394,9 +449,13 @@ def main() -> None:
     odd_places: dict[str, int] = {}
     allowance_left: dict[str, int] = {}
     missing_tables: list[str] = []
+    cancelled: list[str] = []
     for (iso, course, race_no), html in sorted(pages.items()):
-        rows = results_rows(html)
-        if not rows:
+        rows, status = page_rows(html)
+        if status == "cancelled":
+            cancelled.append(f"{iso} {course} R{race_no}")
+            continue
+        if status == "missing":
             missing_tables.append(f"{iso} {course} R{race_no}")
             continue
         for row in rows:
@@ -417,6 +476,8 @@ def main() -> None:
                 "odds": row["odds"],
             })
 
+    if cancelled:
+        print("skipped cancelled races (0 starts): " + ", ".join(cancelled), file=sys.stderr)
     if missing_tables:
         print("missing result tables:\n" + "\n".join(missing_tables), file=sys.stderr)
         raise SystemExit(1)
