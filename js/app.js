@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261114st';
+  const APP_DATA_VERSION = '20261114stresults';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -157,9 +157,13 @@
     const cls = row.class || '';
     const dist = row.distance != null ? row.distance : '';
     const sub = cls && dist !== '' ? `${escapeHtml(cls)}${dist}` : escapeHtml(cls || String(dist));
+    const cancelledLine =
+      row.result && row.result.cancelled === true
+        ? '\n      <span class="race-meta-line">取消／退款</span>'
+        : '';
     return `<span class="race-cell">
       <span class="race-no-line">${row.race}</span>
-      <span class="race-meta-line">${sub}</span>
+      <span class="race-meta-line">${sub}</span>${cancelledLine}
     </span>`;
   }
 
