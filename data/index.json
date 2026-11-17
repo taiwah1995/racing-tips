@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-11-18-hv",
+      "date": "2026-11-18",
+      "venue": "快活谷",
+      "venueCode": "HV",
+      "raceCount": 9,
+      "label": null,
+      "file": "meetings/2026-11-18-hv.json",
+      "banker": {
+        "race": 1,
+        "no": 1,
+        "name": "禾道威",
+        "odds": 3.3
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-11-14-st",
       "date": "2026-11-14",
       "venue": "沙田",
