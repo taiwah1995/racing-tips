@@ -2643,8 +2643,19 @@
       "daozi_none": true,
       "status": "已結算",
       "rule": "t692u+t789u+t838u+t890u-late-live-with-results"
+    },
+    {
+      "date": "2026-11-20",
+      "label": "11/20（全日紙面）",
+      "tips": [],
+      "stable_none": true,
+      "daozi_none": true,
+      "status": "暫定（紙面草稿）",
+      "rule": "t692u+t789u+t838u+t725u+t913u-paper-allday-only",
+      "note": "DRAFT：A3精做3場全部紙面0注；拜仁慕尼黑 HAD主勝@1.04・58%★5；特魯瓦 HAD主勝@1.95・52%★1；畢爾包 HAD主勝@1.38・52%★1；唔出單場卡／穩陣／刀仔；唔計有注命中或盈虧；stable_none（有注腳=0）｜daozi_none（★4↑有注=0）；用戶親口「update 今日賽事上網」｜t913u｜seq=4294｜13:19:15 HKT｜handoff 2026-11-20 09:48 HKT｜football143 staging｜未發布",
+      "updated_at_hkt": "2026-11-20 13:28:18 HKT"
     }
   ],
-  "updated_at_hkt": "2026-11-09 09:10:13 HKT（live-1108-t890u-bobo-up-1108）",
-  "publish_note": "LIVE 2026-11-08｜t890u-bobo-up-1108｜遲出街連賽果｜單場2已結算 HDC／stable_none／daozi_none｜當日+$278｜累計 45.0/76 +$700.85｜紙面30｜football142"
+  "updated_at_hkt": "2026-11-20 13:28:18 HKT（draft-1120-football143-paper）",
+  "publish_note": "DRAFT 2026-11-20｜t913u-paper-allday-only｜三場紙面0注／無卡｜stable_none／daozi_none｜當日公開盈虧 $0（唔入數簿）｜累計維持 football142 45.0/76 +$700.85｜football143｜未發布"
 }
