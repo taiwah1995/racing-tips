@@ -1,6 +1,6 @@
 {
-  "date": "2026-11-08",
-  "count": 573,
+  "date": "2026-11-20",
+  "count": 576,
   "star_colors": {
     "1": "#9ca3af",
     "2": "#60a5fa",
@@ -8043,8 +8043,44 @@
       "league": "葡超",
       "result": "0-1",
       "wl": "P"
+    },
+    {
+      "date": "2026-11-20",
+      "time": "03:30",
+      "match": "拜仁慕尼黑 vs 科隆",
+      "confidence": 58,
+      "stars": 5,
+      "pick": "拜仁慕尼黑｜主客和 主勝（紙面）",
+      "odds": 1.04,
+      "stake": 0,
+      "source": "API",
+      "league": "德甲"
+    },
+    {
+      "date": "2026-11-20",
+      "time": "03:45",
+      "match": "特魯瓦 vs 勒哈弗爾",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "特魯瓦｜主客和 主勝（紙面）",
+      "odds": 1.95,
+      "stake": 0,
+      "source": "API",
+      "league": "法甲"
+    },
+    {
+      "date": "2026-11-20",
+      "time": "04:00",
+      "match": "畢爾包 vs 愛斯賓奴",
+      "confidence": 52,
+      "stars": 1,
+      "pick": "畢爾包｜主客和 主勝（紙面）",
+      "odds": 1.38,
+      "stake": 0,
+      "source": "API",
+      "league": "西甲"
     }
   ],
-  "updated_at_hkt": "2026-11-09 09:10:13 HKT（live-1108-t890u-bobo-up-1108）",
-  "source_note": "LIVE 2026-11-08 t890u-bobo-up-1108｜遲出街連賽果｜用戶親口「上」｜ticket t890u｜投注日 2026-11-08｜波波 session pos4213 user「上?」自核｜覆核 football140 PASS_WITH_NOTES｜遲出街連賽果一併處理（卡面水位結算）｜基線 football140 count=573；填 paper_results30＋兩有注卡；保留／對齊 football141 11-07 國民隊vs維塞烏 1-0／L；拿根亞vs普馬斯 pending；stable_none｜daozi_none｜CDN football142"
+  "updated_at_hkt": "2026-11-20 13:28:18 HKT（draft-1120-football143-paper）",
+  "source_note": "DRAFT 2026-11-20 t913u-paper-allday-only｜用戶親口「update 今日賽事上網」｜波波 session entry_id=t913u seq=4294 2026-11-20 13:19:15 HKT｜只上三場紙面全日分析、0注、唔出推介卡／穩陣／刀仔｜唔計有注命中或盈虧｜基線 football142 CDN count=573；＋3 紙面＝576｜daybook 數值不動｜stable_none｜daozi_none｜未發布／未改 racing-tips mirror｜football143"
 }
