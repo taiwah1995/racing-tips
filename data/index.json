@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-11-22-st",
+      "date": "2026-11-22",
+      "venue": "沙田",
+      "venueCode": "ST",
+      "raceCount": 11,
+      "label": null,
+      "file": "meetings/2026-11-22-st.json",
+      "banker": {
+        "race": 5,
+        "no": 2,
+        "name": "偵探傳奇",
+        "odds": 4.0
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-11-18-hv",
       "date": "2026-11-18",
       "venue": "快活谷",
