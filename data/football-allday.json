@@ -8054,7 +8054,9 @@
       "odds": 1.04,
       "stake": 0,
       "source": "API",
-      "league": "德甲"
+      "league": "德甲",
+      "result": "1-1",
+      "wl": "L"
     },
     {
       "date": "2026-11-20",
@@ -8066,7 +8068,9 @@
       "odds": 1.95,
       "stake": 0,
       "source": "API",
-      "league": "法甲"
+      "league": "法甲",
+      "result": "3-1",
+      "wl": "W"
     },
     {
       "date": "2026-11-20",
@@ -8078,9 +8082,11 @@
       "odds": 1.38,
       "stake": 0,
       "source": "API",
-      "league": "西甲"
+      "league": "西甲",
+      "result": "0-1",
+      "wl": "L"
     }
   ],
-  "updated_at_hkt": "2026-11-20 13:28:18 HKT（draft-1120-football143-paper）",
+  "updated_at_hkt": "2026-11-21 08:10:17 HKT（autoresult-1121-am-paper-results）",
   "source_note": "DRAFT 2026-11-20 t913u-paper-allday-only｜用戶親口「update 今日賽事上網」｜波波 session entry_id=t913u seq=4294 2026-11-20 13:19:15 HKT｜只上三場紙面全日分析、0注、唔出推介卡／穩陣／刀仔｜唔計有注命中或盈虧｜基線 football142 CDN count=573；＋3 紙面＝576｜daybook 數值不動｜stable_none｜daozi_none｜未發布／未改 racing-tips mirror｜football143"
 }
