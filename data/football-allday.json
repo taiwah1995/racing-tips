@@ -8600,7 +8600,9 @@
       "odds": 1.29,
       "stake": 0,
       "source": "API",
-      "league": "巴甲"
+      "league": "巴甲",
+      "result": "1-2",
+      "wl": "W"
     },
     {
       "date": "2026-11-22",
@@ -8879,6 +8881,6 @@
       "league": "巴甲"
     }
   ],
-  "updated_at_hkt": "2026-11-22 09:55:05 HKT（draft-1122-football147）",
-  "source_note": "DRAFT 2026-11-22 football147 t909u upa=true｜基線 football146 CDN count=613；＋23（2有注＋21紙面）＝636｜空HDC晚間補1未寫｜daybook暫不變｜未發布｜唔改已結 11-21（查比高恩斯留空維持）"
+  "updated_at_hkt": "2026-11-22 18:21:49 HKT（autoresult-1122-pm-football148）",
+  "source_note": "LIVE autoresult 2026-11-22 PM football148｜只補 11-21 查比高恩斯vs高士路 1-2 W（紙面0注，唔入數簿）；基線 football147 CDN count=636 唔加減行；11-22 23場未開波／未滿2.5h 唔結；tips 單場／刀仔／daybook 數簿不變 45.0/78｜+$117.39｜唔改已結 11-21 其餘36行同 11-20"
 }
