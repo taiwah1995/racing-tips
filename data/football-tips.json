@@ -2657,7 +2657,7 @@
     },
     {
       "date": "2026-11-21",
-      "label": "11/21（暫定草稿）",
+      "label": "11/21（已結算・單場−$400／穩陣無／刀仔−$183.46）",
       "tips": [
         {
           "no": 1,
@@ -2669,14 +2669,17 @@
           "odds": "1.95",
           "confidence": 53,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "外盤主勝水明顯抽高、客勝水下跌，主隊近5場只有和同負；馬會客受平半約1.95過1.8門檻，三维偏客向淺受讓，暫定兩注單場卡。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
-          "note_gate": "HDC淺線合t692u；暫定／provisional｜t909u upa=true｜DRAFT football145｜名單未check｜stable_none｜刀仔深線腳唔上單場卡（t692u）｜計單場樣本｜頭位"
+          "note_gate": "HDC淺線合t692u；暫定／provisional｜t909u upa=true｜DRAFT football145｜名單未check｜stable_none｜刀仔深線腳唔上單場卡（t692u）｜計單場樣本｜頭位",
+          "result": "3-1",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 2,
@@ -2688,19 +2691,22 @@
           "odds": "1.88",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "里爾榜眼主場不敗、里昂客場三負且外盤主勝水下跌；馬會主讓平半約1.88過門檻。考慮近三次主場對里昂未贏，信心收在54%，暫定兩注單場卡。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
           "note_gate": "HDC淺線合t692u；暫定／provisional｜t909u upa=true｜DRAFT football145｜名單未check｜stable_none｜刀仔深線腳唔上單場卡（t692u）｜計單場樣本",
-          "ko_note": "（11/22凌晨）"
+          "ko_note": "（11/22凌晨）",
+          "result": "0-1",
+          "wl": "L",
+          "profit": -200
         }
       ],
       "stable_none": true,
-      "status": "暫定（草稿）",
+      "status": "已結算",
       "rule": "t692u+t789u+t838u+t725u+t909u-upa-true+daozi-5x6",
       "daozi_lock": {
         "group": "刀仔五串六",
@@ -2708,11 +2714,11 @@
         "user_confirmed": true,
         "approval": "t909u；波波交接 user_publish_approved=true；football-handoff-2026-11-21.json generated 2026-11-21 10:03 HKT",
         "legs": [
-          "科木 vs 卡利亞里｜科木｜讓球主-1.5/-2｜1.96",
-          "慕遜加柏 vs 多蒙特｜多蒙特｜讓球客-1｜1.86",
-          "尼斯 vs 巴黎聖日耳門｜巴黎聖日耳門｜讓球客-1/-1.5｜1.99",
-          "帕爾馬 vs 羅馬｜羅馬｜讓球客-1.5/-2｜1.91",
-          "紐卡素 vs 阿仙奴｜阿仙奴｜讓球客-1｜1.88"
+          "科木 vs 卡利亞里｜科木｜讓球主-1.5/-2｜1.96｜WH 2-0",
+          "慕遜加柏 vs 多蒙特｜多蒙特｜讓球客-1｜1.86｜P 0-1",
+          "尼斯 vs 巴黎聖日耳門｜巴黎聖日耳門｜讓球客-1/-1.5｜1.99｜LH 2-3",
+          "帕爾馬 vs 羅馬｜羅馬｜讓球客-1.5/-2｜1.91｜W 1-5",
+          "紐卡素 vs 阿仙奴｜阿仙奴｜讓球客-1｜1.88｜L 2-2"
         ],
         "legs_detail": [
           {
@@ -2727,7 +2733,9 @@
             "line": "-1.75",
             "count_in_single_sample": false,
             "on_single_card": false,
-            "note": "t692u 深線只入刀仔、唔上單場卡"
+            "note": "t692u 深線只入刀仔、唔上單場卡",
+            "result": "2-0",
+            "wl": "WH"
           },
           {
             "ko": "22:30",
@@ -2741,7 +2749,9 @@
             "line": "-1.0",
             "count_in_single_sample": false,
             "on_single_card": false,
-            "note": "t692u 深線只入刀仔、唔上單場卡"
+            "note": "t692u 深線只入刀仔、唔上單場卡",
+            "result": "0-1",
+            "wl": "P"
           },
           {
             "ko": "00:15",
@@ -2756,7 +2766,9 @@
             "count_in_single_sample": false,
             "on_single_card": false,
             "note": "t692u 深線只入刀仔、唔上單場卡",
-            "ko_note": "（11/22凌晨）"
+            "ko_note": "（11/22凌晨）",
+            "result": "2-3",
+            "wl": "LH"
           },
           {
             "ko": "01:00",
@@ -2771,7 +2783,9 @@
             "count_in_single_sample": false,
             "on_single_card": false,
             "note": "t692u 深線只入刀仔、唔上單場卡",
-            "ko_note": "（11/22凌晨）"
+            "ko_note": "（11/22凌晨）",
+            "result": "1-5",
+            "wl": "W"
           },
           {
             "ko": "01:30",
@@ -2786,22 +2800,31 @@
             "count_in_single_sample": false,
             "on_single_card": false,
             "note": "t692u 深線只入刀仔、唔上單場卡",
-            "ko_note": "（11/22凌晨）"
+            "ko_note": "（11/22凌晨）",
+            "result": "2-2",
+            "wl": "L"
           }
         ],
         "combined_odds": 26.05,
         "unit_stake": 40,
         "combos": 6,
         "stake_total": 240,
-        "page_footer": "每注$40×6＝投注$240｜未結算｜全中展示26.05倍（1.96×1.86×1.99×1.91×1.88×$40）",
-        "user_footer": "五串六 $40×6=$240｜未結算｜全中約26.05倍",
+        "page_footer": "每注$40×6＝投注$240｜派彩$56.54｜盈−$183.46（1/6；阿仙奴L 2-2，其餘四腳科木WH×多蒙特P×PSG LH×羅馬W）",
+        "user_footer": "五串六 $40×6=$240｜派彩$56.54｜盈−$183.46｜1/6組有派彩",
         "display_order": "kickoff_hkt asc",
-        "note": "DRAFT football145｜★4↑=19>10，按信心取最高5場（羅馬58、其餘57）出五串六；腳序＝開波升序 HKT；全部 HDC 深線｜線｜>0.25，跟 t692u 唔上單場卡、唔計今日單場樣本；每腳有API、水位≥1.6；非周中歐戰；upa=true／t909u；鎖版等覆核通過後上線，之後禁止自動重排／重揀。"
+        "note": "DRAFT football145｜★4↑=19>10，按信心取最高5場（羅馬58、其餘57）出五串六；腳序＝開波升序 HKT；全部 HDC 深線｜線｜>0.25，跟 t692u 唔上單場卡、唔計今日單場樣本；每腳有API、水位≥1.6；非周中歐戰；upa=true／t909u；鎖版等覆核通過後上線，之後禁止自動重排／重揀。｜settled settled 1/6 派彩$56.54 盈−$183.46（autoresult 2026-11-22 AM）",
+        "status": "settled",
+        "settled": true,
+        "wl": "settled",
+        "profit": -183.46,
+        "payout": 56.54,
+        "combos_paid": "1/6"
       },
-      "note": "DRAFT football145：單場2卡暫定（頭位艾拉維斯vs拉科魯尼亞 HDC客+0/+0.5@1.95・2注・53%★4｜計樣本；里爾vs里昂 HDC主-0/-0.5@1.88・2注・54%★4｜計樣本・11/22凌晨）；stable_none（淺線≥57%有注腳不足2）；刀仔五串六候選5腳（深線只過關、唔上單場卡／唔計樣本；腳序開波升序：科木-1.5/-2@1.96、多蒙特-1@1.86、巴黎聖日耳門-1/-1.5@1.99、羅馬-1.5/-2@1.91、阿仙奴-1@1.88）；全日紙面35＋有注2＝A3 37；空HDC晚間補8未寫入；波波 user_publish_approved=true（t909u）｜handoff 2026-11-21 10:03 HKT｜未發布、等覆核。",
-      "updated_at_hkt": "2026-11-21 10:07:26 HKT"
+      "note": "【賽果】football146 autoresult 2026-11-22 AM｜單場2卡已結算：艾拉維斯vs拉科魯尼亞 3-1 L −$200／里爾vs里昂 0-1 L −$200＝單場−$400（0/2；HDC樣本0/2）；stable_none；刀仔五串六 1/6 派彩$56.54 盈−$183.46（科木WH 2-0／多蒙特P 0-1／巴黎聖日耳門LH 2-3／羅馬W 1-5／阿仙奴L 2-2）；當日①−$400＋②$0＋③−$183.46＝−$583.46｜樣本＋0/2→45.0/78｜累計+$117.39；全日紙面36結、查比高恩斯vs高士路 08:00 IN_PLAY／未滿2.5h留空；方向／盤口／水位／注碼／星數鎖死未改；upa=true／t909u／基線 football145",
+      "updated_at_hkt": "2026-11-22 08:17:00 HKT",
+      "settled_at_hkt": "2026-11-22 08:17:00 HKT"
     }
   ],
-  "updated_at_hkt": "2026-11-21 10:07:26 HKT（draft-1121-football145）",
-  "publish_note": "DRAFT 2026-11-21｜football145｜t909u upa=true｜單場2卡暫定＋刀仔5×6候選＋紙面35｜stable_none｜未發布｜累計維持 football144 45.0/76 +$700.85｜daybook暫不入未結項"
+  "updated_at_hkt": "2026-11-22 08:17:00 HKT（autoresult-1122-am-football146）",
+  "publish_note": "LIVE 2026-11-22 AM autoresult football146｜11-21 單場−$400（0/2）＋刀仔−$183.46（1/6）＋stable_none＝當日−$583.46｜累計 45.0/78 +$117.39｜紙面36結、查比高恩斯留空｜只改賽果／W/L／利潤／總結"
 }
