@@ -1,12 +1,13 @@
 /**
  * TW賽馬貼士 — hash-routed SPA
- * Routes: #/  |  #/meeting/:id  |  #/wind  |  #/flying  |  #/combo  |  #/football
+ * Routes: #/  |  #/meeting/:id  |  #/wind  |  #/flying  |  #/combo
+ * #/football and #/football/YYYY-MM-DD redirect to the standalone football site.
  */
 (function () {
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261123flytitle';
+  const APP_DATA_VERSION = '20261123fbcutover';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -5738,23 +5739,27 @@
   }
 
   /* ---------- routing ---------- */
+  const FOOTBALL_SITE = 'https://taiwah1995.github.io/football-tips/#/football';
+
+  /** Standalone URL for #/football or #/football/YYYY-MM-DD; '' for every other hash. */
+  function footballCutoverTarget(hash) {
+    const football = String(hash || '').match(/^#\/football(?:\/(\d{4}-\d{2}-\d{2}))?\/?$/);
+    if (!football) return '';
+    return FOOTBALL_SITE + (football[1] ? '/' + football[1] : '');
+  }
+
+  function redirectFootballCutover() {
+    const target = footballCutoverTarget(location.hash);
+    if (!target) return false;
+    location.replace(target);
+    return true;
+  }
+
   async function route() {
+    if (redirectFootballCutover()) return;
     const hash = location.hash || '#/';
     const footer = document.querySelector('.site-footer');
-    if (footer) {
-      footer.textContent = /^#\/football(?:\/|$)/.test(hash)
-        ? '足球投注有輸錢風險，以上只係分析。'
-        : '僅供參考 · 非投注建議';
-    }
-    const football = hash.match(/^#\/football(?:\/(\d{4}-\d{2}-\d{2}))?\/?$/);
-    if (football) {
-      try {
-        await renderFootball(football[1] || '');
-      } catch (err) {
-        console.error(err);
-      }
-      return;
-    }
+    if (footer) footer.textContent = '僅供參考 · 非投注建議';
     if (hash === '#/wind') {
       try {
         await renderWind();
@@ -5832,9 +5837,11 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
+  if (!redirectFootballCutover()) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
   }
 })();
