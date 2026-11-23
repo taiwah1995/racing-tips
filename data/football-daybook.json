@@ -739,17 +739,53 @@
       "units": 6.4
     },
     {
+      "date": "2026-11-22",
+      "item": "①單場推介",
+      "kind": "part",
+      "stake": 400,
+      "payout": 280,
+      "profit": -120,
+      "units": 4.0
+    },
+    {
+      "date": "2026-11-22",
+      "item": "②穩陣過關",
+      "kind": "part",
+      "stake": 0,
+      "payout": 0,
+      "profit": 0,
+      "units": 0
+    },
+    {
+      "date": "2026-11-22",
+      "item": "③刀仔鋸大樹",
+      "kind": "part",
+      "stake": 240,
+      "payout": 0.0,
+      "profit": -240.0,
+      "units": 2.4
+    },
+    {
+      "date": "2026-11-22",
+      "item": "當日總結（三項加總）",
+      "kind": "day-total",
+      "stake": 640,
+      "payout": 280.0,
+      "profit": -360.0,
+      "units": 6.4
+    },
+    {
       "date": "",
       "item": "累計總結（三項每日累積）",
       "kind": "cumulative",
-      "stake": 19900.0,
-      "payout": 19617.39,
-      "profit": 117.39,
-      "units": 199.0,
-      "sample": "45.0/78",
-      "note": "至11/21 football146（基線 football142／t890u +$700.85／45.0/76；今輪單場0/2＝−$400、刀仔1/6＝−$183.46、stable_none；當日−$583.46；樣本＋0/2＝45.0/78；累計+$117.39；卡面水位結算 拉科魯尼亞@$1.95 L−$200／里爾@$1.88 L−$200；刀仔派彩$56.54；唔計全日紙面；舊帳 payout−stake 差額跟公開簿不追溯）"
+      "stake": 20540.0,
+      "payout": 19897.39,
+      "profit": -242.61,
+      "units": 205.4,
+      "sample": "45.5/79",
+      "note": "至11/22 football149（基線 football146／football148 +$117.39／45.0/78；今輪單場HAD L−$200（唔計樣本）＋HDC WH +$80＝−$120、刀仔0/6＝−$240、stable_none；當日−$360；樣本＋0.5/1＝45.5/79；累計−$242.61；卡面水位結算 皇家蘇斯達@$1.85 L−$200／羅連安特@$1.80 WH+$80；刀仔派彩$0；唔計全日紙面；華斯高留空；舊帳 payout−stake 差額跟公開簿不追溯）"
     }
   ],
-  "updated_at_hkt": "2026-11-22 08:17:00 HKT（autoresult-1122-am-football146）",
-  "publish_note": "LIVE 2026-11-21 autoresult-1122-am football146｜當日單場 −$400／0/2＋刀仔 −$183.46／1/6｜cumulative +$117.39／45.0/78｜stake 19900｜payout 19617.39｜stable_none"
+  "updated_at_hkt": "2026-11-23 08:12:20 HKT（autoresult-1123-am-football149）",
+  "publish_note": "LIVE 2026-11-22 autoresult-1123-am football149｜當日單場 −$120／0.5/1＋刀仔 −$240／0/6｜cumulative −$242.61／45.5/79｜stake 20540｜payout 19897.39｜stable_none"
 }

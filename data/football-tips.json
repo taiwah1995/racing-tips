@@ -2826,7 +2826,7 @@
     },
     {
       "date": "2026-11-22",
-      "label": "11/22（暫定草稿）",
+      "label": "11/22（已結算・單場−$120／穩陣無／刀仔−$240）",
       "tips": [
         {
           "no": 1,
@@ -2838,14 +2838,17 @@
           "odds": "1.85",
           "confidence": 54,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "皇家蘇斯達排第5近5場4勝，外盤36*主勝3.00升至3.25、客勝2.15跌至2.00明顯撐客；桑坦德第12主場唔差但讓平／半客水1.75低過1.8，改買馬會客勝約1.85過門檻，三维偏客，暫定兩注單場卡。",
           "stars": 4,
           "count_in_single_sample": false,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HAD",
-          "note_gate": "t727u HAD獨立單場；非HDC樣本；暫定／provisional｜t909u upa=true｜DRAFT football147｜名單未check｜stable_none｜刀仔深線腳唔上單場卡（t692u）｜唔計HDC單場樣本｜頭位"
+          "note_gate": "t727u HAD獨立單場；非HDC樣本；暫定／provisional｜t909u upa=true｜DRAFT football147｜名單未check｜stable_none｜刀仔深線腳唔上單場卡（t692u）｜唔計HDC單場樣本｜頭位",
+          "result": "3-2",
+          "wl": "L",
+          "profit": -200
         },
         {
           "no": 2,
@@ -2857,19 +2860,22 @@
           "odds": "1.8",
           "confidence": 53,
           "stake": 2,
-          "status": "暫定",
+          "status": "已結算",
           "reason": "雷恩客場近4場1勝3負入7失14，外盤36*主勝3.00跌至2.88、客勝2.15升至2.40撐主；馬會羅連安特受平／半剛好1.80過門檻，近期主場贏過巴黎FC同摩納哥，三维偏主受淺讓，暫定兩注單場卡。",
           "stars": 4,
           "count_in_single_sample": true,
-          "card_status": "provisional",
+          "card_status": "settled",
           "parlay_types": [],
           "market_code": "HDC",
           "note_gate": "HDC淺線合t692u；暫定／provisional｜t909u upa=true｜DRAFT football147｜名單未check｜stable_none｜刀仔深線腳唔上單場卡（t692u）｜計單場樣本",
-          "ko_note": "（11/23凌晨）"
+          "ko_note": "（11/23凌晨）",
+          "result": "1-1",
+          "wl": "WH",
+          "profit": 80
         }
       ],
       "stable_none": true,
-      "status": "暫定（草稿）",
+      "status": "已結算",
       "rule": "t692u+t789u+t838u+t725u+t727u+t909u-upa-true+daozi-5x6+t281u",
       "daozi_lock": {
         "group": "刀仔五串六",
@@ -2877,11 +2883,11 @@
         "user_confirmed": true,
         "approval": "t909u；波波交接 user_publish_approved=true；football-handoff-2026-11-22.json generated 2026-11-22 09:50 HKT",
         "legs": [
-          "巴黎FC vs 昂熱｜巴黎FC｜讓球主-1.5/-2｜2.14",
-          "博洛尼亞 vs 烏甸尼斯｜博洛尼亞｜讓球主-0.5/-1｜1.83",
-          "馬賽 vs 勒芒｜馬賽｜讓球主-1/-1.5｜1.86",
-          "阿特蘭大 vs 國際米蘭｜國際米蘭｜讓球客-1｜1.83",
-          "基達菲 vs 馬德里體育會｜馬德里體育會｜讓球客-1｜1.88"
+          "巴黎FC vs 昂熱｜巴黎FC｜讓球主-1.5/-2｜2.14｜W 4-0",
+          "博洛尼亞 vs 烏甸尼斯｜博洛尼亞｜讓球主-0.5/-1｜1.83｜L 1-1",
+          "馬賽 vs 勒芒｜馬賽｜讓球主-1/-1.5｜1.86｜L 2-3",
+          "阿特蘭大 vs 國際米蘭｜國際米蘭｜讓球客-1｜1.83｜L 4-4",
+          "基達菲 vs 馬德里體育會｜馬德里體育會｜讓球客-1｜1.88｜W 0-3"
         ],
         "legs_detail": [
           {
@@ -2896,7 +2902,9 @@
             "line": "-1.75",
             "count_in_single_sample": false,
             "on_single_card": false,
-            "note": "t692u 深線只入刀仔、唔上單場卡"
+            "note": "t692u 深線只入刀仔、唔上單場卡",
+            "result": "4-0",
+            "wl": "W"
           },
           {
             "ko": "22:00",
@@ -2910,7 +2918,9 @@
             "line": "-0.75",
             "count_in_single_sample": false,
             "on_single_card": false,
-            "note": "t692u 深線只入刀仔、唔上單場卡"
+            "note": "t692u 深線只入刀仔、唔上單場卡",
+            "result": "1-1",
+            "wl": "L"
           },
           {
             "ko": "03:45",
@@ -2925,7 +2935,9 @@
             "count_in_single_sample": false,
             "on_single_card": false,
             "note": "t692u 深線只入刀仔、唔上單場卡",
-            "ko_note": "（11/23凌晨）"
+            "ko_note": "（11/23凌晨）",
+            "result": "2-3",
+            "wl": "L"
           },
           {
             "ko": "03:45",
@@ -2940,7 +2952,9 @@
             "count_in_single_sample": false,
             "on_single_card": false,
             "note": "t692u 深線只入刀仔、唔上單場卡",
-            "ko_note": "（11/23凌晨）"
+            "ko_note": "（11/23凌晨）",
+            "result": "4-4",
+            "wl": "L"
           },
           {
             "ko": "04:00",
@@ -2955,22 +2969,31 @@
             "count_in_single_sample": false,
             "on_single_card": false,
             "note": "t692u 深線只入刀仔、唔上單場卡",
-            "ko_note": "（11/23凌晨）"
+            "ko_note": "（11/23凌晨）",
+            "result": "0-3",
+            "wl": "W"
           }
         ],
         "combined_odds": 25.06,
         "unit_stake": 40,
         "combos": 6,
         "stake_total": 240,
-        "page_footer": "每注$40×6＝投注$240｜未結算｜全中展示25.06倍（2.14×1.83×1.86×1.83×1.88×$40）",
-        "user_footer": "五串六 $40×6=$240｜未結算｜全中約25.06倍",
+        "page_footer": "每注$40×6＝投注$240｜派彩$0｜盈−$240（0/6；巴黎FC W 4-0，博洛尼亞L 1-1，馬賽L 2-3，國際米蘭L 4-4，馬德里體育會W 0-3）",
+        "user_footer": "五串六 $40×6=$240｜派彩$0｜盈−$240｜0/6組有派彩",
         "display_order": "kickoff_hkt asc, then home_hkjc",
-        "note": "DRAFT football147｜★4↑=12>10，按信心取最高5場出五串六；腳序＝開波升序 HKT（同時段按主隊名）；全部 HDC 深線｜線｜>0.25，跟 t692u 唔上單場卡、唔計今日單場樣本；每腳有API、水位≥1.6；非周中歐戰；upa=true／t909u；鎖版等覆核通過後上線，之後禁止自動重排／重揀。巴塞隆拿−2.25過深唔入刀仔（跟波波）。"
+        "note": "DRAFT football147｜★4↑=12>10，按信心取最高5場出五串六；腳序＝開波升序 HKT（同時段按主隊名）；全部 HDC 深線｜線｜>0.25，跟 t692u 唔上單場卡、唔計今日單場樣本；每腳有API、水位≥1.6；非周中歐戰；upa=true／t909u；鎖版等覆核通過後上線，之後禁止自動重排／重揀。巴塞隆拿−2.25過深唔入刀仔（跟波波）。｜settled settled 0/6 派彩$0 盈−$240（autoresult 2026-11-23 AM）",
+        "status": "settled",
+        "settled": true,
+        "wl": "settled",
+        "profit": -240.0,
+        "payout": 0.0,
+        "combos_paid": "0/6"
       },
-      "note": "DRAFT football147：單場2卡暫定（頭位桑坦德vs皇家蘇斯達 HAD客勝@1.85・2注・54%★4｜非HDC樣本／t727u；羅連安特vs雷恩 HDC主+0/+0.5@1.8・2注・53%★4｜計樣本・11/23凌晨）；stable_none（淺線≥57%有注腳不足2）；刀仔五串六候選5腳（深線只過關、唔上單場卡／唔計樣本；腳序開波升序：巴黎FC-1.5/-2@2.14、博洛尼亞-0.5/-1@1.83、國際米蘭-1@1.83、馬賽-1/-1.5@1.86、馬德里體育會-1@1.88）；全日紙面21＋有注2＝A3 23；空HDC晚間補1（川迪vs威廉二世）未寫入；三場巴甲只紙面（t281u）；波波 user_publish_approved=true（t909u）｜handoff 2026-11-22 09:50 HKT｜未發布、等覆核。",
-      "updated_at_hkt": "2026-11-22 09:55:05 HKT"
+      "note": "DRAFT football147：單場2卡暫定（頭位桑坦德vs皇家蘇斯達 HAD客勝@1.85・2注・54%★4｜非HDC樣本／t727u；羅連安特vs雷恩 HDC主+0/+0.5@1.8・2注・53%★4｜計樣本・11/23凌晨）；stable_none（淺線≥57%有注腳不足2）；刀仔五串六候選5腳（深線只過關、唔上單場卡／唔計樣本；腳序開波升序：巴黎FC-1.5/-2@2.14、博洛尼亞-0.5/-1@1.83、國際米蘭-1@1.83、馬賽-1/-1.5@1.86、馬德里體育會-1@1.88）；全日紙面21＋有注2＝A3 23；空HDC晚間補1（川迪vs威廉二世）未寫入；三場巴甲只紙面（t281u）；波波 user_publish_approved=true（t909u）｜handoff 2026-11-22 09:50 HKT｜未發布、等覆核。｜【賽果】football149 autoresult 2026-11-23 AM｜單場2卡已結算：桑坦德vs皇家蘇斯達 3-2 L −$200（HAD，唔計樣本）／羅連安特vs雷恩 1-1 WH +$80（HDC樣本0.5/1）＝單場−$120；stable_none；刀仔五串六 0/6 派彩$0 盈−$240（巴黎FC W 4-0／博洛尼亞L 1-1／馬賽L 2-3／國際米蘭L 4-4／馬德里體育會W 0-3）；當日①−$120＋②$0＋③−$240＝−$360｜樣本＋0.5/1→45.5/79｜累計−$242.61；全日紙面21場其中20已結（華斯高 06:30 未滿2.5h／IN_PLAY 留空）；川迪未寫入唔加行；方向／盤口／水位／注碼／星數鎖死未改；upa=true／t909u／基線 football148",
+      "updated_at_hkt": "2026-11-23 08:12:20 HKT（autoresult-1123-am-football149）",
+      "settled_at_hkt": "2026-11-23 08:12:20 HKT"
     }
   ],
-  "updated_at_hkt": "2026-11-22 18:21:49 HKT（autoresult-1122-pm-football148）",
-  "publish_note": "DRAFT 2026-11-22｜football147｜t909u upa=true｜單場2卡暫定（1 HAD非樣本＋1 HDC樣本）＋刀仔5×6候選＋紙面21｜stable_none｜未發布｜累計維持 football146 45.0/78 +$117.39｜daybook暫不入未結項｜唔改已結 11-21｜LIVE autoresult 2026-11-22 PM football148：只補 11-21 查比高恩斯vs高士路 1-2 W（紙面0注）；單場／刀仔／daybook／累計不變 45.0/78｜+$117.39；11-22 未結"
+  "updated_at_hkt": "2026-11-23 08:12:20 HKT（autoresult-1123-am-football149）",
+  "publish_note": "LIVE autoresult 2026-11-23 AM football149｜11-22 單場 −$120（HAD L−$200＋HDC WH +$80；樣本0.5/1）＋刀仔 0/6 −$240｜當日−$360｜累計 45.5/79 −$242.61｜stake 20540｜payout 19897.39｜stable_none｜紙面20/21結、華斯高留空｜只改賽果／W/L／利潤／總結｜唔改 11-21／11-20"
 }
