@@ -6,7 +6,7 @@
   'use strict';
 
   const DATA_BASE = 'data';
-  const APP_DATA_VERSION = '20261122stresults';
+  const APP_DATA_VERSION = '20261123flytitle';
   /** 馬膽 stake, same convention as the ledger heading: 獨贏 $100 · 位置 $300. */
   const STAKE_WIN = 100;
   const STAKE_PLACE = 300;
@@ -1687,7 +1687,7 @@
     const stats = flyingMeetings(horses)[0];
     const hit = stats ? flyingHitHtml(stats) : '';
     return '<section class="panel" id="meeting-flying">' +
-      panelTitleHtml('生蟲落飛', date) +
+      panelTitleHtml('賽日有飛馬', date) +
       (hit ? '<div class="fly-hit-line">' + hit + '</div>' : '') +
       flyingPickLegendHtml() +
       flyingRaceCardsHtml(horses) +
