@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-11-25-hv",
+      "date": "2026-11-25",
+      "venue": "快活谷",
+      "venueCode": "HV",
+      "raceCount": 9,
+      "label": null,
+      "file": "meetings/2026-11-25-hv.json",
+      "banker": {
+        "race": 7,
+        "no": 8,
+        "name": "順善寶",
+        "odds": 4.5
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-11-22-st",
       "date": "2026-11-22",
       "venue": "沙田",
