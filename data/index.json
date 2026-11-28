@@ -1,6 +1,22 @@
 {
   "meetings": [
     {
+      "id": "2026-11-29-st",
+      "date": "2026-11-29",
+      "venue": "沙田",
+      "venueCode": "ST",
+      "raceCount": 11,
+      "label": null,
+      "file": "meetings/2026-11-29-st.json",
+      "banker": {
+        "race": 10,
+        "no": 6,
+        "name": "巴閉精",
+        "odds": 3.0
+      },
+      "bankerPlace": null
+    },
+    {
       "id": "2026-11-25-hv",
       "date": "2026-11-25",
       "venue": "快活谷",
